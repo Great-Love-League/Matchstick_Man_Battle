@@ -1,9 +1,9 @@
 
-const VIEWPORT_WIDTH : Double = 1920 // 视口宽度
-const VIEWPORT_HEIGHT : Double = 1080 // 视口高度
-const PPM = 20.0
+pub const VIEWPORT_WIDTH : Double = 1920 // 视口宽度
+pub const VIEWPORT_HEIGHT : Double = 1080 // 视口高度
+pub const PPM = 20.0
 
-const Pi : Double = 3.141592653589793
+pub const Pi : Double = 3.141592653589793
 
 fn world_to_screen(world_x : Double, world_y : Double) -> (Double, Double) {
   let screen_x : Double = world_x * PPM
