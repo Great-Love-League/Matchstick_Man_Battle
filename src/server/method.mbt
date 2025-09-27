@@ -97,7 +97,7 @@ fn create_world(
 	let worldAABB= @box2d.b2AABB()
 	worldAABB.setminVertex(@box2d.b2Vec2(-10000.0, -10000.0))
 	worldAABB.setmaxVertex(@box2d.b2Vec2(10000.0, 10000.0))
-	let world=@box2d.b2World(worldAABB,@box2d.b2Vec2(gravity.0, gravity.1), true)
+	let world : @box2d.B2World = {world : @box2d.b2World(worldAABB,@box2d.b2Vec2(gravity.0, gravity.1), true)}
 	world
 }
 
@@ -207,6 +207,13 @@ fn maintain_torso(
 
 pub extern "js" fn op_equal(a:@box2d.B2Body, b:@box2d.B2Body)->Bool=
 	#| (a, b) => a===b
+
+extern "js" fn @box2d.B2Body::is_object_alive(self : @box2d.B2Body) -> Bool =
+	#| (self) =>{
+	#|	return self !== null && 
+	#|         self !== undefined && 
+	#|         typeof self === 'object';
+	#| }
 
 fn which_platform(
 	particle: Particle
