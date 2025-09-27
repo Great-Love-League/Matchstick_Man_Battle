@@ -1,5 +1,5 @@
 {
-  "is-main": false,
+  "is-main": true,
   "import": [
       "Yoorkin/rabbit-tea/dom",
       "rami3l/js-ffi/js",
@@ -14,8 +14,9 @@
       "Milky2018/selene/tilemap",
       "Milky2018/selene/camera",
       "Milky2018/selene/ui",
-	  {"path":"Kaida-Amethyst/math","alias":"cmath"},
-      { "path":"Milky2018/selene-canvas", "alias": "canvas" },
-      { "path": "Demonmasterlqx/box2d_ffi/box2d", "alias": "box2d" }
+	  { "path":
+      "Milky2018/selene-canvas","alias":"canvas"},
+	  { "path":"Kaida-Amethyst/math","alias":"cmath"},
+      { "path":"Demonmasterlqx/box2d_ffi/box2d","alias": "box2d" }
   ]
 }
