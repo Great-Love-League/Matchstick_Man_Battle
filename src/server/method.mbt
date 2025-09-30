@@ -1,34 +1,8 @@
 
 pub const VIEWPORT_WIDTH : Double = 1920 // 视口宽度
 pub const VIEWPORT_HEIGHT : Double = 1080 // 视口高度
-pub const PPM = 20.0
 
 pub const Pi : Double = 3.141592653589793
-
-fn world_to_screen(world_x : Double, world_y : Double) -> (Double, Double) {
-  let screen_x : Double = world_x * PPM
-  let screen_y : Double = world_y * PPM
-  (screen_x,-screen_y+VIEWPORT_HEIGHT)
-}
-
-///|
-fn screen_to_world(screen_x : Double, screen_y : Double) -> (Double, Double) {
-  let world_x : Double = screen_x / PPM
-  let world_y : Double = (VIEWPORT_HEIGHT - screen_y) / PPM
-  (world_x, world_y)
-}
-
-fn world_to_screen_siz(world_x : Double, world_y : Double) -> (Double, Double) {
-  let screen_x : Double = world_x * PPM
-  let screen_y : Double = world_y * PPM
-  (screen_x,screen_y)
-}
-
-fn screen_to_world_siz(screen_x : Double, screen_y : Double) -> (Double, Double) {
-  let world_x : Double = screen_x / PPM
-  let world_y : Double = screen_y / PPM
-  (world_x, world_y)
-}
 
 
 //return a static box

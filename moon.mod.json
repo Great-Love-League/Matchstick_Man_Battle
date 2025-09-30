@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "deps": {
     "Kaida-Amethyst/math": "0.1.20",
-    "Demonmasterlqx/box2d_ffi": "0.1.4",
+    "Demonmasterlqx/box2d_ffi": "0.2.3",
     "Demonmasterlqx/MoonP5": "0.0.1"
   },
   "readme": "README.mbt.md",
