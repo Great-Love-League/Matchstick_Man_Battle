@@ -1,24 +1,6 @@
 {
   "is-main": true,
   "import": [
-    "Yoorkin/rabbit-tea/dom",
-    "rami3l/js-ffi/js",
-    "Milky2018/selene/audio",
-    "Milky2018/selene/system",
-    "Milky2018/selene/math",
-    "Milky2018/selene/sprite",
-    "Milky2018/selene/velocity",
-    "Milky2018/selene/plugins",
-    "Milky2018/selene/position",
-    "Milky2018/selene/collision",
-    "Milky2018/selene/tilemap",
-    "Milky2018/selene/camera",
-    "Milky2018/selene/ui",
-    // "Milky2018/selene/inputs",
-    {
-      "path": "Milky2018/selene-canvas",
-      "alias": "canvas"
-    },
     {
       "path": "Kaida-Amethyst/math",
       "alias": "cmath"
@@ -27,9 +9,9 @@
       "path": "Demonmasterlqx/box2d_ffi/box2d",
       "alias": "box2d"
     },
-    "Milky2018/selene"
-  ],
-  // "overrides": [
-  //   "Milky2018/selene-canvas"
-  // ]
+    {
+      "path": "Demonmasterlqx/MoonP5/cmd/p5js_ffi",
+      "alias": "p5js"
+    }
+  ]
 }

@@ -4,8 +4,7 @@
   "deps": {
     "Kaida-Amethyst/math": "0.1.20",
     "Demonmasterlqx/box2d_ffi": "0.1.4",
-    "Milky2018/selene-canvas": "0.15.1",
-    "Milky2018/selene": "0.15.1"
+    "Demonmasterlqx/MoonP5": "0.0.1"
   },
   "readme": "README.mbt.md",
   "repository": "",
