@@ -1,6 +1,6 @@
 const Width: Double = 1000.0
 const Height: Double = 1000.0
-pub const PPM = 50.0
+pub const PPM = 20.0
 
 extern "js" fn getP5Instance(
   drawww : (@p5js.P5Instance) -> Unit,
@@ -8,7 +8,7 @@ extern "js" fn getP5Instance(
   height~ : Double = 400
 ) -> @p5js.P5Instance =
   #| (drawww, width, height) => {
-  #|a = new p5((p)=>{
+  #|   a = new p5((p)=>{
   #|  p.setup = function() {
   #|    p.createCanvas(width, height);
   #|  }
@@ -104,9 +104,9 @@ fn drawCircle(p: &@p5js.P5JS, shape: @box2d.B2CircleShape) -> Unit{
   let screen_pos = world_to_screen(Width, Height, position.getX(), position.getY(), PPM)
   let screen_radius = world_to_screen_size(radius, PPM)
 
-  println("Circle Position: \{position.getX()} , \{position.getY()}")
-  println("Circle Screen Position: \{screen_pos.0} , \{screen_pos.1}")
-  println("Circle Radius: \{radius}")
+//   println("Circle Position: \{position.getX()} , \{position.getY()}")
+//   println("Circle Screen Position: \{screen_pos.0} , \{screen_pos.1}")
+//   println("Circle Radius: \{radius}")
 
   p.fillColorPara(200, Some(0.0), Some(0.0), None)
   p.circle(screen_pos.0, screen_pos.1, screen_radius * 2.0)
@@ -163,33 +163,35 @@ fn box2d_init(world: @box2d.B2World) ->Unit{
     (1.0,10.0),
     (1.0,0.1)
   )
-
   static_box.setAngularVelocity(0.5)
+//   let circledef = @box2d.b2CircleDef()
+//   circledef.setRadius(0.5)
+//   circledef.setDensity(1.0)
+//   circledef.setFriction(0.3)
+//   circledef.setLocalPosition(@box2d.b2Vec2(0.0,0.0))
 
-  let circledef = @box2d.b2CircleDef()
-  circledef.setRadius(0.5)
-  circledef.setDensity(1.0)
-  circledef.setFriction(0.3)
-  circledef.setLocalPosition(@box2d.b2Vec2(0.0,0.0))
-
-  let circlebodyDef = @box2d.b2BodyDef()
-  circlebodyDef.setPosition(@box2d.b2Vec2(0.0, 4.0))
-  circlebodyDef.addShape(circledef.getBase())
-  world.createBody(circlebodyDef) |> ignore
+//   let circlebodyDef = @box2d.b2BodyDef()
+//   circlebodyDef.setPosition(@box2d.b2Vec2(0.0, 4.0))
+//   circlebodyDef.addShape(circledef.getBase())
+//   world.createBody(circlebodyDef) |> ignore
 
 }
 
 fn main {
-
-  let world = create_world()
-
-  box2d_init(world)
+  box2d_init(world.val)
 
   let p5_instance = getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
-    world.step(1.0/60.0, 4)
-    draw_world(p, world)
+    
+	// 	println("Fuck\n")
+	// for particle in particles.val {
+	// 	println("Fuck2\n")
+	// 	walk(particle,1)
+	// }
+	
+	
+	// world.val.step(1.0/60.0, 4)
+    // //draw_world(p, world.val)
   }, width=Width, height=Height)
 
-  p5_instance |> ignore
-
+  //p5_instance |> ignore
 }
