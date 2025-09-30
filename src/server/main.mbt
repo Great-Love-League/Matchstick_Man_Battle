@@ -158,11 +158,13 @@ fn box2d_init(world: @box2d.B2World) ->Unit{
 
   particles.val.push(create_particle(world, (0.0,10.0)))
 
-  create_static_box(
+  let static_box = create_static_box(
     world,
-    (1.0,1.0),
-    (1.0,0.5)
-  ) |> ignore
+    (1.0,10.0),
+    (1.0,0.1)
+  )
+
+  static_box.setAngularVelocity(0.5)
 
   let circledef = @box2d.b2CircleDef()
   circledef.setRadius(0.5)
