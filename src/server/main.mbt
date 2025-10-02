@@ -183,7 +183,15 @@ fn main {
   let p5_instance = getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
     
 	for particle in particle_list.val {
-		jump(particle,100)
+		if(p.keyIsDown(KeyA)){
+			walk(particle,-1)
+		}
+		else if(p.keyIsDown(KeyD)){
+			walk(particle,1)
+		}
+		else {
+			stand(particle)
+		}
 		maintain_rotation(particle.torso,0.0,kp=30.0,kd=10.0)
 		//particle.torso.applyForce(@box2d.b2Vec2(0.0, 50.0), particle.torso.getCenterPosition())
 	}
