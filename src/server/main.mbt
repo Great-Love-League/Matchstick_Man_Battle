@@ -39,7 +39,7 @@ extern "js" fn getCanvasHeight(self : &@p5js.P5JS) -> Double =
 fn world_to_screen(world_width: Double, world_height: Double, x: Double, y: Double, ppm : Double) -> (Double, Double) {
   let screen_x_pixle_num = world_width
   let screen_y_pixle_num = world_height
-  println("Canvas Width: \{screen_x_pixle_num}, Height: \{screen_y_pixle_num}")
+  //println("Canvas Width: \{screen_x_pixle_num}, Height: \{screen_y_pixle_num}")
   return (screen_x_pixle_num/2.0 + x * ppm, screen_y_pixle_num - y * ppm)
 }
 ///|
@@ -140,12 +140,12 @@ fn draw_world(p: &@p5js.P5JS, world: @box2d.B2World) -> Unit {
 /// PPM 用于控制物理世界单位与屏幕像素的转换比例，1个物理单位等于多少像素
 /// 具体坐标系问题请查看 world_to_screen 的注释
 /// 使用的时候，请先 使用 getP5Instance 创建 p5js 对象，然后在回调中游戏逻辑
-/// ```
+/// 
 /// let p5_instance = getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
 ///   world.step(1.0/60.0, 4)
 ///   draw_world(p, world)
 /// }, width=Width, height=Height)
-/// ```
+/// 
 /// 
 /// 绘画只需要调用 draw_world 即可，注意要step world!!!!!!!!
 
@@ -156,7 +156,7 @@ fn box2d_init(world: @box2d.B2World) ->Unit{
     (10.0,1.0)
   ) |> ignore
 
-  particles.val.push(create_particle(world, (0.0,10.0)))
+  create_particle(world, (0.0,10.0)) |> ignore
 
   let static_box = create_static_box(
     world,
@@ -182,15 +182,15 @@ fn main {
 
   let p5_instance = getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
     
-	// 	println("Fuck\n")
-	// for particle in particles.val {
-	// 	println("Fuck2\n")
-	// 	walk(particle,1)
-	// }
+	for particle in particle_list.val {
+		jump(particle,100)
+		maintain_rotation(particle.torso,0.0,kp=30.0,kd=10.0)
+		//particle.torso.applyForce(@box2d.b2Vec2(0.0, 50.0), particle.torso.getCenterPosition())
+	}
 	
 	
-	// world.val.step(1.0/60.0, 4)
-    // //draw_world(p, world.val)
+	world.val.step(1.0/60.0, 4)
+    draw_world(p, world.val)
   }, width=Width, height=Height)
 
   //p5_instance |> ignore

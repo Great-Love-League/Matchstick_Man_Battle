@@ -93,8 +93,8 @@ fn create_particle(
 	let thigh_right_joint = create_joint(world, torso, right_thigh, (position.0, position.1-0.5),enable_limit=true,lower_angle=-1.0,upper_angle=1.0)
 	let knee_left_joint = create_joint(world, left_thigh, left_shank, (position.0, position.1-1.5),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
 	let knee_right_joint = create_joint(world, right_thigh, right_shank, (position.0, position.1-1.5),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
-	let index= particle_index.val
-	Particle::{
+	let index= particle_index.val-1
+	let tmp=Particle::{
     torso,
     head,
     left_thigh,
@@ -110,6 +110,8 @@ fn create_particle(
 		walk_state:false,
 		cooldown:0
 	}
+	particle_list.val.push(tmp)
+	tmp
 }
 
 let platform_index:Ref[Int]=Ref::new(0)
@@ -120,11 +122,13 @@ fn create_platform(
 )-> Platform{
 	platform_index.val+=1
 	let body = create_static_box(world, position, size)
-	let index = platform_index.val
-	Platform::{
+	let index = platform_index.val-1
+	let tmp=Platform::{
 		body,
 		index
 	}
+	platform_list.val.push(tmp)
+	tmp
 }
 
 fn maintain_joint(
@@ -179,15 +183,8 @@ fn maintain_torso(
 	maintain_position(particle.torso, target_pos)
 }
 
-pub extern "js" fn op_equal(a:@box2d.B2Body, b:@box2d.B2Body)->Bool=
-	#| (a, b) => a===b
-
-extern "js" fn @box2d.B2Body::is_object_alive(self : @box2d.B2Body) -> Bool =
-	#| (self) =>{
-	#|	return self !== null && 
-	#|         self !== undefined && 
-	#|         typeof self === 'object';
-	#| }
+extern "js" fn equals(a:@box2d.B2Body, b:@box2d.B2Body)->Bool=
+#|(a,b)=>{return a===b}
 
 fn which_platform(
 	particle: Particle
@@ -196,25 +193,42 @@ fn which_platform(
 	for contact in contact_list {
 		let bodyA=contact.getShape1().getBody()
 		let bodyB=contact.getShape2().getBody()
-		if(op_equal(bodyA, particle.left_shank)||
-			op_equal(bodyA, particle.right_shank)){
-			for platform in platform_list.val {
-				if(op_equal(bodyB, platform.body)){
-					return platform.index
+		if equals(bodyA, particle.left_shank) || equals(bodyB, particle.left_shank) {
+			let other_body=if equals(bodyA, particle.left_shank) {bodyB} else {bodyA}
+			for i in platform_list.val {
+				if equals(other_body, i.body) {
+					return i.index
 				}
 			}
 		}
-		if(op_equal(bodyB, particle.left_shank)||
-			op_equal(bodyB, particle.right_shank)){
-			for platform in platform_list.val {
-				if(op_equal(bodyA, platform.body)){
-					return platform.index
+		if equals(bodyA, particle.right_shank) || equals(bodyB, particle.right_shank) {
+			let other_body=if equals(bodyA, particle.right_shank) {bodyB} else {bodyA}
+			for i in platform_list.val {
+				if equals(other_body, i.body) {
+					return i.index
+				}
+			}
+		}
+		if equals(bodyA, particle.left_thigh) || equals(bodyB, particle.left_thigh) {
+			let other_body=if equals(bodyA, particle.left_thigh) {bodyB} else {bodyA}
+			for i in platform_list.val {
+				if equals(other_body, i.body) {
+					return i.index
+				}
+			}
+		}
+		if equals(bodyA, particle.right_thigh) || equals(bodyB, particle.right_thigh) {
+			let other_body=if equals(bodyA, particle.right_thigh) {bodyB} else {bodyA}
+			for i in platform_list.val {
+				if equals(other_body, i.body) {
+					return i.index
 				}
 			}
 		}
 	}
 	-1
 }
+
 let knee_angle : Double = 63.0 / 180.0 * Pi
 let thigh_angle_forward = 0.5
 let thigh_angle_backward = -0.5
@@ -223,19 +237,6 @@ fn walk(
 	direction: Double
 )->Unit{
 	let index=which_platform(particle)
-	if(index==-1){
-		return 
-	}
-	let platform=platform_list.val[index]
-	
-	let p_angle=platform.body.getRotation()
-
-	let target_y=(
-		particle.torso.getCenterPosition().getX()-platform.body.getCenterPosition().getX()
-	)*@cmath.tan(p_angle)+platform.body.getCenterPosition().getY()
-	
-	maintain_position(particle.torso,(particle.torso.getCenterPosition().getX(),target_y+3.0))
-	maintain_rotation(particle.torso, p_angle*0.7)
 	
 	let mut left_target :Double=0.0
 	let mut right_target :Double=0.0
@@ -247,18 +248,30 @@ fn walk(
 		left_target = thigh_angle_forward
 		right_target = thigh_angle_backward
 	}
-	
-	maintain_joint(particle.thigh_left_joint, left_target + p_angle*0.7)
-	maintain_joint(particle.thigh_right_joint, right_target + p_angle*0.7)
-	maintain_joint(particle.knee_left_joint, -knee_angle*direction,kp=300.0,kd=10.0)
-	maintain_joint(particle.knee_right_joint, -knee_angle*direction,kp=300.0,kd=10.0)
+	maintain_joint(particle.thigh_left_joint, left_target,kp=30.0,kd=1.0)
+	maintain_joint(particle.thigh_right_joint, right_target,kp=30.0,kd=1.0)
+	maintain_joint(particle.knee_left_joint, -knee_angle*direction,kp=30.0,kd=1.0)
+	maintain_joint(particle.knee_right_joint, -knee_angle*direction,kp=30.0,kd=1.0)
 	if particle.cooldown<=0{
 		particle.walk_state = !particle.walk_state
-		particle.cooldown=10
+		particle.cooldown=20
 	}
 	else{
 		particle.cooldown-=1
 	}
+	if(index==-1){
+		return 
+	}
+	let platform=platform_list.val[index]
+	let p_angle=platform.body.getRotation()
+	let target_y=(
+		particle.torso.getCenterPosition().getX()-platform.body.getCenterPosition().getX()
+	)*@cmath.tan(p_angle)+platform.body.getCenterPosition().getY()
+	
+	maintain_position(particle.torso,(particle.torso.getCenterPosition().getX(),target_y+3.3))
+	maintain_rotation(particle.torso, p_angle*0.7)
+	let v=@box2d.b2Vec2(50.0*direction*@cmath.cos(p_angle),50.0*direction*@cmath.sin(p_angle))
+	particle.torso.applyForce(v, particle.torso.getCenterPosition())
 }
 //这里缺少了走路停下的阻尼,和站稳的阻尼
 fn stand(
@@ -266,8 +279,10 @@ fn stand(
 )->Unit{
 	let index=which_platform(particle)
 	if(index==-1){
+		println("Can't find platform")
 		return 
 	}
+	println(index)
 	let platform=platform_list.val[index]
 	
 	let p_angle=platform.body.getRotation()
@@ -276,7 +291,7 @@ fn stand(
 		particle.torso.getCenterPosition().getX()-platform.body.getCenterPosition().getX()
 	)*@cmath.tan(p_angle)+platform.body.getCenterPosition().getY()
 	
-	maintain_position(particle.torso,(particle.torso.getCenterPosition().getX(),target_y+3.0))
+	maintain_position(particle.torso,(particle.torso.getCenterPosition().getX(),target_y+3.5))
 }
 
 //这里缺少了跳跃的动作
