@@ -93,6 +93,17 @@ fn create_particle(
 	let thigh_right_joint = create_joint(world, torso, right_thigh, (position.0, position.1-0.5),enable_limit=true,lower_angle=-1.0,upper_angle=1.0)
 	let knee_left_joint = create_joint(world, left_thigh, left_shank, (position.0, position.1-1.5),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
 	let knee_right_joint = create_joint(world, right_thigh, right_shank, (position.0, position.1-1.5),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
+	
+	let left_arm = create_dynamic_box(world, (position.0, position.1+0.5),(0.15,0.5),density=1.0,groupindex=-1)
+	let right_arm = create_dynamic_box(world, (position.0, position.1+0.5),(0.15,0.5),density=1.0,groupindex=-1)
+	let left_forearm = create_dynamic_box(world, (position.0, position.1-0.25),(0.15,0.5),density=1.0,groupindex=-1)
+	let right_forearm = create_dynamic_box(world, (position.0, position.1-0.25),(0.15,0.5),density=1.0,groupindex=-1)
+	
+	let arm_left_joint = create_joint(world, torso, left_arm, (position.0, position.1+1),enable_limit=true,lower_angle=-1.0,upper_angle=1.0)
+	let arm_right_joint = create_joint(world, torso, right_arm, (position.0, position.1+1),enable_limit=true,lower_angle=-1.0,upper_angle=1.0)
+	let forearm_left_joint = create_joint(world, left_arm, left_forearm, (position.0, position.1),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
+	let forearm_right_joint = create_joint(world, right_arm, right_forearm, (position.0, position.1),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
+	
 	let index= particle_index.val-1
 	let tmp=Particle::{
     torso,
@@ -107,6 +118,14 @@ fn create_particle(
     knee_right_joint,
     neck_joint,
 		index,
+		left_forearm,
+		right_forearm,
+		left_arm,
+		right_arm,
+		arm_left_joint,
+		arm_right_joint,
+		forearm_left_joint,
+		forearm_right_joint,
 		walk_state:false,
 		cooldown:0
 	}
@@ -230,8 +249,11 @@ fn which_platform(
 }
 
 let knee_angle : Double = 63.0 / 180.0 * Pi
-let thigh_angle_forward = 0.5
+let thigh_angle_forward = 0.8
 let thigh_angle_backward = -0.5
+let elbow_angle : Double = 63.0 / 180.0 * Pi
+let arm_angle_forward = 0.5
+let arm_angle_backward = -0.5
 fn walk(
 	particle: Particle,
 	direction: Double
@@ -240,18 +262,28 @@ fn walk(
 	
 	let mut left_target :Double=0.0
 	let mut right_target :Double=0.0
+	let mut left_arm_target :Double=0.0
+	let mut right_arm_target :Double=0.0
 	if particle.walk_state {
 		left_target = thigh_angle_backward
 		right_target = thigh_angle_forward
+		left_arm_target = arm_angle_backward
+		right_arm_target = arm_angle_forward
 	}
 	else {
 		left_target = thigh_angle_forward
 		right_target = thigh_angle_backward
+		left_arm_target = arm_angle_forward
+		right_arm_target = arm_angle_backward
 	}
-	maintain_joint(particle.thigh_left_joint, left_target,kp=30.0,kd=1.0)
-	maintain_joint(particle.thigh_right_joint, right_target,kp=30.0,kd=1.0)
+	maintain_joint(particle.thigh_left_joint, left_target,kp=50.0,kd=1.0)
+	maintain_joint(particle.thigh_right_joint, right_target,kp=50.0,kd=1.0)
 	maintain_joint(particle.knee_left_joint, -knee_angle*direction,kp=30.0,kd=1.0)
 	maintain_joint(particle.knee_right_joint, -knee_angle*direction,kp=30.0,kd=1.0)
+	maintain_joint(particle.arm_left_joint, left_arm_target,kp=30.0,kd=1.0)
+	maintain_joint(particle.arm_right_joint, right_arm_target,kp=30.0,kd=1.0)
+	maintain_joint(particle.forearm_left_joint, elbow_angle*direction,kp=30.0,kd=1.0)
+	maintain_joint(particle.forearm_right_joint, elbow_angle*direction,kp=30.0,kd=1.0)
 	if particle.cooldown<=0{
 		particle.walk_state = !particle.walk_state
 		particle.cooldown=20
@@ -268,9 +300,9 @@ fn walk(
 		particle.torso.getCenterPosition().getX()-platform.body.getCenterPosition().getX()
 	)*@cmath.tan(p_angle)+platform.body.getCenterPosition().getY()
 	
-	maintain_position(particle.torso,(particle.torso.getCenterPosition().getX(),target_y+3.3))
+	maintain_position(particle.torso,(particle.torso.getCenterPosition().getX(),target_y+3.4))
 	maintain_rotation(particle.torso, p_angle*0.7)
-	let v=@box2d.b2Vec2(50.0*direction*@cmath.cos(p_angle),50.0*direction*@cmath.sin(p_angle))
+	let v=@box2d.b2Vec2(50.0*direction*@cmath.cos(p_angle),100.0*direction*@cmath.sin(p_angle))
 	particle.torso.applyForce(v, particle.torso.getCenterPosition())
 }
 //这里缺少了走路停下的阻尼,和站稳的阻尼
@@ -278,6 +310,15 @@ fn stand(
 	particle: Particle
 )->Unit{
 	let index=which_platform(particle)
+	
+	maintain_joint(particle.thigh_left_joint, 0.0,kp=50.0,kd=2.0)
+	maintain_joint(particle.thigh_right_joint, 0.0,kp=50.0,kd=2.0)
+	maintain_joint(particle.knee_left_joint, 0.0,kp=10.0,kd=2.0)
+	maintain_joint(particle.knee_right_joint, 0.0,kp=10.0,kd=2.0)
+	maintain_joint(particle.arm_left_joint, 0.0,kp=10.0,kd=2.0)
+	maintain_joint(particle.arm_right_joint, 0.0,kp=10.0,kd=2.0)
+	maintain_joint(particle.forearm_left_joint, 0.0,kp=30.0,kd=2.0)
+	maintain_joint(particle.forearm_right_joint, 0.0,kp=30.0,kd=2.0)
 	if(index==-1){
 		println("Can't find platform")
 		return 
@@ -291,7 +332,7 @@ fn stand(
 		particle.torso.getCenterPosition().getX()-platform.body.getCenterPosition().getX()
 	)*@cmath.tan(p_angle)+platform.body.getCenterPosition().getY()
 	
-	maintain_position(particle.torso,(particle.torso.getCenterPosition().getX(),target_y+3.5))
+	maintain_position(particle.torso,(particle.torso.getCenterPosition().getX(),target_y+3.7))
 }
 
 //这里缺少了跳跃的动作

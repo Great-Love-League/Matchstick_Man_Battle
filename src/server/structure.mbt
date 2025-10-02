@@ -13,6 +13,18 @@ pub struct Particle{
 	knee_right_joint : @box2d.B2Joint
 	neck_joint : @box2d.B2Joint
 	index : Int
+
+	left_forearm : @box2d.B2Body
+	right_forearm : @box2d.B2Body
+	
+	left_arm : @box2d.B2Body
+	right_arm : @box2d.B2Body
+	
+	arm_left_joint : @box2d.B2Joint
+	arm_right_joint : @box2d.B2Joint
+	
+	forearm_left_joint : @box2d.B2Joint
+	forearm_right_joint : @box2d.B2Joint
 	
 	mut walk_state : Bool
 	mut cooldown : Int
