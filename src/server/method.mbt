@@ -86,24 +86,21 @@ fn create_particle(
 	let head = create_dynamic_box(world, (position.0, position.1+1.5),(0.2,0.25),density=1.0,groupindex=-1)
 	let left_thigh = create_dynamic_box(world, (position.0, position.1-1),(0.15,0.5),density=1.0,groupindex=-1)
 	let right_thigh = create_dynamic_box(world, (position.0, position.1-1),(0.15,0.5),density=1.0,groupindex=-1)
-	let left_shank = create_dynamic_box(world, (position.0, position.1-2),(0.15,0.5),density=1.0,groupindex=-1)
-	let right_shank = create_dynamic_box(world, (position.0, position.1-2),(0.15,0.5),density=1.0,groupindex=-1)
+	let left_shank = create_dynamic_box(world, (position.0, position.1-2),(0.15,0.5),density=1.0,groupindex=-1,friciton=0.8)
+	let right_shank = create_dynamic_box(world, (position.0, position.1-2),(0.15,0.5),density=1.0,groupindex=-1,friciton=0.8)
 	let neck_joint = create_joint(world, torso, head, (position.0, position.1+1.0),enable_limit=true,lower_angle=0.0,upper_angle=0.0)
 	let thigh_left_joint = create_joint(world, torso, left_thigh, (position.0, position.1-0.5),enable_limit=true,lower_angle=-1.0,upper_angle=1.0)
 	let thigh_right_joint = create_joint(world, torso, right_thigh, (position.0, position.1-0.5),enable_limit=true,lower_angle=-1.0,upper_angle=1.0)
 	let knee_left_joint = create_joint(world, left_thigh, left_shank, (position.0, position.1-1.5),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
 	let knee_right_joint = create_joint(world, right_thigh, right_shank, (position.0, position.1-1.5),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
-	
 	let left_arm = create_dynamic_box(world, (position.0, position.1+0.5),(0.15,0.5),density=1.0,groupindex=-1)
 	let right_arm = create_dynamic_box(world, (position.0, position.1+0.5),(0.15,0.5),density=1.0,groupindex=-1)
 	let left_forearm = create_dynamic_box(world, (position.0, position.1-0.25),(0.15,0.5),density=1.0,groupindex=-1)
 	let right_forearm = create_dynamic_box(world, (position.0, position.1-0.25),(0.15,0.5),density=1.0,groupindex=-1)
-	
 	let arm_left_joint = create_joint(world, torso, left_arm, (position.0, position.1+1),enable_limit=true,lower_angle=-1.0,upper_angle=1.0)
 	let arm_right_joint = create_joint(world, torso, right_arm, (position.0, position.1+1),enable_limit=true,lower_angle=-1.0,upper_angle=1.0)
 	let forearm_left_joint = create_joint(world, left_arm, left_forearm, (position.0, position.1),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
 	let forearm_right_joint = create_joint(world, right_arm, right_forearm, (position.0, position.1),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
-	
 	let index= particle_index.val-1
 	let tmp=Particle::{
     torso,
@@ -117,7 +114,6 @@ fn create_particle(
     knee_left_joint,
     knee_right_joint,
     neck_joint,
-		index,
 		left_forearm,
 		right_forearm,
 		left_arm,
@@ -126,6 +122,7 @@ fn create_particle(
 		arm_right_joint,
 		forearm_left_joint,
 		forearm_right_joint,
+		index,
 		walk_state:false,
 		cooldown:0
 	}
@@ -254,7 +251,7 @@ let thigh_angle_backward = -0.5
 let elbow_angle : Double = 63.0 / 180.0 * Pi
 let arm_angle_forward = 0.5
 let arm_angle_backward = -0.5
-fn walk(
+fn particle_walk(
 	particle: Particle,
 	direction: Double
 )->Unit{
@@ -306,7 +303,7 @@ fn walk(
 	particle.torso.applyForce(v, particle.torso.getCenterPosition())
 }
 //这里缺少了走路停下的阻尼,和站稳的阻尼
-fn stand(
+fn particle_stand(
 	particle: Particle
 )->Unit{
 	let index=which_platform(particle)
@@ -320,7 +317,7 @@ fn stand(
 	maintain_joint(particle.forearm_left_joint, 0.0,kp=30.0,kd=2.0)
 	maintain_joint(particle.forearm_right_joint, 0.0,kp=30.0,kd=2.0)
 	if(index==-1){
-		println("Can't find platform")
+		//println("Can't find platform")
 		return 
 	}
 	println(index)
@@ -336,7 +333,7 @@ fn stand(
 }
 
 //这里缺少了跳跃的动作
-fn jump(
+fn particle_jump(
 	particle: Particle,
 	force: Double
 )->Unit{
