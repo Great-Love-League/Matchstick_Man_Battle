@@ -6,7 +6,7 @@ extern "js" fn getP5Instance(
   drawww : (@p5js.P5Instance) -> Unit,
   width~ : Double = 400,
   height~ : Double = 400
-) -> @p5js.P5Instance =
+) -> @p5js.P5Instance = 
   #| (drawww, width, height) => {
   #|   a = new p5((p)=>{
   #|  p.setup = function() {
@@ -71,7 +71,6 @@ fn world_to_screen_size(size: Double, ppm : Double) -> Double {
 
 
 fn drawPolygon(p: &@p5js.P5JS, shape: @box2d.B2PolygonShape) -> Unit {
-
   // 获取顶点
   let vertices = shape.getVertices()
   let global_position : Array[@box2d.B2Vec2] = Array::new()
@@ -79,14 +78,12 @@ fn drawPolygon(p: &@p5js.P5JS, shape: @box2d.B2PolygonShape) -> Unit {
     let gvec = shape.getBody().getWorldPoint(vertex)
     global_position.push(gvec)
   }
-
   // 转换为屏幕坐标
   let screen_position : Array[(Double, Double)] = Array::new()
   for gvec in global_position {
     let screen_coords = world_to_screen(Width, Height, gvec.getX(), gvec.getY(), PPM)
     screen_position.push(screen_coords)
   }
-
   // 绘制多边形
   p.beginShape(None)
   for i in 0..<screen_position.length() {
@@ -94,20 +91,16 @@ fn drawPolygon(p: &@p5js.P5JS, shape: @box2d.B2PolygonShape) -> Unit {
     p.vertex(x, y, None, None, None)
   }
   p.endShape(Some("close"), None)  // "close" 表示闭合多边形
-
 }
 
 fn drawCircle(p: &@p5js.P5JS, shape: @box2d.B2CircleShape) -> Unit{
   let position = shape.getBody().getWorldPoint(shape.getLocalPosition())
   let radius = shape.getRadius()
-
   let screen_pos = world_to_screen(Width, Height, position.getX(), position.getY(), PPM)
   let screen_radius = world_to_screen_size(radius, PPM)
-
 //   println("Circle Position: \{position.getX()} , \{position.getY()}")
 //   println("Circle Screen Position: \{screen_pos.0} , \{screen_pos.1}")
 //   println("Circle Radius: \{radius}")
-
   p.fillColorPara(200, Some(0.0), Some(0.0), None)
   p.circle(screen_pos.0, screen_pos.1, screen_radius * 2.0)
 
@@ -115,11 +108,8 @@ fn drawCircle(p: &@p5js.P5JS, shape: @box2d.B2CircleShape) -> Unit{
 
 
 fn draw_world(p: &@p5js.P5JS, world: @box2d.B2World) -> Unit {
-
   p.background(255.0, Some(204.0), Some(0.0), None)
-
   for body in world.getBodyList() {
-
     for shape in body.getShapeList() {
       match shape.getType() {
         PolygonShape => drawPolygon(p, shape.toPolygonShape())
@@ -131,7 +121,6 @@ fn draw_world(p: &@p5js.P5JS, world: @box2d.B2World) -> Unit {
       }
     }
   }
-
 }
 
 // -------------------- 绘画相关 结束 ---------------------
@@ -157,6 +146,7 @@ fn box2d_init(world: @box2d.B2World) ->Unit{
   ) |> ignore
 
   create_particle(world, (0.0,10.0)) |> ignore
+  create_particle(world, (5.0,10.0)) |> ignore
 
   let static_box = create_static_box(
     world,
@@ -182,19 +172,26 @@ fn main {
 
   let p5_instance = getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
     
-	for particle in particle_list.val {
+		
 		if(p.keyIsDown(KeyA)){
-			walk(particle,-1)
+			particle_walk(particle_list.val[0],-1)
 		}
 		else if(p.keyIsDown(KeyD)){
-			walk(particle,1)
+			particle_walk(particle_list.val[0],1)
 		}
-		else {
-			stand(particle)
+		else{
+			particle_stand(particle_list.val[0])
 		}
-		maintain_rotation(particle.torso,0.0,kp=30.0,kd=10.0)
+		if(p.keyIsDown(ArrowLeft)){
+			particle_walk(particle_list.val[1],-1)
+		}
+		else if(p.keyIsDown(ArrowRight)){
+			particle_walk(particle_list.val[1],1)
+		}
+		else{
+			particle_stand(particle_list.val[1])
+		}
 		//particle.torso.applyForce(@box2d.b2Vec2(0.0, 50.0), particle.torso.getCenterPosition())
-	}
 	
 	
 	world.val.step(1.0/60.0, 4)
