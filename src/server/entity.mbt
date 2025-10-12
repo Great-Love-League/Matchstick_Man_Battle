@@ -1,4 +1,13 @@
 //Player Entity
+
+pub struct ParticleControl{
+	mut walk_state : Bool
+	mut walk_cooldown : Int
+	mut jump_cooldown : Int
+	mut jump_state : Bool
+	mut jump_frame_count : Int
+}
+
 pub struct Particle{
 	torso : @box2d.B2Body
 	head : @box2d.B2Body
@@ -20,9 +29,7 @@ pub struct Particle{
 	forearm_left_joint : @box2d.B2Joint
 	forearm_right_joint : @box2d.B2Joint
 	index : Int
-	
-	mut walk_state : Bool
-	mut cooldown : Int
+	control : ParticleControl
 }
 
 //Platform Entity
