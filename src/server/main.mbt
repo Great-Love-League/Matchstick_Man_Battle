@@ -146,7 +146,7 @@ fn box2d_init(world: @box2d.B2World) ->Unit{
   ) |> ignore
 
   create_particle(world, (0.0,10.0)) |> ignore
-  create_particle(world, (5.0,10.0)) |> ignore
+  //create_particle(world, (5.0,10.0)) |> ignore
 
   let static_box = create_static_box(
     world,
@@ -179,18 +179,39 @@ fn main {
 		else if(p.keyIsDown(KeyD)){
 			particle_walk(particle_list.val[0],1)
 		}
-		else{
+		else if(p.keyIsDown(KeyW)){
+			if particle_list.val[0].control.jump_cooldown <= 0 {
+				if !particle_list.val[0].control.jump_state { // 如果不在跳跃状态，则开始跳跃
+					particle_list.val[0].control.jump_state = true
+					particle_list.val[0].control.jump_frame_count = 0  // 重置跳跃帧计数
+					particle_list.val[0].control.jump_cooldown = j_dur_A + j_dur_B + j_dur_C  // 总共跳跃帧数
+				}
+			}
+		}
+		else if(!particle_list.val[0].control.jump_state){
 			particle_stand(particle_list.val[0])
 		}
-		if(p.keyIsDown(ArrowLeft)){
-			particle_walk(particle_list.val[1],-1)
+		if(particle_list.val[0].control.jump_cooldown > 0){
+			particle_list.val[0].control.jump_cooldown -= 1 
 		}
-		else if(p.keyIsDown(ArrowRight)){
-			particle_walk(particle_list.val[1],1)
-		}
-		else{
-			particle_stand(particle_list.val[1])
-		}
+		particle_jump(particle_list.val[0],0)
+		// else{
+		// 	if(particle_list.val[0].jump_cooldown>=0){
+		// 		particle_jump(particle_list.val[0],50)
+		// 	}
+		// 	else{
+		// 		particle_stand(particle_list.val[0])
+		// 	}
+		// }
+		// if(p.keyIsDown(ArrowLeft)){
+		// 	particle_walk(particle_list.val[1],-1)
+		// }
+		// else if(p.keyIsDown(ArrowRight)){
+		// 	particle_walk(particle_list.val[1],1)
+		// }
+		// else{
+		// 	particle_stand(particle_list.val[1])
+		// }
 		//particle.torso.applyForce(@box2d.b2Vec2(0.0, 50.0), particle.torso.getCenterPosition())
 	
 	

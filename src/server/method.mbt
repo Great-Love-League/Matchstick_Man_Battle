@@ -18,6 +18,7 @@ fn create_static_box(
 	body_def.setPosition(@box2d.b2Vec2(position.0, position.1))
 	body_def.addShape(box_def.getBase())
 	body_def.setRotation(0.0)
+	body_def.setAllowSleep(false)
 	let body = world.createBody(body_def)
 	body
 }
@@ -40,6 +41,7 @@ fn create_dynamic_box(
 	body_def.setPosition(@box2d.b2Vec2(position.0, position.1))
 	body_def.addShape(box_def.getBase())
 	body_def.setRotation(0.0)
+	body_def.setAllowSleep(false)
 	let body = world.createBody(body_def)
 	body
 }
@@ -74,6 +76,21 @@ fn create_world(
 	let world : @box2d.B2World = {world : @box2d.b2World(worldAABB,@box2d.b2Vec2(gravity.0, gravity.1), true)}
 	world
 }
+fn create_particle_control(
+	walk_state?: Bool=false,
+	walk_cooldown?: Int=0,
+	jump_cooldown?: Int=-1,
+	jump_state?: Bool=false,
+	jump_frame_count?: Int=0
+) -> ParticleControl{
+	ParticleControl::{
+		walk_state,
+		walk_cooldown,
+		jump_cooldown,
+		jump_state,
+		jump_frame_count
+	}
+}
 
 //return a particle and its index in the particle system
 let particle_index:Ref[Int]=Ref::new(0)
@@ -103,17 +120,17 @@ fn create_particle(
 	let forearm_right_joint = create_joint(world, right_arm, right_forearm, (position.0, position.1),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
 	let index= particle_index.val-1
 	let tmp=Particle::{
-    torso,
-    head,
-    left_thigh,
-    right_thigh,
-    left_shank,
-    right_shank,
-    thigh_left_joint,
-    thigh_right_joint,
-    knee_left_joint,
-    knee_right_joint,
-    neck_joint,
+		torso,
+		head,
+		left_thigh,
+		right_thigh,
+		left_shank,
+		right_shank,
+		thigh_left_joint,
+		thigh_right_joint,
+		knee_left_joint,
+		knee_right_joint,
+		neck_joint,
 		left_forearm,
 		right_forearm,
 		left_arm,
@@ -123,8 +140,7 @@ fn create_particle(
 		forearm_left_joint,
 		forearm_right_joint,
 		index,
-		walk_state:false,
-		cooldown:0
+		control: create_particle_control()
 	}
 	particle_list.val.push(tmp)
 	tmp
@@ -157,7 +173,7 @@ fn maintain_joint(
 	let bodyB=joint.toRevoluteJoint().getBody2()
 	let angle = bodyB.getRotation() - bodyA.getRotation()
 	let mut error=target_angle - angle
-	error =(error + Pi) % (2.0 * Pi) - Pi
+	//error =(error + Pi) % (2.0 * Pi) - Pi
 	let torque=kp*error - kd*(bodyB.getAngularVelocity()-bodyA.getAngularVelocity())
 	bodyB.applyTorque(torque)
 }
@@ -180,12 +196,12 @@ fn maintain_position(
 fn maintain_rotation(
 	body: @box2d.B2Body,
 	target_angle: Double,
-	kp?:Double=300.0,
+	kp?:Double=30.0,
 	kd?:Double=10.0
 )-> Unit {
 	let angle = body.getRotation()
 	let mut error=target_angle - angle
-	error =(error + Pi) % (2.0 * Pi) - Pi
+	//error =(error + Pi) % (2.0 * Pi) - Pi
 	let torque=kp*error - kd*body.getAngularVelocity()
 	body.applyTorque(torque)
 }
@@ -202,49 +218,38 @@ fn maintain_torso(
 extern "js" fn equals(a:@box2d.B2Body, b:@box2d.B2Body)->Bool=
 #|(a,b)=>{return a===b}
 
-fn which_platform(
-	particle: Particle
-)->Int{
+fn is_contact(a:@box2d.B2Body, b:@box2d.B2Body)->Bool{
 	let contact_list=world.val.getContactList()
 	for contact in contact_list {
 		let bodyA=contact.getShape1().getBody()
 		let bodyB=contact.getShape2().getBody()
-		if equals(bodyA, particle.left_shank) || equals(bodyB, particle.left_shank) {
-			let other_body=if equals(bodyA, particle.left_shank) {bodyB} else {bodyA}
-			for i in platform_list.val {
-				if equals(other_body, i.body) {
-					return i.index
-				}
-			}
+		if (equals(bodyA, a) && equals(bodyB, b)) || (equals(bodyA, b) && equals(bodyB, a)) {
+			return true
 		}
-		if equals(bodyA, particle.right_shank) || equals(bodyB, particle.right_shank) {
-			let other_body=if equals(bodyA, particle.right_shank) {bodyB} else {bodyA}
-			for i in platform_list.val {
-				if equals(other_body, i.body) {
-					return i.index
-				}
-			}
+	}
+	false
+}
+
+fn which_platform(
+	particle: Particle
+)->Int{
+	for platform in platform_list.val {
+		if is_contact(particle.left_shank, platform.body) {
+			return platform.index
 		}
-		if equals(bodyA, particle.left_thigh) || equals(bodyB, particle.left_thigh) {
-			let other_body=if equals(bodyA, particle.left_thigh) {bodyB} else {bodyA}
-			for i in platform_list.val {
-				if equals(other_body, i.body) {
-					return i.index
-				}
-			}
+		if is_contact(particle.right_shank, platform.body) {
+			return platform.index
 		}
-		if equals(bodyA, particle.right_thigh) || equals(bodyB, particle.right_thigh) {
-			let other_body=if equals(bodyA, particle.right_thigh) {bodyB} else {bodyA}
-			for i in platform_list.val {
-				if equals(other_body, i.body) {
-					return i.index
-				}
-			}
-		}
+		// if is_contact(particle.right_thigh, platform.body) {
+		// 	return platform.index
+		// }
+		// if is_contact(particle.right_thigh, platform.body) {
+		// 	return platform.index
+		// }
 	}
 	-1
 }
-
+//particle walk
 let knee_angle : Double = 63.0 / 180.0 * Pi
 let thigh_angle_forward = 0.8
 let thigh_angle_backward = -0.5
@@ -255,59 +260,106 @@ fn particle_walk(
 	particle: Particle,
 	direction: Double
 )->Unit{
-	let index=which_platform(particle)
-	
-	let mut left_target :Double=0.0
-	let mut right_target :Double=0.0
-	let mut left_arm_target :Double=0.0
-	let mut right_arm_target :Double=0.0
-	if particle.walk_state {
-		left_target = thigh_angle_backward
-		right_target = thigh_angle_forward
-		left_arm_target = arm_angle_backward
-		right_arm_target = arm_angle_forward
-	}
-	else {
-		left_target = thigh_angle_forward
-		right_target = thigh_angle_backward
-		left_arm_target = arm_angle_forward
-		right_arm_target = arm_angle_backward
-	}
-	maintain_joint(particle.thigh_left_joint, left_target,kp=50.0,kd=1.0)
-	maintain_joint(particle.thigh_right_joint, right_target,kp=50.0,kd=1.0)
+	//腿部动作处理
+	if particle.control.walk_state{	maintain_joint(particle.thigh_left_joint, thigh_angle_backward,kp=50.0,kd=1.0)}
+	else{					maintain_joint(particle.thigh_left_joint, thigh_angle_forward,kp=50.0,kd=1.0)}
+	if particle.control.walk_state{	maintain_joint(particle.thigh_right_joint, thigh_angle_forward,kp=50.0,kd=1.0)}
+	else{					maintain_joint(particle.thigh_right_joint,thigh_angle_backward,kp=50.0,kd=1.0)}
 	maintain_joint(particle.knee_left_joint, -knee_angle*direction,kp=30.0,kd=1.0)
 	maintain_joint(particle.knee_right_joint, -knee_angle*direction,kp=30.0,kd=1.0)
-	maintain_joint(particle.arm_left_joint, left_arm_target,kp=30.0,kd=1.0)
-	maintain_joint(particle.arm_right_joint, right_arm_target,kp=30.0,kd=1.0)
+	
+	//手部动作处理
+	if particle.control.walk_state{	maintain_joint(particle.arm_left_joint, arm_angle_backward,kp=30.0,kd=1.0)}
+	else{					maintain_joint(particle.arm_left_joint, arm_angle_forward,kp=30.0,kd=1.0)}
+	if particle.control.walk_state{	maintain_joint(particle.arm_right_joint, arm_angle_forward,kp=30.0,kd=1.0)}
+	else{					maintain_joint(particle.arm_right_joint, arm_angle_backward,kp=30.0,kd=1.0)}
 	maintain_joint(particle.forearm_left_joint, elbow_angle*direction,kp=30.0,kd=1.0)
 	maintain_joint(particle.forearm_right_joint, elbow_angle*direction,kp=30.0,kd=1.0)
-	if particle.cooldown<=0{
-		particle.walk_state = !particle.walk_state
-		particle.cooldown=20
+	
+	//躯干姿态处理
+	maintain_rotation(particle.torso, 0,kp=100.0,kd=10.0)
+	
+	//状态处理
+	if particle.control.walk_cooldown<=0{
+		particle.control.walk_state = !particle.control.walk_state
+		particle.control.walk_cooldown=20
 	}
-	else{
-		particle.cooldown-=1
-	}
+	else{particle.control.walk_cooldown-=1}
+
+	//力学处理
+	let index=which_platform(particle)
 	if(index==-1){
+		particle.torso.applyForce(@box2d.b2Vec2(50.0*direction,0.0), particle.torso.getCenterPosition())
 		return 
 	}
+	
 	let platform=platform_list.val[index]
 	let p_angle=platform.body.getRotation()
 	let target_y=(
 		particle.torso.getCenterPosition().getX()-platform.body.getCenterPosition().getX()
-	)*@cmath.tan(p_angle)+platform.body.getCenterPosition().getY()
+	)*@cmath.tan(p_angle)+platform.body.getCenterPosition().getY()//Fuck
 	
-	maintain_position(particle.torso,(particle.torso.getCenterPosition().getX(),target_y+3.4))
-	maintain_rotation(particle.torso, p_angle*0.7)
-	let v=@box2d.b2Vec2(50.0*direction*@cmath.cos(p_angle),100.0*direction*@cmath.sin(p_angle))
+	maintain_position(particle.torso,(particle.torso.getCenterPosition().getX(),target_y+3.4),kd=5.0,kp=1.0)
+	let v=@box2d.b2Vec2(50.0*direction*@cmath.cos(p_angle),50.0*direction*@cmath.sin(p_angle))
 	particle.torso.applyForce(v, particle.torso.getCenterPosition())
 }
 //这里缺少了走路停下的阻尼,和站稳的阻尼
+
+//这里缺少了跳跃的动作
+let knee_angle_bend_max : Double = -2.50  // 最大弯曲角度 (前10帧)
+let knee_angle_straight : Double = 0.0  // 最大伸直角度 (最后3帧)
+let j_dur_A : Int = 40  // 前10帧膝盖弯曲
+let j_dur_B : Int = 1  // 后3帧膝盖伸直
+let j_dur_C : Int = 20  // 后3帧膝盖伸直
+let jump_force : Double = 200.0  // 跳跃力大小
+
+fn particle_jump(
+    particle: Particle,
+    direction: Double
+)-> Unit {
+    // 控制跳跃动作的帧计数
+
+    // 跳跃的膝盖弯曲和伸直处理
+    if particle.control.jump_state {
+		println(particle.control.jump_frame_count)
+		maintain_rotation(particle.torso, 0,kp=100.0,kd=10.0)
+        // 膝盖弯曲: 前10帧
+        particle.control.jump_frame_count += 1
+        if particle.control.jump_frame_count < j_dur_A {
+            let bend_factor : Double = (particle.control.jump_frame_count.to_double() / j_dur_A.to_double()) * knee_angle_bend_max
+			println(bend_factor)
+            maintain_joint(particle.knee_left_joint, bend_factor, kp = 50.0, kd = 2.0)
+            maintain_joint(particle.knee_right_joint, bend_factor, kp = 50.0, kd = 2.0)
+            maintain_joint(particle.thigh_left_joint, thigh_angle_forward, kp = 50.0, kd = 2.0)
+            maintain_joint(particle.thigh_right_joint, -thigh_angle_backward, kp = 50.0, kd = 2.0)
+			return 
+        }
+		else if particle.control.jump_frame_count < j_dur_A+j_dur_B {
+			let v = @box2d.b2Vec2(jump_force * direction, 50.0) // 沿x轴和y轴施加力
+        	particle.torso.applyImpulse(v, particle.torso.getCenterPosition())
+			return 
+		}
+        else if particle.control.jump_frame_count < (j_dur_A + j_dur_B + j_dur_C) {
+			//let v = @box2d.b2Vec2(jump_force * direction, 5.0) // 沿x轴和y轴施加力
+        	//particle.torso.applyImpulse(v, particle.torso.getCenterPosition())
+            let straight_factor: Double = knee_angle_bend_max - ((particle.control.jump_frame_count - j_dur_A - j_dur_B).to_double() / j_dur_C.to_double()) * knee_angle_bend_max
+            maintain_joint(particle.knee_left_joint, 0, kp = 70.0, kd = 2.0)
+            maintain_joint(particle.knee_right_joint, 0, kp = 70.0, kd = 2.0)
+            maintain_joint(particle.thigh_left_joint, 0, kp = 70.0, kd = 2.0)
+            maintain_joint(particle.thigh_right_joint, 0, kp = 70.0, kd = 2.0)
+			return 
+        }
+
+
+        // 跳跃完成，重置状态
+            particle.control.jump_state = false  // 跳跃结束
+    }
+}
+
 fn particle_stand(
 	particle: Particle
 )->Unit{
 	let index=which_platform(particle)
-	
 	maintain_joint(particle.thigh_left_joint, 0.0,kp=50.0,kd=2.0)
 	maintain_joint(particle.thigh_right_joint, 0.0,kp=50.0,kd=2.0)
 	maintain_joint(particle.knee_left_joint, 0.0,kp=10.0,kd=2.0)
@@ -316,11 +368,11 @@ fn particle_stand(
 	maintain_joint(particle.arm_right_joint, 0.0,kp=10.0,kd=2.0)
 	maintain_joint(particle.forearm_left_joint, 0.0,kp=30.0,kd=2.0)
 	maintain_joint(particle.forearm_right_joint, 0.0,kp=30.0,kd=2.0)
+	maintain_rotation(particle.torso, 0,kp=100.0,kd=10.0)
 	if(index==-1){
-		//println("Can't find platform")
 		return 
 	}
-	println(index)
+	println("stand")
 	let platform=platform_list.val[index]
 	
 	let p_angle=platform.body.getRotation()
@@ -331,24 +383,8 @@ fn particle_stand(
 	
 	maintain_position(particle.torso,(particle.torso.getCenterPosition().getX(),target_y+3.7))
 }
-
-//这里缺少了跳跃的动作
-fn particle_jump(
-	particle: Particle,
-	force: Double
-)->Unit{
-	let index=which_platform(particle)
-	if(index==-1){
-		return 
-	}
-	let platform=platform_list.val[index]
-	
-	let p_angle=platform.body.getRotation()
-
-	let target_y=(
-		particle.torso.getCenterPosition().getX()-platform.body.getCenterPosition().getX()
-	)*@cmath.tan(p_angle)+platform.body.getCenterPosition().getY()
-	
-	maintain_position(particle.torso,(particle.torso.getCenterPosition().getX(),target_y+3.0))
-	particle.torso.applyImpulse(@box2d.b2Vec2(0.0,force), particle.torso.getCenterPosition())
+fn particle_action(particle:Particle) -> Unit {
+	// if(particle.jump_cooldown>=0){//有jump优先处理jump
+		
+	// }
 }
