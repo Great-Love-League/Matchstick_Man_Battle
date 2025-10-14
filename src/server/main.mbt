@@ -179,7 +179,10 @@ fn main {
 		else if(p.keyIsDown(KeyD)){
 			particle_walk(particle_list.val[0],1)
 		}
-		else if(p.keyIsDown(KeyW)){
+		else if(!particle_list.val[0].control.jump_state){
+			particle_stand(particle_list.val[0])
+		}
+		if(p.keyIsDown(KeyW)){
 			if particle_list.val[0].control.jump_cooldown <= 0 {
 				if !particle_list.val[0].control.jump_state { // 如果不在跳跃状态，则开始跳跃
 					particle_list.val[0].control.jump_state = true
@@ -187,9 +190,6 @@ fn main {
 					particle_list.val[0].control.jump_cooldown = j_dur_A + j_dur_B + j_dur_C  // 总共跳跃帧数
 				}
 			}
-		}
-		else if(!particle_list.val[0].control.jump_state){
-			particle_stand(particle_list.val[0])
 		}
 		if(particle_list.val[0].control.jump_cooldown > 0){
 			particle_list.val[0].control.jump_cooldown -= 1 
