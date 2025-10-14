@@ -1,7 +1,19 @@
 //Player Entity
 
+pub struct ArticleControl{
+	mut left:Bool
+	mut right:Bool
+}
+
+pub struct Article{
+	mut id : Int
+	mut body_list : Array[@box2d.B2Body]
+}
+
+
 pub struct ParticleControl{
 	mut walk_state : Bool
+	mut walk_direction : Double
 	mut walk_cooldown : Int
 	mut jump_cooldown : Int
 	mut jump_state : Bool
