@@ -1,16 +1,3 @@
-//Player Entity
-
-pub struct ArticleControl{
-	mut left:Bool
-	mut right:Bool
-}
-
-pub struct Article{
-	mut id : Int
-	mut body_list : Array[@box2d.B2Body]
-}
-
-
 pub struct ParticleControl{
 	mut walk_state : Bool
 	mut walk_direction : Double
@@ -42,10 +29,4 @@ pub struct Particle{
 	forearm_right_joint : @box2d.B2Joint
 	index : Int
 	control : ParticleControl
-}
-
-//Platform Entity
-pub struct Platform{
-	body : @box2d.B2Body
-	index : Int
 }
