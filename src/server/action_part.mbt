@@ -162,6 +162,11 @@ fn particle_jump(particle : Particle, direction : Double) -> Unit {
 ///|
 fn particle_stand(particle : Particle) -> Unit {
   let index = which_platform(particle)
+  maintain_rotation(particle.torso, 0, kp=100.0, kd=10.0)
+  if index == -1 {
+		
+    return
+  }
   maintain_joint(particle.thigh_left_joint, 0.0, kp=50.0, kd=2.0)
   maintain_joint(particle.thigh_right_joint, 0.0, kp=50.0, kd=2.0)
   maintain_joint(particle.knee_left_joint, 0.0, kp=10.0, kd=2.0)
@@ -170,10 +175,6 @@ fn particle_stand(particle : Particle) -> Unit {
   maintain_joint(particle.arm_right_joint, 0.0, kp=10.0, kd=2.0)
   maintain_joint(particle.forearm_left_joint, 0.0, kp=30.0, kd=2.0)
   maintain_joint(particle.forearm_right_joint, 0.0, kp=30.0, kd=2.0)
-  maintain_rotation(particle.torso, 0, kp=100.0, kd=10.0)
-  if index == -1 {
-    return
-  }
   let platform = platform_list.val[index]
   let p_angle = platform.body.getRotation()
   let target_y = (
