@@ -5,7 +5,12 @@ pub struct Weapon{
 
 pub struct Sword{
 	mut id : Int
-	mut art:Weapon
+	mut art: Weapon
+	mut body : @box2d.B2Body
+}
+pub struct Gun{
+	mut id : Int
+	mut art: Weapon
 	mut body : @box2d.B2Body
 }
 
@@ -22,16 +27,22 @@ pub(open) trait WeaponDestroy {
 }
 
 pub impl WeaponCreate for Sword with create(self, world, position){
-	let mut body_def = @box2d.B2BodyDef()
-	body_def.s
-	self.body=world.val.createBody
+	let s:String="123".to_string();
+
+	let mut bodydef:@box2d.B2BodyDef=match @map_loader.get_bodydef_from_raw(Some(s), None) {
+        Ok(b) => b,
+        None => {
+            // 处理错误情况
+            panic("Failed to get bodydef")
+        }
+    }
 }
 
-pub struct Entity{
-	mut id : Int
-	mut body_list : Array[@box2d.B2Body]
-}
+// pub struct Entity{
+// 	mut id : Int
+// 	mut body_list : Array[@box2d.B2Body]
+// }
 
-pub struct Bullet{
-	mut ent : Entity
-}
+// pub struct Bullet{
+// 	mut ent : Entity
+// }
