@@ -173,54 +173,17 @@ fn box2d_init(world: @box2d.B2World) ->Unit{
 fn main {
   box2d_init(world.val)
 
-  let p5_instance = getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
-    
-		
-		if(p.keyIsDown(KeyA)){
-			particle_walk(particle_list.val[0],-1)
-		}
-		else if(p.keyIsDown(KeyD)){
-			particle_walk(particle_list.val[0],1)
-		}
-		else if(!particle_list.val[0].control.jump_state){
-			particle_stand(particle_list.val[0])
-		}
-		if(p.keyIsDown(KeyW)){
-			if particle_list.val[0].control.jump_cooldown <= 0 {
-				if !particle_list.val[0].control.jump_state { // 如果不在跳跃状态，则开始跳跃
-					particle_list.val[0].control.jump_state = true
-					particle_list.val[0].control.jump_frame_count = 0  // 重置跳跃帧计数
-					particle_list.val[0].control.jump_cooldown = j_dur_A + j_dur_B + j_dur_C  // 总共跳跃帧数
-				}
-			}
-		}
-		if(particle_list.val[0].control.jump_cooldown > 0){
-			particle_list.val[0].control.jump_cooldown -= 1 
-		}
-		particle_jump(particle_list.val[0],0)
-		// else{
-		// 	if(particle_list.val[0].jump_cooldown>=0){
-		// 		particle_jump(particle_list.val[0],50)
-		// 	}
-		// 	else{
-		// 		particle_stand(particle_list.val[0])
-		// 	}
-		// }
-		// if(p.keyIsDown(ArrowLeft)){
-		// 	particle_walk(particle_list.val[1],-1)
-		// }
-		// else if(p.keyIsDown(ArrowRight)){
-		// 	particle_walk(particle_list.val[1],1)
-		// }
-		// else{
-		// 	particle_stand(particle_list.val[1])
-		// }
-		//particle.torso.applyForce(@box2d.b2Vec2(0.0, 50.0), particle.torso.getCenterPosition())
-	
-	
-	world.val.step(1.0/60.0, 4)
-    draw_world(p, world.val)
-  }, width=Width, height=Height)
+  let p5_instance = getP5Instance(
+    fn(p : @p5js.P5Instance) -> Unit {
+      // 调用游戏主循环（处理输入和更新游戏状态，包括物理）
+      game_loop(p, world.val)
+
+      // 渲染游戏世界
+      draw_world(p, world.val)
+    },
+    width=Width,
+    height=Height,
+  )
 
   //p5_instance |> ignore
 }
