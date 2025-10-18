@@ -6,7 +6,9 @@ fn create_particle_control(
 	walk_cooldown?: Int=0,
 	jump_cooldown?: Int=-1,
 	jump_state?: Bool=false,
-	jump_frame_count?: Int=0
+	jump_frame_count?: Int=0,
+	health?: Int=100,
+	is_faint?: Bool=false
 ) -> ParticleControl{
 	ParticleControl::{
 		walk_state,
@@ -14,7 +16,9 @@ fn create_particle_control(
 		walk_cooldown,
 		jump_cooldown,
 		jump_state,
-		jump_frame_count
+		jump_frame_count,
+		health,
+		is_faint
 	}
 }
 

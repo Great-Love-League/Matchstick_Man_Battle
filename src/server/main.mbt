@@ -154,6 +154,9 @@ fn box2d_init(world: @box2d.B2World) ->Unit{
     (1.0,0.1)
   )
   static_box.setAngularVelocity(0.5)
+	
+	
+	Sword::create(world,0)
 //   let circledef = @box2d.b2CircleDef()
 //   circledef.setRadius(0.5)
 //   circledef.setDensity(1.0)
