@@ -10,6 +10,10 @@
       "alias": "box2d"
     },
     {
+      "path": "Demonmasterlqx/moonbit_stickman_map_loader/map_loader",
+      "alias": "map_loader"
+    },
+    {
       "path": "Demonmasterlqx/MoonP5/cmd/p5js_ffi",
       "alias": "p5js"
     }
