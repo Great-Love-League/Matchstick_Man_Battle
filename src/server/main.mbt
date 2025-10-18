@@ -175,7 +175,22 @@ fn main {
 
   let p5_instance = getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
     
-		
+		if(particle_list.val[0].control.faint_state){
+			if(particle_list.val[0].control.faint_resistance<300){
+				particle_list.val[0].control.faint_resistance+=1
+			}
+			else{
+				particle_list.val[0].control.faint_state=false
+				particle_list.val[0].control.health=100
+				particle_list.val[0].control.faint_resistance=0
+			}
+			world.val.step(1.0/60.0, 4)
+			draw_world(p, world.val)
+			return
+		}
+		if(p.keyIsDown(KeyJ)){
+			particle_list.val[0].control.faint_state=true
+		}
 		if(p.keyIsDown(KeyA)){
 			particle_walk(particle_list.val[0],-1)
 		}

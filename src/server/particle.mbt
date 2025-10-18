@@ -6,7 +6,8 @@ pub struct ParticleControl{
 	mut jump_state : Bool
 	mut jump_frame_count : Int
 	mut health : Int
-	mut is_faint : Bool
+	mut faint_state :Bool
+	mut faint_resistance : Int
 }
 
 pub struct Particle{
