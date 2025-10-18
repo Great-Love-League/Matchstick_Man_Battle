@@ -139,22 +139,25 @@ fn draw_world(p: &@p5js.P5JS, world: @box2d.B2World) -> Unit {
 /// 绘画只需要调用 draw_world 即可，注意要step world!!!!!!!!
 
 fn box2d_init(game:Game) ->Unit{
-  game.create_platform(
-    (0.0,0.0),
-    (10.0,1.0)
-  ) |> ignore
+  // game.create_platform(
+  //   (0.0,0.0),
+  //   (10.0,1.0)
+  // ) |> ignore
 
   game.create_particle((0.0,10.0)) |> ignore
+	
+	
+	
   //create_particle(world, (5.0,10.0)) |> ignore
 
-  let static_box = game.create_static_box(
-    (1.0,10.0),
-    (1.0,0.1)
-  )
-  static_box.setAngularVelocity(0.5)
+  // let static_box = game.create_static_box(
+  //   (1.0,10.0),
+  //   (1.0,0.1)
+  // )
+  // static_box.setAngularVelocity(0.5)
 	
 	
-	Sword::create(game,0)
+	Gun::create(game,0)
 }
 
 fn main {
@@ -164,66 +167,7 @@ fn main {
   box2d_init(game)
 
   let p5_instance = getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
-    
-		if(game.particle_list[0].control.faint_state){
-			if(game.particle_list[0].control.faint_resistance<300){
-				game.particle_list[0].control.faint_resistance+=1
-			}
-			else{
-				game.particle_list[0].control.faint_state=false
-				game.particle_list[0].control.health=100
-				game.particle_list[0].control.faint_resistance=0
-			}
-			game.world.step(1.0/60.0, 4)
-			draw_world(p, game.world)
-			return
-		}
-		if(p.keyIsDown(KeyJ)){
-			game.particle_list[0].control.faint_state=true
-		}
-		if(p.keyIsDown(KeyA)){
-			game.particle_walk(game.particle_list[0],-1)
-		}
-		else if(p.keyIsDown(KeyD)){
-			game.particle_walk(game.particle_list[0],1)
-		}
-		else if(!game.particle_list[0].control.jump_state){
-			game.particle_stand(game.particle_list[0])
-		}
-		if(p.keyIsDown(KeyW)){
-			if game.particle_list[0].control.jump_cooldown <= 0 {
-				if !game.particle_list[0].control.jump_state { // 如果不在跳跃状态，则开始跳跃
-					game.particle_list[0].control.jump_state = true
-					game.particle_list[0].control.jump_frame_count = 0  // 重置跳跃帧计数
-					game.particle_list[0].control.jump_cooldown = j_dur_A + j_dur_B + j_dur_C  // 总共跳跃帧数
-				}
-			}
-		}
-		if(game.particle_list[0].control.jump_cooldown > 0){
-			game.particle_list[0].control.jump_cooldown -= 1 
-		}
-		game.particle_jump(game.particle_list[0],0)
-		// else{
-		// 	if(game.particle_list[0].jump_cooldown>=0){
-		// 		particle_jump(game.particle_list[0],50)
-		// 	}
-		// 	else{
-		// 		particle_stand(game.particle_list[0])
-		// 	}
-		// }
-		// if(p.keyIsDown(ArrowLeft)){
-		// 	particle_walk(particle_list.val[1],-1)
-		// }
-		// else if(p.keyIsDown(ArrowRight)){
-		// 	particle_walk(particle_list.val[1],1)
-		// }
-		// else{
-		// 	particle_stand(particle_list.val[1])
-		// }
-		//particle.torso.applyForce(@box2d.b2Vec2(0.0, 50.0), particle.torso.getCenterPosition())
-	
-	
-	game.world.step(1.0/60.0, 4)
+    game.update(p)
     draw_world(p, game.world)
   }, width=Width, height=Height)
 

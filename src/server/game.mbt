@@ -1,5 +1,6 @@
 struct Game {
 	world : @box2d.B2World
+	weapon : WeaponManager
 	mut particle_list:Array[Particle]
 	mut particle_index:Int
 	
@@ -9,9 +10,11 @@ struct Game {
 	mut enemy_list : Array[Enemy]
 }
 fn create_game() -> Game{
-	let world = create_world()
+	let world = create_world(level=level1,flag=true)
+	let weapon=create_weapon_manager()
 	let game = Game::{
 		world,
+		weapon,
 		particle_list:Array::new(),
 		particle_index:0,
 		platform_list:Array::new(),
@@ -21,6 +24,49 @@ fn create_game() -> Game{
 	game
 }
 
+fn Game::update(self:Self, p: @p5js.P5Instance) -> Unit {
+	
+		if(self.particle_list[0].control.faint_state){
+			if(self.particle_list[0].control.faint_resistance<300){
+				self.particle_list[0].control.faint_resistance+=1
+			}
+			else{
+				self.particle_list[0].control.faint_state=false
+				self.particle_list[0].control.health=100
+				self.particle_list[0].control.faint_resistance=0
+			}
+			self.world.step(1.0/60.0, 4)
+			draw_world(p, self.world)
+			return
+		}
+		if(p.keyIsDown(KeyJ)){
+			self.particle_list[0].control.faint_state=true
+		}
+		if(p.keyIsDown(KeyA)){
+			self.particle_walk(self.particle_list[0],-1)
+		}
+		else if(p.keyIsDown(KeyD)){
+			self.particle_walk(self.particle_list[0],1)
+		}
+		else if(!self.particle_list[0].control.jump_state){
+			self.particle_stand(self.particle_list[0])
+		}
+		if(p.keyIsDown(KeyW)){
+			if self.particle_list[0].control.jump_cooldown <= 0 {
+				if !self.particle_list[0].control.jump_state { // 如果不在跳跃状态，则开始跳跃
+					self.particle_list[0].control.jump_state = true
+					self.particle_list[0].control.jump_frame_count = 0  // 重置跳跃帧计数
+					self.particle_list[0].control.jump_cooldown = j_dur_A + j_dur_B + j_dur_C  // 总共跳跃帧数
+				}
+			}
+		}
+		if(self.particle_list[0].control.jump_cooldown > 0){
+			self.particle_list[0].control.jump_cooldown -= 1 
+		}
+		self.particle_jump(self.particle_list[0],0)
+		self.world.step(1.0/60.0, 4)
+}
+// fn Game::
 
 pub const VIEWPORT_WIDTH : Double = 1920 // 视口宽度
 pub const VIEWPORT_HEIGHT : Double = 1080 // 视口高度
