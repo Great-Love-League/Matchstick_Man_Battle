@@ -1,5 +1,5 @@
 
-let sword_shift:@box2d.B2Vec2=@box2d.b2Vec2((-6.35)-(-7.07), (17.00)-(15.10))
+let sword_shift:@box2d.B2Vec2=@box2d.b2Vec2(((-6.35)-(-7.07))/2, ((17.00)-(15.10))/2)
 let sword_index : Ref[Int]=Ref::new(0)
 pub struct Sword{
 	mut id : Int
@@ -36,10 +36,9 @@ pub impl WeaponCreate for Sword with create(world, owner_id){
 					@box2d.b2BodyDef()
 				}
     }
-	return
 	let centerpos=particle_list.val[owner_id].right_forearm.getCenterPosition()
 	let rotate =particle_list.val[owner_id].right_forearm.getRotation()
-	let handpos=@box2d.b2Vec2(@cmath.sin(rotate)+centerpos.getX(),@cmath.cos(rotate)+centerpos.getY())
+	let handpos=@box2d.b2Vec2(-@cmath.sin(rotate)*0.25+centerpos.getX(),-@cmath.cos(rotate)*0.25+centerpos.getY())
 
 	bodydef.setPosition(@box2d.b2Vec2(handpos.getX()+sword_shift.getX(), handpos.getY()+sword_shift.getY()))
 	
@@ -62,35 +61,35 @@ pub impl WeaponControl for Sword with attack(self){
 		if is_contact(i.torso, self.body) || is_contact(i.head, self.body){
 			i.control.health-=10
 			if i.control.health<=0{
-				i.control.is_faint=true
+				i.control.faint_state=true
 			}
 			break
 		}
 		else if is_contact(i.left_thigh, self.body) || is_contact(i.right_thigh, self.body){
 			i.control.health-=5
 			if i.control.health<=0{
-				i.control.is_faint=true
+				i.control.faint_state=true
 			}
 			break
 		}
 		else if is_contact(i.left_shank, self.body) || is_contact(i.right_shank, self.body){
 			i.control.health-=3
 			if i.control.health<=0{
-				i.control.is_faint=true
+				i.control.faint_state=true
 			}
 			break
 		}
 		else if is_contact(i.left_arm, self.body) || is_contact(i.right_arm, self.body){
 			i.control.health-=4
 			if i.control.health<=0{
-				i.control.is_faint=true
+				i.control.faint_state=true
 			}
 			break
 		}
 		else if is_contact(i.left_forearm, self.body) || is_contact(i.right_forearm, self.body){
 			i.control.health-=2
 			if i.control.health<=0{
-				i.control.is_faint=true
+				i.control.faint_state=true
 			}
 			break
 		}

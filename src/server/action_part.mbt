@@ -162,7 +162,7 @@ fn particle_jump(particle : Particle, direction : Double) -> Unit {
 ///|
 fn particle_stand(particle : Particle) -> Unit {
   let index = which_platform(particle)
-  maintain_rotation(particle.torso, 0, kp=100.0, kd=10.0)
+  maintain_rotation(particle.torso, 0, kp=30.0, kd=10.0)
   if index == -1 {
 		
     return
