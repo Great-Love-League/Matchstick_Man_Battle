@@ -1,7 +1,8 @@
 ///| Character-Particle Adapter
 /// 角色与火柴人的适配器 - 为了兼容旧的动作函数
 
-///| Convert Character to Particle for compatibility
+///|
+/// Convert Character to Particle for compatibility
 /// 将新的Character转换为旧的Particle以保持兼容性
 fn character_to_particle(character : Character) -> Particle {
   Particle::{
@@ -29,9 +30,12 @@ fn character_to_particle(character : Character) -> Particle {
   }
 }
 
-///| Create ParticleControl from Character
+///|
+/// Create ParticleControl from Character
 /// 从Character创建ParticleControl
-fn create_particle_control_from_character(character : Character) -> ParticleControl {
+fn create_particle_control_from_character(
+  character : Character,
+) -> ParticleControl {
   ParticleControl::{
     walk_state: character.control.walk_state,
     walk_direction: character.control.walk_direction,
@@ -44,9 +48,13 @@ fn create_particle_control_from_character(character : Character) -> ParticleCont
   }
 }
 
-///| Sync particle control back to character
+///|
+/// Sync particle control back to character
 /// 将Particle的控制状态同步回Character
-fn sync_particle_to_character(particle : Particle, character : Character) -> Unit {
+fn sync_particle_to_character(
+  particle : Particle,
+  character : Character,
+) -> Unit {
   character.control.walk_state = particle.control.walk_state
   character.control.walk_direction = particle.control.walk_direction
   character.control.walk_cooldown = particle.control.walk_cooldown
@@ -57,7 +65,8 @@ fn sync_particle_to_character(particle : Particle, character : Character) -> Uni
   character.control.is_faint = particle.control.is_faint
 }
 
-///| Wrapper for particle_walk that works with Character
+///|
+/// Wrapper for particle_walk that works with Character
 /// particle_walk的包装器，使其能与Character一起工作
 pub fn character_walk(character : Character, direction : Double) -> Unit {
   let particle = character_to_particle(character)
@@ -65,7 +74,8 @@ pub fn character_walk(character : Character, direction : Double) -> Unit {
   sync_particle_to_character(particle, character)
 }
 
-///| Wrapper for particle_stand that works with Character
+///|
+/// Wrapper for particle_stand that works with Character
 /// particle_stand的包装器，使其能与Character一起工作
 pub fn character_stand(character : Character) -> Unit {
   let particle = character_to_particle(character)
@@ -73,7 +83,8 @@ pub fn character_stand(character : Character) -> Unit {
   sync_particle_to_character(particle, character)
 }
 
-///| Wrapper for particle_jump that works with Character
+///|
+/// Wrapper for particle_jump that works with Character
 /// particle_jump的包装器，使其能与Character一起工作
 pub fn character_jump(character : Character, direction : Double) -> Unit {
   let particle = character_to_particle(character)
