@@ -23,10 +23,15 @@ pub(open) trait WeaponCreate {
 
 pub(open) trait WeaponControl {
 	attack(Self, game:Game) -> Unit
+  get_attack_field(Self) -> Double = _
 }
 
 pub(open) trait WeaponDestroy {
 	destroy(Self, game:Game) -> Unit
+}
+
+impl WeaponControl with get_attack_field(self) -> Double {
+	return 1.0
 }
 
 pub impl WeaponCreate for Sword with create(game, owner_id){

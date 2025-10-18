@@ -6,7 +6,7 @@ struct Game {
 	mut platform_list:Array[Platform]
 	mut platform_index:Int
 	
-	mut enemy_list : Array[Enemy]
+	mut enemy_list : Array[&EnemyTrait?]
 }
 fn create_game() -> Game{
 	let world = create_world()
@@ -16,7 +16,7 @@ fn create_game() -> Game{
 		particle_index:0,
 		platform_list:Array::new(),
 		platform_index:0,
-		enemy_list : Array::new()
+		enemy_list : Array::new(),
 	}
 	game
 }
