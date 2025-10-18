@@ -138,52 +138,38 @@ fn draw_world(p: &@p5js.P5JS, world: @box2d.B2World) -> Unit {
 /// 
 /// 绘画只需要调用 draw_world 即可，注意要step world!!!!!!!!
 
-fn box2d_init(world: @box2d.B2World) ->Unit{
-  create_platform(
-    world,
-    (0.0,0.0),
-    (10.0,1.0)
-  ) |> ignore
+fn box2d_init(game:Game) ->Unit{
+  // game.create_platform(
+  //   (0.0,0.0),
+  //   (10.0,1.0)
+  // ) |> ignore
 
-  create_particle(world, (0.0,10.0)) |> ignore
+  game.create_particle((0.0,10.0)) |> ignore
+	
+	
+	
   //create_particle(world, (5.0,10.0)) |> ignore
 
-  let static_box = create_static_box(
-    world,
-    (1.0,10.0),
-    (1.0,0.1)
-  )
-  static_box.setAngularVelocity(0.5)
+  // let static_box = game.create_static_box(
+  //   (1.0,10.0),
+  //   (1.0,0.1)
+  // )
+  // static_box.setAngularVelocity(0.5)
 	
 	
-	Sword::create(world,0)
-//   let circledef = @box2d.b2CircleDef()
-//   circledef.setRadius(0.5)
-//   circledef.setDensity(1.0)
-//   circledef.setFriction(0.3)
-//   circledef.setLocalPosition(@box2d.b2Vec2(0.0,0.0))
-
-//   let circlebodyDef = @box2d.b2BodyDef()
-//   circlebodyDef.setPosition(@box2d.b2Vec2(0.0, 4.0))
-//   circlebodyDef.addShape(circledef.getBase())
-//   world.createBody(circlebodyDef) |> ignore
-
+	Gun::create(game,0)
 }
 
 fn main {
-  box2d_init(world.val)
+	
+	let game = create_game()
+	
+  box2d_init(game)
 
-  let p5_instance = getP5Instance(
-    fn(p : @p5js.P5Instance) -> Unit {
-      // 调用游戏主循环（处理输入和更新游戏状态，包括物理）
-      game_loop(p, world.val)
-
-      // 渲染游戏世界
-      draw_world(p, world.val)
-    },
-    width=Width,
-    height=Height,
-  )
+  let p5_instance = getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
+    game.update(p)
+    draw_world(p, game.world)
+  }, width=Width, height=Height)
 
   //p5_instance |> ignore
 }
