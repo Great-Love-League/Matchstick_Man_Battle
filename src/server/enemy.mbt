@@ -26,7 +26,6 @@ struct Enemy {
 }
 
 
-let enemy_id : Ref[Int]=Ref::new(0)
 
 pub(open) trait EnemyCreate{
 	
