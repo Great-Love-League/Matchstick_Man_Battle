@@ -163,6 +163,9 @@ fn main {
 	
   box2d_init(game)
 
+  create_box_enemy(game, (5.0,10.0)) |> ignore
+  let rander = @random.Rand::new()
+
   let p5_instance = getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
     
 		if(game.particle_list[0].control.faint_state){
@@ -223,6 +226,13 @@ fn main {
 		//particle.torso.applyForce(@box2d.b2Vec2(0.0, 50.0), particle.torso.getCenterPosition())
 	
 	
+    // 按照一定的规律更新敌人
+    if rander.int(limit=100) < 5 {
+      let pos = ((rander.double()-0.5)*100.0, (rander.double())*100.0)
+      create_box_enemy(game, pos) |> ignore
+    }
+
+
 	game.world.step(1.0/60.0, 4)
     draw_world(p, game.world)
   }, width=Width, height=Height)
