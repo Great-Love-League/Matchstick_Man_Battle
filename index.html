@@ -8,7 +8,6 @@
     jQuery.noConflict();
     Object.extend = jQuery.extend;
     </script>
-    <script src="lib/jquery.svg.min.js"></script>
     
     <meta charset="UTF-8">
     <title>My Game</title>
@@ -21,12 +20,236 @@
         }
     </style>
     <script src="./box2d.js"></script>
-    <script src=".mooncakes\Demonmasterlqx\MoonP5\p5.js"></script>
+    <script src="./.mooncakes/Demonmasterlqx/MoonP5/p5.js"></script>
+        <script>
+    // 临时防护：确保常用绘图变量/函数在全局存在，避免 p5 的 scope 引发空值警告
+    // 生成的 server.js 直接引用 bare identifier `min`/`max`，需要真正的全局绑定（var 或顶层赋值）
+    if (typeof min === 'undefined') { var min = Math.min; window.min = min; }
+    if (typeof max === 'undefined') { var max = Math.max; window.max = max; }
+        // 当 color() 或 beginShape 参数未定义时，给出安全默认值
+        (function(){
+            const _origColor = window.color;
+            if (typeof _origColor === 'function') {
+                window.color = function(r,g,b,a){
+                    if (r === undefined) r = 0;
+                    if (g === undefined) g = r;
+                    if (b === undefined) b = r;
+                    if (a === undefined) a = 255;
+                    return _origColor.call(this, r,g,b,a);
+                };
+            }
+            const _origBeginShape = window.beginShape;
+            if (typeof _origBeginShape === 'function') {
+                window.beginShape = function(mode){
+                    if (mode === undefined) mode = POINTS;
+                    return _origBeginShape.call(this, mode);
+                };
+            }
+            const _origEndShape = window.endShape;
+            if (typeof _origEndShape === 'function') {
+                window.endShape = function(mode, closeMode){
+                    if (mode === undefined) mode = 0;
+                    if (closeMode === undefined) closeMode = false;
+                    return _origEndShape.call(this, mode, closeMode);
+                };
+            }
+        })();
+            // Patch p5 instance methods to default missing alpha to 255 to silence warnings
+            (function(){
+                try {
+                    if (typeof p5 !== 'undefined' && p5 && p5.prototype) {
+                        const proto = p5.prototype;
+                        if (typeof proto.color === 'function') {
+                            const _origColor = proto.color;
+                            proto.color = function(r,g,b,a){
+                                if (arguments.length === 3) a = 255;
+                                if (a === undefined) a = 255;
+                                return _origColor.call(this, r, g === undefined ? r : g, b === undefined ? r : b, a);
+                            };
+                        }
+                        if (typeof proto.fill === 'function') {
+                            const _origFill = proto.fill;
+                            proto.fill = function(r,g,b,a){
+                                if (arguments.length === 1 && typeof r === 'object') return _origFill.call(this, r);
+                                if (arguments.length === 3) a = 255;
+                                if (a === undefined) a = 255;
+                                return _origFill.call(this, r, g, b, a);
+                            };
+                        }
+                    }
+                } catch(e){ console.warn('p5 patch failed', e); }
+            })();
+        </script>
+            <div id="debug-bar" style="position:fixed;right:8px;bottom:8px;padding:6px 10px;background:rgba(0,0,0,0.6);color:white;border-radius:6px;font-size:12px;z-index:9999">app children: <span id="debug-count">0</span></div>
+            <script>
+            // Simple debug UI to show whether #app is populated
+            (function(){
+                const countEl = document.getElementById('debug-count');
+                const appEl = document.getElementById('app');
+                const update = () => {
+                    const n = appEl ? appEl.childElementCount : 0;
+                    countEl.textContent = String(n);
+                    if (appEl) {
+                        if (n > 0) appEl.classList.add('demo-debug-outline');
+                        else appEl.classList.remove('demo-debug-outline');
+                    }
+                };
+                setInterval(update, 300);
+                window.addEventListener('load', update);
+            })();
+            </script>
     <script src="./target/js/release/build/server/server.js"></script>
+    <!-- Integrate moonbitgame-example frontend -->
 </head>
 
 <body>
+    <!-- Example frontend mount point -->
+    <div id="app"></div>
     <canvas id="canvas" style="display: block; margin: 0 auto;" height="32" width="32"></canvas>
+        <div id="page-log" style="position:fixed;left:8px;bottom:8px;max-width:40%;max-height:40%;overflow:auto;background:rgba(255,255,255,0.9);color:#111;padding:8px;border-radius:6px;font-size:12px;z-index:9998">logs:<div id="page-log-inside"></div></div>
+        <script>
+            // Inline execution smoke-test
+            try {
+                const inside = document.getElementById('page-log-inside');
+                if (inside) {
+                    const el = document.createElement('div');
+                    el.textContent = 'inline-script: ' + new Date().toISOString();
+                    inside.appendChild(el);
+                }
+                console.log('inline-script ran');
+            } catch(e) { console.error('inline-script error', e); }
+        </script>
+        <script>
+        // 在 Rabbit-TEA 渲染完成后，将原有 canvas 移入示例的 Game Area
+        window.addEventListener('load', () => {
+            const tryMove = () => {
+                function findGameArea() {
+                    const nodes = Array.from(document.querySelectorAll('div'));
+                    for (const n of nodes) {
+                        if (n.textContent && n.textContent.includes('Game Area')) {
+                            // Try to find the inner area element with the expected size classes
+                            // Search upward for a reasonable ancestor, then find child matching size classes
+                            let p = n;
+                            for (let i = 0; i < 8 && p; i++) { p = p.parentElement; }
+                            if (p) {
+                                const found = p.querySelector('[class*="w-[680px]"][class*="h-[360px]"]') || p.querySelector('[class*="w-[680px]"]');
+                                if (found) return found;
+                            }
+                            // fallback to the element containing the text
+                            return n.closest('div');
+                        }
+                    }
+                    return null;
+                }
+                const target = findGameArea() || document.querySelector('[class*="w-[680px]"]') || document.querySelector('[class*="Game Area"]');
+                // p5 typically creates a canvas with id 'defaultCanvas0' or just a <canvas> element
+                const canvas = document.getElementById('defaultCanvas0') || document.querySelector('canvas') || document.getElementById('canvas');
+                if (target && canvas) {
+                    try {
+                        // ensure the container can position absolute children
+                        const prevPos = window.getComputedStyle(target).position;
+                        if (prevPos === 'static' || !prevPos) target.style.position = 'relative';
+                        // ensure the container has a sensible minimum size for the game area
+                        if (!target.style.minWidth) target.style.minWidth = '680px';
+                        if (!target.style.minHeight) target.style.minHeight = '360px';
+                        // compute available pixel area
+                        const cw = Math.max(1, target.clientWidth || 680);
+                        const ch = Math.max(1, target.clientHeight || 360);
+                        // move canvas into target if not already — insert as first child so UI elements render above it
+                        if (!target.contains(canvas)) {
+                            // append as last child so canvas is visually on top when z-index is high
+                            target.appendChild(canvas);
+                        }
+                        // set pixel size so drawing covers the element crisply
+                        try { canvas.width = cw; canvas.height = ch; } catch(e) {}
+                        // overlay canvas to exactly fill the target
+                        canvas.style.position = 'absolute';
+                        canvas.style.left = '0';
+                        canvas.style.top = '0';
+                        canvas.style.transform = 'none';
+                        canvas.style.width = '100%';
+                        canvas.style.height = '100%';
+                        // place canvas on top as requested
+                        canvas.style.zIndex = '1000';
+                        canvas.style.display = 'block';
+                        console.log('tryMove: canvas resized to', cw, ch, 'and moved into target', target);
+                    } catch(e){ console.warn('tryMove failed', e); }
+                } else {
+                    setTimeout(tryMove, 200);
+                }
+            };
+            tryMove();
+        });
+        </script>
+    <link rel="stylesheet" href="./moonbitgame-example/styles.css">
+    <script>
+    // Dynamic import wrapper to catch errors from the example bundle and log mount status
+    (async function(){
+        console.log('bootloader: starting dynamic import of example bundle');
+        // Proxy console to write into page-log as well
+        (function(){
+            const out = document.getElementById('page-log-inside');
+            if (!out) return;
+            const wrap = (kind) => (...args) => {
+                try { const el = document.createElement('div'); el.textContent = kind + ': ' + args.map(a=>{ try { return typeof a === 'string'?a:JSON.stringify(a);} catch(e){ return String(a);} }).join(' '); out.appendChild(el); out.scrollTop = out.scrollHeight; } catch(e){}
+                return original[kind].apply(console, args);
+            };
+            const original = { log: console.log, warn: console.warn, error: console.error };
+            console.log = wrap('log'); console.warn = wrap('warn'); console.error = wrap('error');
+        })();
+        window.addEventListener('error', (e) => {
+            console.error('global error captured', e.error || e.message, e);
+        });
+        window.addEventListener('unhandledrejection', (ev) => {
+            console.error('unhandledrejection', ev.reason);
+        });
+        try {
+            const mod = await import('./moonbitgame-example/main/main.js');
+            console.log('bootloader: example module imported', mod);
+            // If module exports a startup function, try to call it safely
+            if (mod && typeof mod.startup === 'function') {
+                try { mod.startup('app'); console.log('bootloader: called mod.startup("app")'); } catch (err) { console.warn('bootloader: mod.startup threw', err); }
+            }
+        } catch (err) {
+            console.error('bootloader: failed to import example module', err);
+        }
+                // Poll app child count for a short period so we can see late mounts
+                let checks = 0;
+                const intId = setInterval(()=>{
+                        const appEl = document.getElementById('app');
+                        const n = appEl ? appEl.childElementCount : 0;
+                        console.log('bootloader: poll', checks, 'app present?', !!appEl, 'children=', n);
+                        checks += 1;
+                        if (checks > 20) {
+                                clearInterval(intId);
+                                // If nothing mounted, inject a visible fallback UI so the demo is visible
+                                try {
+                                        const app = document.getElementById('app');
+                                        if (app && app.childElementCount === 0) {
+                                                const fallback = `
+<div class="min-h-screen flex items-center justify-center" style="font-family:system-ui;padding:16px">
+    <div style="width:820px;height:560px;background:rgba(255,255,255,0.9);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.12);display:flex;flex-direction:column;overflow:hidden">
+        <div style="padding:16px;border-bottom:1px solid rgba(0,0,0,0.06);font-size:20px;font-weight:600">Rabbit-TEA: Demo Game</div>
+        <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:24px">
+            <div style="width:680px;height:360px;border:2px dashed #d1d5db;border-radius:8px;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#f8fafc,#eef2ff)">
+                <div style="text-align:center;color:#6b7280">
+                    <div style="font-size:18px;margin-bottom:8px">Game Area</div>
+                    <div>游戏逻辑未实现 — 这里只是界面占位</div>
+                </div>
+            </div>
+        </div>
+        <div style="padding:12px;border-top:1px solid rgba(0,0,0,0.06);font-size:12px;color:#374151">操作说明：- 点击或按键操作（未实现）</div>
+    </div>
+</div>`;
+                                                app.innerHTML = fallback;
+                                                // leave fallback UI default stacking (canvas z-index now controls visibility)
+                                                console.log('bootloader: injected fallback UI into #app');
+                                        }
+                                } catch(e) { console.error('bootloader: fallback inject failed', e); }
+                        }
+                }, 200);
+    })();
+    </script>
 </body>
 
 </html>
