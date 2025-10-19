@@ -200,7 +200,7 @@ pub impl WeaponControl for Gun with attack(self,game){
 				max_distance=100.0,
 				penetration=0,
 				gravity_compensation=0.95,  // 95%补偿，轻微下坠
-				recoil_horizontal=1.5,       // 轻微水平后坐力
+				recoil_horizontal=3,       // 轻微水平后坐力
 				recoil_vertical=0.3          // 轻微向上抬升
 			)
 			println("手枪射击，持有者: #\{self.owner_id}")
@@ -230,7 +230,7 @@ pub impl WeaponControl for Gun with attack(self,game){
 				damage=30,
 				max_distance=120.0,
 				gravity_compensation=0.98,  // 98%补偿，极轻微下坠
-				recoil_horizontal=8.0,       // 中等水平后坐力
+				recoil_horizontal=30.0,       // 高水平后坐力
 				recoil_vertical=0.5          // 中等向上抬升
 			)
 			println("狙击枪射击，持有者: #\{self.owner_id}")
