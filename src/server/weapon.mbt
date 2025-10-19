@@ -156,13 +156,13 @@ pub impl WeaponCreate for Gun with create( game, owner_id){
 	
 	game.weapon.gun_index+=1
 	
-	// 创建手枪（默认配置，优化为真实弹道）
+	// 创建手枪
 	let aa:Gun=Gun::{
 		id:game.weapon.gun_index,
 		owner_id:owner_id,
 		body:game.world.createBody(bodydef),
 		
-		// 手枪配置（9mm手枪约350-400 m/s）
+		// 手枪配置
 		bullet_damage: 10.0,
 		bullet_speed: 60.0,  // 提升速度
 		bullet_penetration: 0,
@@ -188,30 +188,68 @@ pub impl WeaponControl for Gun with attack(self,game){
 	let holder = game.particle_list[self.owner_id]
 	let direction = if holder.control.walk_direction > 0.0 { 1.0 } else { -1.0 }
 	
-	// 根据枪械类型选择射击方式
+	// 根据枪械类型选择射击方式及参数
 	match self.gun_type {
 		Pistol => {
-			// 手枪：普通射击
-			game.shoot_bullet(self.owner_id, direction)
-			println("手枪射击! 持有者: #\{self.owner_id}")
+			// 手枪：轻微下坠，轻微后坐力
+			game.shoot_bullet_advanced(
+				self.owner_id, 
+				direction,
+				speed=60.0,
+				damage=10,
+				max_distance=100.0,
+				penetration=0,
+				gravity_compensation=0.95,  // 95%补偿，轻微下坠
+				recoil_horizontal=1.5,       // 轻微水平后坐力
+				recoil_vertical=0.3          // 轻微向上抬升
+			)
+			println("手枪射击，持有者: #\{self.owner_id}")
 		}
 		
 		Shotgun => {
-			// 霰弹枪：散射（5发，30度扩散）
-			game.shoot_shotgun(self.owner_id, direction, 5, 0.52)
-			println("霰弹枪射击! 持有者: #\{self.owner_id}")
+			// 霰弹枪：明显下坠，强烈后坐力
+			game.shoot_shotgun(
+				self.owner_id, 
+				direction, 
+				5,     // 5发子弹
+				0.52,  // 30度扩散
+				gravity_compensation=0.85,  // 85%补偿，明显下坠
+				recoil_horizontal=4.0,      // 强烈水平后坐力
+				recoil_vertical=0.6         // 明显向上抬升
+			)
+			println("霰弹枪射击，持有者: #\{self.owner_id}")
 		}
 		
 		Sniper => {
-			// 狙击枪：穿透2个目标
-			game.shoot_penetrating_bullet(self.owner_id, direction, 2)
-			println("狙击枪射击! 持有者: #\{self.owner_id}")
+			// 狙击枪：轻微下坠，中等后坐力
+			game.shoot_penetrating_bullet_advanced(
+				self.owner_id, 
+				direction, 
+				2,  // 穿透2个目标
+				speed=80.0,
+				damage=30,
+				max_distance=120.0,
+				gravity_compensation=0.98,  // 98%补偿，极轻微下坠
+				recoil_horizontal=8.0,       // 中等水平后坐力
+				recoil_vertical=0.5          // 中等向上抬升
+			)
+			println("狙击枪射击，持有者: #\{self.owner_id}")
 		}
 		
 		LaserRifle => {
-			// 激光枪：高穿透
-			game.shoot_penetrating_bullet(self.owner_id, direction, 5)
-			println("激光枪射击! 持有者: #\{self.owner_id}")
+			// 激光枪：完全无下坠，无后坐力（能量武器）
+			game.shoot_penetrating_bullet_advanced(
+				self.owner_id, 
+				direction, 
+				5,  // 穿透5个目标
+				speed=100.0,
+				damage=15,
+				max_distance=150.0,
+				gravity_compensation=1.0,    // 100%补偿，完全无下坠 ✨
+				recoil_horizontal=0.0,       // 无后坐力 ✨
+				recoil_vertical=0.0          // 无向上抬升 ✨
+			)
+			println("激光枪射击，持有者: #\{self.owner_id}")
 		}
 	}
 	
@@ -327,7 +365,7 @@ fn Game::create_laser_rifle(self : Self, owner_id : Int) -> Unit {
 		
 		// 激光枪配置（科幻武器，极高速度）
 		bullet_damage: 15.0,
-		bullet_speed: 100.0,  // 超高速度（接近光速的游戏表现）
+		bullet_speed: 1000.0,  // 超高速度
 		bullet_penetration: 5,
 		bullet_targets: [Player],
 		
