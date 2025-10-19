@@ -156,15 +156,15 @@ pub impl WeaponCreate for Gun with create( game, owner_id){
 	
 	game.weapon.gun_index+=1
 	
-	// 创建手枪（默认配置）
+	// 创建手枪（默认配置，优化为真实弹道）
 	let aa:Gun=Gun::{
 		id:game.weapon.gun_index,
 		owner_id:owner_id,
 		body:game.world.createBody(bodydef),
 		
-		// 手枪配置
+		// 手枪配置（9mm手枪约350-400 m/s）
 		bullet_damage: 10.0,
-		bullet_speed: 20.0,
+		bullet_speed: 60.0,  // 提升速度
 		bullet_penetration: 0,
 		bullet_targets: [Player],
 		
@@ -251,9 +251,9 @@ fn Game::create_shotgun(self : Self, owner_id : Int) -> Unit {
 		owner_id:owner_id,
 		body:self.world.createBody(bodydef),
 		
-		// 霰弹枪配置
+		// 霰弹枪配置（真实霰弹枪约350-400 m/s）
 		bullet_damage: 6.0,
-		bullet_speed: 18.0,
+		bullet_speed: 50.0,  // 提升速度
 		bullet_penetration: 0,
 		bullet_targets: [Player],
 		
@@ -288,9 +288,9 @@ fn Game::create_sniper(self : Self, owner_id : Int) -> Unit {
 		owner_id:owner_id,
 		body:self.world.createBody(bodydef),
 		
-		// 狙击枪配置
+		// 狙击枪配置（真实狙击步枪约800-1000 m/s）
 		bullet_damage: 30.0,
-		bullet_speed: 30.0,
+		bullet_speed: 80.0,  // 高速度
 		bullet_penetration: 2,
 		bullet_targets: [Player],
 		
@@ -325,9 +325,9 @@ fn Game::create_laser_rifle(self : Self, owner_id : Int) -> Unit {
 		owner_id:owner_id,
 		body:self.world.createBody(bodydef),
 		
-		// 激光枪配置
+		// 激光枪配置（科幻武器，极高速度）
 		bullet_damage: 15.0,
-		bullet_speed: 35.0,
+		bullet_speed: 100.0,  // 超高速度（接近光速的游戏表现）
 		bullet_penetration: 5,
 		bullet_targets: [Player],
 		
