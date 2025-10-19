@@ -1,6 +1,23 @@
 fn create_world(
-	gravity?: (Double, Double) = (0.0, -9.8)
+	gravity?: (Double, Double) = (0.0, -9.8),
+	level?: String = "",
+	flag?: Bool = false
 )-> @box2d.B2World{
+	if flag==true {
+		let global_box2d_world : Ref[&@box2d.World?] = Ref::new(None)
+		try {
+      global_box2d_world.val = Some(@map_loader.load_map(file_content=level).construct_world())
+    } catch {
+      @map_loader.MapLoaderError(e) => {
+        println("Error loading map: \{e}")
+      }
+      e => {
+        println("Unknown error loading map: \{e}")
+      }
+    }
+
+		return @box2d.B2World::{world: global_box2d_world.val.unwrap().getBase()}
+	}
 	let worldAABB= @box2d.b2AABB()
 	worldAABB.setminVertex(@box2d.b2Vec2(-10000.0, -10000.0))
 	worldAABB.setmaxVertex(@box2d.b2Vec2(10000.0, 10000.0))
