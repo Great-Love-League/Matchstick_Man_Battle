@@ -1,26 +1,106 @@
 struct Game {
 	world : @box2d.B2World
+	weapon : WeaponManager
 	mut particle_list:Array[Particle]
 	mut particle_index:Int
 	
 	mut platform_list:Array[Platform]
 	mut platform_index:Int
 	
-	mut enemy_list : Array[&EnemyTrait?]
+	mut enemy_list : Array[Enemy]
+	
+	mut bullet_list : Array[Bullet]
+	mut item_list : Array[Item]
+	mut frame_count : Int
 }
 fn create_game() -> Game{
-	let world = create_world()
+	let world = create_world(level=level1,flag=true)
+	let weapon=create_weapon_manager()
 	let game = Game::{
 		world,
+		weapon,
 		particle_list:Array::new(),
 		particle_index:0,
 		platform_list:Array::new(),
 		platform_index:0,
 		enemy_list : Array::new(),
+		bullet_list : Array::new(),
+		item_list : Array::new(),
+		frame_count : 0
 	}
 	game
 }
 
+fn Game::update(self:Self, p: @p5js.P5Instance) -> Unit {
+		self.frame_count += 1
+		
+		if(self.particle_list[0].control.faint_state){
+			if(self.particle_list[0].control.faint_resistance<300){
+				self.particle_list[0].control.faint_resistance+=1
+			}
+			else{
+				self.particle_list[0].control.faint_state=false
+				self.particle_list[0].control.health=100
+				self.particle_list[0].control.faint_resistance=0
+			}
+			self.world.step(1.0/60.0, 4)
+			draw_world(p, self.world)
+			return
+		}
+		if(p.keyIsDown(KeyJ)){
+			self.particle_list[0].control.faint_state=true
+		}
+		
+		// 射击控制 - Z键发射子弹
+		if(p.keyIsDown(KeyZ)){
+			let direction = if self.particle_list[0].control.walk_direction > 0.0 { 1.0 } else { -1.0 }
+			self.shoot_bullet(0, direction)
+		}
+		
+		// 测试生成物品 - K键在角色前方生成生命包
+		if(p.keyIsDown(KeyK)){
+			let particle_pos = self.particle_list[0].torso.getCenterPosition()
+			self.spawn_health_pack((particle_pos.getX() + 3.0, particle_pos.getY()))
+		}
+		
+		if(p.keyIsDown(KeyA)){
+			self.particle_walk(self.particle_list[0],-1)
+		}
+		else if(p.keyIsDown(KeyD)){
+			self.particle_walk(self.particle_list[0],1)
+		}
+		else if(!self.particle_list[0].control.jump_state){
+			self.particle_stand(self.particle_list[0])
+		}
+		if(p.keyIsDown(KeyW)){
+			if self.particle_list[0].control.jump_cooldown <= 0 {
+				if !self.particle_list[0].control.jump_state { // 如果不在跳跃状态，则开始跳跃
+					self.particle_list[0].control.jump_state = true
+					self.particle_list[0].control.jump_frame_count = 0  // 重置跳跃帧计数
+					self.particle_list[0].control.jump_cooldown = j_dur_A + j_dur_B + j_dur_C  // 总共跳跃帧数
+				}
+			}
+		}
+		if(self.particle_list[0].control.jump_cooldown > 0){
+			self.particle_list[0].control.jump_cooldown -= 1 
+		}
+		self.particle_jump(self.particle_list[0],0)
+		
+		// 更新子弹系统
+		self.update_all_bullets()
+		
+		// 更新物品系统
+		self.update_all_items()
+		
+		// 每60帧清理一次
+		if self.frame_count % 60 == 0 {
+			self.cleanup_bullets()
+			self.cleanup_items()
+		}
+		
+		self.world.step(1.0/60.0, 4)
+}
+// fn Game::
 
 pub const VIEWPORT_WIDTH : Double = 1920 // 视口宽度
 pub const VIEWPORT_HEIGHT : Double = 1080 // 视口高度
