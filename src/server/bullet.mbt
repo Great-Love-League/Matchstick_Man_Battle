@@ -47,21 +47,25 @@ fn Game::create_bullet(
   target_types? : Array[TargetType] = [Player],
   penetration? : Int = 0,
 ) -> Bullet {
-  // 创建圆形子弹物理体
+  // 创建圆形子弹物理体（优化为真实弹道效果）
   let circle_def = @box2d.b2CircleDef()
-  circle_def.setRadius(0.1)
-  circle_def.setDensity(0.5)
-  circle_def.setFriction(0.1)
-  circle_def.setGroupIndex(-2)  // 独立碰撞组
+  circle_def.setRadius(0.08)     // 更小的子弹半径（8cm）
+  circle_def.setDensity(8.0)     // 高密度（金属子弹）
+  circle_def.setFriction(0.0)    // 无摩擦（空气阻力忽略不计）
+  circle_def.setRestitution(0.3) // 低弹性（不弹跳）
+  circle_def.setGroupIndex(-2)   // 独立碰撞组
   circle_def.setLocalPosition(@box2d.b2Vec2(0.0, 0.0))
   
   let body_def = @box2d.b2BodyDef()
   body_def.setPosition(@box2d.b2Vec2(position.0, position.1))
   body_def.addShape(circle_def.getBase())
   body_def.setAllowSleep(false)
+  body_def.setLinearDamping(0.0) // 无线性阻尼（保持速度）
   
   let body = self.world.createBody(body_def)
   body.setLinearVelocity(@box2d.b2Vec2(velocity.0, velocity.1))
+  
+  // 通过持续施加向上的力来抵消大部分重力（在 update_bullet 中实现）
   
   let bullet_id = self.bullet_list.length()
   let bullet = Bullet::{
@@ -92,6 +96,13 @@ fn Game::update_bullet(self : Self, bullet : Bullet) -> Unit {
   let dx = current_pos.getX() - bullet.start_position.0
   let dy = current_pos.getY() - bullet.start_position.1
   bullet.traveled_distance = @cmath.sqrt(dx * dx + dy * dy)
+  
+  // 抵消95%的重力，使子弹几乎不下坠（模拟真实高速子弹）
+  // 重力加速度约为 -9.8 m/s²
+  // 子弹质量 = 密度(8.0) × 体积(π×0.08²×h) ≈ 0.16
+  let mass = bullet.body.getMass()
+  let anti_gravity_force = @box2d.b2Vec2(0.0, mass * 9.8 * 0.95)  // 抵消95%重力
+  bullet.body.applyForce(anti_gravity_force, current_pos)
   
   if bullet.traveled_distance >= bullet.max_distance {
     bullet.is_active = false
@@ -254,20 +265,27 @@ fn Game::shoot_bullet(self : Self, player_index : Int, direction : Double) -> Un
   let hand_pos = particle.right_forearm.getCenterPosition()
   let position = (hand_pos.getX(), hand_pos.getY())
   
-  // 计算速度
-  let speed = 20.0
+  // 计算速度（真实枪械速度：手枪约250-400 m/s，这里缩小为60）
+  let speed = 60.0
   let velocity = (direction * speed, 0.0)
   
-  // 创建普通子弹：伤害10，射程50，只打其他玩家
+  // 创建普通子弹：伤害10，射程100，只打其他玩家
   self.create_bullet(
     position, 
     velocity, 
     player_index, 
     damage=10, 
-    max_distance=50.0,
+    max_distance=100.0,
     target_types=[Player],
     penetration=0
   ) |> ignore
+  
+  // 后坐力：施加反向冲量（牛顿第三定律）
+  // 子弹质量约0.01kg，速度60m/s，动量 = 0.6 kg·m/s
+  // 角色质量较大，后坐力相应减小
+  let recoil_impulse = @box2d.b2Vec2(-direction * 1.5, 0.3)  // 反向+轻微向上
+  let torso_pos = particle.torso.getCenterPosition()
+  particle.torso.applyImpulse(recoil_impulse, torso_pos)
   
   println("玩家 \{player_index} 发射了普通子弹")
 }
@@ -292,7 +310,7 @@ fn Game::shoot_penetrating_bullet(
   let hand_pos = particle.right_forearm.getCenterPosition()
   let position = (hand_pos.getX(), hand_pos.getY())
   
-  let speed = 25.0  // 穿透弹速度更快
+  let speed = 80.0  // 穿透弹速度更快（狙击步枪约800-900 m/s）
   let velocity = (direction * speed, 0.0)
   
   self.create_bullet(
@@ -300,10 +318,16 @@ fn Game::shoot_penetrating_bullet(
     velocity, 
     player_index, 
     damage=15,  // 穿透弹伤害更高
-    max_distance=60.0,
+    max_distance=120.0,  // 更远射程
     target_types=[Player],
     penetration=penetration_count
   ) |> ignore
+  
+  // 后坐力：狙击枪后坐力更强
+  // 速度更快(80 vs 60)，后坐力按比例增加
+  let recoil_impulse = @box2d.b2Vec2(-direction * 3.0, 0.5)  // 更强的反向冲量
+  let torso_pos = particle.torso.getCenterPosition()
+  particle.torso.applyImpulse(recoil_impulse, torso_pos)
   
   println("玩家 \{player_index} 发射了穿透子弹 (穿透\{penetration_count}次)")
 }
@@ -330,7 +354,7 @@ fn Game::shoot_shotgun(
   let hand_pos = particle.right_forearm.getCenterPosition()
   let position = (hand_pos.getX(), hand_pos.getY())
   
-  let base_speed = 18.0
+  let base_speed = 50.0  // 霰弹枪速度提升（约350-400 m/s）
   
   // 生成多发子弹
   for i in 0..<bullet_count {
@@ -351,11 +375,18 @@ fn Game::shoot_shotgun(
       velocity,
       player_index,
       damage=6,  // 散弹单发伤害较低
-      max_distance=30.0,  // 射程较短
+      max_distance=60.0,  // 射程增加
       target_types=[Player],
       penetration=0
     ) |> ignore
   }
+  
+  // 后坐力：霰弹枪后坐力最大（多发子弹同时发射）
+  // 后坐力按子弹数量累积
+  let recoil_magnitude = bullet_count.to_double() * 0.8  // 每发0.8的后坐力
+  let recoil_impulse = @box2d.b2Vec2(-direction * recoil_magnitude, 0.6)
+  let torso_pos = particle.torso.getCenterPosition()
+  particle.torso.applyImpulse(recoil_impulse, torso_pos)
   
   println("玩家 \{player_index} 发射了散弹 (\{bullet_count}发)")
 }
