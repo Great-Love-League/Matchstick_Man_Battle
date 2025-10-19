@@ -1,34 +1,140 @@
-///|
-fn which_platform(particle : Particle) -> Int {
-  for platform in platform_list.val {
-    if is_contact(particle.left_shank, platform.body) {
-      return platform.index
-    }
-    if is_contact(particle.right_shank, platform.body) {
-      return platform.index
-    }
-    // if is_contact(particle.right_thigh, platform.body) {
-    // 	return platform.index
-    // }
-    // if is_contact(particle.right_thigh, platform.body) {
-    // 	return platform.index
-    // }
-  }
-  -1
-}
-//particle walk
-
-///|
 let knee_angle : Double = 63.0 / 180.0 * Pi
 let thigh_angle_forward = 0.8
 let thigh_angle_backward = -0.5
 let elbow_angle : Double = 63.0 / 180.0 * Pi
 let arm_angle_forward = 0.5
 let arm_angle_backward = -0.5
+let knee_angle_bend_max : Double = -2.50 // 最大弯曲角度 (前10帧)
+let knee_angle_straight : Double = 0.0 // 最大伸直角度 (最后3帧)
+let j_thigh_angle_forward : Double = 1.0 
+let j_thigh_angle_backward : Double = 0.3
+let j_arm_angle_backward : Double = -0.3
+let j_dur_A : Int = 40 // 前10帧膝盖弯曲
+let j_dur_B : Int = 1 // 后3帧膝盖伸直
+let j_dur_C : Int = 20 // 后3帧膝盖伸直
+let jump_force : Double = 200.0 // 跳跃力大小
 
-///|
-fn particle_walk(particle : Particle, direction : Double) -> Unit {
-  //腿部动作处理
+pub struct ParticleControl{
+	mut walk_state : Bool
+	mut walk_direction : Double
+	mut walk_cooldown : Int
+	mut jump_cooldown : Int
+	mut jump_state : Bool
+	mut jump_frame_count : Int
+	mut health : Int
+	mut faint_state :Bool
+	mut faint_resistance : Int
+}
+pub struct Particle{
+	torso : @box2d.B2Body
+	head : @box2d.B2Body
+	left_thigh : @box2d.B2Body
+	right_thigh : @box2d.B2Body
+	left_shank: @box2d.B2Body
+	right_shank: @box2d.B2Body
+	thigh_left_joint : @box2d.B2Joint
+	thigh_right_joint : @box2d.B2Joint
+	knee_left_joint : @box2d.B2Joint
+	knee_right_joint : @box2d.B2Joint
+	neck_joint : @box2d.B2Joint
+	left_forearm : @box2d.B2Body
+	right_forearm : @box2d.B2Body
+	left_arm : @box2d.B2Body
+	right_arm : @box2d.B2Body
+	arm_left_joint : @box2d.B2Joint
+	arm_right_joint : @box2d.B2Joint
+	forearm_left_joint : @box2d.B2Joint
+	forearm_right_joint : @box2d.B2Joint
+	index : Int
+	control : ParticleControl
+}
+fn Game::create_particle_control(
+	self:Self,
+	walk_state?: Bool=false,
+	walk_direction?: Double=1.0,
+	walk_cooldown?: Int=0,
+	jump_cooldown?: Int=-1,
+	jump_state?: Bool=false,
+	jump_frame_count?: Int=0,
+	health?: Int=100,
+	faint_state?:Bool=false,
+	faint_resistance?: Int=0
+) -> ParticleControl{
+	ParticleControl::{
+		walk_state,
+		walk_direction,
+		walk_cooldown,
+		jump_cooldown,
+		jump_state,
+		jump_frame_count,
+		health,
+		faint_state,
+		faint_resistance
+	}
+}
+fn Game::create_particle(
+	self:Self,
+	position: (Double, Double)
+)-> Particle {
+	self.particle_index+=1
+	let torso = self.create_dynamic_box(position,(0.25,1.0),density=1.0,groupindex=-1)
+	let head = self.create_dynamic_box((position.0, position.1+1.5),(0.2,0.25),density=1.0,groupindex=-1)
+	let left_thigh = self.create_dynamic_box((position.0, position.1-1),(0.15,0.5),density=1.0,groupindex=-1)
+	let right_thigh = self.create_dynamic_box((position.0, position.1-1),(0.15,0.5),density=1.0,groupindex=-1)
+	let left_shank = self.create_dynamic_box((position.0, position.1-2),(0.15,0.5),density=1.0,groupindex=-1,friciton=0.2)
+	let right_shank = self.create_dynamic_box((position.0, position.1-2),(0.15,0.5),density=1.0,groupindex=-1,friciton=0.2)
+	let neck_joint = self.create_joint(torso, head, (position.0, position.1+1.0),enable_limit=true,lower_angle=0.0,upper_angle=0.0)
+	let thigh_left_joint = self.create_joint(torso, left_thigh, (position.0, position.1-0.5),enable_limit=true,lower_angle=-1.0,upper_angle=1.0)
+	let thigh_right_joint = self.create_joint(torso, right_thigh, (position.0, position.1-0.5),enable_limit=true,lower_angle=-1.0,upper_angle=1.0)
+	let knee_left_joint = self.create_joint(left_thigh, left_shank, (position.0, position.1-1.5),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
+	let knee_right_joint = self.create_joint(right_thigh, right_shank, (position.0, position.1-1.5),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
+	let left_arm = self.create_dynamic_box((position.0, position.1+0.5),(0.15,0.5),density=1.0,groupindex=-1)
+	let right_arm = self.create_dynamic_box((position.0, position.1+0.5),(0.15,0.5),density=1.0,groupindex=-1)
+	let left_forearm = self.create_dynamic_box((position.0, position.1-0.25),(0.15,0.5),density=1.0,groupindex=-1)
+	let right_forearm = self.create_dynamic_box((position.0, position.1-0.25),(0.15,0.5),density=1.0,groupindex=-1)
+	let arm_left_joint = self.create_joint(torso, left_arm, (position.0, position.1+1),enable_limit=true,lower_angle=-1.0,upper_angle=1.0)
+	let arm_right_joint = self.create_joint(torso, right_arm, (position.0, position.1+1),enable_limit=true,lower_angle=-1.0,upper_angle=1.0)
+	let forearm_left_joint = self.create_joint(left_arm, left_forearm, (position.0, position.1),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
+	let forearm_right_joint = self.create_joint(right_arm, right_forearm, (position.0, position.1),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
+	let index= self.particle_index-1
+	let tmp=Particle::{
+		torso,
+		head,
+		left_thigh,
+		right_thigh,
+		left_shank,
+		right_shank,
+		thigh_left_joint,
+		thigh_right_joint,
+		knee_left_joint,
+		knee_right_joint,
+		neck_joint,
+		left_forearm,
+		right_forearm,
+		left_arm,
+		right_arm,
+		arm_left_joint,
+		arm_right_joint,
+		forearm_left_joint,
+		forearm_right_joint,
+		index,
+		control: self.create_particle_control()
+	}
+	self.particle_list.push(tmp)
+	tmp
+}
+fn Game::which_platform(self:Self, particle : Particle) -> Int {
+  for platform in self.platform_list {
+    if self.is_contact(particle.left_shank, platform.body) {
+      return platform.index
+    }
+    if self.is_contact(particle.right_shank, platform.body) {
+      return platform.index
+    }
+  }
+  -1
+}
+fn Game::particle_walk(self:Self,particle : Particle, direction : Double) -> Unit {
 	particle.control.walk_direction = direction
 	if !particle.control.jump_state {
 		if particle.control.walk_state {
@@ -56,30 +162,22 @@ fn particle_walk(particle : Particle, direction : Double) -> Unit {
 		maintain_joint(particle.forearm_left_joint,elbow_angle * direction,kp=30.0,kd=1.0)
 		maintain_joint(particle.forearm_right_joint,elbow_angle * direction,kp=30.0,kd=1.0)
 	}
-
-  //手部动作处理
-
-  //躯干姿态处理
   maintain_rotation(particle.torso, 0, kp=100.0, kd=10.0)
-
-  //状态处理
   if particle.control.walk_cooldown <= 0 {
     particle.control.walk_state = !particle.control.walk_state
     particle.control.walk_cooldown = 20
   } else {
     particle.control.walk_cooldown -= 1
   }
-
 	particle.torso.applyForce(
 		@box2d.b2Vec2(50.0 * direction, 0.0),
 		particle.torso.getCenterPosition(),
 	)
-  //力学处理
-  let index = which_platform(particle)
+  let index = self.which_platform(particle)
   if index == -1 {
     return
   }
-  let platform = platform_list.val[index]
+  let platform = self.platform_list[index]
   let p_angle = platform.body.getRotation()
   let target_y = (
       particle.torso.getCenterPosition().getX() -
@@ -94,26 +192,8 @@ fn particle_walk(particle : Particle, direction : Double) -> Unit {
   )
   particle.torso.applyForce(v, particle.torso.getCenterPosition())
 }
-//这里缺少了走路停下的阻尼,和站稳的阻尼
-
-//这里缺少了跳跃的动作
-
-///|
-let knee_angle_bend_max : Double = -2.50 // 最大弯曲角度 (前10帧)
-let knee_angle_straight : Double = 0.0 // 最大伸直角度 (最后3帧)
-let j_thigh_angle_forward : Double = 1.0 
-let j_thigh_angle_backward : Double = 0.3
-let j_arm_angle_backward : Double = -0.3
-let j_dur_A : Int = 40 // 前10帧膝盖弯曲
-let j_dur_B : Int = 1 // 后3帧膝盖伸直
-let j_dur_C : Int = 20 // 后3帧膝盖伸直
-let jump_force : Double = 200.0 // 跳跃力大小
-
-///|
-fn particle_jump(particle : Particle, direction : Double) -> Unit {
+fn Game::particle_jump(self:Self,particle : Particle, direction : Double) -> Unit {
   // 控制跳跃动作的帧计数
-
-  // 跳跃的膝盖弯曲和伸直处理
   if particle.control.jump_state {
     // 膝盖弯曲: 前10帧
     particle.control.jump_frame_count += 1
@@ -153,15 +233,16 @@ fn particle_jump(particle : Particle, direction : Double) -> Unit {
       maintain_joint(particle.thigh_right_joint, 0, kp=70.0, kd=2.0)
       return
     }
-
-    // 跳跃完成，重置状态
     particle.control.jump_state = false // 跳跃结束
   }
 }
-
-///|
-fn particle_stand(particle : Particle) -> Unit {
-  let index = which_platform(particle)
+fn Game::particle_stand(self:Self,particle : Particle) -> Unit {
+  let index = self.which_platform(particle)
+  maintain_rotation(particle.torso, 0, kp=30.0, kd=10.0)
+  if index == -1 {
+		
+    return
+  }
   maintain_joint(particle.thigh_left_joint, 0.0, kp=50.0, kd=2.0)
   maintain_joint(particle.thigh_right_joint, 0.0, kp=50.0, kd=2.0)
   maintain_joint(particle.knee_left_joint, 0.0, kp=10.0, kd=2.0)
@@ -170,11 +251,7 @@ fn particle_stand(particle : Particle) -> Unit {
   maintain_joint(particle.arm_right_joint, 0.0, kp=10.0, kd=2.0)
   maintain_joint(particle.forearm_left_joint, 0.0, kp=30.0, kd=2.0)
   maintain_joint(particle.forearm_right_joint, 0.0, kp=30.0, kd=2.0)
-  maintain_rotation(particle.torso, 0, kp=100.0, kd=10.0)
-  if index == -1 {
-    return
-  }
-  let platform = platform_list.val[index]
+  let platform = self.platform_list[index]
   let p_angle = platform.body.getRotation()
   let target_y = (
       particle.torso.getCenterPosition().getX() -
@@ -187,10 +264,6 @@ fn particle_stand(particle : Particle) -> Unit {
     (particle.torso.getCenterPosition().getX(), target_y + 3.7),
   )
 }
-
-///|
-fn particle_action(particle : Particle) -> Unit {
-  // if(particle.jump_cooldown>=0){//有jump优先处理jump
-
-  // }
-}
+// fn particle_action(particle : Particle) -> Unit {
+	
+// }
