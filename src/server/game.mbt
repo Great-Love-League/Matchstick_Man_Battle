@@ -52,8 +52,8 @@ fn Game::update(self:Self, p: @p5js.P5Instance) -> Unit {
 	}
 	
 	// ===== 武器系统控制 =====
-	// I、O、P、L键：装备不同武器
-	if(p.keyIsDown(KeyI)){
+	// 1、2、3、4键：装备不同武器（字母区上方的数字键）
+	if(p.keyIsDown(Digit1)){
 		// 销毁旧武器
 		for gun in self.weapon.gun_list {
 			if gun.owner_id == 0 {
@@ -65,7 +65,7 @@ fn Game::update(self:Self, p: @p5js.P5Instance) -> Unit {
 		self.create_pistol(0)
 		println("装备手枪!")
 	}
-	if(p.keyIsDown(KeyO)){
+	if(p.keyIsDown(Digit2)){
 		// 销毁旧武器
 		for gun in self.weapon.gun_list {
 			if gun.owner_id == 0 {
@@ -77,7 +77,7 @@ fn Game::update(self:Self, p: @p5js.P5Instance) -> Unit {
 		self.create_shotgun(0)
 		println("装备霰弹枪!")
 	}
-	if(p.keyIsDown(KeyP)){
+	if(p.keyIsDown(Digit3)){
 		// 销毁旧武器
 		for gun in self.weapon.gun_list {
 			if gun.owner_id == 0 {
@@ -89,7 +89,7 @@ fn Game::update(self:Self, p: @p5js.P5Instance) -> Unit {
 		self.create_sniper(0)
 		println("装备狙击枪!")
 	}
-	if(p.keyIsDown(KeyL)){
+	if(p.keyIsDown(Digit4)){
 		// 销毁旧武器
 		for gun in self.weapon.gun_list {
 			if gun.owner_id == 0 {
@@ -102,8 +102,8 @@ fn Game::update(self:Self, p: @p5js.P5Instance) -> Unit {
 		println("装备激光枪!")
 	}
 	
-	// S键：使用武器射击
-	if(p.keyIsDown(KeyS)){
+	// Z键：使用武器射击
+	if(p.keyIsDown(KeyZ)){
 		// 遍历找到玩家的武器并射击
 		for gun in self.weapon.gun_list {
 			if gun.owner_id == 0 {
@@ -112,12 +112,14 @@ fn Game::update(self:Self, p: @p5js.P5Instance) -> Unit {
 			}
 		}
 	}
-	
-	// 射击控制 - Z键发射子弹（直接发射，无需武器）
-	if(p.keyIsDown(KeyZ)){
-		let direction = if self.particle_list[0].control.walk_direction > 0.0 { 1.0 } else { -1.0 }
-		self.shoot_bullet(0, direction)
-	}		// 测试生成物品 - K键在角色前方生成生命包
+	// 没有武器调试用
+
+	// // 射击控制 - Z键发射子弹（直接发射，无需武器）
+	// if(p.keyIsDown(KeyZ)){
+	// 	let direction = if self.particle_list[0].control.walk_direction > 0.0 { 1.0 } else { -1.0 }
+	// 	self.shoot_bullet(0, direction)
+	// }		
+	// 测试生成物品 - K键在角色前方生成生命包
 		if(p.keyIsDown(KeyK)){
 			let particle_pos = self.particle_list[0].torso.getCenterPosition()
 			self.spawn_health_pack((particle_pos.getX() + 3.0, particle_pos.getY()))

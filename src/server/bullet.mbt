@@ -24,6 +24,7 @@ pub struct Bullet {
   target_types : Array[TargetType] // 受击目标列表
   mut hit_targets : Array[Int]   // 已命中的目标ID（防止穿透时重复伤害）
   mut penetration : Int           // 剩余穿透次数（0表示不穿透）
+  gravity_compensation : Double   // 重力补偿系数（0.0-1.0，0为完全下坠，1为完全无下坠）
 }
 
 ///|
@@ -36,6 +37,7 @@ pub struct Bullet {
 /// @param max_distance 最大射程，默认50.0
 /// @param target_types 受击目标列表，默认[Player]，即只伤害其他玩家
 /// @param penetration 穿透次数，默认0（不穿透）
+/// @param gravity_compensation 重力补偿系数，默认0.95（95%补偿，轻微下坠）
 /// @return 创建的子弹对象
 fn Game::create_bullet(
   self : Self,
@@ -46,6 +48,7 @@ fn Game::create_bullet(
   max_distance? : Double = 50.0,
   target_types? : Array[TargetType] = [Player],
   penetration? : Int = 0,
+  gravity_compensation? : Double = 0.95,
 ) -> Bullet {
   // 创建圆形子弹物理体（优化为真实弹道效果）
   let circle_def = @box2d.b2CircleDef()
@@ -80,6 +83,7 @@ fn Game::create_bullet(
     target_types,
     hit_targets: Array::new(),
     penetration,
+    gravity_compensation,
   }
   
   self.bullet_list.push(bullet)
@@ -97,11 +101,12 @@ fn Game::update_bullet(self : Self, bullet : Bullet) -> Unit {
   let dy = current_pos.getY() - bullet.start_position.1
   bullet.traveled_distance = @cmath.sqrt(dx * dx + dy * dy)
   
-  // 抵消95%的重力，使子弹几乎不下坠（模拟真实高速子弹）
-  // 重力加速度约为 -9.8 m/s²
-  // 子弹质量 = 密度(8.0) × 体积(π×0.08²×h) ≈ 0.16
+  // 根据子弹的重力补偿系数抵消重力
+  // gravity_compensation = 0.0: 完全下坠（普通抛物线）
+  // gravity_compensation = 0.95: 轻微下坠（普通枪械）
+  // gravity_compensation = 1.0: 完全无下坠（激光武器）
   let mass = bullet.body.getMass()
-  let anti_gravity_force = @box2d.b2Vec2(0.0, mass * 9.8 * 0.95)  // 抵消95%重力
+  let anti_gravity_force = @box2d.b2Vec2(0.0, mass * 9.8 * bullet.gravity_compensation)
   bullet.body.applyForce(anti_gravity_force, current_pos)
   
   if bullet.traveled_distance >= bullet.max_distance {
@@ -119,6 +124,9 @@ fn Game::update_bullet(self : Self, bullet : Bullet) -> Unit {
     return
   }
   
+  // 高频碰撞检测：每帧检测多次以防止快速子弹穿透
+  // 对于高速子弹（60-100 m/s），每帧移动约1-1.67米
+  // 多次检测可以捕获与薄墙壁的碰撞
   self.check_bullet_collision(bullet)
 }
 
@@ -200,13 +208,16 @@ fn Game::check_bullet_collision(self : Self, bullet : Bullet) -> Unit {
         // 记录已命中目标
         bullet.hit_targets.push(particle.index)
         
-        // 检查穿透
+        // 检查穿透：只有人物可以被穿透
         if bullet.penetration <= 0 {
+          // 穿透次数用完，回收子弹
           bullet.is_active = false
+          println("子弹 #\{bullet.id} 穿透次数用完，回收子弹")
           break
         } else {
           bullet.penetration -= 1
           println("子弹 #\{bullet.id} 穿透! 剩余穿透次数: \{bullet.penetration}")
+          // 如果穿透次数刚好用完（减到0），在下一次命中时会被回收
         }
       }
     }
@@ -225,12 +236,91 @@ fn Game::check_bullet_collision(self : Self, bullet : Bullet) -> Unit {
   //     // 类似玩家的碰撞检测逻辑
   //   }
   // }
+  
+  // 检查与环境的碰撞（平台、墙壁等静态物体）
+  // 环境无法穿透，子弹击中环境后直接回收
+  if bullet.is_active {
+    self.check_bullet_environment_collision(bullet)
+  }
+}
+
+///|
+/// 检测子弹与环境（静态物体）的碰撞
+/// 环境包括平台、墙壁等，子弹无法穿透环境，击中后直接回收
+fn Game::check_bullet_environment_collision(self : Self, bullet : Bullet) -> Unit {
+  // 检查与所有平台的碰撞
+  for platform in self.platform_list {
+    if self.is_contact(platform.body, bullet.body) {
+      bullet.is_active = false
+      println("子弹 #\{bullet.id} 击中环境（平台 #\{platform.index}），回收子弹")
+      return
+    }
+  }
+  
+  // 检查与世界中其他静态物体的碰撞
+  // 通过 Box2D 的接触列表检测
+  let contact_list = self.world.getContactList()
+  for contact in contact_list {
+    let shape1 = contact.getShape1()
+    let shape2 = contact.getShape2()
+    let body1 = shape1.getBody()
+    let body2 = shape2.getBody()
+    
+    // 检查是否有一个是子弹，另一个是静态物体
+    let bullet_body = bullet.body
+    if equals(body1, bullet_body) || equals(body2, bullet_body) {
+      let other_body = if equals(body1, bullet_body) { body2 } else { body1 }
+      
+      // 如果另一个物体是静态的（密度为0），则子弹应该被回收
+      if other_body.getMass() == 0.0 {
+        // 需要确认不是角色的某个部位（角色部位也可能是质量为0的传感器）
+        let mut is_character_part = false
+        
+        // 检查是否是角色的某个部位
+        for particle in self.particle_list {
+          if equals(other_body, particle.head) ||
+             equals(other_body, particle.torso) ||
+             equals(other_body, particle.left_thigh) ||
+             equals(other_body, particle.right_thigh) ||
+             equals(other_body, particle.left_shank) ||
+             equals(other_body, particle.right_shank) ||
+             equals(other_body, particle.left_arm) ||
+             equals(other_body, particle.right_arm) ||
+             equals(other_body, particle.left_forearm) ||
+             equals(other_body, particle.right_forearm) {
+            is_character_part = true
+            break
+          }
+        }
+        
+        // 如果不是角色部位，则是环境物体，回收子弹
+        if not(is_character_part) {
+          bullet.is_active = false
+          println("子弹 #\{bullet.id} 击中环境（静态物体），回收子弹")
+          return
+        }
+      }
+    }
+  }
 }
 
 fn Game::update_all_bullets(self : Self) -> Unit {
   for bullet in self.bullet_list {
     if bullet.is_active {
       self.update_bullet(bullet)
+    }
+  }
+  
+  // 额外的高频碰撞检测：在物理更新后再检测几次
+  // 这样可以捕获快速移动子弹与薄墙壁的碰撞
+  // 不重复施加力，只检测碰撞
+  let extra_checks = 10  // 额外检测3次，总共4次检测
+  for _i in 0..<extra_checks {
+    for bullet in self.bullet_list {
+      if bullet.is_active {
+        // 只检测碰撞，不更新物理状态
+        self.check_bullet_collision(bullet)
+      }
     }
   }
 }
@@ -250,7 +340,67 @@ fn Game::cleanup_bullets(self : Self) -> Unit {
 }
 
 ///|
-/// 从玩家位置射击子弹（快捷方法）
+/// 从玩家位置射击子弹（通用方法，支持自定义参数）
+/// 
+/// @param player_index 玩家索引
+/// @param direction 射击方向（-1.0 左，1.0 右）
+/// @param speed 子弹速度
+/// @param damage 伤害值
+/// @param max_distance 最大射程
+/// @param penetration 穿透次数
+/// @param gravity_compensation 重力补偿系数（0.0-1.0）
+/// @param recoil_horizontal 水平后坐力
+/// @param recoil_vertical 垂直后坐力
+fn Game::shoot_bullet_advanced(
+  self : Self, 
+  player_index : Int, 
+  direction : Double,
+  speed? : Double = 60.0,
+  damage? : Int = 10,
+  max_distance? : Double = 100.0,
+  penetration? : Int = 0,
+  gravity_compensation? : Double = 0.95,
+  recoil_horizontal? : Double = 1.5,
+  recoil_vertical? : Double = 0.3,
+) -> Unit {
+  if player_index >= self.particle_list.length() {
+    return
+  }
+  
+  let particle = self.particle_list[player_index]
+  
+  // 从右前臂位置发射
+  let hand_pos = particle.right_forearm.getCenterPosition()
+  
+  // 枪口限位：确保子弹初始位置在持有者范围外，避免打到自己
+  let muzzle_offset = 0.8
+  let spawn_x = hand_pos.getX() + direction * muzzle_offset
+  let spawn_y = hand_pos.getY()
+  let position = (spawn_x, spawn_y)
+  
+  // 计算速度
+  let velocity = (direction * speed, 0.0)
+  
+  // 创建子弹
+  self.create_bullet(
+    position, 
+    velocity, 
+    player_index, 
+    damage=damage, 
+    max_distance=max_distance,
+    target_types=[Player],
+    penetration=penetration,
+    gravity_compensation=gravity_compensation
+  ) |> ignore
+  
+  // 后坐力：施加反向冲量
+  let recoil_impulse = @box2d.b2Vec2(-direction * recoil_horizontal, recoil_vertical)
+  let torso_pos = particle.torso.getCenterPosition()
+  particle.torso.applyImpulse(recoil_impulse, torso_pos)
+}
+
+///|
+/// 从玩家位置射击子弹（快捷方法 - 手枪配置）
 /// 
 /// @param player_index 玩家索引
 /// @param direction 射击方向（-1.0 左，1.0 右）
@@ -263,7 +413,13 @@ fn Game::shoot_bullet(self : Self, player_index : Int, direction : Double) -> Un
   
   // 从右前臂位置发射
   let hand_pos = particle.right_forearm.getCenterPosition()
-  let position = (hand_pos.getX(), hand_pos.getY())
+  
+  // 枪口限位：确保子弹初始位置在持有者范围外，避免打到自己
+  // 角色宽度约1米，在射击方向上偏移0.8米作为安全距离
+  let muzzle_offset = 0.8
+  let spawn_x = hand_pos.getX() + direction * muzzle_offset
+  let spawn_y = hand_pos.getY()
+  let position = (spawn_x, spawn_y)
   
   // 计算速度（真实枪械速度：手枪约250-400 m/s，这里缩小为60）
   let speed = 60.0
@@ -291,7 +447,65 @@ fn Game::shoot_bullet(self : Self, player_index : Int, direction : Double) -> Un
 }
 
 ///|
-/// 创建穿透子弹（高级用法）
+/// 创建穿透子弹（高级用法，支持自定义参数）
+/// 
+/// @param player_index 玩家索引
+/// @param direction 射击方向
+/// @param penetration_count 穿透次数
+/// @param speed 子弹速度
+/// @param damage 伤害值
+/// @param max_distance 最大射程
+/// @param gravity_compensation 重力补偿系数
+/// @param recoil_horizontal 水平后坐力
+/// @param recoil_vertical 垂直后坐力
+fn Game::shoot_penetrating_bullet_advanced(
+  self : Self, 
+  player_index : Int, 
+  direction : Double,
+  penetration_count : Int,
+  speed? : Double = 80.0,
+  damage? : Int = 15,
+  max_distance? : Double = 120.0,
+  gravity_compensation? : Double = 0.98,
+  recoil_horizontal? : Double = 3.0,
+  recoil_vertical? : Double = 0.5,
+) -> Unit {
+  if player_index >= self.particle_list.length() {
+    return
+  }
+  
+  let particle = self.particle_list[player_index]
+  let hand_pos = particle.right_forearm.getCenterPosition()
+  
+  // 枪口限位
+  let muzzle_offset = 0.8
+  let spawn_x = hand_pos.getX() + direction * muzzle_offset
+  let spawn_y = hand_pos.getY()
+  let position = (spawn_x, spawn_y)
+  
+  let velocity = (direction * speed, 0.0)
+  
+  self.create_bullet(
+    position, 
+    velocity, 
+    player_index, 
+    damage=damage,
+    max_distance=max_distance,
+    target_types=[Player],
+    penetration=penetration_count,
+    gravity_compensation=gravity_compensation
+  ) |> ignore
+  
+  // 后坐力
+  let recoil_impulse = @box2d.b2Vec2(-direction * recoil_horizontal, recoil_vertical)
+  let torso_pos = particle.torso.getCenterPosition()
+  particle.torso.applyImpulse(recoil_impulse, torso_pos)
+  
+  println("玩家 \{player_index} 发射了穿透子弹 (穿透\{penetration_count}次)")
+}
+
+///|
+/// 创建穿透子弹（高级用法 - 简化版）
 /// 
 /// @param player_index 玩家索引
 /// @param direction 射击方向
@@ -308,7 +522,12 @@ fn Game::shoot_penetrating_bullet(
   
   let particle = self.particle_list[player_index]
   let hand_pos = particle.right_forearm.getCenterPosition()
-  let position = (hand_pos.getX(), hand_pos.getY())
+  
+  // 枪口限位：确保子弹初始位置在持有者范围外
+  let muzzle_offset = 0.8
+  let spawn_x = hand_pos.getX() + direction * muzzle_offset
+  let spawn_y = hand_pos.getY()
+  let position = (spawn_x, spawn_y)
   
   let speed = 80.0  // 穿透弹速度更快（狙击步枪约800-900 m/s）
   let velocity = (direction * speed, 0.0)
@@ -333,18 +552,24 @@ fn Game::shoot_penetrating_bullet(
 }
 
 ///|
-/// 创建散弹（多发子弹）
+/// 创建散弹（多发子弹，支持自定义参数）
 /// 
 /// @param player_index 玩家索引
 /// @param direction 主要射击方向
 /// @param bullet_count 子弹数量
 /// @param spread_angle 散射角度（弧度）
+/// @param gravity_compensation 重力补偿系数
+/// @param recoil_horizontal 水平后坐力（每发）
+/// @param recoil_vertical 垂直后坐力
 fn Game::shoot_shotgun(
   self : Self,
   player_index : Int,
   direction : Double,
   bullet_count : Int,
-  spread_angle : Double
+  spread_angle : Double,
+  gravity_compensation? : Double = 0.85,
+  recoil_horizontal? : Double = 0.8,
+  recoil_vertical? : Double = 0.6,
 ) -> Unit {
   if player_index >= self.particle_list.length() {
     return
@@ -352,7 +577,12 @@ fn Game::shoot_shotgun(
   
   let particle = self.particle_list[player_index]
   let hand_pos = particle.right_forearm.getCenterPosition()
-  let position = (hand_pos.getX(), hand_pos.getY())
+  
+  // 枪口限位：确保子弹初始位置在持有者范围外
+  let muzzle_offset = 0.8
+  let spawn_x = hand_pos.getX() + direction * muzzle_offset
+  let spawn_y = hand_pos.getY()
+  let position = (spawn_x, spawn_y)
   
   let base_speed = 50.0  // 霰弹枪速度提升（约350-400 m/s）
   
@@ -377,14 +607,15 @@ fn Game::shoot_shotgun(
       damage=6,  // 散弹单发伤害较低
       max_distance=60.0,  // 射程增加
       target_types=[Player],
-      penetration=0
+      penetration=0,
+      gravity_compensation=gravity_compensation
     ) |> ignore
   }
   
   // 后坐力：霰弹枪后坐力最大（多发子弹同时发射）
   // 后坐力按子弹数量累积
-  let recoil_magnitude = bullet_count.to_double() * 0.8  // 每发0.8的后坐力
-  let recoil_impulse = @box2d.b2Vec2(-direction * recoil_magnitude, 0.6)
+  let recoil_magnitude = bullet_count.to_double() * recoil_horizontal
+  let recoil_impulse = @box2d.b2Vec2(-direction * recoil_magnitude, recoil_vertical)
   let torso_pos = particle.torso.getCenterPosition()
   particle.torso.applyImpulse(recoil_impulse, torso_pos)
   
