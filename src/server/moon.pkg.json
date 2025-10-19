@@ -16,6 +16,10 @@
     {
       "path": "Demonmasterlqx/MoonP5/cmd/p5js_ffi",
       "alias": "p5js"
+    },
+    {
+      "path": "Great-Love-League/Stick_Man_Battle/assets",
+      "alias": "assets"
     }
   ]
 }
