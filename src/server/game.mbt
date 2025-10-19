@@ -47,17 +47,77 @@ fn Game::update(self:Self, p: @p5js.P5Instance) -> Unit {
 			draw_world(p, self.world)
 			return
 		}
-		if(p.keyIsDown(KeyJ)){
-			self.particle_list[0].control.faint_state=true
+	if(p.keyIsDown(KeyJ)){
+		self.particle_list[0].control.faint_state=true
+	}
+	
+	// ===== 武器系统控制 =====
+	// I、O、P、L键：装备不同武器
+	if(p.keyIsDown(KeyI)){
+		// 销毁旧武器
+		for gun in self.weapon.gun_list {
+			if gun.owner_id == 0 {
+				gun.destroy(self)
+			}
 		}
-		
-		// 射击控制 - Z键发射子弹
-		if(p.keyIsDown(KeyZ)){
-			let direction = if self.particle_list[0].control.walk_direction > 0.0 { 1.0 } else { -1.0 }
-			self.shoot_bullet(0, direction)
+		self.weapon.gun_list.clear()
+		// 创建手枪
+		self.create_pistol(0)
+		println("装备手枪!")
+	}
+	if(p.keyIsDown(KeyO)){
+		// 销毁旧武器
+		for gun in self.weapon.gun_list {
+			if gun.owner_id == 0 {
+				gun.destroy(self)
+			}
 		}
-		
-		// 测试生成物品 - K键在角色前方生成生命包
+		self.weapon.gun_list.clear()
+		// 创建霰弹枪
+		self.create_shotgun(0)
+		println("装备霰弹枪!")
+	}
+	if(p.keyIsDown(KeyP)){
+		// 销毁旧武器
+		for gun in self.weapon.gun_list {
+			if gun.owner_id == 0 {
+				gun.destroy(self)
+			}
+		}
+		self.weapon.gun_list.clear()
+		// 创建狙击枪
+		self.create_sniper(0)
+		println("装备狙击枪!")
+	}
+	if(p.keyIsDown(KeyL)){
+		// 销毁旧武器
+		for gun in self.weapon.gun_list {
+			if gun.owner_id == 0 {
+				gun.destroy(self)
+			}
+		}
+		self.weapon.gun_list.clear()
+		// 创建激光枪
+		self.create_laser_rifle(0)
+		println("装备激光枪!")
+	}
+	
+	// S键：使用武器射击
+	if(p.keyIsDown(KeyS)){
+		// 遍历找到玩家的武器并射击
+		for gun in self.weapon.gun_list {
+			if gun.owner_id == 0 {
+				gun.attack(self)
+				break
+			}
+		}
+	}
+	
+	// 射击控制 - Z键发射子弹（直接发射，无需武器）
+	if(p.keyIsDown(KeyZ)){
+		let direction = if self.particle_list[0].control.walk_direction > 0.0 { 1.0 } else { -1.0 }
+		self.shoot_bullet(0, direction)
+	}		// 测试生成物品 - K键在角色前方生成生命包
 		if(p.keyIsDown(KeyK)){
 			let particle_pos = self.particle_list[0].torso.getCenterPosition()
 			self.spawn_health_pack((particle_pos.getX() + 3.0, particle_pos.getY()))
