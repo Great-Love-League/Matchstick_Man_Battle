@@ -1,0 +1,20 @@
+/* Tailwind import removed - this project doesn't include a Tailwind build output.
+	Keep the minimal fallback styles so the Rabbit-TEA UI is visible without Tailwind. */
+
+/* Minimal fallback styles so the Rabbit-TEA UI is visible without a Tailwind build step */
+body { font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial; }
+.min-h-screen { min-height: 100vh; }
+.flex { display: flex; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.text-center { text-align: center; }
+.bg-white\/80 { background-color: rgba(255,255,255,0.8); }
+.rounded-2xl { border-radius: 1rem; }
+.shadow-2xl { box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+.text-gray-500 { color: #6b7280; }
+.w-\[680px\] { width: 680px; }
+.h-\[360px\] { height: 360px; }
+.bg-gradient-to-b { background: linear-gradient(to bottom, #bfdbfe, #c7b3ff); }
+
+/* Ensure the demo area is visible */
+.demo-debug-outline { outline: 2px dashed rgba(34,197,94,0.9); }
