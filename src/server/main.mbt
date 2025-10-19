@@ -166,6 +166,9 @@ fn main {
 	
   box2d_init(game)
 
+  create_box_enemy(game, (5.0,10.0)) |> ignore
+  let rander = @random.Rand::new()
+
   let p5_instance = getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
     game.update(p)
     draw_world(p, game.world)
