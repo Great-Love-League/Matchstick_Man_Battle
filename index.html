@@ -380,18 +380,105 @@
                     if (app && app.childElementCount === 0) {
                         const fallback = `
 <div class="min-h-screen flex items-center justify-center" style="font-family:system-ui;padding:16px;background:linear-gradient(180deg,#bfdbfe,#c7d2fe,#ddd6fe)">
-    <div style="width:820px;height:560px;background:rgba(255,255,255,0.9);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.12);display:flex;flex-direction:column;overflow:hidden">
-        <div style="padding:16px;border-bottom:1px solid rgba(0,0,0,0.06);font-size:20px;font-weight:600">Rabbit-TEA: Demo Game</div>
-        <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:24px">
-            <div id="game-area-fallback" style="width:680px;height:360px;position:relative;border:2px dashed #d1d5db;border-radius:8px;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#f8fafc,#eef2ff);overflow:visible;padding:0;margin:0;">
-                <div style="text-align:center;color:#6b7280;z-index:1;pointer-events:none;position:relative;">\n<div style=\"font-size:18px;margin-bottom:8px\">Game Area</div>\n<div>游戏画面将显示在这里</div>\n</div>
+    <div style="width:900px;background:rgba(255,255,255,0.95);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.15);display:flex;flex-direction:column;overflow:visible;padding:20px;">
+        <!-- 标题区 -->
+        <div style="text-align:center;margin-bottom:20px;">
+            <h1 style="font-size:32px;font-weight:700;color:#1e293b;margin:0 0 8px 0;">火柴人大乱斗</h1>
+            <p style="font-size:14px;color:#64748b;margin:0;">Matchstick Man Battle</p>
+        </div>
+        
+        <!-- 游戏状态和控制区 -->
+        <div style="display:flex;gap:20px;margin-bottom:20px;align-items:center;justify-content:space-between;padding:16px;background:linear-gradient(135deg,#f1f5f9,#e2e8f0);border-radius:12px;">
+            <div style="flex:1;">
+                <div style="font-size:16px;font-weight:600;color:#334155;margin-bottom:8px;">玩家 1</div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <span style="font-size:14px;color:#64748b;">HP:</span>
+                    <div style="flex:1;height:20px;background:#cbd5e1;border-radius:10px;overflow:hidden;position:relative;">
+                        <div id="hp-bar-p1" style="height:100%;background:linear-gradient(90deg,#ef4444,#dc2626);width:100%;transition:width 0.3s;"></div>
+                    </div>
+                    <span id="hp-text-p1" style="font-size:14px;font-weight:600;color:#1e293b;min-width:60px;">100/100</span>
+                </div>
+                <div style="margin-top:8px;font-size:14px;color:#64748b;">胜利: <span id="wins-p1" style="font-weight:600;color:#059669;">0</span></div>
+            </div>
+            
+            <div style="text-align:center;">
+                <button id="start-game-btn" style="padding:12px 32px;font-size:16px;font-weight:600;color:white;background:linear-gradient(135deg,#3b82f6,#2563eb);border:none;border-radius:8px;cursor:pointer;box-shadow:0 4px 12px rgba(59,130,246,0.3);transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 16px rgba(59,130,246,0.4)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 12px rgba(59,130,246,0.3)'">开始游戏</button>
+                <div id="game-status" style="margin-top:12px;font-size:14px;font-weight:500;color:#64748b;">等待开始...</div>
+            </div>
+            
+            <div style="flex:1;text-align:right;">
+                <div style="font-size:16px;font-weight:600;color:#334155;margin-bottom:8px;">玩家 2</div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <span id="hp-text-p2" style="font-size:14px;font-weight:600;color:#1e293b;min-width:60px;">100/100</span>
+                    <div style="flex:1;height:20px;background:#cbd5e1;border-radius:10px;overflow:hidden;position:relative;">
+                        <div id="hp-bar-p2" style="height:100%;background:linear-gradient(90deg,#3b82f6,#2563eb);width:100%;transition:width 0.3s;"></div>
+                    </div>
+                    <span style="font-size:14px;color:#64748b;">HP:</span>
+                </div>
+                <div style="margin-top:8px;font-size:14px;color:#64748b;">胜利: <span id="wins-p2" style="font-weight:600;color:#059669;">0</span></div>
             </div>
         </div>
-        <div style="padding:12px;border-top:1px solid rgba(0,0,0,0.06);font-size:12px;color:#374151">操作说明：- 使用键盘或鼠标控制游戏</div>
+        
+        <!-- 游戏区域 -->
+        <div style="display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(180deg,#f8fafc,#f1f5f9);border-radius:12px;position:relative;">
+            <div id="game-area-fallback" style="width:820px;height:560px;position:relative;border:3px solid #cbd5e1;border-radius:8px;background:#ffffff;overflow:visible;padding:0;margin:0;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#94a3b8;z-index:1;pointer-events:none;">
+                    <div style="font-size:24px;margin-bottom:8px;font-weight:600;">🎮</div>
+                    <div style="font-size:16px;">点击"开始游戏"开始对战</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 操作说明 -->
+        <div style="margin-top:20px;padding:16px;background:linear-gradient(135deg,#fef3c7,#fde68a);border-radius:12px;border-left:4px solid #f59e0b;">
+            <div style="font-size:14px;font-weight:600;color:#92400e;margin-bottom:8px;">🎯 操作说明</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;color:#78350f;">
+                <div><strong>玩家1:</strong> WASD移动 + F攻击 + G特殊技能</div>
+                <div><strong>玩家2:</strong> 方向键移动 + L攻击 + K特殊技能</div>
+            </div>
+        </div>
     </div>
 </div>`;
                         app.innerHTML = fallback;
                         console.log('bootloader: injected fallback UI due to load conflict');
+                        
+                        // 设置游戏 API
+                        window.gameUI = {
+                            updateHP: function(player, current, max) {
+                                const bar = document.getElementById('hp-bar-p' + player);
+                                const text = document.getElementById('hp-text-p' + player);
+                                if (bar && text) {
+                                    const percent = Math.max(0, Math.min(100, (current / max) * 100));
+                                    bar.style.width = percent + '%';
+                                    text.textContent = Math.round(current) + '/' + Math.round(max);
+                                }
+                            },
+                            updateWins: function(player, wins) {
+                                const el = document.getElementById('wins-p' + player);
+                                if (el) el.textContent = wins;
+                            },
+                            setStatus: function(text) {
+                                const el = document.getElementById('game-status');
+                                if (el) el.textContent = text;
+                            },
+                            onStartGame: null
+                        };
+                        
+                        // 开始游戏按钮事件
+                        const startBtn = document.getElementById('start-game-btn');
+                        if (startBtn) {
+                            startBtn.addEventListener('click', function() {
+                                console.log('Start game button clicked');
+                                if (window.gameUI.onStartGame) {
+                                    window.gameUI.onStartGame();
+                                }
+                                window.gameUI.setStatus('游戏进行中...');
+                                startBtn.textContent = '重新开始';
+                            });
+                        }
+                        
+                        console.log('bootloader: gameUI API initialized');
+                        
                         // Retry moving canvas into the fallback game area
                         setTimeout(() => {
                             const gameArea = document.getElementById('game-area-fallback');
