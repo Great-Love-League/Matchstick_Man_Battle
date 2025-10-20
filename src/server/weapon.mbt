@@ -29,7 +29,28 @@ pub struct Gun{
 	id : Int
 	owner_id : Int
 	body : @box2d.B2Body
+	
+	// 子弹配置
+	bullet_damage : Double
+	bullet_speed : Double
+	bullet_penetration : Int
+	bullet_targets : Array[TargetType]
+	
+	// 射击控制
+	fire_rate : Int  // 射速（帧间隔）
+	mut last_fire_frame : Int  // 上次射击帧
+	
+	// 武器类型
+	gun_type : GunType
 }
+
+// 枪械类型
+pub enum GunType {
+	Pistol       // 手枪：低伤害，快射速
+	Shotgun      // 霰弹枪：散射，近距离
+	Sniper       // 狙击枪：高伤害，穿透
+	LaserRifle   // 激光枪：高穿透，中伤害
+} derive(Show, Eq)
 
 pub(open) trait WeaponCreate {
 	create(game:Game,owner_id:Int) -> Unit
@@ -134,10 +155,23 @@ pub impl WeaponCreate for Gun with create( game, owner_id){
 	bodydef.setPosition(@box2d.b2Vec2(handpos.getX()+gun_body_shift.getX(), handpos.getY()+gun_body_shift.getY()))
 	
 	game.weapon.gun_index+=1
+	
+	// 创建手枪
 	let aa:Gun=Gun::{
 		id:game.weapon.gun_index,
 		owner_id:owner_id,
-		body:game.world.createBody(bodydef)
+		body:game.world.createBody(bodydef),
+		
+		// 手枪配置
+		bullet_damage: 10.0,
+		bullet_speed: 60.0,  // 提升速度
+		bullet_penetration: 0,
+		bullet_targets: [Player],
+		
+		fire_rate: 15,  // 每15帧可射击一次
+		last_fire_frame: 0,
+		
+		gun_type: Pistol
 	}
 	game.weapon.gun_list.push(aa)
 
@@ -145,9 +179,201 @@ pub impl WeaponCreate for Gun with create( game, owner_id){
 }
 
 pub impl WeaponControl for Gun with attack(self,game){
-	println("Gun attack!")
+	// 检查冷却
+	if game.frame_count - self.last_fire_frame < self.fire_rate {
+		return  // 还在冷却中
+	}
+	
+	// 获取持有者信息
+	let holder = game.particle_list[self.owner_id]
+	let direction = if holder.control.walk_direction > 0.0 { 1.0 } else { -1.0 }
+	
+	// 根据枪械类型选择射击方式及参数
+	match self.gun_type {
+		Pistol => {
+			// 手枪：轻微下坠，轻微后坐力
+			game.shoot_bullet_advanced(
+				self.owner_id, 
+				direction,
+				speed=60.0,
+				damage=10,
+				max_distance=100.0,
+				penetration=0,
+				gravity_compensation=0.95,  // 95%补偿，轻微下坠
+				recoil_horizontal=3,       // 轻微水平后坐力
+				recoil_vertical=0.3          // 轻微向上抬升
+			)
+			println("手枪射击，持有者: #\{self.owner_id}")
+		}
+		
+		Shotgun => {
+			// 霰弹枪：明显下坠，强烈后坐力
+			game.shoot_shotgun(
+				self.owner_id, 
+				direction, 
+				5,     // 5发子弹
+				0.52,  // 30度扩散
+				gravity_compensation=0.85,  // 85%补偿，明显下坠
+				recoil_horizontal=4.0,      // 强烈水平后坐力
+				recoil_vertical=0.6         // 明显向上抬升
+			)
+			println("霰弹枪射击，持有者: #\{self.owner_id}")
+		}
+		
+		Sniper => {
+			// 狙击枪：轻微下坠，中等后坐力
+			game.shoot_penetrating_bullet_advanced(
+				self.owner_id, 
+				direction, 
+				2,  // 穿透2个目标
+				speed=80.0,
+				damage=30,
+				max_distance=120.0,
+				gravity_compensation=0.98,  // 98%补偿，极轻微下坠
+				recoil_horizontal=30.0,       // 高水平后坐力
+				recoil_vertical=0.5          // 中等向上抬升
+			)
+			println("狙击枪射击，持有者: #\{self.owner_id}")
+		}
+		
+		LaserRifle => {
+			// 激光枪：完全无下坠，无后坐力（能量武器）
+			game.shoot_penetrating_bullet_advanced(
+				self.owner_id, 
+				direction, 
+				5,  // 穿透5个目标
+				speed=100.0,
+				damage=15,
+				max_distance=150.0,
+				gravity_compensation=1.0,    // 100%补偿，完全无下坠 ✨
+				recoil_horizontal=0.0,       // 无后坐力 ✨
+				recoil_vertical=0.0          // 无向上抬升 ✨
+			)
+			println("激光枪射击，持有者: #\{self.owner_id}")
+		}
+	}
+	
+	// 更新冷却
+	self.last_fire_frame = game.frame_count
 }
 
 pub impl WeaponDestroy for Gun with destroy(self, game){
 	game.world.destroyBody(self.body)
+}
+
+///|
+/// 创建手枪（快捷方法）
+fn Game::create_pistol(self : Self, owner_id : Int) -> Unit {
+	Gun::create(self, owner_id)  // 默认就是手枪
+}
+
+///|
+/// 创建霰弹枪
+fn Game::create_shotgun(self : Self, owner_id : Int) -> Unit {
+	let bodydef:@box2d.B2BodyDef=@map_loader.get_bodydef_from_raw(Some(gun_body), None) catch {
+		_=> {
+			println("Failed to create body definition for Shotgun")
+			@box2d.b2BodyDef()
+		}
+	}
+	let centerpos=self.particle_list[owner_id].right_forearm.getCenterPosition()
+	let rotate =self.particle_list[owner_id].right_forearm.getRotation()
+	let handpos=@box2d.b2Vec2(-@cmath.sin(rotate)*0.25+centerpos.getX(),-@cmath.cos(rotate)*0.25+centerpos.getY())
+
+	bodydef.setPosition(@box2d.b2Vec2(handpos.getX()+gun_body_shift.getX(), handpos.getY()+gun_body_shift.getY()))
+	
+	self.weapon.gun_index+=1
+	
+	let gun:Gun=Gun::{
+		id:self.weapon.gun_index,
+		owner_id:owner_id,
+		body:self.world.createBody(bodydef),
+		
+		// 霰弹枪配置（真实霰弹枪约350-400 m/s）
+		bullet_damage: 6.0,
+		bullet_speed: 50.0,  // 提升速度
+		bullet_penetration: 0,
+		bullet_targets: [Player],
+		
+		fire_rate: 40,  // 慢射速
+		last_fire_frame: 0,
+		
+		gun_type: Shotgun
+	}
+	self.weapon.gun_list.push(gun)
+	self.create_joint(self.particle_list[owner_id].right_forearm, gun.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
+}
+
+///|
+/// 创建狙击枪
+fn Game::create_sniper(self : Self, owner_id : Int) -> Unit {
+	let bodydef:@box2d.B2BodyDef=@map_loader.get_bodydef_from_raw(Some(gun_body), None) catch {
+		_=> {
+			println("Failed to create body definition for Sniper")
+			@box2d.b2BodyDef()
+		}
+	}
+	let centerpos=self.particle_list[owner_id].right_forearm.getCenterPosition()
+	let rotate =self.particle_list[owner_id].right_forearm.getRotation()
+	let handpos=@box2d.b2Vec2(-@cmath.sin(rotate)*0.25+centerpos.getX(),-@cmath.cos(rotate)*0.25+centerpos.getY())
+
+	bodydef.setPosition(@box2d.b2Vec2(handpos.getX()+gun_body_shift.getX(), handpos.getY()+gun_body_shift.getY()))
+	
+	self.weapon.gun_index+=1
+	
+	let gun:Gun=Gun::{
+		id:self.weapon.gun_index,
+		owner_id:owner_id,
+		body:self.world.createBody(bodydef),
+		
+		// 狙击枪配置（真实狙击步枪约800-1000 m/s）
+		bullet_damage: 30.0,
+		bullet_speed: 80.0,  // 高速度
+		bullet_penetration: 2,
+		bullet_targets: [Player],
+		
+		fire_rate: 60,  // 很慢的射速
+		last_fire_frame: 0,
+		
+		gun_type: Sniper
+	}
+	self.weapon.gun_list.push(gun)
+	self.create_joint(self.particle_list[owner_id].right_forearm, gun.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
+}
+
+///|
+/// 创建激光枪
+fn Game::create_laser_rifle(self : Self, owner_id : Int) -> Unit {
+	let bodydef:@box2d.B2BodyDef=@map_loader.get_bodydef_from_raw(Some(gun_body), None) catch {
+		_=> {
+			println("Failed to create body definition for LaserRifle")
+			@box2d.b2BodyDef()
+		}
+	}
+	let centerpos=self.particle_list[owner_id].right_forearm.getCenterPosition()
+	let rotate =self.particle_list[owner_id].right_forearm.getRotation()
+	let handpos=@box2d.b2Vec2(-@cmath.sin(rotate)*0.25+centerpos.getX(),-@cmath.cos(rotate)*0.25+centerpos.getY())
+
+	bodydef.setPosition(@box2d.b2Vec2(handpos.getX()+gun_body_shift.getX(), handpos.getY()+gun_body_shift.getY()))
+	
+	self.weapon.gun_index+=1
+	
+	let gun:Gun=Gun::{
+		id:self.weapon.gun_index,
+		owner_id:owner_id,
+		body:self.world.createBody(bodydef),
+		
+		// 激光枪配置（科幻武器，极高速度）
+		bullet_damage: 15.0,
+		bullet_speed: 1000.0,  // 超高速度
+		bullet_penetration: 5,
+		bullet_targets: [Player],
+		
+		fire_rate: 5,  // 超快射速
+		last_fire_frame: 0,
+		
+		gun_type: LaserRifle
+	}
+	self.weapon.gun_list.push(gun)
+	self.create_joint(self.particle_list[owner_id].right_forearm, gun.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
 }
