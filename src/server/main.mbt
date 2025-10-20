@@ -1,5 +1,5 @@
-const Width: Double = 1000.0
-const Height: Double = 1000.0
+const Width: Double = 820.0
+const Height: Double = 560.0
 pub const PPM = 20.0
 
 extern "js" fn getP5Instance(
