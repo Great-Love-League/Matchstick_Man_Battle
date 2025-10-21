@@ -150,6 +150,7 @@ fn box2d_init(game:Game) ->Unit{
   // x坐标在平台范围内: -5.77 ± 5 = (-10.77, -0.77)
   // 选择平台中心偏左: x = -3.0
   game.create_particle((-3.0, 12.0)) |> ignore
+  game.create_drone(position=(-3.0, 20.0)) |> ignore
 	
 	
 	

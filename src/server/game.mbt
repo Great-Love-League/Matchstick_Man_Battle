@@ -148,6 +148,9 @@ fn Game::update(self:Self, p: @p5js.P5Instance) -> Unit {
 		}
 		self.particle_jump(self.particle_list[0],0)
 		
+		// 更新敌人
+		self.update_drones()
+		
 		// 更新子弹系统
 		self.update_all_bullets()
 		
