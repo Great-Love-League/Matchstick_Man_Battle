@@ -252,13 +252,13 @@ fn Game::particle_stand(self:Self,particle : Particle) -> Unit {
   maintain_joint(particle.forearm_left_joint, 0.0, kp=30.0, kd=2.0)
   maintain_joint(particle.forearm_right_joint, 0.0, kp=30.0, kd=2.0)
   let platform = self.platform_list[index]
-  let p_angle = platform.body.getRotation()
+  let p_angle = platform.get_body().getRotation()
   let target_y = (
       particle.torso.getCenterPosition().getX() -
-      platform.body.getCenterPosition().getX()
+      platform.get_body().getCenterPosition().getX()
     ) *
     @cmath.tan(p_angle) +
-    platform.body.getCenterPosition().getY()
+    platform.get_body().getCenterPosition().getY()
   maintain_position(
     particle.torso,
     (particle.torso.getCenterPosition().getX(), target_y + 3.7),

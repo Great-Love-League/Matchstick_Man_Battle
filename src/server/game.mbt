@@ -4,7 +4,7 @@ struct Game {
 	mut particle_list:Array[Particle]
 	mut particle_index:Int
 	
-	mut platform_list:Array[Platform]
+	mut platform_list:Array[&PlatformTrait]
 	mut platform_index:Int
 	
 	mut enemy_list : Array[&EnemyTrait?]
