@@ -172,7 +172,7 @@ fn main {
 	
   box2d_init(game)
 	
-	create_rotatable_platform(game,(0,30),(5,1),10.0) |> ignore
+	create_movable_platform(game,(5,1),(0,25),(0,30),5) |> ignore
 
   // 创建敌人，放在平台2的右侧
   // 平台2范围: x ∈ (-10.77, -0.77)

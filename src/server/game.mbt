@@ -242,7 +242,7 @@ fn Game::create_dynamic_box(
 	let body = self.world.createBody(body_def)
 	body
 }
-fn Game::create_joint(
+fn Game::create_revolute_joint(
 	self: Self,
 	body_a: @box2d.B2Body,
 	body_b: @box2d.B2Body,
@@ -258,6 +258,27 @@ fn Game::create_joint(
 	joint_def.setEnableLimit(enable_limit)
 	joint_def.setLowerAngle(lower_angle)
 	joint_def.setUpperAngle(upper_angle)
+	let joint = self.world.createJoint(joint_def.getBase())
+	joint
+}
+fn Game::create_prismatic_joint(
+	self :Self,
+	body_a: @box2d.B2Body,
+	body_b: @box2d.B2Body,
+	anchor: (Double, Double),
+	axis: @box2d.B2Vec2,
+	enable_limit?: Bool=false,
+	lower_translation?: Double=-10000.0,
+	upper_translation?: Double=10000.0
+)-> @box2d.B2Joint{
+	let joint_def = @box2d.b2PrismaticJointDef()
+	joint_def.setBody1(body_a)
+	joint_def.setBody2(body_b)
+	joint_def.setAnchorPoint(@box2d.b2Vec2(anchor.0, anchor.1))
+	joint_def.setEnableLimit(enable_limit)
+	joint_def.setLowerTranslation(lower_translation)
+	joint_def.setUpperTranslation(upper_translation)
+	joint_def.setAxis(axis)
 	let joint = self.world.createJoint(joint_def.getBase())
 	joint
 }
