@@ -169,7 +169,10 @@ fn main {
 	
 	let game = create_game()
 	
+	
   box2d_init(game)
+	
+	create_rotatable_platform(game,(0,30),(5,1),10.0) |> ignore
 
   // 创建敌人，放在平台2的右侧
   // 平台2范围: x ∈ (-10.77, -0.77)
