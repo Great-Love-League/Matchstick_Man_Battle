@@ -90,7 +90,7 @@ pub impl WeaponCreate for Sword with create(game, owner_id){
 	}
 	game.weapon.sword_list.push(aa)
 
-	game.create_joint(game.particle_list[owner_id].right_forearm, aa.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
+	game.create_revolute_joint(game.particle_list[owner_id].right_forearm, aa.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
 }
 
 pub impl WeaponControl for Sword with attack(self,game){
@@ -175,7 +175,7 @@ pub impl WeaponCreate for Gun with create( game, owner_id){
 	}
 	game.weapon.gun_list.push(aa)
 
-	game.create_joint(game.particle_list[owner_id].right_forearm, aa.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
+	game.create_revolute_joint(game.particle_list[owner_id].right_forearm, aa.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
 }
 
 pub impl WeaponControl for Gun with attack(self,game){
@@ -301,7 +301,7 @@ fn Game::create_shotgun(self : Self, owner_id : Int) -> Unit {
 		gun_type: Shotgun
 	}
 	self.weapon.gun_list.push(gun)
-	self.create_joint(self.particle_list[owner_id].right_forearm, gun.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
+	self.create_revolute_joint(self.particle_list[owner_id].right_forearm, gun.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
 }
 
 ///|
@@ -338,7 +338,7 @@ fn Game::create_sniper(self : Self, owner_id : Int) -> Unit {
 		gun_type: Sniper
 	}
 	self.weapon.gun_list.push(gun)
-	self.create_joint(self.particle_list[owner_id].right_forearm, gun.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
+	self.create_revolute_joint(self.particle_list[owner_id].right_forearm, gun.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
 }
 
 ///|
@@ -375,5 +375,5 @@ fn Game::create_laser_rifle(self : Self, owner_id : Int) -> Unit {
 		gun_type: LaserRifle
 	}
 	self.weapon.gun_list.push(gun)
-	self.create_joint(self.particle_list[owner_id].right_forearm, gun.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
+	self.create_revolute_joint(self.particle_list[owner_id].right_forearm, gun.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
 }
