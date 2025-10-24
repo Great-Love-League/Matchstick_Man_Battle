@@ -18,6 +18,8 @@ pub struct MovablePlatform{
 	end_position : @box2d.B2Vec2
 	speed : Double // 移动速度，单位米每秒
 	mut direction : Int // 1表示从start到end，-1表示从end到start
+	mut cooldown : Int  // 冷却时间，防止频繁切换方向
+	cooldown_time : Int // 冷却时间总长
 }
 
 // 还需要一个操作 , 探测某个人是否能站在平台上
@@ -58,7 +60,7 @@ pub impl PlatformTrait for Platform with get_body(self) -> @box2d.B2Body {
 pub fn create_rotatable_platform(game:Game,size:(Double,Double),position:(Double,Double),angle_speed:Double,initial_angle?:Double=0.0) -> RotatablePlatform {
 	let box_def = @box2d.b2BoxDef()
 	box_def.setExtents(@box2d.b2Vec2(size.0, size.1))
-	box_def.setDensity(1.0)
+	box_def.setDensity(50.0)
 	let body_def = @box2d.b2BodyDef()
 	body_def.setPosition(@box2d.b2Vec2(position.0, position.1))
 	body_def.addShape(box_def.getBase())
@@ -86,7 +88,7 @@ pub impl PlatformTrait for RotatablePlatform with update(self, game) -> Unit {
 	let new_angle = current_angle + self.angle_speed * (1.0/60.0) // 假设每帧更新一次，60FPS
 	self.angle += self.angle_speed * (1.0/60.0)
 	println("RotatablePlatform ${self.index} angle: ${self.angle}")
-	maintain_rotation(self.body, new_angle,kp=1000.0, kd=100.0)
+	maintain_rotation(self.body, new_angle,kp=100000.0, kd=10000.0)
 }
 
 pub impl PlatformTrait for RotatablePlatform with get_index(self) -> Int {
@@ -101,13 +103,18 @@ pub impl PlatformTrait for RotatablePlatform with get_body(self) -> @box2d.B2Bod
 pub fn create_movable_platform(game:Game, size:(Double,Double), start_position:(Double,Double), end_position:(Double,Double), speed:Double) -> MovablePlatform {
 	let box_def = @box2d.b2BoxDef()
 	box_def.setExtents(@box2d.b2Vec2(size.0, size.1))
-	box_def.setDensity(1.0)
+	box_def.setDensity(50.0)
 	let body_def = @box2d.b2BodyDef()
 	body_def.setPosition(@box2d.b2Vec2(start_position.0, start_position.1))
 	body_def.addShape(box_def.getBase())
 	body_def.setRotation(0.0)
 	body_def.setAllowSleep(false)
 	let body = game.world.createBody(body_def)
+	
+	let to_target = @box2d.b2Vec2(end_position.0 - start_position.0, end_position.1 - start_position.1)
+	let cooldown_time = ((to_target.length() / speed) ).to_int() // 转换为帧数，假设60FPS
+	
+	
 	let new = MovablePlatform::{
 		fulcrum : game.anchor,
 		body,
@@ -116,22 +123,37 @@ pub fn create_movable_platform(game:Game, size:(Double,Double), start_position:(
 		end_position : @box2d.b2Vec2(end_position.0, end_position.1),
 		now_position : @box2d.b2Vec2(start_position.0, start_position.1),
 		speed,
-		direction : 1
+		direction : 1,
+		cooldown : cooldown_time,
+		cooldown_time
 	}
 	let axis = @box2d.b2Vec2(end_position.0 - start_position.0, end_position.1 - start_position.1)
-	game.create_prismatic_joint(game.anchor, body, (0.0, 0.0), axis, enable_limit=true, lower_translation=0.0, upper_translation=5.0)|> ignore
+	//game.create_prismatic_joint(game.anchor, body, (0.0, 0.0), axis, enable_limit=true, lower_translation=0.0, upper_translation=5.0)|> ignore
+	
+	game.platform_list.push(new)
+	game.platform_index += 1
 	
 	new
 }
 
 impl PlatformTrait for MovablePlatform with update(self, game) -> Unit {
+	
+	self.body.applyForce(@box2d.b2Vec2(0.0, 9.8*self.body.getMass()), self.body.getCenterPosition())
+	// println("rotation")
+	maintain_rotation(self.body, 0.0, kp=100000.0, kd=10000.0)
+	
 	let current_pos = self.body.getCenterPosition()
-	let target_pos = if self.direction == -1 { self.end_position } else { self.start_position }
+	let target_pos = if self.direction == 1 { self.end_position } else { self.start_position }
 	let to_target = @box2d.b2Vec2(target_pos.getX() - current_pos.getX(), target_pos.getY() - current_pos.getY())
 	let distance = to_target.length()
-	if distance < 0.1 {
+	
+	println("\{self.direction} \{self.cooldown} \{distance}")
+	self.cooldown -= 1
+	
+	if distance < 0.1 && self.cooldown<0 {
 		// 到达目标点，切换方向
 		self.direction *= -1
+		self.cooldown = self.cooldown_time // 设置冷却时间，防止频繁切换
 	} else {
 		let move_distance = self.speed * (1.0/60.0)
 		let move_vector = to_target
@@ -139,7 +161,10 @@ impl PlatformTrait for MovablePlatform with update(self, game) -> Unit {
 		move_vector.setX(move_vector.getX() * move_distance/len )
 		move_vector.setY(move_vector.getY() * move_distance/len )
 		let new_pos = @box2d.b2Vec2(current_pos.getX() + move_vector.getX(), current_pos.getY() + move_vector.getY())
-		maintain_position(self.body,(new_pos.getX(), new_pos.getY()), kp=10.0, kd=1.0)
+		
+		//println("MovablePlatform \{self.index} position: (\{new_pos.getX()}, \{new_pos.getY()})")
+		
+		maintain_position(self.body,(new_pos.getX(), new_pos.getY()), kp=1000000.0, kd=5000.0)
 	}
 }
 

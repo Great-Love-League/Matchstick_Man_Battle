@@ -149,7 +149,7 @@ fn box2d_init(game:Game) ->Unit{
   // 人物高度约3.5米，所以放在 y = 9.4 + 2.0 = 11.4
   // x坐标在平台范围内: -5.77 ± 5 = (-10.77, -0.77)
   // 选择平台中心偏左: x = -3.0
-  game.create_particle((-3.0, 12.0)) |> ignore
+  game.create_particle((-10.0, 12.0)) |> ignore
 	
 	
 	
@@ -172,12 +172,14 @@ fn main {
 	
   box2d_init(game)
 	
-	create_movable_platform(game,(5,1),(0,25),(0,30),5) |> ignore
+	create_movable_platform(game,(5,1),(0,20),(0,40),1) |> ignore
+	
+	create_rotatable_platform(game,(5,1),(-15,20),10) |> ignore
 
   // 创建敌人，放在平台2的右侧
   // 平台2范围: x ∈ (-10.77, -0.77)
   // 将敌人放在右侧: x = -1.0
-  create_box_enemy(game, (-1.0, 12.0)) |> ignore
+  //create_box_enemy(game, (-1.0, 12.0)) |> ignore
   let rander = @random.Rand::new()
 
   let p5_instance = getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
