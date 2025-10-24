@@ -12,27 +12,16 @@ struct Game {
 	mut bullet_list : Array[Bullet]
 	mut item_list : Array[Item]
 	mut frame_count : Int
-}
-fn create_game() -> Game{
-	let world = create_world(level=level1,flag=true)
-	let weapon=create_weapon_manager()
-	let game = Game::{
-		world,
-		weapon,
-		particle_list:Array::new(),
-		particle_index:0,
-		platform_list:Array::new(),
-		platform_index:0,
-		enemy_list : Array::new(),
-		bullet_list : Array::new(),
-		item_list : Array::new(),
-		frame_count : 0
-	}
-	game
+	
+	anchor : @box2d.B2Body
 }
 
 fn Game::update(self:Self, p: @p5js.P5Instance) -> Unit {
 		self.frame_count += 1
+		
+		for platform in self.platform_list {
+			platform.update(self)
+		}
 		
 		if(self.particle_list[0].control.faint_state){
 			if(self.particle_list[0].control.faint_resistance<300){
@@ -186,6 +175,52 @@ fn Game::create_static_box(
 	let body = self.world.createBody(body_def)
 	body
 }
+
+fn create_game() -> Game{
+	let world = create_world(level=level1,flag=true)
+	
+	// let platform_list=Array::new()
+	// for body in world.getBodyList() {
+	// 	if body.getMass() == 0.0 {
+	// 		platform_list.push(body)
+	// 	}
+	// }
+	
+	// for i in platform_list {
+	// 	let sh = i.getShapeList()
+	// 	for j in sh {
+	// 		let t = j.getBase().getFriction()
+	// 	}
+	// }
+	
+	let weapon=create_weapon_manager()
+	
+	let anchor_box_def = @box2d.b2BoxDef()
+	anchor_box_def.setExtents(@box2d.b2Vec2(0.01, 0.01))
+	anchor_box_def.setDensity(0.0)
+	let anchor_body_def = @box2d.b2BodyDef()
+	anchor_body_def.setPosition(@box2d.b2Vec2(0.0, 0.0))
+	anchor_body_def.addShape(anchor_box_def.getBase())
+	anchor_body_def.setRotation(0.0)
+	anchor_body_def.setAllowSleep(false)
+	let anchor = world.createBody(anchor_body_def)
+	
+	let game = Game::{
+		world,
+		weapon,
+		particle_list:Array::new(),
+		particle_index:0,
+		platform_list:Array::new(),
+		platform_index:0,
+		enemy_list : Array::new(),
+		bullet_list : Array::new(),
+		item_list : Array::new(),
+		frame_count : 0,
+		anchor
+	}
+	game
+}
+
 fn Game::create_dynamic_box(
 	self:Self,
 	position: (Double, Double),

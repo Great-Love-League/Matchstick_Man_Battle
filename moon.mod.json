@@ -13,5 +13,6 @@
   "keywords": [],
   "description": "A stick man battle game",
   "source": "src",
-  "target": "js"
+  "target": "js",
+  "preferred-target": "js"
 }

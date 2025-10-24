@@ -125,11 +125,11 @@ fn Game::create_particle(
 }
 fn Game::which_platform(self:Self, particle : Particle) -> Int {
   for platform in self.platform_list {
-    if self.is_contact(particle.left_shank, platform.body) {
-      return platform.index
+    if self.is_contact(particle.left_shank, platform.get_body()) {
+      return platform.get_index()
     }
-    if self.is_contact(particle.right_shank, platform.body) {
-      return platform.index
+    if self.is_contact(particle.right_shank, platform.get_body()) {
+      return platform.get_index()
     }
   }
   -1
@@ -178,13 +178,13 @@ fn Game::particle_walk(self:Self,particle : Particle, direction : Double) -> Uni
     return
   }
   let platform = self.platform_list[index]
-  let p_angle = platform.body.getRotation()
+  let p_angle = platform.get_body().getRotation()
   let target_y = (
       particle.torso.getCenterPosition().getX() -
-      platform.body.getCenterPosition().getX()
+      platform.get_body().getCenterPosition().getX()
     ) *
     @cmath.tan(p_angle) +
-    platform.body.getCenterPosition().getY() //Fuck
+    platform.get_body().getCenterPosition().getY() //Fuck
   maintain_position(particle.torso,(particle.torso.getCenterPosition().getX(), target_y + 3.5))
   let v = @box2d.b2Vec2(
     50.0 * direction * @cmath.cos(p_angle),
