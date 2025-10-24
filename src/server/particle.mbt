@@ -179,13 +179,13 @@ fn Game::particle_walk(self:Self,particle : Particle, direction : Double) -> Uni
   }
   let platform = self.platform_list[index]
   let p_angle = platform.get_body().getRotation()
-  let target_y = (
-      particle.torso.getCenterPosition().getX() -
-      platform.get_body().getCenterPosition().getX()
-    ) *
-    @cmath.tan(p_angle) +
-    platform.get_body().getCenterPosition().getY() //Fuck
-  maintain_position(particle.torso,(particle.torso.getCenterPosition().getX(), target_y + 3.5))
+  // let target_y = (
+  //     particle.torso.getCenterPosition().getX() -
+  //     platform.get_body().getCenterPosition().getX()
+  //   ) *
+    // @cmath.tan(p_angle) +
+    // platform.get_body().getCenterPosition().getY() //Fuck
+  // maintain_position(particle.torso,(particle.torso.getCenterPosition().getX(), target_y + 3.5))
   let v = @box2d.b2Vec2(
     50.0 * direction * @cmath.cos(p_angle),
     50.0 * direction * @cmath.sin(p_angle),
@@ -251,18 +251,18 @@ fn Game::particle_stand(self:Self,particle : Particle) -> Unit {
   maintain_joint(particle.arm_right_joint, 0.0, kp=10.0, kd=2.0)
   maintain_joint(particle.forearm_left_joint, 0.0, kp=30.0, kd=2.0)
   maintain_joint(particle.forearm_right_joint, 0.0, kp=30.0, kd=2.0)
-  let platform = self.platform_list[index]
-  let p_angle = platform.get_body().getRotation()
-  let target_y = (
-      particle.torso.getCenterPosition().getX() -
-      platform.get_body().getCenterPosition().getX()
-    ) *
-    @cmath.tan(p_angle) +
-    platform.get_body().getCenterPosition().getY()
-  maintain_position(
-    particle.torso,
-    (particle.torso.getCenterPosition().getX(), target_y + 3.7),
-  )
+  // let platform = self.platform_list[index]
+  // let p_angle = platform.get_body().getRotation()
+  // let target_y = (
+  //     particle.torso.getCenterPosition().getX() -
+  //     platform.get_body().getCenterPosition().getX()
+  //   ) *
+  //   @cmath.tan(p_angle) +
+  //   platform.get_body().getCenterPosition().getY()
+  // maintain_position(
+  //   particle.torso,
+  //   (particle.torso.getCenterPosition().getX(), target_y + 3.7),
+  // )
 }
 // fn particle_action(particle : Particle) -> Unit {
 	
