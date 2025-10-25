@@ -14,6 +14,8 @@ fn box2d_init(game:Game) ->Unit{
   // x坐标在平台范围内: -5.77 ± 5 = (-10.77, -0.77)
   // 选择平台中心偏左: x = -3.0
   game.create_particle((-10.0, 12.0)) |> ignore
+
+  game.create_particle((-5.0, 12.0)) |> ignore
 	
 	
 	
@@ -27,6 +29,104 @@ fn box2d_init(game:Game) ->Unit{
 	
 	
 	Gun::create(game,0)
+	Gun::create(game,1)
+}
+
+fn load_custom_functions(game:Game) -> Unit {
+
+  /// 昏迷功能
+  game.register_custom_function(
+    GameCustomFunction::new(
+      GameRunning,
+      fn(game: Game, p5: @p5js.P5Instance) {
+        if(game.particle_list[0].control.faint_state){
+          if(game.particle_list[0].control.faint_resistance<300){
+            game.particle_list[0].control.faint_resistance+=1
+          }
+          else{
+            game.particle_list[0].control.faint_state=false
+            game.particle_list[0].control.health=100
+            game.particle_list[0].control.faint_resistance=0
+          }
+          return
+        }
+        if(p5.keyIsDown(KeyJ)){
+          game.particle_list[0].control.faint_state=true
+        }
+      }
+    )
+  )
+
+  /// 武器切换功能
+  game.register_custom_function(
+    GameCustomFunction::new(
+      GameRunning,
+      fn(game: Game, p: @p5js.P5Instance) {
+        if(p.keyIsDown(Digit1)){
+          // 销毁旧武器
+          for gun in game.weapon.gun_list {
+            if gun.owner_id == 0 {
+              gun.destroy(game)
+            }
+          }
+          game.weapon.gun_list.clear()
+          // 创建手枪
+          game.create_pistol(0)
+          println("装备手枪!")
+        }
+        if(p.keyIsDown(Digit2)){
+          // 销毁旧武器
+          for gun in game.weapon.gun_list {
+            if gun.owner_id == 0 {
+              gun.destroy(game)
+            }
+          }
+          game.weapon.gun_list.clear()
+          // 创建霰弹枪
+          game.create_shotgun(0)
+          println("装备霰弹枪!")
+        }
+        if(p.keyIsDown(Digit3)){
+          // 销毁旧武器
+          for gun in game.weapon.gun_list {
+            if gun.owner_id == 0 {
+              gun.destroy(game)
+            }
+          }
+          game.weapon.gun_list.clear()
+          // 创建狙击枪
+          game.create_sniper(0)
+          println("装备狙击枪!")
+        }
+        if(p.keyIsDown(Digit4)){
+          // 销毁旧武器
+          for gun in game.weapon.gun_list {
+            if gun.owner_id == 0 {
+              gun.destroy(game)
+            }
+          }
+          game.weapon.gun_list.clear()
+          // 创建激光枪
+          game.create_laser_rifle(0)
+          println("装备激光枪!")
+        }
+      }
+    )
+  )
+
+  /// 测试生成物品 - K键在角色前方生成生命包
+  game.register_custom_function(
+    GameCustomFunction::new(
+      GameRunning,
+      fn(game: Game, p5: @p5js.P5Instance) {
+        if(p5.keyIsDown(KeyK)){
+          let particle_pos = game.particle_list[0].torso.getCenterPosition()
+          game.spawn_health_pack((particle_pos.getX() + 3.0, particle_pos.getY()))
+        }
+      }
+    )
+  )
+
 }
 
 fn main {
@@ -42,16 +142,42 @@ fn main {
 	
 	create_platform(game,(-20,5),(10,1)) |> ignore
 
-  // 创建敌人，放在平台2的右侧
-  // 平台2范围: x ∈ (-10.77, -0.77)
-  // 将敌人放在右侧: x = -1.0
-  //create_box_enemy(game, (-1.0, 12.0)) |> ignore
-  let rander = @random.Rand::new()
+  game.register_particle_control_config(
+    ParticleControlConfig::new(
+      0,
+      left_key = Some(@p5js.KeyA),
+      right_key = Some(@p5js.KeyD),
+      jump_key = Some(@p5js.KeyW),
+      shoot_key = Some(@p5js.KeyZ),
+      from_internet = false,
+    )
+  ) catch {
+    ParticleControlConfigError(e) =>{
+      println("Error registering particle control config: \{e}")
+    }
+  }
+
+  game.register_particle_control_config(
+    ParticleControlConfig::new(
+      1,
+      left_key = Some(@p5js.ArrowLeft),
+      right_key = Some(@p5js.ArrowRight),
+      jump_key = Some(@p5js.ArrowUp),
+      shoot_key = Some(@p5js.ArrowDown),
+      from_internet = false,
+    )
+  ) catch {
+    ParticleControlConfigError(e) =>{
+      println("Error registering particle control config: \{e}")
+    }
+  }
+  
+  load_custom_functions(game)
 
   let p5_instance = getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
-    game.update(p)
+    game.state_machine_update(p)
     draw_world(p, game.world)
   }, width=Width, height=Height)
 
-  //p5_instance |> ignore
+  p5_instance |> ignore
 }
