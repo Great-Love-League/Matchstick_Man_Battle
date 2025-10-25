@@ -1,16 +1,29 @@
 <!DOCTYPE html>
 <html>
-<script type="text/javascript">const min = Math.min;</script>
 <head>
-
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js" ></script>
-    <script type="text/javascript">
-    jQuery.noConflict();
-    Object.extend = jQuery.extend;
-    </script>
-    
     <meta charset="UTF-8">
     <title>My Game</title>
+    
+    <!-- 本地 jQuery 或使用 HTTPS CDN -->
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript">
+    // 确保 jQuery 加载成功后才设置 Object.extend
+    if (typeof jQuery !== 'undefined') {
+        jQuery.noConflict();
+        Object.extend = jQuery.extend;
+    } else {
+        // 降级方案：简单的 extend 实现
+        Object.extend = function(target, source) {
+            for (var key in source) {
+                if (source.hasOwnProperty(key)) {
+                    target[key] = source[key];
+                }
+            }
+            return target;
+        };
+    }
+    </script>
+    
     <style type="text/css">
         @font-face {
             font-family: "ThaleahFat";
@@ -19,9 +32,11 @@
             font-style: normal;
         }
     </style>
+    
     <script src="./box2d.js"></script>
     <script src="./.mooncakes/Demonmasterlqx/MoonP5/p5.js"></script>
-        <script>
+    
+    <script>
     // 临时防护：确保常用绘图变量/函数在全局存在，避免 p5 的 scope 引发空值警告
     // 生成的 server.js 直接引用 bare identifier `min`/`max`，需要真正的全局绑定（var 或顶层赋值）
     if (typeof min === 'undefined') { var min = Math.min; window.min = min; }
@@ -422,10 +437,6 @@
         <!-- 游戏区域 -->
         <div style="display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(180deg,#f8fafc,#f1f5f9);border-radius:12px;position:relative;">
             <div id="game-area-fallback" style="width:820px;height:560px;position:relative;border:3px solid #cbd5e1;border-radius:8px;background:#ffffff;overflow:visible;padding:0;margin:0;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
-                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#94a3b8;z-index:1;pointer-events:none;">
-                    <div style="font-size:24px;margin-bottom:8px;font-weight:600;">🎮</div>
-                    <div style="font-size:16px;">点击"开始游戏"开始对战</div>
-                </div>
             </div>
         </div>
         
