@@ -129,19 +129,7 @@ fn load_custom_functions(game:Game) -> Unit {
 
 }
 
-fn main {
-	
-	let game = create_game()
-	
-	
-  box2d_init(game)
-	
-	create_movable_platform(game,(5,1),(0,20),(0,40),1) |> ignore
-	
-	create_rotatable_platform(game,(5,1),(-15,20),1) |> ignore
-	
-	create_platform(game,(-20,5),(10,1)) |> ignore
-
+fn register_control(game:Game) -> Unit{
   game.register_particle_control_config(
     ParticleControlConfig::new(
       0,
@@ -171,8 +159,24 @@ fn main {
       println("Error registering particle control config: \{e}")
     }
   }
-  
+}
+
+fn main {
+	
+	let game = create_game()
+	
+	
+  box2d_init(game)
+	
+	create_movable_platform(game,(5,1),(0,20),(0,40),1) |> ignore
+	
+	create_rotatable_platform(game,(5,1),(-15,20),1) |> ignore
+	
+	create_platform(game,(-20,5),(10,1)) |> ignore
+
   load_custom_functions(game)
+
+  register_control(game)
 
   let p5_instance = getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
     game.state_machine_update(p)
