@@ -238,19 +238,18 @@ fn Game::particle_jump(self:Self,particle : Particle, direction : Double) -> Uni
 }
 fn Game::particle_stand(self:Self,particle : Particle) -> Unit {
   let index = self.which_platform(particle)
-  maintain_rotation(particle.torso, 0, kp=30.0, kd=10.0)
+  maintain_rotation(particle.torso, 0, kp=300.0, kd=10.0)
   if index == -1 {
-		
     return
   }
   maintain_joint(particle.thigh_left_joint, 0.0, kp=50.0, kd=2.0)
   maintain_joint(particle.thigh_right_joint, 0.0, kp=50.0, kd=2.0)
-  maintain_joint(particle.knee_left_joint, 0.0, kp=10.0, kd=2.0)
-  maintain_joint(particle.knee_right_joint, 0.0, kp=10.0, kd=2.0)
-  maintain_joint(particle.arm_left_joint, 0.0, kp=10.0, kd=2.0)
-  maintain_joint(particle.arm_right_joint, 0.0, kp=10.0, kd=2.0)
-  maintain_joint(particle.forearm_left_joint, 0.0, kp=30.0, kd=2.0)
-  maintain_joint(particle.forearm_right_joint, 0.0, kp=30.0, kd=2.0)
+  maintain_joint(particle.knee_left_joint, 0.0, kp=50.0, kd=2.0)
+  maintain_joint(particle.knee_right_joint, 0.0, kp=50.0, kd=2.0)
+  maintain_joint(particle.arm_left_joint, 0.0, kp=50.0, kd=2.0)
+  maintain_joint(particle.arm_right_joint, 0.0, kp=50.0, kd=2.0)
+  maintain_joint(particle.forearm_left_joint, 0.0, kp=50.0, kd=2.0)
+  maintain_joint(particle.forearm_right_joint, 0.0, kp=50.0, kd=2.0)
   // let platform = self.platform_list[index]
   // let p_angle = platform.get_body().getRotation()
   // let target_y = (

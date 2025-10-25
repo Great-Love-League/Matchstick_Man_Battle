@@ -32,9 +32,9 @@ fn maintain_joint(
 )-> Unit {
 	let bodyA=joint.toRevoluteJoint().getBody1()
 	let bodyB=joint.toRevoluteJoint().getBody2()
-	let angle = bodyB.getRotation() - bodyA.getRotation()
+	let angle:Double = bodyB.getRotation() - bodyA.getRotation()
 	let error=target_angle - angle
-	let torque=kp*error - kd*(bodyB.getAngularVelocity()-bodyA.getAngularVelocity())
+	let torque :Double =kp*error - kd*(bodyB.getAngularVelocity()-bodyA.getAngularVelocity())
 	bodyB.applyTorque(torque)
 }
 fn maintain_position(
