@@ -8,7 +8,6 @@
     jQuery.noConflict();
     Object.extend = jQuery.extend;
     </script>
-    <script src="lib/jquery.svg.min.js"></script>
     
     <meta charset="UTF-8">
     <title>My Game</title>
@@ -21,12 +20,561 @@
         }
     </style>
     <script src="./box2d.js"></script>
-    <script src=".mooncakes\Demonmasterlqx\MoonP5\p5.js"></script>
+    <script src="./.mooncakes/Demonmasterlqx/MoonP5/p5.js"></script>
+        <script>
+    // 临时防护：确保常用绘图变量/函数在全局存在，避免 p5 的 scope 引发空值警告
+    // 生成的 server.js 直接引用 bare identifier `min`/`max`，需要真正的全局绑定（var 或顶层赋值）
+    if (typeof min === 'undefined') { var min = Math.min; window.min = min; }
+    if (typeof max === 'undefined') { var max = Math.max; window.max = max; }
+        // 当 color() 或 beginShape 参数未定义时，给出安全默认值
+        (function(){
+            const _origColor = window.color;
+            if (typeof _origColor === 'function') {
+                window.color = function(r,g,b,a){
+                    if (r === undefined) r = 0;
+                    if (g === undefined) g = r;
+                    if (b === undefined) b = r;
+                    if (a === undefined) a = 255;
+                    return _origColor.call(this, r,g,b,a);
+                };
+            }
+            const _origBeginShape = window.beginShape;
+            if (typeof _origBeginShape === 'function') {
+                window.beginShape = function(mode){
+                    if (mode === undefined) mode = POINTS;
+                    return _origBeginShape.call(this, mode);
+                };
+            }
+            const _origEndShape = window.endShape;
+            if (typeof _origEndShape === 'function') {
+                window.endShape = function(mode, closeMode){
+                    if (mode === undefined) mode = 0;
+                    if (closeMode === undefined) closeMode = false;
+                    return _origEndShape.call(this, mode, closeMode);
+                };
+            }
+        })();
+            // Patch p5 instance methods to default missing alpha to 255 to silence warnings
+            (function(){
+                try {
+                    if (typeof p5 !== 'undefined' && p5 && p5.prototype) {
+                        const proto = p5.prototype;
+                        if (typeof proto.color === 'function') {
+                            const _origColor = proto.color;
+                            proto.color = function(r,g,b,a){
+                                if (arguments.length === 3) a = 255;
+                                if (a === undefined) a = 255;
+                                return _origColor.call(this, r, g === undefined ? r : g, b === undefined ? r : b, a);
+                            };
+                        }
+                        if (typeof proto.fill === 'function') {
+                            const _origFill = proto.fill;
+                            proto.fill = function(r,g,b,a){
+                                if (arguments.length === 1 && typeof r === 'object') return _origFill.call(this, r);
+                                if (arguments.length === 3) a = 255;
+                                if (a === undefined) a = 255;
+                                return _origFill.call(this, r, g, b, a);
+                            };
+                        }
+                    }
+                } catch(e){ console.warn('p5 patch failed', e); }
+            })();
+        </script>
+            <div id="debug-bar" style="position:fixed;right:8px;bottom:8px;padding:6px 10px;background:rgba(0,0,0,0.6);color:white;border-radius:6px;font-size:12px;z-index:9999">app children: <span id="debug-count">0</span></div>
+            <script>
+            // Simple debug UI to show whether #app is populated
+            (function(){
+                const countEl = document.getElementById('debug-count');
+                const appEl = document.getElementById('app');
+                const update = () => {
+                    const n = appEl ? appEl.childElementCount : 0;
+                    countEl.textContent = String(n);
+                    if (appEl) {
+                        if (n > 0) appEl.classList.add('demo-debug-outline');
+                        else appEl.classList.remove('demo-debug-outline');
+                    }
+                };
+                setInterval(update, 300);
+                window.addEventListener('load', update);
+            })();
+            </script>
     <script src="./target/js/release/build/server/server.js"></script>
+    <!-- Integrate moonbitgame-example frontend -->
 </head>
 
 <body>
+    <!-- Example frontend mount point -->
+    <div id="app"></div>
     <canvas id="canvas" style="display: block; margin: 0 auto;" height="32" width="32"></canvas>
+        <div id="page-log" style="position:fixed;left:8px;bottom:8px;max-width:40%;max-height:40%;overflow:auto;background:rgba(255,255,255,0.9);color:#111;padding:8px;border-radius:6px;font-size:12px;z-index:9998">logs:<div id="page-log-inside"></div></div>
+        <script>
+            // Inline execution smoke-test
+            try {
+                const inside = document.getElementById('page-log-inside');
+                if (inside) {
+                    const el = document.createElement('div');
+                    el.textContent = 'inline-script: ' + new Date().toISOString();
+                    inside.appendChild(el);
+                }
+                console.log('inline-script ran');
+            } catch(e) { console.error('inline-script error', e); }
+        </script>
+        <script>
+        // 在 Rabbit-TEA 渲染完成后，将原有 canvas 移入示例的 Game Area
+        window.addEventListener('load', () => {
+            const tryMove = () => {
+                function findGameArea() {
+                    // Try several strategies in order of reliability.
+                    // 1) element with explicit Tailwind-like utility classes
+                    const byClass = document.querySelector('.w-\\[680px\\].h-\\[360px\\]') || document.querySelector('.w-\\[680px\\]');
+                    if (byClass) return byClass;
+
+                    // 2) element with inline style width/height matching the expected area (fallback UI uses inline styles)
+                    const byInline = Array.from(document.querySelectorAll('div[style]')).find(d => {
+                        const s = (d.getAttribute('style') || '').replace(/\s+/g, '');
+                        return s.includes('width:680px') || (s.includes('width:820px') && s.includes('height:560px')) || s.includes('height:360px');
+                    });
+                    if (byInline) return byInline;
+
+                    // 3) find a div containing the text "Game Area" and then prefer a descendant that looks like the playfield
+                    const textNodes = Array.from(document.querySelectorAll('div'));
+                    for (const n of textNodes) {
+                        try {
+                            if (n.textContent && n.textContent.includes('Game Area')) {
+                                // Prefer a nearby child that has expected size classes or inline size
+                                const found = n.querySelector('.w-\\[680px\\].h-\\[360px\\]') || n.querySelector('.w-\\[680px\\]') || Array.from(n.querySelectorAll('div[style]')).find(d => {
+                                    const s = (d.getAttribute('style') || '').replace(/\s+/g, '');
+                                    return s.includes('width:680px') || s.includes('height:360px');
+                                });
+                                if (found) return found;
+                                // As a last resort, return the closest div that contains the text
+                                return n.closest('div');
+                            }
+                        } catch (e) { /* ignore */ }
+                    }
+
+                    return null;
+                }
+                let target = findGameArea() || document.querySelector('.w-\\[680px\\]') || document.querySelector('[class*="Game Area"]') || document.getElementById('app');
+                // If we ended up with the root #app, prefer an inner playfield if present
+                try {
+                    if (target && target.id === 'app') {
+                        const inner = target.querySelector('.w-\\[680px\\].h-\\[360px\\]') || target.querySelector('.w-\\[680px\\]') || Array.from(target.querySelectorAll('div')).find(n => n.textContent && n.textContent.includes('Game Area'));
+                        if (inner) {
+                            console.log('tryMove: found inner playfield inside #app, using that instead', inner);
+                            target = inner;
+                        } else {
+                            // No inner playfield present: inject a dedicated playfield container inside #app
+                            console.log('tryMove: no inner playfield inside #app, injecting one');
+                            let injected = document.getElementById('__auto_playfield');
+                            if (!injected) {
+                                // create a wrapper to center the playfield if no demo card exists
+                                let wrapper = document.getElementById('__auto_playfield_wrapper');
+                                if (!wrapper) {
+                                    wrapper = document.createElement('div');
+                                    wrapper.id = '__auto_playfield_wrapper';
+                                    wrapper.style.display = 'flex';
+                                    wrapper.style.alignItems = 'center';
+                                    wrapper.style.justifyContent = 'center';
+                                    wrapper.style.minHeight = '100vh';
+                                    wrapper.style.width = '100%';
+                                }
+                                injected = document.createElement('div');
+                                injected.id = '__auto_playfield';
+                                // basic centered fixed-size playfield to host the canvas
+                                injected.style.width = '680px';
+                                injected.style.height = '360px';
+                                injected.style.position = 'relative';
+                                injected.style.display = 'block';
+                                // ensure some visual separation for debugging
+                                injected.style.background = 'transparent';
+                                // try to find example demo card (width:820px;height:560px) to place injected inside it
+                                const demoCard = document.querySelector('div[style*="width:820px"][style*="height:560px"]') || document.querySelector('.min-h-screen');
+                                if (demoCard) {
+                                    demoCard.appendChild(injected);
+                                } else {
+                                    wrapper.appendChild(injected);
+                                    target.appendChild(wrapper);
+                                }
+                            }
+                            target = injected;
+                        }
+                    }
+                } catch(e) { console.warn('tryMove: inner-target check failed', e); }
+                // Prefer a canvas already inside the target (if present), otherwise fall back to global canvas ids
+                let canvas = null;
+                if (target) canvas = target.querySelector('canvas');
+                if (!canvas) canvas = document.getElementById('defaultCanvas0') || document.querySelector('canvas') || document.getElementById('canvas');
+                if (target && canvas) {
+                    try {
+                        // decorate for debug visibility
+                        try {
+                            const prev = document.getElementById('__game_target_debug');
+                            if (prev && prev.parentElement) prev.parentElement.removeChild(prev);
+                        } catch(e){}
+                        try {
+                            const info = document.createElement('div');
+                            info.id = '__game_target_debug';
+                            info.style.position = 'fixed';
+                            info.style.right = '8px';
+                            info.style.top = '8px';
+                            info.style.background = 'rgba(0,0,0,0.7)';
+                            info.style.color = 'white';
+                            info.style.zIndex = 10000;
+                            info.style.padding = '6px 8px';
+                            info.style.fontSize = '12px';
+                            info.style.borderRadius = '6px';
+                            info.textContent = 'game debug: locating target...';
+                            document.body.appendChild(info);
+                        } catch(e){ console.warn('debug info attach failed', e); }
+
+                        // ensure the container can position absolute children
+                        const prevPos = window.getComputedStyle(target).position;
+                        if (prevPos === 'static' || !prevPos) target.style.position = 'relative';
+                        // ensure the container has a sensible minimum size for the game area
+                        if (!target.style.minWidth) target.style.minWidth = '680px';
+                        if (!target.style.minHeight) target.style.minHeight = '360px';
+                        // compute available pixel area
+                        let cw = Math.max(1, target.clientWidth || 680);
+                        let ch = Math.max(1, target.clientHeight || 360);
+
+                        // If the target is suspiciously small, create a safe overlay host so the game is visible
+                        if (cw < 200 || ch < 200) {
+                            console.warn('found small target, creating fallback host', cw, ch, target);
+                            let fallback = document.getElementById('__injected_game_host');
+                            if (!fallback) {
+                                fallback = document.createElement('div');
+                                fallback.id = '__injected_game_host';
+                                fallback.style.position = 'fixed';
+                                fallback.style.left = '50%';
+                                fallback.style.top = '50%';
+                                fallback.style.transform = 'translate(-50%, -50%)';
+                                fallback.style.width = '680px';
+                                fallback.style.height = '360px';
+                                fallback.style.zIndex = 9997;
+                                fallback.style.background = 'rgba(0,0,0,0.03)';
+                                fallback.style.border = '2px dashed rgba(0,0,0,0.06)';
+                                fallback.style.borderRadius = '8px';
+                                document.body.appendChild(fallback);
+                            }
+                            // switch the target to the fallback host
+                            target = fallback;
+                            cw = 680; ch = 360;
+                        }
+
+                        // move canvas into target if not already — insert as first child so UI elements render above it
+                        if (!target.contains(canvas)) {
+                            try {
+                                target.insertBefore(canvas, target.firstChild);
+                            } catch(e) {
+                                target.appendChild(canvas);
+                            }
+                        }
+
+                        // Set canvas pixel size with devicePixelRatio for crispness and ensure CSS size matches visible container size
+                        try {
+                            const dpr = window.devicePixelRatio || 1;
+                            canvas.width = Math.max(1, Math.floor(cw * dpr));
+                            canvas.height = Math.max(1, Math.floor(ch * dpr));
+                            canvas.style.width = (cw) + 'px';
+                            canvas.style.height = (ch) + 'px';
+                        } catch(e) { console.warn('set canvas pixel size failed', e); }
+
+                        // overlay canvas to exactly fill the target
+                        canvas.style.position = 'absolute';
+                        canvas.style.left = '0';
+                        canvas.style.top = '0';
+                        canvas.style.transform = 'none';
+                        // ensure canvas sits behind UI elements and does not block pointer events
+                        canvas.style.zIndex = '0';
+                        canvas.style.pointerEvents = 'none';
+                        canvas.style.display = 'block';
+
+                        try { const dbg = document.getElementById('__game_target_debug'); if (dbg) dbg.textContent = `game debug: target=${target.tagName} id=${target.id||''} class=${(target.className||'').toString().slice(0,80)} size=${cw}x${ch}`; } catch(e){}
+                        console.log('tryMove: canvas resized to', cw, ch, 'and moved into target', target, 'canvas attrs', canvas.width, canvas.height);
+                        // Notify libraries that size changed
+                        try { window.dispatchEvent(new Event('resize')); } catch(e) { console.warn('dispatch resize failed', e); }
+                    } catch(e){ console.warn('tryMove failed', e); }
+                } else {
+                    setTimeout(tryMove, 200);
+                }
+            };
+            tryMove();
+
+            // Observe #app for dynamic mounts (move injected playfield into real demo card when it appears)
+            (function(){
+                try {
+                    const appEl = document.getElementById('app');
+                    if (!appEl) return;
+                    let observed = false;
+                    const mo = new MutationObserver((mutations)=>{
+                        try {
+                            // prefer the real playfield if it appears
+                            const realPlay = document.querySelector('.w-\\[680px\\].h-\\[360px\\]') || document.querySelector('.w-\\[680px\\]');
+                            const injected = document.getElementById('__auto_playfield');
+                            const demoCard = document.querySelector('div[style*="width:820px"][style*="height:560px"]') || document.querySelector('.min-h-screen');
+                            if (realPlay) {
+                                // move canvas into the real playfield
+                                const canvas = document.querySelector('canvas');
+                                if (canvas && realPlay && canvas.parentElement !== realPlay) {
+                                    try { realPlay.insertBefore(canvas, realPlay.firstChild); } catch(e){ realPlay.appendChild(canvas); }
+                                    console.log('observer: moved canvas into realPlay', realPlay);
+                                    tryMove();
+                                    mo.disconnect();
+                                    observed = true;
+                                    return;
+                                }
+                            }
+                            if (injected && demoCard && injected.parentElement !== demoCard) {
+                                demoCard.appendChild(injected);
+                                console.log('observer: moved __auto_playfield into demoCard', demoCard);
+                                tryMove();
+                                mo.disconnect();
+                                observed = true;
+                                return;
+                            }
+                        } catch(e) { console.warn('observer loop error', e); }
+                    });
+                    mo.observe(appEl, { childList:true, subtree:true });
+                    // Safety: disconnect after 10s if not resolved
+                    setTimeout(()=>{ try { mo.disconnect(); } catch(e){} }, 10000);
+                } catch(e){ console.warn('observer setup failed', e); }
+            })();
+        });
+        </script>
+    <link rel="stylesheet" href="./moonbitgame-example/styles.css">
+    <script>
+    // Proxy console to write into page-log as well
+    (function(){
+        const out = document.getElementById('page-log-inside');
+        if (!out) return;
+        const wrap = (kind) => (...args) => {
+            try { const el = document.createElement('div'); el.textContent = kind + ': ' + args.map(a=>{ try { return typeof a === 'string'?a:JSON.stringify(a);} catch(e){ return String(a);} }).join(' '); out.appendChild(el); out.scrollTop = out.scrollHeight; } catch(e){}
+            return original[kind].apply(console, args);
+        };
+        const original = { log: console.log, warn: console.warn, error: console.error };
+        console.log = wrap('log'); console.warn = wrap('warn'); console.error = wrap('error');
+    })();
+    window.addEventListener('error', (e) => {
+        console.error('global error captured', e.error || e.message, e);
+    });
+    window.addEventListener('unhandledrejection', (ev) => {
+        console.error('unhandledrejection', ev.reason);
+    });
+    console.log('bootloader: loading example bundle via script tag');
+    </script>
+    <!-- Load example module directly (IIFE will execute and mount UI) -->
+    <!-- Note: This may conflict with server.js due to duplicate global declarations -->
+    <script>
+    // Detect if example module will fail to load (e.g., duplicate $PanicError class)
+    // If so, immediately inject fallback UI so the game can be displayed
+    (function(){
+        let loadFailed = false;
+        const errHandler = (e) => {
+            if (e && e.message && e.message.includes('$PanicError')) {
+                loadFailed = true;
+                console.warn('bootloader: example module load conflict detected (duplicate $PanicError), injecting fallback UI immediately');
+                // Inject fallback UI right away
+                try {
+                    const app = document.getElementById('app');
+                    if (app && app.childElementCount === 0) {
+                        const fallback = `
+<div class="min-h-screen flex items-center justify-center" style="font-family:system-ui;padding:16px;background:linear-gradient(180deg,#bfdbfe,#c7d2fe,#ddd6fe)">
+    <div style="width:900px;background:rgba(255,255,255,0.95);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.15);display:flex;flex-direction:column;overflow:visible;padding:20px;">
+        <!-- 标题区 -->
+        <div style="text-align:center;margin-bottom:20px;">
+            <h1 style="font-size:32px;font-weight:700;color:#1e293b;margin:0 0 8px 0;">火柴人大乱斗</h1>
+            <p style="font-size:14px;color:#64748b;margin:0;">Matchstick Man Battle</p>
+        </div>
+        
+        <!-- 游戏状态和控制区 -->
+        <div style="display:flex;gap:20px;margin-bottom:20px;align-items:center;justify-content:space-between;padding:16px;background:linear-gradient(135deg,#f1f5f9,#e2e8f0);border-radius:12px;">
+            <div style="flex:1;">
+                <div style="font-size:16px;font-weight:600;color:#334155;margin-bottom:8px;">玩家 1</div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <span style="font-size:14px;color:#64748b;">HP:</span>
+                    <div style="flex:1;height:20px;background:#cbd5e1;border-radius:10px;overflow:hidden;position:relative;">
+                        <div id="hp-bar-p1" style="height:100%;background:linear-gradient(90deg,#ef4444,#dc2626);width:100%;transition:width 0.3s;"></div>
+                    </div>
+                    <span id="hp-text-p1" style="font-size:14px;font-weight:600;color:#1e293b;min-width:60px;">100/100</span>
+                </div>
+                <div style="margin-top:8px;font-size:14px;color:#64748b;">胜利: <span id="wins-p1" style="font-weight:600;color:#059669;">0</span></div>
+            </div>
+            
+            <div style="text-align:center;">
+                <button id="start-game-btn" style="padding:12px 32px;font-size:16px;font-weight:600;color:white;background:linear-gradient(135deg,#3b82f6,#2563eb);border:none;border-radius:8px;cursor:pointer;box-shadow:0 4px 12px rgba(59,130,246,0.3);transition:all 0.2s;" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 6px 16px rgba(59,130,246,0.4)'" onmouseout="this.style.transform='translateY(0)';this.style.boxShadow='0 4px 12px rgba(59,130,246,0.3)'">开始游戏</button>
+                <div id="game-status" style="margin-top:12px;font-size:14px;font-weight:500;color:#64748b;">等待开始...</div>
+            </div>
+            
+            <div style="flex:1;text-align:right;">
+                <div style="font-size:16px;font-weight:600;color:#334155;margin-bottom:8px;">玩家 2</div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <span id="hp-text-p2" style="font-size:14px;font-weight:600;color:#1e293b;min-width:60px;">100/100</span>
+                    <div style="flex:1;height:20px;background:#cbd5e1;border-radius:10px;overflow:hidden;position:relative;">
+                        <div id="hp-bar-p2" style="height:100%;background:linear-gradient(90deg,#3b82f6,#2563eb);width:100%;transition:width 0.3s;"></div>
+                    </div>
+                    <span style="font-size:14px;color:#64748b;">HP:</span>
+                </div>
+                <div style="margin-top:8px;font-size:14px;color:#64748b;">胜利: <span id="wins-p2" style="font-weight:600;color:#059669;">0</span></div>
+            </div>
+        </div>
+        
+        <!-- 游戏区域 -->
+        <div style="display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(180deg,#f8fafc,#f1f5f9);border-radius:12px;position:relative;">
+            <div id="game-area-fallback" style="width:820px;height:560px;position:relative;border:3px solid #cbd5e1;border-radius:8px;background:#ffffff;overflow:visible;padding:0;margin:0;box-shadow:0 4px 12px rgba(0,0,0,0.1);">
+                <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:#94a3b8;z-index:1;pointer-events:none;">
+                    <div style="font-size:24px;margin-bottom:8px;font-weight:600;">🎮</div>
+                    <div style="font-size:16px;">点击"开始游戏"开始对战</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 操作说明 -->
+        <div style="margin-top:20px;padding:16px;background:linear-gradient(135deg,#fef3c7,#fde68a);border-radius:12px;border-left:4px solid #f59e0b;">
+            <div style="font-size:14px;font-weight:600;color:#92400e;margin-bottom:8px;">🎯 操作说明</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13px;color:#78350f;">
+                <div><strong>玩家1:</strong> WASD移动 + F攻击 + G特殊技能</div>
+                <div><strong>玩家2:</strong> 方向键移动 + L攻击 + K特殊技能</div>
+            </div>
+        </div>
+    </div>
+</div>`;
+                        app.innerHTML = fallback;
+                        console.log('bootloader: injected fallback UI due to load conflict');
+                        
+                        // 设置游戏 API
+                        window.gameUI = {
+                            updateHP: function(player, current, max) {
+                                const bar = document.getElementById('hp-bar-p' + player);
+                                const text = document.getElementById('hp-text-p' + player);
+                                if (bar && text) {
+                                    const percent = Math.max(0, Math.min(100, (current / max) * 100));
+                                    bar.style.width = percent + '%';
+                                    text.textContent = Math.round(current) + '/' + Math.round(max);
+                                }
+                            },
+                            updateWins: function(player, wins) {
+                                const el = document.getElementById('wins-p' + player);
+                                if (el) el.textContent = wins;
+                            },
+                            setStatus: function(text) {
+                                const el = document.getElementById('game-status');
+                                if (el) el.textContent = text;
+                            },
+                            onStartGame: null
+                        };
+                        
+                        // 开始游戏按钮事件
+                        const startBtn = document.getElementById('start-game-btn');
+                        if (startBtn) {
+                            startBtn.addEventListener('click', function() {
+                                console.log('Start game button clicked');
+                                if (window.gameUI.onStartGame) {
+                                    window.gameUI.onStartGame();
+                                }
+                                window.gameUI.setStatus('游戏进行中...');
+                                startBtn.textContent = '重新开始';
+                            });
+                        }
+                        
+                        console.log('bootloader: gameUI API initialized');
+                        
+                        // Retry moving canvas into the fallback game area
+                        setTimeout(() => {
+                            const gameArea = document.getElementById('game-area-fallback');
+                            const canvas = document.querySelector('canvas');
+                            const demoCard = gameArea ? gameArea.closest('div[style*="width:820px"][style*="background"]') : null;
+                            if (gameArea && canvas) {
+                                const cw = canvas.width || 680;
+                                const ch = canvas.height || 360;
+                                // 头部+底部高度
+                                const extra = 56 + 40;
+                                if (demoCard) {
+                                    demoCard.style.setProperty('height', (ch + extra) + 'px', 'important');
+                                    demoCard.style.setProperty('width', cw + 'px', 'important');
+                                    demoCard.style.setProperty('overflow', 'visible', 'important');
+                                    demoCard.style.setProperty('border-radius', '0', 'important');
+                                }
+                                // 移动 canvas
+                                if (!gameArea.contains(canvas)) {
+                                    try {
+                                        gameArea.insertBefore(canvas, gameArea.firstChild);
+                                    } catch(e){ gameArea.appendChild(canvas); }
+                                }
+                                canvas.style.position = 'absolute';
+                                canvas.style.left = '0';
+                                canvas.style.top = '0';
+                                canvas.style.width = cw + 'px';
+                                canvas.style.height = ch + 'px';
+                                canvas.style.zIndex = '0';
+                                canvas.style.pointerEvents = 'auto';
+                                canvas.style.display = 'block';
+                                canvas.style.margin = '0';
+                                canvas.style.padding = '0';
+                                canvas.width = cw;
+                                canvas.height = ch;
+                                console.log('bootloader: moved canvas into fallback game area, auto resized to', cw, ch);
+                                window.dispatchEvent(new Event('resize'));
+                                // 再次延迟修正 demoCard 样式，防止被覆盖
+                                setTimeout(() => {
+                                    if (demoCard) {
+                                        demoCard.style.setProperty('height', (ch + extra) + 'px', 'important');
+                                        demoCard.style.setProperty('width', cw + 'px', 'important');
+                                        demoCard.style.setProperty('overflow', 'visible', 'important');
+                                        demoCard.style.setProperty('border-radius', '0', 'important');
+                                    }
+                                }, 500);
+                            }
+                        }, 100);
+                    }
+                } catch(e){ console.error('fallback inject on conflict failed', e); }
+            }
+        };
+        window.addEventListener('error', errHandler);
+        setTimeout(() => { window.removeEventListener('error', errHandler); }, 1000);
+    })();
+    </script>
+    <script src="./moonbitgame-example/main/main.js"></script>
+    <script>
+    (function(){
+        console.log('bootloader: example module loaded (IIFE should have executed)');
+        // Poll app child count for a short period so we can see late mounts
+        let checks = 0;
+        const intId = setInterval(()=>{
+                const appEl = document.getElementById('app');
+                const n = appEl ? appEl.childElementCount : 0;
+                console.log('bootloader: poll', checks, 'app present?', !!appEl, 'children=', n);
+                checks += 1;
+                if (checks > 20) {
+                        clearInterval(intId);
+                        // If nothing mounted, inject a visible fallback UI so the demo is visible
+                        try {
+                                const app = document.getElementById('app');
+                                if (app && app.childElementCount === 0) {
+                                        const fallback = `
+<div class="min-h-screen flex items-center justify-center" style="font-family:system-ui;padding:16px">
+    <div style="width:820px;height:560px;background:rgba(255,255,255,0.9);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,0.12);display:flex;flex-direction:column;overflow:hidden">
+        <div style="padding:16px;border-bottom:1px solid rgba(0,0,0,0.06);font-size:20px;font-weight:600">Rabbit-TEA: Demo Game</div>
+        <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:24px">
+            <div style="width:680px;height:360px;border:2px dashed #d1d5db;border-radius:8px;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg,#f8fafc,#eef2ff)">
+                <div style="text-align:center;color:#6b7280">
+                    <div style="font-size:18px;margin-bottom:8px">Game Area</div>
+                    <div>游戏逻辑未实现 — 这里只是界面占位</div>
+                </div>
+            </div>
+        </div>
+        <div style="padding:12px;border-top:1px solid rgba(0,0,0,0.06);font-size:12px;color:#374151">操作说明：- 点击或按键操作（未实现）</div>
+    </div>
+</div>`;
+                                        app.innerHTML = fallback;
+                                        // leave fallback UI default stacking (canvas z-index now controls visibility)
+                                        console.log('bootloader: injected fallback UI into #app');
+                                }
+                        } catch(e) { console.error('bootloader: fallback inject failed', e); }
+                }
+        }, 200);
+    })();
+    </script>
 </body>
 
 </html>
