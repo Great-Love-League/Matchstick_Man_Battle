@@ -157,7 +157,6 @@ pub const VIEWPORT_WIDTH : Double = 1920 // 视口宽度
 pub const VIEWPORT_HEIGHT : Double = 1080 // 视口高度
 
 pub const Pi : Double = 3.141592653589793
-let platform_index:Ref[Int]=Ref::new(0)
 
 fn Game::create_static_box(
 	self:Self,
