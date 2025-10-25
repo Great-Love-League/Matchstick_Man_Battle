@@ -87,7 +87,7 @@ pub impl PlatformTrait for RotatablePlatform with update(self, game) -> Unit {
 	let current_angle = self.body.getRotation()
 	let new_angle = current_angle + self.angle_speed * (1.0/60.0) // 假设每帧更新一次，60FPS
 	self.angle += self.angle_speed * (1.0/60.0)
-	println("RotatablePlatform ${self.index} angle: ${self.angle}")
+	// println("RotatablePlatform ${self.index} angle: ${self.angle}")
 	maintain_rotation(self.body, new_angle,kp=100000.0, kd=10000.0)
 }
 
@@ -147,7 +147,7 @@ impl PlatformTrait for MovablePlatform with update(self, game) -> Unit {
 	let to_target = @box2d.b2Vec2(target_pos.getX() - current_pos.getX(), target_pos.getY() - current_pos.getY())
 	let distance = to_target.length()
 	
-	println("\{self.direction} \{self.cooldown} \{distance}")
+	// println("\{self.direction} \{self.cooldown} \{distance}")
 	self.cooldown -= 1
 	
 	if distance < 0.1 && self.cooldown<0 {
