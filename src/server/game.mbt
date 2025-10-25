@@ -294,19 +294,19 @@ fn Game::create_static_box(
 fn create_game() -> Game{
 	let world = create_world(level=level1,flag=true)
 	
-	// let platform_list=Array::new()
-	// for body in world.getBodyList() {
-	// 	if body.getMass() == 0.0 {
-	// 		platform_list.push(body)
-	// 	}
-	// }
+	let platform_list=Array::new()
+	for body in world.getBodyList() {
+		if body.getMass() == 0.0 {
+			platform_list.push(body)
+		}
+	}
 	
-	// for i in platform_list {
-	// 	let sh = i.getShapeList()
-	// 	for j in sh {
-	// 		let t = j.getBase().getFriction()
-	// 	}
-	// }
+	for i in platform_list {
+		let sh = i.getShapeList()
+		for j in sh {
+			let t = j.getBase().getFriction()
+		}
+	}
 	
 	let weapon=create_weapon_manager()
 	
