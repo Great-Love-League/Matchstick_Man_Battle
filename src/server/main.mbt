@@ -1,5 +1,5 @@
-const Width: Double = 1000.0
-const Height: Double = 1000.0
+const Width: Double = 820.0
+const Height: Double = 560.0
 pub const PPM = 20.0
 
 extern "js" fn getP5Instance(
@@ -101,7 +101,7 @@ fn drawCircle(p: &@p5js.P5JS, shape: @box2d.B2CircleShape) -> Unit{
 //   println("Circle Position: \{position.getX()} , \{position.getY()}")
 //   println("Circle Screen Position: \{screen_pos.0} , \{screen_pos.1}")
 //   println("Circle Radius: \{radius}")
-  p.fillColorPara(200, Some(0.0), Some(0.0), None)
+  p.fillColorPara(200, Some(0.0), Some(0.0), Some(255.0))
   p.circle(screen_pos.0, screen_pos.1, screen_radius * 2.0)
 
 }
