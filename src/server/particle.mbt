@@ -162,23 +162,37 @@ fn Game::particle_walk(self:Self,particle : Particle, direction : Double) -> Uni
 		maintain_joint(particle.forearm_left_joint,elbow_angle * direction,kp=30.0,kd=1.0)
 		maintain_joint(particle.forearm_right_joint,elbow_angle * direction,kp=30.0,kd=1.0)
 	}
-  maintain_rotation(particle.torso, 0, kp=100.0, kd=10.0)
   if particle.control.walk_cooldown <= 0 {
     particle.control.walk_state = !particle.control.walk_state
     particle.control.walk_cooldown = 20
   } else {
     particle.control.walk_cooldown -= 1
   }
-	particle.torso.applyForce(
-		@box2d.b2Vec2(50.0 * direction, 0.0),
-		particle.torso.getCenterPosition(),
-	)
+	
   let index = self.which_platform(particle)
   if index == -1 {
+  	maintain_rotation(particle.torso, 0, kp=100.0, kd=10.0)
+		particle.torso.applyForce(
+		@box2d.b2Vec2(20.0 * direction, 0.0),
+		particle.torso.getCenterPosition(),
+	)
     return
   }
   let platform = self.platform_list[index]
-  let p_angle = platform.get_body().getRotation()
+  let mut p_angle = (platform.get_body().getRotation() % 3.14 +3.14)%3.14
+	
+	if p_angle > 1.57 {
+		p_angle -= 3.14
+	}
+	
+	if p_angle > 0.5 || p_angle < -0.5 {
+		particle.torso.applyForce(
+		@box2d.b2Vec2(20.0 * direction, 0.0),
+		particle.torso.getCenterPosition(),
+	)
+		return ;
+	}
+	
   // let target_y = (
   //     particle.torso.getCenterPosition().getX() -
   //     platform.get_body().getCenterPosition().getX()
@@ -187,9 +201,19 @@ fn Game::particle_walk(self:Self,particle : Particle, direction : Double) -> Uni
     // platform.get_body().getCenterPosition().getY() //Fuck
   // maintain_position(particle.torso,(particle.torso.getCenterPosition().getX(), target_y + 3.5))
   let v = @box2d.b2Vec2(
-    50.0 * direction * @cmath.cos(p_angle),
-    50.0 * direction * @cmath.sin(p_angle),
+    100.0 * direction * @cmath.cos(p_angle),
+    100.0 * direction * @cmath.sin(p_angle),
   )
+
+	let mut play_angle = (p_angle%(2.0*3.14)+(2.0*3.14))%(2.0*3.14)
+	
+	if play_angle > 3.14 {
+		play_angle -= 2.0*3.14
+	}
+	
+	println("Fuck: \{play_angle}")
+
+  maintain_rotation(particle.torso, play_angle, kp=100.0, kd=10.0)
   particle.torso.applyForce(v, particle.torso.getCenterPosition())
 }
 fn Game::particle_jump(self:Self,particle : Particle, direction : Double) -> Unit {
@@ -202,7 +226,7 @@ fn Game::particle_jump(self:Self,particle : Particle, direction : Double) -> Uni
       let bend_factor : Double = particle.control.jump_frame_count.to_double() /
         j_dur_A.to_double() *
         knee_angle_bend_max
-      println(bend_factor)
+      // println(bend_factor)
 			maintain_joint(particle.arm_left_joint, j_arm_angle_backward*particle.control.walk_direction, kp=30.0, kd=1.0)
 			maintain_joint(particle.arm_right_joint, j_arm_angle_backward*particle.control.walk_direction, kp=30.0, kd=1.0)
 			maintain_joint(particle.forearm_left_joint, elbow_angle * particle.control.walk_direction, kp=30.0, kd=1.0)

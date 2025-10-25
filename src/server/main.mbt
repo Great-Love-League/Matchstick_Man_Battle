@@ -170,7 +170,7 @@ fn main {
 	
 	create_movable_platform(game,(5,1),(0,20),(0,40),1) |> ignore
 	
-	create_rotatable_platform(game,(5,1),(-15,20),1) |> ignore
+	create_rotatable_platform(game,(10,1),(-15,20),0,initial_angle=0.5) |> ignore
 	
 	create_platform(game,(-20,5),(10,1)) |> ignore
 
