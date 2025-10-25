@@ -174,7 +174,9 @@ fn main {
 	
 	create_movable_platform(game,(5,1),(0,20),(0,40),1) |> ignore
 	
-	create_rotatable_platform(game,(5,1),(-15,20),10) |> ignore
+	create_rotatable_platform(game,(5,1),(-15,20),1) |> ignore
+	
+	create_platform(game,(-20,5),(10,1)) |> ignore
 
   // 创建敌人，放在平台2的右侧
   // 平台2范围: x ∈ (-10.77, -0.77)
