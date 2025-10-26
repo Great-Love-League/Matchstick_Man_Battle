@@ -22,7 +22,7 @@ pub struct Bullet {
   start_position : (Double, Double) // 起始位置
   mut is_active : Bool           // 是否激活
   target_types : Array[TargetType] // 受击目标列表
-  mut hit_targets : Array[Int]   // 已命中的目标ID（防止穿透时重复伤害）
+  hit_targets : Array[Int]       // 已命中的目标ID（防止穿透时重复伤害）
   mut penetration : Int           // 剩余穿透次数（0表示不穿透）
   gravity_compensation : Double   // 重力补偿系数（0.0-1.0，0为完全下坠，1为完全无下坠）
 }
@@ -38,6 +38,7 @@ pub struct Bullet {
 /// @param target_types 受击目标列表，默认[Player]，即只伤害其他玩家
 /// @param penetration 穿透次数，默认0（不穿透）
 /// @param gravity_compensation 重力补偿系数，默认0.95（95%补偿，轻微下坠）
+/// @param collision_group 碰撞组索引，默认-1（与角色相同，避免物理碰撞）
 /// @return 创建的子弹对象
 fn Game::create_bullet(
   self : Self,
@@ -49,6 +50,7 @@ fn Game::create_bullet(
   target_types? : Array[TargetType] = [Player],
   penetration? : Int = 0,
   gravity_compensation? : Double = 0.95,
+  collision_group? : Int = -1,
 ) -> Bullet {
   // 创建圆形子弹物理体（优化为真实弹道效果）
   let circle_def = @box2d.b2CircleDef()
@@ -56,7 +58,7 @@ fn Game::create_bullet(
   circle_def.setDensity(8.0)     // 高密度（金属子弹）
   circle_def.setFriction(0.0)    // 无摩擦（空气阻力忽略不计）
   circle_def.setRestitution(0.3) // 低弹性（不弹跳）
-  circle_def.setGroupIndex(-2)   // 独立碰撞组
+  circle_def.setGroupIndex(collision_group)   // 使用与持有者相同的碰撞组（默认-1）
   circle_def.setLocalPosition(@box2d.b2Vec2(0.0, 0.0))
   
   let body_def = @box2d.b2BodyDef()
@@ -381,7 +383,7 @@ fn Game::shoot_bullet_advanced(
   // 计算速度
   let velocity = (direction * speed, 0.0)
   
-  // 创建子弹
+  // 创建子弹（使用持有者的碰撞组-1，避免与持有者发生物理碰撞）
   self.create_bullet(
     position, 
     velocity, 
@@ -390,7 +392,8 @@ fn Game::shoot_bullet_advanced(
     max_distance=max_distance,
     target_types=[Player],
     penetration=penetration,
-    gravity_compensation=gravity_compensation
+    gravity_compensation=gravity_compensation,
+    collision_group=-1
   ) |> ignore
   
   // 后坐力：施加反向冲量
@@ -493,7 +496,8 @@ fn Game::shoot_penetrating_bullet_advanced(
     max_distance=max_distance,
     target_types=[Player],
     penetration=penetration_count,
-    gravity_compensation=gravity_compensation
+    gravity_compensation=gravity_compensation,
+    collision_group=-1
   ) |> ignore
   
   // 后坐力
@@ -608,7 +612,8 @@ fn Game::shoot_shotgun(
       max_distance=60.0,  // 射程增加
       target_types=[Player],
       penetration=0,
-      gravity_compensation=gravity_compensation
+      gravity_compensation=gravity_compensation,
+      collision_group=-1
     ) |> ignore
   }
   
