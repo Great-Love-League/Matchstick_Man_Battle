@@ -1,10 +1,14 @@
+pub suberror ParticleControlConfigError String
+pub suberror GameStateError String
+
 struct Game {
 	world : @box2d.B2World
 	weapon : WeaponManager
+	mut state : GameState
 	mut particle_list:Array[Particle]
 	mut particle_index:Int
 	
-	mut platform_list:Array[Platform]
+	mut platform_list:Array[&PlatformTrait]
 	mut platform_index:Int
 	
 	mut enemy_list : Array[&EnemyTrait?]
@@ -12,163 +16,263 @@ struct Game {
 	mut bullet_list : Array[Bullet]
 	mut item_list : Array[Item]
 	mut frame_count : Int
-}
-fn create_game() -> Game{
-	let world = create_world(level=level1,flag=true)
-	let weapon=create_weapon_manager()
-	let game = Game::{
-		world,
-		weapon,
-		particle_list:Array::new(),
-		particle_index:0,
-		platform_list:Array::new(),
-		platform_index:0,
-		enemy_list : Array::new(),
-		bullet_list : Array::new(),
-		item_list : Array::new(),
-		frame_count : 0
-	}
-	game
+
+	// 玩家控制配置列表
+	mut particle_control_configs : Array[ParticleControlConfig]
+
+	// 自定义函数列表
+	mut custom_functions : Array[&GameCustomFunctionTrait]
+	
+	anchor : @box2d.B2Body
 }
 
-fn Game::update(self:Self, p: @p5js.P5Instance) -> Unit {
-		self.frame_count += 1
+trait GameCustomFunctionTrait {
+	call_custom_function(self: Self, game: Game, p5: @p5js.P5Instance) -> Unit
+	get_call_stage(self: Self) -> GameState
+}
+
+pub(all) struct GameCustomFunction {
+	stage : GameState
+	func : (Game, @p5js.P5Instance) -> Unit
+}
+
+pub fn GameCustomFunction::new(
+	stage : GameState,
+	func : (Game, @p5js.P5Instance) -> Unit
+) -> Self {
+	GameCustomFunction::{
+		stage,
+		func
+	}
+}
+
+pub impl GameCustomFunctionTrait for GameCustomFunction with call_custom_function(self, game: Game, p5: @p5js.P5Instance) -> Unit {
+		(self.func)(game, p5)
+}
+
+pub impl GameCustomFunctionTrait for GameCustomFunction with get_call_stage(self) -> GameState {
+		self.stage
+}
+
+
+///| 玩家控制配置结构体
+struct ParticleControlConfig {
+	from_internet : Bool
+
+	left_key : @p5js.KeyCode
+	right_key : @p5js.KeyCode
+	jump_key : @p5js.KeyCode
+	shoot_key : @p5js.KeyCode
+
+	target_ip : String
+	target_port : Int
+	target_particle_index : Int
+}
+
+fn ParticleControlConfig::new(
+	target_particle_index : Int,
+	left_key~ : @p5js.KeyCode? = Some(KeyA),
+	right_key~ : @p5js.KeyCode? = Some(KeyD),
+	jump_key~ : @p5js.KeyCode? = Some(KeyW),
+	shoot_key~ : @p5js.KeyCode? = Some(KeyZ),
+	from_internet~ : Bool = false,
+	target_ip~ : String? = None,
+	target_port~ : Int? = None,
+	) -> Self raise ParticleControlConfigError {
+
+	if from_internet {
+		// 检查必要参数
+		if target_ip == None || target_port == None {
+			println("Error: Missing target_ip or target_port for internet control.")
+			raise ParticleControlConfigError("Missing target_ip or target_port for internet control.")
+		}
+
+		return ParticleControlConfig::{
+			from_internet,
+			left_key: @p5js.UnknownKey,
+			right_key: @p5js.UnknownKey,
+			jump_key: @p5js.UnknownKey,
+			shoot_key: @p5js.UnknownKey,
+			target_ip: target_ip.unwrap(),
+			target_port: target_port.unwrap(),
+			target_particle_index,
+		}
+
+	}
+
+	if from_internet == false {
+		// 检查必要参数
+		if left_key == None || right_key == None || jump_key == None || shoot_key == None {
+			println("Error: Missing key bindings for local control.")
+			raise ParticleControlConfigError("Missing key bindings for local control.")
+		}
+		return ParticleControlConfig::{
+			from_internet,
+			left_key: left_key.unwrap(),
+			right_key: right_key.unwrap(),
+			jump_key: jump_key.unwrap(),
+			shoot_key: shoot_key.unwrap(),
+			target_ip: "",
+			target_port: 0,
+			target_particle_index,
+		}
+	}
+
+	raise ParticleControlConfigError("Unknown error in ParticleControlConfig::new")
+
+}
+
+///| 游戏状态
+enum GameState {
+	GamePreparing
+	GameRunning
+	GamePaused
+	GameOver
+}derive(Eq)
+
+///| 注册玩家控制配置，按键绑定或网络控制
+pub fn Game::register_particle_control_config(
+	self:Self,
+	config: ParticleControlConfig
+) -> Unit {
+	self.particle_control_configs.push(config)
+}
+
+pub fn Game::register_custom_function(self:Self, func : &GameCustomFunctionTrait) -> Unit {
+	self.custom_functions.push(func)
+}
+
+fn Game::run_custom_functions(self:Self, stage:GameState, p5: @p5js.P5Instance) -> Unit {
+	for func in self.custom_functions {
+		if func.get_call_stage() == stage {
+			func.call_custom_function(self, p5)
+		}
+	}
+}
+
+fn Game::state_machine_update(self:Self, p5: @p5js.P5Instance) -> Unit {
+	match self.state {
+		GamePreparing => {
+			self.prepare(p5)
+		}
+		GameRunning => {
+			self.running(p5)
+		}
+		GamePaused => {
+			self.pause(p5)
+		}
+		GameOver => {
+			self.game_over(p5)
+		}
+	}
+}
+
+fn Game::prepare(self:Self, p5: @p5js.P5Instance) -> Unit {
+	self.run_custom_functions(GamePreparing, p5)
+	self.state = GameRunning
+}
+
+fn Game::pause(self:Self, p5: @p5js.P5Instance) -> Unit {
+	self.run_custom_functions(GamePaused, p5)
+	self.state = GameRunning
+}
+
+fn Game::running(self:Self, p5: @p5js.P5Instance) -> Unit {
+
+	self.frame_count += 1
+
+	for platform in self.platform_list {
+		platform.update(self)
+	}
+
+	for config in self.particle_control_configs {
+		if !config.from_internet {
+			self.particle_control(config, p5) catch{
+				e => {
+					println("Error in particle_control: \{e} in particle index \{config.target_particle_index}.")
+				}
+			}
+		}
+		// 网络控制待实现
+	}
+
+	// 更新子弹系统
+	self.update_all_bullets()
+	
+	// 更新物品系统
+	self.update_all_items()
+	
+	// 每60帧清理一次
+	if self.frame_count % 60 == 0 {
+		self.cleanup_bullets()
+		self.cleanup_items()
+	}
 		
-		if(self.particle_list[0].control.faint_state){
-			if(self.particle_list[0].control.faint_resistance<300){
-				self.particle_list[0].control.faint_resistance+=1
-			}
-			else{
-				self.particle_list[0].control.faint_state=false
-				self.particle_list[0].control.health=100
-				self.particle_list[0].control.faint_resistance=0
-			}
-			self.world.step(1.0/60.0, 4)
-			draw_world(p, self.world)
-			return
-		}
-	if(p.keyIsDown(KeyJ)){
-		self.particle_list[0].control.faint_state=true
+
+	self.run_custom_functions(GameRunning, p5)
+
+
+	self.world.step(1.0/60.0, 4)
+	self.state = GameRunning
+}
+
+fn Game::game_over(self:Self, p5: @p5js.P5Instance) -> Unit {
+	self.run_custom_functions(GameOver, p5)
+	self.state = GameRunning
+}
+
+///| 重构后的玩家移动函数
+fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : @p5js.P5Instance) -> Unit raise{
+
+	let particle_index = control_config.target_particle_index
+	if particle_index < 0 || particle_index >= self.particle_list.length() {
+		println("Error: Invalid target_particle_index \{particle_index} in particle_control.")
+		raise GameStateError("Invalid target_particle_index in particle_control. want to control \{particle_index}, but only \{self.particle_list.length()} particles exist.")
 	}
-	
-	// ===== 武器系统控制 =====
-	// 1、2、3、4键：装备不同武器（字母区上方的数字键）
-	if(p.keyIsDown(Digit1)){
-		// 销毁旧武器
-		for gun in self.weapon.gun_list {
-			if gun.owner_id == 0 {
-				gun.destroy(self)
-			}
-		}
-		self.weapon.gun_list.clear()
-		// 创建手枪
-		self.create_pistol(0)
-		println("装备手枪!")
+	let particle = self.particle_list[particle_index]
+
+	if control_config.from_internet {
+		raise GameStateError("Internet control not implemented yet.")
 	}
-	if(p.keyIsDown(Digit2)){
-		// 销毁旧武器
+
+	if p.keyIsDown(control_config.shoot_key) {
 		for gun in self.weapon.gun_list {
-			if gun.owner_id == 0 {
-				gun.destroy(self)
-			}
-		}
-		self.weapon.gun_list.clear()
-		// 创建霰弹枪
-		self.create_shotgun(0)
-		println("装备霰弹枪!")
-	}
-	if(p.keyIsDown(Digit3)){
-		// 销毁旧武器
-		for gun in self.weapon.gun_list {
-			if gun.owner_id == 0 {
-				gun.destroy(self)
-			}
-		}
-		self.weapon.gun_list.clear()
-		// 创建狙击枪
-		self.create_sniper(0)
-		println("装备狙击枪!")
-	}
-	if(p.keyIsDown(Digit4)){
-		// 销毁旧武器
-		for gun in self.weapon.gun_list {
-			if gun.owner_id == 0 {
-				gun.destroy(self)
-			}
-		}
-		self.weapon.gun_list.clear()
-		// 创建激光枪
-		self.create_laser_rifle(0)
-		println("装备激光枪!")
-	}
-	
-	// Z键：使用武器射击
-	if(p.keyIsDown(KeyZ)){
-		// 遍历找到玩家的武器并射击
-		for gun in self.weapon.gun_list {
-			if gun.owner_id == 0 {
+			if gun.owner_id == particle_index {
 				gun.attack(self)
 				break
 			}
 		}
 	}
-	// 没有武器调试用
 
-	// // 射击控制 - Z键发射子弹（直接发射，无需武器）
-	// if(p.keyIsDown(KeyZ)){
-	// 	let direction = if self.particle_list[0].control.walk_direction > 0.0 { 1.0 } else { -1.0 }
-	// 	self.shoot_bullet(0, direction)
-	// }		
-	// 测试生成物品 - K键在角色前方生成生命包
-		if(p.keyIsDown(KeyK)){
-			let particle_pos = self.particle_list[0].torso.getCenterPosition()
-			self.spawn_health_pack((particle_pos.getX() + 3.0, particle_pos.getY()))
-		}
-		
-		if(p.keyIsDown(KeyA)){
-			self.particle_walk(self.particle_list[0],-1)
-		}
-		else if(p.keyIsDown(KeyD)){
-			self.particle_walk(self.particle_list[0],1)
-		}
-		else if(!self.particle_list[0].control.jump_state){
-			self.particle_stand(self.particle_list[0])
-		}
-		if(p.keyIsDown(KeyW)){
-			if self.particle_list[0].control.jump_cooldown <= 0 {
-				if !self.particle_list[0].control.jump_state { // 如果不在跳跃状态，则开始跳跃
-					self.particle_list[0].control.jump_state = true
-					self.particle_list[0].control.jump_frame_count = 0  // 重置跳跃帧计数
-					self.particle_list[0].control.jump_cooldown = j_dur_A + j_dur_B + j_dur_C  // 总共跳跃帧数
-				}
+	if(p.keyIsDown((control_config.left_key))){
+		self.particle_walk(particle,-1)
+	}
+	else if(p.keyIsDown((control_config.right_key))){
+		self.particle_walk(particle,1)
+	}
+	else if(!particle.control.jump_state){
+		self.particle_stand(particle)
+	}
+	if(p.keyIsDown((control_config.jump_key))){
+		if particle.control.jump_cooldown <= 0 {
+			if !particle.control.jump_state { // 如果不在跳跃状态，则开始跳跃
+				particle.control.jump_state = true
+				particle.control.jump_frame_count = 0  // 重置跳跃帧计数
+				particle.control.jump_cooldown = j_dur_A + j_dur_B + j_dur_C  // 总共跳跃帧数
 			}
 		}
-		if(self.particle_list[0].control.jump_cooldown > 0){
-			self.particle_list[0].control.jump_cooldown -= 1 
-		}
-		self.particle_jump(self.particle_list[0],0)
-		
-		// 更新子弹系统
-		self.update_all_bullets()
-		
-		// 更新物品系统
-		self.update_all_items()
-		
-		// 每60帧清理一次
-		if self.frame_count % 60 == 0 {
-			self.cleanup_bullets()
-			self.cleanup_items()
-		}
-		
-		self.world.step(1.0/60.0, 4)
+	}
+	if(particle.control.jump_cooldown > 0){
+		particle.control.jump_cooldown -= 1
+	}
+	self.particle_jump(particle,0)
+
 }
-// fn Game::
 
 pub const VIEWPORT_WIDTH : Double = 1920 // 视口宽度
 pub const VIEWPORT_HEIGHT : Double = 1080 // 视口高度
 
 pub const Pi : Double = 3.141592653589793
-let platform_index:Ref[Int]=Ref::new(0)
 
 fn Game::create_static_box(
 	self:Self,
@@ -186,6 +290,55 @@ fn Game::create_static_box(
 	let body = self.world.createBody(body_def)
 	body
 }
+
+fn create_game() -> Game{
+	let world = create_world(level=level1,flag=true)
+	
+	let platform_list=Array::new()
+	for body in world.getBodyList() {
+		if body.getMass() == 0.0 {
+			platform_list.push(body)
+		}
+	}
+	
+	for i in platform_list {
+		let sh = i.getShapeList()
+		for j in sh {
+			let t = j.getBase().getFriction()
+		}
+	}
+	
+	let weapon=create_weapon_manager()
+	
+	let anchor_box_def = @box2d.b2BoxDef()
+	anchor_box_def.setExtents(@box2d.b2Vec2(0.01, 0.01))
+	anchor_box_def.setDensity(0.0)
+	let anchor_body_def = @box2d.b2BodyDef()
+	anchor_body_def.setPosition(@box2d.b2Vec2(0.0, 0.0))
+	anchor_body_def.addShape(anchor_box_def.getBase())
+	anchor_body_def.setRotation(0.0)
+	anchor_body_def.setAllowSleep(false)
+	let anchor = world.createBody(anchor_body_def)
+	
+	let game = Game::{
+		world,
+		weapon,
+		state: GameRunning,
+		particle_list:Array::new(),
+		particle_index:0,
+		platform_list:Array::new(),
+		platform_index:0,
+		enemy_list : Array::new(),
+		bullet_list : Array::new(),
+		item_list : Array::new(),
+		frame_count : 0,
+		anchor,
+		particle_control_configs : Array::new(),
+		custom_functions : Array::new()
+	}
+	game
+}
+
 fn Game::create_dynamic_box(
 	self:Self,
 	position: (Double, Double),
@@ -207,7 +360,7 @@ fn Game::create_dynamic_box(
 	let body = self.world.createBody(body_def)
 	body
 }
-fn Game::create_joint(
+fn Game::create_revolute_joint(
 	self: Self,
 	body_a: @box2d.B2Body,
 	body_b: @box2d.B2Body,
@@ -223,6 +376,27 @@ fn Game::create_joint(
 	joint_def.setEnableLimit(enable_limit)
 	joint_def.setLowerAngle(lower_angle)
 	joint_def.setUpperAngle(upper_angle)
+	let joint = self.world.createJoint(joint_def.getBase())
+	joint
+}
+fn Game::create_prismatic_joint(
+	self :Self,
+	body_a: @box2d.B2Body,
+	body_b: @box2d.B2Body,
+	anchor: (Double, Double),
+	axis: @box2d.B2Vec2,
+	enable_limit?: Bool=false,
+	lower_translation?: Double=-10000.0,
+	upper_translation?: Double=10000.0
+)-> @box2d.B2Joint{
+	let joint_def = @box2d.b2PrismaticJointDef()
+	joint_def.setBody1(body_a)
+	joint_def.setBody2(body_b)
+	joint_def.setAnchorPoint(@box2d.b2Vec2(anchor.0, anchor.1))
+	joint_def.setEnableLimit(enable_limit)
+	joint_def.setLowerTranslation(lower_translation)
+	joint_def.setUpperTranslation(upper_translation)
+	joint_def.setAxis(axis)
 	let joint = self.world.createJoint(joint_def.getBase())
 	joint
 }
