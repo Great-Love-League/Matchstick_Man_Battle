@@ -102,40 +102,12 @@ fn Game::update(self:Self, p: @p5js.P5Instance) -> Unit {
 		println("装备激光枪!")
 	}
 	
-	// Z键：使用武器射击（原有功能保留）
+	// Z键：使用武器射击
 	if(p.keyIsDown(KeyZ)){
 		// 遍历找到玩家的武器并射击
 		for gun in self.weapon.gun_list {
 			if gun.owner_id == 0 {
 				gun.attack(self)
-				break
-			}
-		}
-	}
-	
-	// 鼠标左键：按鼠标方向射击
-	if(mouseIsPressed(p)){
-		// 获取鼠标位置
-		let mouse_screen_x = getMouseX(p)
-		let mouse_screen_y = getMouseY(p)
-		
-		// 转换为世界坐标
-		let mouse_world = screen_to_world(Width, Height, mouse_screen_x, mouse_screen_y, PPM)
-		
-		// 获取玩家位置
-		let player_pos = self.particle_list[0].torso.getCenterPosition()
-		let player_x = player_pos.getX()
-		let player_y = player_pos.getY()
-		
-		// 计算从玩家到鼠标的角度
-		let dx = mouse_world.0 - player_x
-		let dy = mouse_world.1 - player_y
-		let angle = @cmath.atan2(dy, dx)
-		
-		// 遍历找到玩家的武器并按角度射击
-		for gun in self.weapon.gun_list {
-			if gun.owner_id == 0 {
-				gun.attack_at_angle(self, angle)
 				break
 			}
 		}
