@@ -24,6 +24,21 @@ extern "js" fn getCanvasHeight(self : &@p5js.P5JS) -> Double =
   #| (self) => self.height
 
 ///|
+/// 获取鼠标X坐标（屏幕坐标）
+extern "js" fn getMouseX(p : @p5js.P5Instance) -> Double =
+  #| (p) => p.mouseX
+
+///|
+/// 获取鼠标Y坐标（屏幕坐标）
+extern "js" fn getMouseY(p : @p5js.P5Instance) -> Double =
+  #| (p) => p.mouseY
+
+///|
+/// 检查鼠标左键是否按下
+extern "js" fn mouseIsPressed(p : @p5js.P5Instance) -> Bool =
+  #| (p) => p.mouseIsPressed
+
+///|
 /// 坐标转换函数，坐标系如下
 /// -----------> x_canvas
 /// |           ^ y_box2d
