@@ -58,6 +58,7 @@ pub(open) trait WeaponCreate {
 
 pub(open) trait WeaponControl {
 	attack(Self, game:Game) -> Unit
+	attack_at_angle(Self, game:Game, angle:Double) -> Unit  // 新增：按角度射击
   get_attack_field(Self) -> Double = _
 }
 
@@ -137,6 +138,13 @@ pub impl WeaponControl for Sword with attack(self,game){
 	println("Sword attack!")
 }
 
+///|
+/// 剑的角度攻击（暂不实现，保持默认行为）
+pub impl WeaponControl for Sword with attack_at_angle(self, game, _angle){
+	// 剑的攻击不受角度影响，调用普通攻击
+	self.attack(game)
+}
+
 pub impl WeaponDestroy for Sword with destroy(self, game){
 	game.world.destroyBody(self.body)
 }
@@ -214,7 +222,7 @@ pub impl WeaponControl for Gun with attack(self,game){
 				5,     // 5发子弹
 				0.52,  // 30度扩散
 				gravity_compensation=0.85,  // 85%补偿，明显下坠
-				recoil_horizontal=4.0,      // 强烈水平后坐力
+				recoil_horizontal=20.0,      // 强烈水平后坐力
 				recoil_vertical=0.6         // 明显向上抬升
 			)
 			println("霰弹枪射击，持有者: #\{self.owner_id}")
@@ -250,6 +258,93 @@ pub impl WeaponControl for Gun with attack(self,game){
 				recoil_vertical=0.0          // 无向上抬升 ✨
 			)
 			println("激光枪射击，持有者: #\{self.owner_id}")
+		}
+	}
+	
+	// 更新冷却
+	self.last_fire_frame = game.frame_count
+}
+
+///|
+/// 武器按角度攻击（鼠标控制）
+pub impl WeaponControl for Gun with attack_at_angle(self,game,angle){
+	// 检查冷却
+	if game.frame_count - self.last_fire_frame < self.fire_rate {
+		return  // 还在冷却中
+	}
+	
+	// 根据枪械类型选择射击方式及参数
+	match self.gun_type {
+		Pistol => {
+			// 手枪：轻微下坠，轻微后坐力
+			game.shoot_bullet_at_angle(
+				self.owner_id, 
+				angle,
+				speed=60.0,
+				damage=10,
+				max_distance=100.0,
+				penetration=0,
+				gravity_compensation=0.95,
+				recoil_horizontal=3.0,
+				recoil_vertical=0.3
+			)
+		}
+		
+		Shotgun => {
+			// 霰弹枪：5发散射
+			let base_speed = 50.0
+			let bullet_count = 5
+			let spread_angle = 0.52  // 30度扩散
+			
+			for i in 0..<bullet_count {
+				let angle_offset = if bullet_count == 1 {
+					0.0
+				} else {
+					spread_angle * (i.to_double() / (bullet_count - 1).to_double() - 0.5)
+				}
+				
+				game.shoot_bullet_at_angle(
+					self.owner_id,
+					angle + angle_offset,
+					speed=base_speed,
+					damage=6,
+					max_distance=60.0,
+					penetration=0,
+					gravity_compensation=0.85,
+					recoil_horizontal=20,
+					recoil_vertical=0.6
+				)
+			}
+		}
+		
+		Sniper => {
+			// 狙击枪：高伤害穿透
+			game.shoot_bullet_at_angle(
+				self.owner_id, 
+				angle,
+				speed=80.0,
+				damage=30,
+				max_distance=120.0,
+				penetration=2,
+				gravity_compensation=0.98,
+				recoil_horizontal=30.0,
+				recoil_vertical=0.5
+			)
+		}
+		
+		LaserRifle => {
+			// 激光枪：无下坠，无后坐力
+			game.shoot_bullet_at_angle(
+				self.owner_id, 
+				angle,
+				speed=100.0,
+				damage=15,
+				max_distance=150.0,
+				penetration=5,
+				gravity_compensation=1.0,
+				recoil_horizontal=0.0,
+				recoil_vertical=0.0
+			)
 		}
 	}
 	
