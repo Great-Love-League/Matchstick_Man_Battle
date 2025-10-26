@@ -252,9 +252,9 @@ fn Game::check_bullet_collision(self : Self, bullet : Bullet) -> Unit {
 fn Game::check_bullet_environment_collision(self : Self, bullet : Bullet) -> Unit {
   // 检查与所有平台的碰撞
   for platform in self.platform_list {
-    if self.is_contact(platform.body, bullet.body) {
+    if self.is_contact(platform.get_body(), bullet.body) {
       bullet.is_active = false
-      println("子弹 #\{bullet.id} 击中环境（平台 #\{platform.index}），回收子弹")
+      //println("子弹 #\{bullet.id} 击中环境（平台 #\{platform.index}），回收子弹")
       return
     }
   }

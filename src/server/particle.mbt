@@ -83,19 +83,19 @@ fn Game::create_particle(
 	let right_thigh = self.create_dynamic_box((position.0, position.1-1),(0.15,0.5),density=1.0,groupindex=-1)
 	let left_shank = self.create_dynamic_box((position.0, position.1-2),(0.15,0.5),density=1.0,groupindex=-1,friciton=0.2)
 	let right_shank = self.create_dynamic_box((position.0, position.1-2),(0.15,0.5),density=1.0,groupindex=-1,friciton=0.2)
-	let neck_joint = self.create_joint(torso, head, (position.0, position.1+1.0),enable_limit=true,lower_angle=0.0,upper_angle=0.0)
-	let thigh_left_joint = self.create_joint(torso, left_thigh, (position.0, position.1-0.5),enable_limit=true,lower_angle=-1.0,upper_angle=1.0)
-	let thigh_right_joint = self.create_joint(torso, right_thigh, (position.0, position.1-0.5),enable_limit=true,lower_angle=-1.0,upper_angle=1.0)
-	let knee_left_joint = self.create_joint(left_thigh, left_shank, (position.0, position.1-1.5),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
-	let knee_right_joint = self.create_joint(right_thigh, right_shank, (position.0, position.1-1.5),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
+	let neck_joint = self.create_revolute_joint(torso, head, (position.0, position.1+1.0),enable_limit=true,lower_angle=0.0,upper_angle=0.0)
+	let thigh_left_joint = self.create_revolute_joint(torso, left_thigh, (position.0, position.1-0.5),enable_limit=true,lower_angle=-1.0,upper_angle=1.0)
+	let thigh_right_joint = self.create_revolute_joint(torso, right_thigh, (position.0, position.1-0.5),enable_limit=true,lower_angle=-1.0,upper_angle=1.0)
+	let knee_left_joint = self.create_revolute_joint(left_thigh, left_shank, (position.0, position.1-1.5),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
+	let knee_right_joint = self.create_revolute_joint(right_thigh, right_shank, (position.0, position.1-1.5),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
 	let left_arm = self.create_dynamic_box((position.0, position.1+0.5),(0.15,0.5),density=1.0,groupindex=-1)
 	let right_arm = self.create_dynamic_box((position.0, position.1+0.5),(0.15,0.5),density=1.0,groupindex=-1)
 	let left_forearm = self.create_dynamic_box((position.0, position.1-0.25),(0.15,0.5),density=1.0,groupindex=-1)
 	let right_forearm = self.create_dynamic_box((position.0, position.1-0.25),(0.15,0.5),density=1.0,groupindex=-1)
-	let arm_left_joint = self.create_joint(torso, left_arm, (position.0, position.1+1),enable_limit=true,lower_angle=-1.0,upper_angle=1.0)
-	let arm_right_joint = self.create_joint(torso, right_arm, (position.0, position.1+1),enable_limit=true,lower_angle=-1.0,upper_angle=1.0)
-	let forearm_left_joint = self.create_joint(left_arm, left_forearm, (position.0, position.1),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
-	let forearm_right_joint = self.create_joint(right_arm, right_forearm, (position.0, position.1),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
+	let arm_left_joint = self.create_revolute_joint(torso, left_arm, (position.0, position.1+1),enable_limit=true,lower_angle=-1.0,upper_angle=1.0)
+	let arm_right_joint = self.create_revolute_joint(torso, right_arm, (position.0, position.1+1),enable_limit=true,lower_angle=-1.0,upper_angle=1.0)
+	let forearm_left_joint = self.create_revolute_joint(left_arm, left_forearm, (position.0, position.1),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
+	let forearm_right_joint = self.create_revolute_joint(right_arm, right_forearm, (position.0, position.1),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
 	let index= self.particle_index-1
 	let tmp=Particle::{
 		torso,
@@ -125,11 +125,11 @@ fn Game::create_particle(
 }
 fn Game::which_platform(self:Self, particle : Particle) -> Int {
   for platform in self.platform_list {
-    if self.is_contact(particle.left_shank, platform.body) {
-      return platform.index
+    if self.is_contact(particle.left_shank, platform.get_body()) {
+      return platform.get_index()
     }
-    if self.is_contact(particle.right_shank, platform.body) {
-      return platform.index
+    if self.is_contact(particle.right_shank, platform.get_body()) {
+      return platform.get_index()
     }
   }
   -1
@@ -162,34 +162,58 @@ fn Game::particle_walk(self:Self,particle : Particle, direction : Double) -> Uni
 		maintain_joint(particle.forearm_left_joint,elbow_angle * direction,kp=30.0,kd=1.0)
 		maintain_joint(particle.forearm_right_joint,elbow_angle * direction,kp=30.0,kd=1.0)
 	}
-  maintain_rotation(particle.torso, 0, kp=100.0, kd=10.0)
   if particle.control.walk_cooldown <= 0 {
     particle.control.walk_state = !particle.control.walk_state
     particle.control.walk_cooldown = 20
   } else {
     particle.control.walk_cooldown -= 1
   }
-	particle.torso.applyForce(
-		@box2d.b2Vec2(50.0 * direction, 0.0),
-		particle.torso.getCenterPosition(),
-	)
+	
   let index = self.which_platform(particle)
   if index == -1 {
+  	maintain_rotation(particle.torso, 0, kp=100.0, kd=10.0)
+		particle.torso.applyForce(
+		@box2d.b2Vec2(20.0 * direction, 0.0),
+		particle.torso.getCenterPosition(),
+	)
     return
   }
   let platform = self.platform_list[index]
-  let p_angle = platform.body.getRotation()
-  let target_y = (
-      particle.torso.getCenterPosition().getX() -
-      platform.body.getCenterPosition().getX()
-    ) *
-    @cmath.tan(p_angle) +
-    platform.body.getCenterPosition().getY() //Fuck
-  maintain_position(particle.torso,(particle.torso.getCenterPosition().getX(), target_y + 3.5))
+  let mut p_angle = (platform.get_body().getRotation() % 3.14 +3.14)%3.14
+	
+	if p_angle > 1.57 {
+		p_angle -= 3.14
+	}
+	
+	if p_angle > 0.5 || p_angle < -0.5 {
+		particle.torso.applyForce(
+		@box2d.b2Vec2(20.0 * direction, 0.0),
+		particle.torso.getCenterPosition(),
+	)
+		return ;
+	}
+	
+  // let target_y = (
+  //     particle.torso.getCenterPosition().getX() -
+  //     platform.get_body().getCenterPosition().getX()
+  //   ) *
+    // @cmath.tan(p_angle) +
+    // platform.get_body().getCenterPosition().getY() //Fuck
+  // maintain_position(particle.torso,(particle.torso.getCenterPosition().getX(), target_y + 3.5))
   let v = @box2d.b2Vec2(
-    50.0 * direction * @cmath.cos(p_angle),
-    50.0 * direction * @cmath.sin(p_angle),
+    100.0 * direction * @cmath.cos(p_angle),
+    100.0 * direction * @cmath.sin(p_angle),
   )
+
+	let mut play_angle = (p_angle%(2.0*3.14)+(2.0*3.14))%(2.0*3.14)
+	
+	if play_angle > 3.14 {
+		play_angle -= 2.0*3.14
+	}
+	
+	println("Fuck: \{play_angle}")
+
+  maintain_rotation(particle.torso, play_angle, kp=100.0, kd=10.0)
   particle.torso.applyForce(v, particle.torso.getCenterPosition())
 }
 fn Game::particle_jump(self:Self,particle : Particle, direction : Double) -> Unit {
@@ -202,7 +226,7 @@ fn Game::particle_jump(self:Self,particle : Particle, direction : Double) -> Uni
       let bend_factor : Double = particle.control.jump_frame_count.to_double() /
         j_dur_A.to_double() *
         knee_angle_bend_max
-      println(bend_factor)
+      // println(bend_factor)
 			maintain_joint(particle.arm_left_joint, j_arm_angle_backward*particle.control.walk_direction, kp=30.0, kd=1.0)
 			maintain_joint(particle.arm_right_joint, j_arm_angle_backward*particle.control.walk_direction, kp=30.0, kd=1.0)
 			maintain_joint(particle.forearm_left_joint, elbow_angle * particle.control.walk_direction, kp=30.0, kd=1.0)
@@ -238,31 +262,30 @@ fn Game::particle_jump(self:Self,particle : Particle, direction : Double) -> Uni
 }
 fn Game::particle_stand(self:Self,particle : Particle) -> Unit {
   let index = self.which_platform(particle)
-  maintain_rotation(particle.torso, 0, kp=30.0, kd=10.0)
+  maintain_rotation(particle.torso, 0, kp=300.0, kd=10.0)
   if index == -1 {
-		
     return
   }
   maintain_joint(particle.thigh_left_joint, 0.0, kp=50.0, kd=2.0)
   maintain_joint(particle.thigh_right_joint, 0.0, kp=50.0, kd=2.0)
-  maintain_joint(particle.knee_left_joint, 0.0, kp=10.0, kd=2.0)
-  maintain_joint(particle.knee_right_joint, 0.0, kp=10.0, kd=2.0)
-  maintain_joint(particle.arm_left_joint, 0.0, kp=10.0, kd=2.0)
-  maintain_joint(particle.arm_right_joint, 0.0, kp=10.0, kd=2.0)
-  maintain_joint(particle.forearm_left_joint, 0.0, kp=30.0, kd=2.0)
-  maintain_joint(particle.forearm_right_joint, 0.0, kp=30.0, kd=2.0)
-  let platform = self.platform_list[index]
-  let p_angle = platform.body.getRotation()
-  let target_y = (
-      particle.torso.getCenterPosition().getX() -
-      platform.body.getCenterPosition().getX()
-    ) *
-    @cmath.tan(p_angle) +
-    platform.body.getCenterPosition().getY()
-  maintain_position(
-    particle.torso,
-    (particle.torso.getCenterPosition().getX(), target_y + 3.7),
-  )
+  maintain_joint(particle.knee_left_joint, 0.0, kp=50.0, kd=2.0)
+  maintain_joint(particle.knee_right_joint, 0.0, kp=50.0, kd=2.0)
+  maintain_joint(particle.arm_left_joint, 0.0, kp=50.0, kd=2.0)
+  maintain_joint(particle.arm_right_joint, 0.0, kp=50.0, kd=2.0)
+  maintain_joint(particle.forearm_left_joint, 0.0, kp=50.0, kd=2.0)
+  maintain_joint(particle.forearm_right_joint, 0.0, kp=50.0, kd=2.0)
+  // let platform = self.platform_list[index]
+  // let p_angle = platform.get_body().getRotation()
+  // let target_y = (
+  //     particle.torso.getCenterPosition().getX() -
+  //     platform.get_body().getCenterPosition().getX()
+  //   ) *
+  //   @cmath.tan(p_angle) +
+  //   platform.get_body().getCenterPosition().getY()
+  // maintain_position(
+  //   particle.torso,
+  //   (particle.torso.getCenterPosition().getX(), target_y + 3.7),
+  // )
 }
 // fn particle_action(particle : Particle) -> Unit {
 	
