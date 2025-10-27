@@ -1,6 +1,17 @@
 pub suberror ParticleControlConfigError String
 pub suberror GameStateError String
 
+///|
+/// 鼠标相关的JavaScript FFI函数
+extern "js" fn getMouseX(p : @p5js.P5Instance) -> Double = 
+  #| (p) => p.mouseX
+
+extern "js" fn getMouseY(p : @p5js.P5Instance) -> Double = 
+  #| (p) => p.mouseY
+
+extern "js" fn mouseIsPressed(p : @p5js.P5Instance) -> Bool = 
+  #| (p) => p.mouseIsPressed
+
 struct Game {
 	world : @box2d.B2World
 	weapon : WeaponManager
