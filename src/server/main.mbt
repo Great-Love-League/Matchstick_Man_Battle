@@ -127,6 +127,44 @@ fn load_custom_functions(game:Game) -> Unit {
     )
   )
 
+  /// 鼠标射击功能 - 左键点击朝鼠标方向射击
+  game.register_custom_function(
+    GameCustomFunction::new(
+      GameRunning,
+      fn(game: Game, p5: @p5js.P5Instance) {
+        // 检查是否按下鼠标左键
+        if mouseIsPressed(p5) {
+          // 获取鼠标屏幕坐标
+          let mouse_x = getMouseX(p5)
+          let mouse_y = getMouseY(p5)
+          
+          // 转换为世界坐标
+          let world_coords = screen_to_world(Width, Height, mouse_x, mouse_y, PPM)
+          let mouse_world_x = world_coords.0
+          let mouse_world_y = world_coords.1
+          
+          // 获取玩家位置
+          let player_pos = game.particle_list[0].torso.getCenterPosition()
+          let player_x = player_pos.getX()
+          let player_y = player_pos.getY()
+          
+          // 计算射击角度
+          let dx = mouse_world_x - player_x
+          let dy = mouse_world_y - player_y
+          let angle = @cmath.atan2(dy, dx)
+          
+          // 查找玩家的武器并发射
+          for gun in game.weapon.gun_list {
+            if gun.owner_id == 0 {
+              gun.attack_at_angle(game, angle)
+              break
+            }
+          }
+        }
+      }
+    )
+  )
+
 }
 
 fn register_control(game:Game) -> Unit{
