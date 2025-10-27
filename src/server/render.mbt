@@ -53,7 +53,7 @@ fn world_to_screen(world_width: Double, world_height: Double, x: Double, y: Doub
 /// canvas 的原点在画布左上角
 /// box2d 的原点在画布宽度的二分之一处，画布高度的最下面
 /// 首先通过 ppm 将单位进行转换，然后通过坐标系转换，最后进行平移
-fn screen_to_world(world_width: Double, world_height: Double, x: Double, y: Double, ppm : Double) -> (Double, Double) {
+pub fn screen_to_world(world_width: Double, world_height: Double, x: Double, y: Double, ppm : Double) -> (Double, Double) {
   let screen_x_pixle_num = world_width
   let screen_y_pixle_num = world_height
   return ((x - screen_x_pixle_num/2.0) / ppm, (screen_y_pixle_num - y) / ppm)
@@ -99,7 +99,7 @@ fn drawCircle(p: &@p5js.P5JS, shape: @box2d.B2CircleShape) -> Unit{
 //   println("Circle Position: \{position.getX()} , \{position.getY()}")
 //   println("Circle Screen Position: \{screen_pos.0} , \{screen_pos.1}")
 //   println("Circle Radius: \{radius}")
-  p.fillColorPara(200, Some(0.0), Some(0.0), None)
+  // p.fillColorPara(200, Some(0.0), Some(0.0), None) //子弹射出后全部物体变红bug
   p.circle(screen_pos.0, screen_pos.1, screen_radius * 2.0)
 
 }

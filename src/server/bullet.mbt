@@ -450,6 +450,72 @@ fn Game::shoot_bullet(self : Self, player_index : Int, direction : Double) -> Un
 }
 
 ///|
+/// 基于角度射击子弹（支持鼠标控制）
+/// 
+/// @param player_index 玩家索引
+/// @param angle 射击角度（弧度，0为正右方，逆时针为正）
+/// @param speed 子弹速度
+/// @param damage 伤害值
+/// @param max_distance 最大射程
+/// @param penetration 穿透次数
+/// @param gravity_compensation 重力补偿系数
+/// @param recoil_horizontal 水平后坐力（沿射击方向的反向）
+/// @param recoil_vertical 垂直后坐力（向上的额外抬升）
+fn Game::shoot_bullet_at_angle(
+  self : Self, 
+  player_index : Int, 
+  angle : Double,
+  speed? : Double = 60.0,
+  damage? : Int = 10,
+  max_distance? : Double = 100.0,
+  penetration? : Int = 0,
+  gravity_compensation? : Double = 0.95,
+  recoil_horizontal? : Double = 3.0,
+  recoil_vertical? : Double = 0.3,
+) -> Unit {
+  if player_index >= self.particle_list.length() {
+    return
+  }
+  
+  let particle = self.particle_list[player_index]
+  let hand_pos = particle.right_forearm.getCenterPosition()
+  
+  // 根据角度计算枪口位置
+  let muzzle_offset = 0.8
+  let spawn_x = hand_pos.getX() + @cmath.cos(angle) * muzzle_offset
+  let spawn_y = hand_pos.getY() + @cmath.sin(angle) * muzzle_offset
+  let position = (spawn_x, spawn_y)
+  
+  // 根据角度计算速度向量
+  let vx = @cmath.cos(angle) * speed
+  let vy = @cmath.sin(angle) * speed
+  let velocity = (vx, vy)
+  
+  // 创建子弹
+  self.create_bullet(
+    position, 
+    velocity, 
+    player_index, 
+    damage=damage,
+    max_distance=max_distance,
+    target_types=[Player],
+    penetration=penetration,
+    gravity_compensation=gravity_compensation,
+    collision_group=-1
+  ) |> ignore
+  
+  // 后坐力：完整的向量计算
+  // 水平分量：沿射击方向的反向
+  // 垂直分量：射击方向的反向 + 额外的向上抬升
+  let recoil_impulse = @box2d.b2Vec2(
+    -@cmath.cos(angle) * recoil_horizontal,
+    -@cmath.sin(angle) * recoil_horizontal + recoil_vertical
+  )
+  let torso_pos = particle.torso.getCenterPosition()
+  particle.torso.applyImpulse(recoil_impulse, torso_pos)
+}
+
+///|
 /// 创建穿透子弹（高级用法，支持自定义参数）
 /// 
 /// @param player_index 玩家索引
