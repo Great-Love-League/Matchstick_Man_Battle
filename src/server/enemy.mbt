@@ -16,6 +16,7 @@ pub(open) trait EnemyTrait{
 	is_dead(Self) -> Bool
 	get_hp(Self) -> Double
 	get_hp_limit(Self) -> Double
+	get_position(Self) -> (Double, Double)?  // 获取敌人位置
 }
 
 struct BoxEnemy {
@@ -48,6 +49,14 @@ pub impl EnemyTrait for BoxEnemy with get_hp(self : BoxEnemy) -> Double {
 
 pub impl EnemyTrait for BoxEnemy with get_hp_limit(self : BoxEnemy) -> Double {
 	return self.hp_limit
+}
+
+pub impl EnemyTrait for BoxEnemy with get_position(self : BoxEnemy) -> (Double, Double)? {
+	if self.bodies.length() > 0 {
+		let pos = self.bodies[0].getCenterPosition()
+		return Some((pos.getX(), pos.getY()))
+	}
+	return None
 }
 
 pub impl EnemyTrait for BoxEnemy with destroy(self : BoxEnemy, game:Game) -> Unit {
