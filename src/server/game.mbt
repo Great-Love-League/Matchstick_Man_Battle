@@ -34,6 +34,9 @@ struct Game {
 	// 自定义函数列表
 	mut custom_functions : Array[&GameCustomFunctionTrait]
 	
+	// 自动瞄准配置列表（每个玩家一个配置）
+	mut auto_aim_configs : Array[AutoAimConfig]
+	
 	anchor : @box2d.B2Body
 }
 
@@ -153,6 +156,37 @@ pub fn Game::register_custom_function(self:Self, func : &GameCustomFunctionTrait
 	self.custom_functions.push(func)
 }
 
+///| 注册自动瞄准配置
+/// @param player_id 玩家索引
+/// @param config 自动瞄准配置
+pub fn Game::register_auto_aim_config(
+	self : Self, 
+	player_id : Int, 
+	config : AutoAimConfig
+) -> Unit {
+	// 确保数组足够大
+	while self.auto_aim_configs.length() <= player_id {
+		self.auto_aim_configs.push(AutoAimConfig::new())
+	}
+	self.auto_aim_configs[player_id] = config
+}
+
+///| 获取玩家的自动瞄准配置
+pub fn Game::get_auto_aim_config(self : Self, player_id : Int) -> AutoAimConfig? {
+	if player_id >= 0 && player_id < self.auto_aim_configs.length() {
+		return Some(self.auto_aim_configs[player_id])
+	}
+	return None
+}
+
+///| 切换自动瞄准开关
+pub fn Game::toggle_auto_aim(self : Self, player_id : Int) -> Unit {
+	match self.get_auto_aim_config(player_id) {
+		Some(config) => config.set_enabled(not(config.enabled))
+		None => ()
+	}
+}
+
 fn Game::run_custom_functions(self:Self, stage:GameState, p5: @p5js.P5Instance) -> Unit {
 	for func in self.custom_functions {
 		if func.get_call_stage() == stage {
@@ -212,6 +246,11 @@ fn Game::running(self:Self, p5: @p5js.P5Instance) -> Unit {
 	
 	// 更新物品系统
 	self.update_all_items()
+	
+	// 更新自动瞄准系统（为每个玩家更新目标）
+	for i = 0; i < self.auto_aim_configs.length(); i = i + 1 {
+		self.update_auto_aim_target(i, self.auto_aim_configs[i])
+	}
 	
 	// 每60帧清理一次
 	if self.frame_count % 60 == 0 {
@@ -345,7 +384,8 @@ fn create_game() -> Game{
 		frame_count : 0,
 		anchor,
 		particle_control_configs : Array::new(),
-		custom_functions : Array::new()
+		custom_functions : Array::new(),
+		auto_aim_configs : Array::new()
 	}
 	game
 }

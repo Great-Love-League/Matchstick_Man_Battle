@@ -127,37 +127,73 @@ fn load_custom_functions(game:Game) -> Unit {
     )
   )
 
-  /// 鼠标射击功能 - 左键点击朝鼠标方向射击
+  /// 鼠标射击功能 - 左键点击朝鼠标方向射击（支持自动瞄准）
   game.register_custom_function(
     GameCustomFunction::new(
       GameRunning,
       fn(game: Game, p5: @p5js.P5Instance) {
         // 检查是否按下鼠标左键
         if mouseIsPressed(p5) {
-          // 获取鼠标屏幕坐标
-          let mouse_x = getMouseX(p5)
-          let mouse_y = getMouseY(p5)
+          let player_id = 0
           
-          // 转换为世界坐标
-          let world_coords = screen_to_world(Width, Height, mouse_x, mouse_y, PPM)
-          let mouse_world_x = world_coords.0
-          let mouse_world_y = world_coords.1
-          
-          // 获取玩家位置
-          let player_pos = game.particle_list[0].torso.getCenterPosition()
-          let player_x = player_pos.getX()
-          let player_y = player_pos.getY()
-          
-          // 计算射击角度
-          let dx = mouse_world_x - player_x
-          let dy = mouse_world_y - player_y
-          let angle = @cmath.atan2(dy, dx)
+          // 先检查是否启用自动瞄准
+          let angle = match game.get_auto_aim_config(player_id) {
+            Some(config) => match game.get_auto_aim_angle(player_id, config) {
+              Some(auto_angle) => auto_angle  // 使用自动瞄准角度
+              None => {
+                // 没有自动瞄准目标，使用鼠标位置
+                let mouse_x = getMouseX(p5)
+                let mouse_y = getMouseY(p5)
+                let world_coords = screen_to_world(Width, Height, mouse_x, mouse_y, PPM)
+                let player_pos = game.particle_list[player_id].torso.getCenterPosition()
+                let dx = world_coords.0 - player_pos.getX()
+                let dy = world_coords.1 - player_pos.getY()
+                @cmath.atan2(dy, dx)
+              }
+            }
+            None => {
+              // 没有配置自动瞄准，使用鼠标位置
+              let mouse_x = getMouseX(p5)
+              let mouse_y = getMouseY(p5)
+              let world_coords = screen_to_world(Width, Height, mouse_x, mouse_y, PPM)
+              let player_pos = game.particle_list[player_id].torso.getCenterPosition()
+              let dx = world_coords.0 - player_pos.getX()
+              let dy = world_coords.1 - player_pos.getY()
+              @cmath.atan2(dy, dx)
+            }
+          }
           
           // 查找玩家的武器并发射
           for gun in game.weapon.gun_list {
-            if gun.owner_id == 0 {
+            if gun.owner_id == player_id {
               gun.attack_at_angle(game, angle)
               break
+            }
+          }
+        }
+      }
+    )
+  )
+
+  /// 自动瞄准切换功能 - T键切换自动瞄准
+  game.register_custom_function(
+    GameCustomFunction::new(
+      GameRunning,
+      fn(game: Game, p5: @p5js.P5Instance) {
+        if p5.keyIsDown(KeyT) {
+          // 使用cooldown避免重复触发
+          let player_id = 0
+          if game.frame_count % 30 == 0 {  // 每半秒最多切换一次
+            game.toggle_auto_aim(player_id)
+            match game.get_auto_aim_config(player_id) {
+              Some(config) => {
+                if config.enabled {
+                  println("玩家 \{player_id}: 自动瞄准已启用")
+                } else {
+                  println("玩家 \{player_id}: 自动瞄准已禁用")
+                }
+              }
+              None => ()
             }
           }
         }
@@ -199,6 +235,31 @@ fn register_control(game:Game) -> Unit{
   }
 }
 
+fn register_auto_aim(game:Game) -> Unit {
+  // 为玩家0注册自动瞄准配置
+  // 默认禁用，可通过T键切换
+  // 默认仅瞄准敌人，最大范围50米
+  let config_player0 = AutoAimConfig::new(
+    enabled=false,
+    target_types=[EntityType::Enemy],
+    max_range=50.0
+  )
+  game.register_auto_aim_config(0, config_player0)
+  
+  // 为玩家1注册自动瞄准配置
+  let config_player1 = AutoAimConfig::new(
+    enabled=false,
+    target_types=[EntityType::Enemy],
+    max_range=50.0
+  )
+  game.register_auto_aim_config(1, config_player1)
+  
+  println("自动瞄准系统已初始化")
+  println("  - 按 T 键切换自动瞄准开关")
+  println("  - 默认仅瞄准敌方AI实体")
+  println("  - 最大瞄准距离: 50米")
+}
+
 fn main {
 	
 	let game = create_game()
@@ -215,6 +276,8 @@ fn main {
   load_custom_functions(game)
 
   register_control(game)
+  
+  register_auto_aim(game)
 
   let p5_instance = getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
     game.state_machine_update(p)
