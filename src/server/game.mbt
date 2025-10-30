@@ -1,6 +1,8 @@
 pub suberror ParticleControlConfigError String
 pub suberror GameStateError String
 
+const GAME_BODY_NO_COLLISION_GROUP  = -1000
+
 ///|
 /// 鼠标相关的JavaScript FFI函数
 extern "js" fn getMouseX(p : @p5js.P5Instance) -> Double = 
@@ -288,7 +290,21 @@ fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : 
 	if p.keyIsDown(control_config.shoot_key) {
 		for gun in self.weapon.gun_list {
 			if gun.owner_id == particle_index {
-				gun.attack(self)
+				// 检查是否启用自动瞄准
+				match self.get_auto_aim_config(particle_index) {
+					Some(config) => {
+						if config.enabled {
+							// 使用自动瞄准角度攻击
+							match self.get_auto_aim_angle(particle_index, config) {
+								Some(angle) => gun.attack_at_angle(self, angle)
+								None => gun.attack(self)  // 没有目标时使用默认攻击
+							}
+						} else {
+							gun.attack(self)  // 未启用自动瞄准时使用默认攻击
+						}
+					}
+					None => gun.attack(self)  // 没有配置时使用默认攻击
+				}
 				break
 			}
 		}

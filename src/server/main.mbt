@@ -175,11 +175,12 @@ fn load_custom_functions(game:Game) -> Unit {
     )
   )
 
-  /// 自动瞄准切换功能 - T键切换自动瞄准
+  /// 自动瞄准切换功能 - T键（玩家0）和 Slash键（玩家1）切换自动瞄准
   game.register_custom_function(
     GameCustomFunction::new(
       GameRunning,
       fn(game: Game, p5: @p5js.P5Instance) {
+        // 玩家0: T键切换自动瞄准
         if p5.keyIsDown(KeyT) {
           // 使用cooldown避免重复触发
           let player_id = 0
@@ -195,6 +196,40 @@ fn load_custom_functions(game:Game) -> Unit {
               }
               None => ()
             }
+          }
+        }
+        
+        // 玩家1: Slash(/)键切换自动瞄准
+        if p5.keyIsDown(Slash) {
+          let player_id = 1
+          if game.frame_count % 30 == 0 {  // 每半秒最多切换一次
+            game.toggle_auto_aim(player_id)
+            match game.get_auto_aim_config(player_id) {
+              Some(config) => {
+                if config.enabled {
+                  println("玩家 \{player_id}: 自动瞄准已启用")
+                } else {
+                  println("玩家 \{player_id}: 自动瞄准已禁用")
+                }
+              }
+              None => ()
+            }
+          }
+        }
+      }
+    )
+  )
+
+  /// 添加血量输出
+  game.register_custom_function(
+    GameCustomFunction::new(
+      GameRunning,
+      fn(game: Game, p5: @p5js.P5Instance) {
+        p5 |> ignore
+        // 每100帧输出一次血量
+        if game.frame_count % 100 == 0 {
+          for particle in game.particle_list {
+            println("玩家 \{particle.index} 血量: \{particle.control.health}")
           }
         }
       }
@@ -238,10 +273,10 @@ fn register_control(game:Game) -> Unit{
 fn register_auto_aim(game:Game) -> Unit {
   // 为玩家0注册自动瞄准配置
   // 默认禁用，可通过T键切换
-  // 默认仅瞄准敌人，最大范围50米
+  // 默认瞄准其他玩家和敌人，最大范围50米
   let config_player0 = AutoAimConfig::new(
     enabled=false,
-    target_types=[EntityType::Enemy],
+    target_types=[EntityType::Player, EntityType::Enemy],
     max_range=50.0
   )
   game.register_auto_aim_config(0, config_player0)
@@ -249,15 +284,106 @@ fn register_auto_aim(game:Game) -> Unit {
   // 为玩家1注册自动瞄准配置
   let config_player1 = AutoAimConfig::new(
     enabled=false,
-    target_types=[EntityType::Enemy],
+    target_types=[EntityType::Player, EntityType::Enemy],
     max_range=50.0
   )
   game.register_auto_aim_config(1, config_player1)
   
   println("自动瞄准系统已初始化")
   println("  - 按 T 键切换自动瞄准开关")
-  println("  - 默认仅瞄准敌方AI实体")
+  println("  - 可瞄准其他玩家和敌方AI实体")
+  println("  - 自动排除瞄准自己")
   println("  - 最大瞄准距离: 50米")
+}
+
+fn register_hp_show(game:Game) -> Unit {
+  game.register_custom_function(
+    GameCustomFunction::new(
+      GameRunning,
+      fn(game: Game, p5: @p5js.P5Instance) {
+        // 在画布上为每个角色绘制血量条（屏幕坐标）
+        // 位置：取角色躯干中心向上偏移一点，避免遮挡角色
+        for particle in game.particle_list {
+          // 获取角色躯干中心（world 坐标）
+          let pos = particle.torso.getCenterPosition()
+          // 往上偏移约 1.5 米（角色头顶位置）
+          let screen_pos = world_to_screen(Width, Height, pos.getX(), pos.getY(), PPM)
+
+          let x = screen_pos.0
+          let y = screen_pos.1 - 50.0
+
+          if game.frame_count % 60 == 0 {
+            println("绘制血量条，角色 \{particle.index} 屏幕位置: (\{x}, \{y})")
+          }
+
+          // 血条尺寸（像素）
+          let bar_w = 40.0
+          let bar_h = 6.0
+
+          // 计算血量比（假定最大血量为100）
+          // 将整型血量转换为 double 并归一化（假定满血=100）
+          let mut hp_ratio = particle.control.health.to_double() / 100.0
+          if hp_ratio < 0.0 {
+            hp_ratio = 0.0
+          }
+          if hp_ratio > 1.0 {
+            hp_ratio = 1.0
+          }
+
+          // 霓虹效果：先绘制弱光，再绘制深色背景，最后绘制鲜艳前景，数值居中显示在血条内
+          let left = x - bar_w / 2.0
+          let top = y - bar_h / 2.0
+
+          // 弱光（扩大区域以模拟发光）
+          p5.fillColorPara(60.0, Some(200.0), Some(180.0), Some(90.0))
+          p5.rect(left - 4.0, top - 4.0, bar_w + 10.0, bar_h + 10.0)
+
+          // 背景（深色，半透明）
+          p5.fillColorPara(8.0, Some(8.0), Some(12.0), Some(200.0))
+          p5.rect(left, top, bar_w + 2.0, bar_h + 2.0)
+
+          // 前景（霓虹渐变：粉色 -> 青绿）
+          let fg_w = bar_w * hp_ratio
+          let low_r = 255.0
+          let low_g = 20.0
+          let low_b = 160.0
+          let high_r = 0.0
+          let high_g = 255.0
+          let high_b = 230.0
+          let r = low_r * (1.0 - hp_ratio) + high_r * hp_ratio
+          let g = low_g * (1.0 - hp_ratio) + high_g * hp_ratio
+          let b = low_b * (1.0 - hp_ratio) + high_b * hp_ratio
+          p5.fillColorPara(r, Some(g), Some(b), Some(255.0))
+          p5.rect(left + 1.0, top + 1.0, fg_w, bar_h)
+
+          // 血量数字：居中显示在血条内（先绘制阴影，再绘制白色文字）
+          let text_x = left + (bar_w + 2.0) / 2.0
+          let text_y = top + (bar_h + 2.0) / 2.0 + 3.0
+          p5.textSizeSet(10.0)
+          p5.fillColorPara(0.0, Some(0.0), Some(0.0), Some(180.0))
+          p5.text(particle.control.health.to_string(), text_x + 1.0, text_y + 1.0, None, None)
+          p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
+          p5.text(particle.control.health.to_string(), text_x, text_y, None, None)
+        }
+      }
+    )
+  )
+}
+
+fn register_show_mouse_screen_coords(game:Game) -> Unit {
+  game.register_custom_function(
+    GameCustomFunction::new(
+      GameRunning,
+      fn(game: Game, p5: @p5js.P5Instance) {
+        let mouse_x = getMouseX(p5);
+        let mouse_y = getMouseY(p5);
+        // 每秒输出一次鼠标屏幕坐标
+        if game.frame_count % 60 == 0 {
+          println("鼠标位置: (\{mouse_x}, \{mouse_y})");
+        }
+      }
+    )
+  )
 }
 
 fn main {
@@ -279,7 +405,12 @@ fn main {
   
   register_auto_aim(game)
 
+  register_hp_show(game)
+
+  register_show_mouse_screen_coords(game)
+
   let p5_instance = getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
+    clear_screen(p)
     game.state_machine_update(p)
     draw_world(p, game.world)
   }, width=Width, height=Height)

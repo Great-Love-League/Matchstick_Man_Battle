@@ -77,26 +77,30 @@ fn Game::create_particle(
 	position: (Double, Double)
 )-> Particle {
 	self.particle_index+=1
-	let torso = self.create_dynamic_box(position,(0.25,1.0),density=1.0,groupindex=-1)
-	let head = self.create_dynamic_box((position.0, position.1+1.5),(0.2,0.25),density=1.0,groupindex=-1)
-	let left_thigh = self.create_dynamic_box((position.0, position.1-1),(0.15,0.5),density=1.0,groupindex=-1)
-	let right_thigh = self.create_dynamic_box((position.0, position.1-1),(0.15,0.5),density=1.0,groupindex=-1)
-	let left_shank = self.create_dynamic_box((position.0, position.1-2),(0.15,0.5),density=1.0,groupindex=-1,friciton=0.2)
-	let right_shank = self.create_dynamic_box((position.0, position.1-2),(0.15,0.5),density=1.0,groupindex=-1,friciton=0.2)
+	let index= self.particle_index-1
+	// 每个玩家使用唯一的碰撞组：-(index + 1000)
+	// 这样玩家0用-1000，玩家1用-1001，玩家2用-1002，等等
+	// 同组内的物体不会相互碰撞（包括玩家自己的身体部位、武器和子弹）
+	let player_collision_group = -(index + 1000)
+	let torso = self.create_dynamic_box(position,(0.25,1.0),density=1.0,groupindex=player_collision_group)
+	let head = self.create_dynamic_box((position.0, position.1+1.5),(0.2,0.25),density=1.0,groupindex=player_collision_group)
+	let left_thigh = self.create_dynamic_box((position.0, position.1-1),(0.15,0.5),density=1.0,groupindex=player_collision_group)
+	let right_thigh = self.create_dynamic_box((position.0, position.1-1),(0.15,0.5),density=1.0,groupindex=player_collision_group)
+	let left_shank = self.create_dynamic_box((position.0, position.1-2),(0.15,0.5),density=1.0,groupindex=player_collision_group,friciton=0.2)
+	let right_shank = self.create_dynamic_box((position.0, position.1-2),(0.15,0.5),density=1.0,groupindex=player_collision_group,friciton=0.2)
 	let neck_joint = self.create_revolute_joint(torso, head, (position.0, position.1+1.0),enable_limit=true,lower_angle=0.0,upper_angle=0.0)
 	let thigh_left_joint = self.create_revolute_joint(torso, left_thigh, (position.0, position.1-0.5),enable_limit=true,lower_angle=-1.0,upper_angle=1.0)
 	let thigh_right_joint = self.create_revolute_joint(torso, right_thigh, (position.0, position.1-0.5),enable_limit=true,lower_angle=-1.0,upper_angle=1.0)
 	let knee_left_joint = self.create_revolute_joint(left_thigh, left_shank, (position.0, position.1-1.5),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
 	let knee_right_joint = self.create_revolute_joint(right_thigh, right_shank, (position.0, position.1-1.5),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
-	let left_arm = self.create_dynamic_box((position.0, position.1+0.5),(0.15,0.5),density=1.0,groupindex=-1)
-	let right_arm = self.create_dynamic_box((position.0, position.1+0.5),(0.15,0.5),density=1.0,groupindex=-1)
-	let left_forearm = self.create_dynamic_box((position.0, position.1-0.25),(0.15,0.5),density=1.0,groupindex=-1)
-	let right_forearm = self.create_dynamic_box((position.0, position.1-0.25),(0.15,0.5),density=1.0,groupindex=-1)
+	let left_arm = self.create_dynamic_box((position.0, position.1+0.5),(0.15,0.5),density=1.0,groupindex=player_collision_group)
+	let right_arm = self.create_dynamic_box((position.0, position.1+0.5),(0.15,0.5),density=1.0,groupindex=player_collision_group)
+	let left_forearm = self.create_dynamic_box((position.0, position.1-0.25),(0.15,0.5),density=1.0,groupindex=player_collision_group)
+	let right_forearm = self.create_dynamic_box((position.0, position.1-0.25),(0.15,0.5),density=1.0,groupindex=player_collision_group)
 	let arm_left_joint = self.create_revolute_joint(torso, left_arm, (position.0, position.1+1),enable_limit=true,lower_angle=-1.0,upper_angle=1.0)
 	let arm_right_joint = self.create_revolute_joint(torso, right_arm, (position.0, position.1+1),enable_limit=true,lower_angle=-1.0,upper_angle=1.0)
 	let forearm_left_joint = self.create_revolute_joint(left_arm, left_forearm, (position.0, position.1),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
 	let forearm_right_joint = self.create_revolute_joint(right_arm, right_forearm, (position.0, position.1),enable_limit=true,lower_angle=-1.3,upper_angle=1.3)
-	let index= self.particle_index-1
 	let tmp=Particle::{
 		torso,
 		head,
