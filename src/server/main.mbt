@@ -276,6 +276,96 @@ fn register_auto_aim(game:Game) -> Unit {
   println("  - 最大瞄准距离: 50米")
 }
 
+fn register_hp_show(game:Game) -> Unit {
+  game.register_custom_function(
+    GameCustomFunction::new(
+      GameRunning,
+      fn(game: Game, p5: @p5js.P5Instance) {
+        // 在画布上为每个角色绘制血量条（屏幕坐标）
+        // 位置：取角色躯干中心向上偏移一点，避免遮挡角色
+        for particle in game.particle_list {
+          // 获取角色躯干中心（world 坐标）
+          let pos = particle.torso.getCenterPosition()
+          // 往上偏移约 1.5 米（角色头顶位置）
+          let screen_pos = world_to_screen(Width, Height, pos.getX(), pos.getY(), PPM)
+
+          let x = screen_pos.0
+          let y = screen_pos.1 - 50.0
+
+          if game.frame_count % 60 == 0 {
+            println("绘制血量条，角色 \{particle.index} 屏幕位置: (\{x}, \{y})")
+          }
+
+          // 血条尺寸（像素）
+          let bar_w = 40.0
+          let bar_h = 6.0
+
+          // 计算血量比（假定最大血量为100）
+          // 将整型血量转换为 double 并归一化（假定满血=100）
+          let mut hp_ratio = particle.control.health.to_double() / 100.0
+          if hp_ratio < 0.0 {
+            hp_ratio = 0.0
+          }
+          if hp_ratio > 1.0 {
+            hp_ratio = 1.0
+          }
+
+          // 霓虹效果：先绘制弱光，再绘制深色背景，最后绘制鲜艳前景，数值居中显示在血条内
+          let left = x - bar_w / 2.0
+          let top = y - bar_h / 2.0
+
+          // 弱光（扩大区域以模拟发光）
+          p5.fillColorPara(60.0, Some(200.0), Some(180.0), Some(90.0))
+          p5.rect(left - 4.0, top - 4.0, bar_w + 10.0, bar_h + 10.0)
+
+          // 背景（深色，半透明）
+          p5.fillColorPara(8.0, Some(8.0), Some(12.0), Some(200.0))
+          p5.rect(left, top, bar_w + 2.0, bar_h + 2.0)
+
+          // 前景（霓虹渐变：粉色 -> 青绿）
+          let fg_w = bar_w * hp_ratio
+          let low_r = 255.0
+          let low_g = 20.0
+          let low_b = 160.0
+          let high_r = 0.0
+          let high_g = 255.0
+          let high_b = 230.0
+          let r = low_r * (1.0 - hp_ratio) + high_r * hp_ratio
+          let g = low_g * (1.0 - hp_ratio) + high_g * hp_ratio
+          let b = low_b * (1.0 - hp_ratio) + high_b * hp_ratio
+          p5.fillColorPara(r, Some(g), Some(b), Some(255.0))
+          p5.rect(left + 1.0, top + 1.0, fg_w, bar_h)
+
+          // 血量数字：居中显示在血条内（先绘制阴影，再绘制白色文字）
+          let text_x = left + (bar_w + 2.0) / 2.0
+          let text_y = top + (bar_h + 2.0) / 2.0 + 3.0
+          p5.textSizeSet(10.0)
+          p5.fillColorPara(0.0, Some(0.0), Some(0.0), Some(180.0))
+          p5.text(particle.control.health.to_string(), text_x + 1.0, text_y + 1.0, None, None)
+          p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
+          p5.text(particle.control.health.to_string(), text_x, text_y, None, None)
+        }
+      }
+    )
+  )
+}
+
+fn register_show_mouse_screen_coords(game:Game) -> Unit {
+  game.register_custom_function(
+    GameCustomFunction::new(
+      GameRunning,
+      fn(game: Game, p5: @p5js.P5Instance) {
+        let mouse_x = getMouseX(p5);
+        let mouse_y = getMouseY(p5);
+        // 每秒输出一次鼠标屏幕坐标
+        if game.frame_count % 60 == 0 {
+          println("鼠标位置: (\{mouse_x}, \{mouse_y})");
+        }
+      }
+    )
+  )
+}
+
 fn main {
 	
 	let game = create_game()
@@ -295,7 +385,12 @@ fn main {
   
   register_auto_aim(game)
 
+  register_hp_show(game)
+
+  register_show_mouse_screen_coords(game)
+
   let p5_instance = getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
+    clear_screen(p)
     game.state_machine_update(p)
     draw_world(p, game.world)
   }, width=Width, height=Height)

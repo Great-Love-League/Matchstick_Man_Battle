@@ -106,9 +106,11 @@ fn drawCircle(p: &@p5js.P5JS, shape: @box2d.B2CircleShape) -> Unit{
 
 
 fn draw_world(p: &@p5js.P5JS, world: @box2d.B2World) -> Unit {
-  p.background(255.0, Some(204.0), Some(0.0), None)
+  // p.background(255.0, Some(204.0), Some(0.0), None)
   for body in world.getBodyList() {
     for shape in body.getShapeList() {
+      // 填充颜色
+      p.fillColorPara(127.0, Some(127.0), Some(127.0), Some(200.0))
       match shape.getType() {
         PolygonShape => drawPolygon(p, shape.toPolygonShape())
         BoxShape => drawPolygon(p, shape.toPolygonShape())
@@ -119,6 +121,10 @@ fn draw_world(p: &@p5js.P5JS, world: @box2d.B2World) -> Unit {
       }
     }
   }
+}
+
+fn clear_screen(p: &@p5js.P5JS) -> Unit {
+  p.background(255.0, Some(204.0), Some(0.0), None)
 }
 
 // -------------------- 绘画相关 结束 ---------------------
