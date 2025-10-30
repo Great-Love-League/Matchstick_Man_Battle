@@ -431,8 +431,6 @@ fn create_game() -> Game{
 		auto_aim_configs : Array::new()
 	}
 	
-	load_map(game,3)|> ignore
-	
 	game
 }
 
