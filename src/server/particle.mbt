@@ -24,6 +24,7 @@ pub struct ParticleControl{
 	mut health : Int
 	mut faint_state :Bool
 	mut faint_resistance : Int
+	mut stand_cooldown : Int
 }
 pub struct Particle{
 	torso : @box2d.B2Body
@@ -69,7 +70,8 @@ fn Game::create_particle_control(
 		jump_frame_count,
 		health,
 		faint_state,
-		faint_resistance
+		faint_resistance,
+		stand_cooldown : 0
 	}
 }
 fn Game::create_particle(
@@ -175,6 +177,7 @@ fn Game::particle_walk(self:Self,particle : Particle, direction : Double) -> Uni
 	
   let index = self.which_platform(particle)
   if index == -1 {
+		particle.control.stand_cooldown -= 1
   	maintain_rotation(particle.torso, 0, kp=100.0, kd=10.0)
 		particle.torso.applyForce(
 		@box2d.b2Vec2(20.0 * direction, 0.0),
@@ -191,9 +194,9 @@ fn Game::particle_walk(self:Self,particle : Particle, direction : Double) -> Uni
 	
 	if p_angle > 0.5 || p_angle < -0.5 {
 		particle.torso.applyForce(
-		@box2d.b2Vec2(20.0 * direction, 0.0),
-		particle.torso.getCenterPosition(),
-	)
+			@box2d.b2Vec2(20.0 * direction, 0.0),
+			particle.torso.getCenterPosition(),
+		)
 		return ;
 	}
 	
@@ -268,8 +271,13 @@ fn Game::particle_stand(self:Self,particle : Particle) -> Unit {
   let index = self.which_platform(particle)
   maintain_rotation(particle.torso, 0, kp=300.0, kd=10.0)
   if index == -1 {
-    return
+		if particle.control.stand_cooldown <= 0 {
+    	return
+		}
+		particle.control.stand_cooldown -= 1
+		println("Stand cooldown: \{particle.control.stand_cooldown}")
   }
+	particle.control.stand_cooldown = 10
   maintain_joint(particle.thigh_left_joint, 0.0, kp=50.0, kd=2.0)
   maintain_joint(particle.thigh_right_joint, 0.0, kp=50.0, kd=2.0)
   maintain_joint(particle.knee_left_joint, 0.0, kp=50.0, kd=2.0)
@@ -278,19 +286,4 @@ fn Game::particle_stand(self:Self,particle : Particle) -> Unit {
   maintain_joint(particle.arm_right_joint, 0.0, kp=50.0, kd=2.0)
   maintain_joint(particle.forearm_left_joint, 0.0, kp=50.0, kd=2.0)
   maintain_joint(particle.forearm_right_joint, 0.0, kp=50.0, kd=2.0)
-  // let platform = self.platform_list[index]
-  // let p_angle = platform.get_body().getRotation()
-  // let target_y = (
-  //     particle.torso.getCenterPosition().getX() -
-  //     platform.get_body().getCenterPosition().getX()
-  //   ) *
-  //   @cmath.tan(p_angle) +
-  //   platform.get_body().getCenterPosition().getY()
-  // maintain_position(
-  //   particle.torso,
-  //   (particle.torso.getCenterPosition().getX(), target_y + 3.7),
-  // )
 }
-// fn particle_action(particle : Particle) -> Unit {
-	
-// }
