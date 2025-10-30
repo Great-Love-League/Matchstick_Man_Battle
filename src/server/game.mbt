@@ -1,6 +1,8 @@
 pub suberror ParticleControlConfigError String
 pub suberror GameStateError String
 
+const GAME_BODY_NO_COLLISION_GROUP  = -1000
+
 ///|
 /// 鼠标相关的JavaScript FFI函数
 extern "js" fn getMouseX(p : @p5js.P5Instance) -> Double = 
