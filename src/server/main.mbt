@@ -175,51 +175,6 @@ fn load_custom_functions(game:Game) -> Unit {
     )
   )
 
-  /// 自动瞄准切换功能 - T键（玩家0）和 Slash键（玩家1）切换自动瞄准
-  game.register_custom_function(
-    GameCustomFunction::new(
-      GameRunning,
-      fn(game: Game, p5: @p5js.P5Instance) {
-        // 玩家0: T键切换自动瞄准
-        if p5.keyIsDown(KeyT) {
-          // 使用cooldown避免重复触发
-          let player_id = 0
-          if game.frame_count % 30 == 0 {  // 每半秒最多切换一次
-            game.toggle_auto_aim(player_id)
-            match game.get_auto_aim_config(player_id) {
-              Some(config) => {
-                if config.enabled {
-                  println("玩家 \{player_id}: 自动瞄准已启用")
-                } else {
-                  println("玩家 \{player_id}: 自动瞄准已禁用")
-                }
-              }
-              None => ()
-            }
-          }
-        }
-        
-        // 玩家1: Slash(/)键切换自动瞄准
-        if p5.keyIsDown(Slash) {
-          let player_id = 1
-          if game.frame_count % 30 == 0 {  // 每半秒最多切换一次
-            game.toggle_auto_aim(player_id)
-            match game.get_auto_aim_config(player_id) {
-              Some(config) => {
-                if config.enabled {
-                  println("玩家 \{player_id}: 自动瞄准已启用")
-                } else {
-                  println("玩家 \{player_id}: 自动瞄准已禁用")
-                }
-              }
-              None => ()
-            }
-          }
-        }
-      }
-    )
-  )
-
   /// 添加血量输出
   game.register_custom_function(
     GameCustomFunction::new(
@@ -239,6 +194,7 @@ fn load_custom_functions(game:Game) -> Unit {
 }
 
 fn register_control(game:Game) -> Unit{
+  // 玩家0: WASD移动，Z射击，T切换自动瞄准
   game.register_particle_control_config(
     ParticleControlConfig::new(
       0,
@@ -246,6 +202,7 @@ fn register_control(game:Game) -> Unit{
       right_key = Some(@p5js.KeyD),
       jump_key = Some(@p5js.KeyW),
       shoot_key = Some(@p5js.KeyZ),
+      toggle_auto_aim_key = Some(@p5js.KeyT),
       from_internet = false,
     )
   ) catch {
@@ -254,6 +211,7 @@ fn register_control(game:Game) -> Unit{
     }
   }
 
+  // 玩家1: 方向键移动，Down射击，Slash(/)切换自动瞄准
   game.register_particle_control_config(
     ParticleControlConfig::new(
       1,
@@ -261,6 +219,7 @@ fn register_control(game:Game) -> Unit{
       right_key = Some(@p5js.ArrowRight),
       jump_key = Some(@p5js.ArrowUp),
       shoot_key = Some(@p5js.ArrowDown),
+      toggle_auto_aim_key = Some(@p5js.Slash),
       from_internet = false,
     )
   ) catch {
