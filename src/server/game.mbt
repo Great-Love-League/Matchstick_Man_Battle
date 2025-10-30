@@ -299,7 +299,9 @@ fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : 
 			}
 		}
 	}
-
+	if(p.keyIsDown(control_config.faint_key)){
+		return
+	}
 	if(p.keyIsDown((control_config.left_key))){
 		self.particle_walk(particle,-1)
 	}
@@ -394,7 +396,7 @@ fn create_game() -> Game{
 		auto_aim_configs : Array::new()
 	}
 	
-	load_map(game,2)|> ignore
+	load_map(game,3)|> ignore
 	
 	game
 }

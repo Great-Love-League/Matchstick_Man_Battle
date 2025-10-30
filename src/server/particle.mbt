@@ -190,9 +190,9 @@ fn Game::particle_walk(self:Self,particle : Particle, direction : Double) -> Uni
 	
 	if p_angle > 0.5 || p_angle < -0.5 {
 		particle.torso.applyForce(
-		@box2d.b2Vec2(20.0 * direction, 0.0),
-		particle.torso.getCenterPosition(),
-	)
+			@box2d.b2Vec2(20.0 * direction, 0.0),
+			particle.torso.getCenterPosition(),
+		)
 		return ;
 	}
 	

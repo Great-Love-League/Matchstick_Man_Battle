@@ -1,6 +1,7 @@
 
 fn load_map(game:Game, level : Int) -> Bool {
-	let shift_x = 0.0
+  game.create_particle((-10.0, 12.0)) |> ignore
+  game.create_particle((-5.0, 12.0)) |> ignore
 	match level {
 		1 => {
 			create_platform(game, (-24.5, 25), (1, 25), angle = 0.0)|> ignore;
@@ -28,6 +29,18 @@ fn load_map(game:Game, level : Int) -> Bool {
 			create_movable_platform(game, (6,1), (16,15), (-16,15), 4, (8,15))|> ignore;
 			create_movable_platform(game, (6,1), (16,25), (-16,25), 4, (0,25))|> ignore;
 			create_movable_platform(game, (6,1), (16,35), (-16,35), 4, (-8,35))|> ignore;
+			return true
+		}
+		3 => {
+			create_platform(game, (0, 0.5), (10, 1), angle = 0.0)|> ignore;
+			create_rotatable_platform(game, (-20, 8), (8, 0.8), 2, initial_angle=0.3) |> ignore;
+			create_rotatable_platform(game, (15, 10), (8, 0.8), 2, initial_angle=1.2) |> ignore;
+			create_rotatable_platform(game, (-5, 16), (8, 0.8), 2, initial_angle=2.8) |> ignore;
+			create_rotatable_platform(game, (22, 19), (8, 0.8), -2, initial_angle=-0.9) |> ignore;
+			create_rotatable_platform(game, (-18, 28), (8, 0.8), -2, initial_angle=0.7) |> ignore;
+			create_rotatable_platform(game, (8, 33), (8, 0.8), 2, initial_angle=-1.5) |> ignore;
+			create_rotatable_platform(game, (-10, 41), (8, 0.8), 2, initial_angle=2.4) |> ignore;
+			create_rotatable_platform(game, (19, 45), (8, 0.8), 2, initial_angle=-2.1) |> ignore;
 			return true
 		}
 		_ => {

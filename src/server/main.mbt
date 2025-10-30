@@ -13,9 +13,6 @@ fn box2d_init(game:Game) ->Unit{
   // 人物高度约3.5米，所以放在 y = 9.4 + 2.0 = 11.4
   // x坐标在平台范围内: -5.77 ± 5 = (-10.77, -0.77)
   // 选择平台中心偏左: x = -3.0
-  game.create_particle((-10.0, 12.0)) |> ignore
-
-  game.create_particle((-5.0, 12.0)) |> ignore
 	
 	
 	
@@ -243,7 +240,7 @@ fn register_control(game:Game) -> Unit{
       right_key = Some(@p5js.ArrowRight),
       jump_key = Some(@p5js.ArrowUp),
 			faint_key = Some(@p5js.ArrowDown),
-      shoot_key = Some(@p5js.ArrowDown),
+      shoot_key = Some(@p5js.Slash),
       from_internet = false,
     )
   ) catch {
