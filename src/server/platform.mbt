@@ -57,7 +57,7 @@ pub impl PlatformTrait for Platform with get_index(self) -> Int {
 pub impl PlatformTrait for Platform with get_body(self) -> @box2d.B2Body {
 	return self.body
 }
-pub fn create_rotatable_platform(game:Game,size:(Double,Double),position:(Double,Double),angle_speed:Double,initial_angle?:Double=0.0) -> RotatablePlatform {
+pub fn create_rotatable_platform(game:Game,position:(Double,Double),size:(Double,Double),angle_speed:Double,initial_angle?:Double=0.0) -> RotatablePlatform {
 	let box_def = @box2d.b2BoxDef()
 	box_def.setExtents(@box2d.b2Vec2(size.0, size.1))
 	box_def.setDensity(50.0)
@@ -100,12 +100,12 @@ pub impl PlatformTrait for RotatablePlatform with get_body(self) -> @box2d.B2Bod
 }
 
 
-pub fn create_movable_platform(game:Game, size:(Double,Double), start_position:(Double,Double), end_position:(Double,Double), speed:Double) -> MovablePlatform {
+pub fn create_movable_platform(game:Game, size:(Double,Double), start_position:(Double,Double), end_position:(Double,Double), speed:Double, now_position:(Double,Double)) -> MovablePlatform {
 	let box_def = @box2d.b2BoxDef()
 	box_def.setExtents(@box2d.b2Vec2(size.0, size.1))
 	box_def.setDensity(50.0)
 	let body_def = @box2d.b2BodyDef()
-	body_def.setPosition(@box2d.b2Vec2(start_position.0, start_position.1))
+	body_def.setPosition(@box2d.b2Vec2(now_position.0, now_position.1))
 	body_def.addShape(box_def.getBase())
 	body_def.setRotation(0.0)
 	body_def.setAllowSleep(false)
@@ -121,7 +121,7 @@ pub fn create_movable_platform(game:Game, size:(Double,Double), start_position:(
 		index : game.platform_index,
 		start_position : @box2d.b2Vec2(start_position.0, start_position.1),
 		end_position : @box2d.b2Vec2(end_position.0, end_position.1),
-		now_position : @box2d.b2Vec2(start_position.0, start_position.1),
+		now_position : @box2d.b2Vec2(now_position.0, now_position.1),
 		speed,
 		direction : 1,
 		cooldown : cooldown_time,

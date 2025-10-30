@@ -1,4 +1,54 @@
 
+fn load_map(game:Game, level : Int) -> Bool {
+  game.create_particle((-10.0, 12.0)) |> ignore
+  game.create_particle((-5.0, 12.0)) |> ignore
+	match level {
+		1 => {
+			create_platform(game, (-24.5, 25), (1, 25), angle = 0.0)|> ignore;
+			create_platform(game, (24.5, 25), (1, 25), angle = 0.0)|> ignore;
+			create_platform(game, (0, 49.5), (23.6, 1), angle = 0.0)|> ignore;
+			create_platform(game, (0, 0.5), (23.6, 1), angle = 0.0)|> ignore;
+			create_movable_platform(game, (5,1), (10-25,10), (40-25,40), 2 ,(10-25,10))|> ignore;
+			create_movable_platform(game, (5,1), (15,10), (-15,40), 2, (0,25))|> ignore;
+			create_platform(game, (0, 10), (5, 1) , angle = 1.57)|> ignore;
+			create_platform(game, (0, 40), (5, 1) , angle = 1.57)|> ignore;
+			create_rotatable_platform(game, (-17, 25), (6, 1) , 10)|> ignore;
+			create_rotatable_platform(game, (17, 25), (6, 1) ,20)|> ignore;
+			return true
+		}
+		2 => {
+			create_platform(game, (-24.5, 25), (1, 25), angle = 0.0)|> ignore;
+			create_platform(game, (24.5, 25), (1, 25), angle = 0.0)|> ignore;
+			create_platform(game, (0, 49.5), (23.6, 1), angle = 0.0)|> ignore;
+			create_platform(game, (0, 0.5), (23.6, 1), angle = 0.0)|> ignore;
+			create_movable_platform(game, (6,1), (-16,10), (16,10), 4, (-16,10))|> ignore;
+			create_movable_platform(game, (6,1), (-16,20), (16,20), 4, (-8,20))|> ignore;
+			create_movable_platform(game, (6,1), (-16,30), (16,30), 4, (0,30))|> ignore;
+			create_movable_platform(game, (6,1), (-16,40), (16,40), 4, (8,40))|> ignore;
+			create_movable_platform(game, (6,1), (16,5), (-16,5), 4, (16,5))|> ignore;
+			create_movable_platform(game, (6,1), (16,15), (-16,15), 4, (8,15))|> ignore;
+			create_movable_platform(game, (6,1), (16,25), (-16,25), 4, (0,25))|> ignore;
+			create_movable_platform(game, (6,1), (16,35), (-16,35), 4, (-8,35))|> ignore;
+			return true
+		}
+		3 => {
+			create_platform(game, (0, 0.5), (10, 1), angle = 0.0)|> ignore;
+			create_rotatable_platform(game, (-20, 8), (8, 0.8), 2, initial_angle=0.3) |> ignore;
+			create_rotatable_platform(game, (15, 10), (8, 0.8), 2, initial_angle=1.2) |> ignore;
+			create_rotatable_platform(game, (-5, 16), (8, 0.8), 2, initial_angle=2.8) |> ignore;
+			create_rotatable_platform(game, (22, 19), (8, 0.8), -2, initial_angle=-0.9) |> ignore;
+			create_rotatable_platform(game, (-18, 28), (8, 0.8), -2, initial_angle=0.7) |> ignore;
+			create_rotatable_platform(game, (8, 33), (8, 0.8), 2, initial_angle=-1.5) |> ignore;
+			create_rotatable_platform(game, (-10, 41), (8, 0.8), 2, initial_angle=2.4) |> ignore;
+			create_rotatable_platform(game, (19, 45), (8, 0.8), 2, initial_angle=-2.1) |> ignore;
+			return true
+		}
+		_ => {
+			return false
+		}
+	}
+}
+
 let level1:String=
 #|{
 #|  "world_settings": {
