@@ -27,7 +27,7 @@ pub struct AutoAimConfig {
 ///| 创建默认自动瞄准配置
 pub fn AutoAimConfig::new(
   enabled~ : Bool = false,
-  target_types~ : Array[EntityType] = [EntityType::Enemy],  // 默认仅瞄准敌人
+  target_types~ : Array[EntityType] = [EntityType::Player, EntityType::Enemy],  // 默认瞄准玩家和敌人
   max_range~ : Double = 50.0
 ) -> AutoAimConfig {
   AutoAimConfig::{
