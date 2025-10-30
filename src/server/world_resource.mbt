@@ -1,4 +1,41 @@
 
+fn load_map(game:Game, level : Int) -> Bool {
+	let shift_x = 0.0
+	match level {
+		1 => {
+			create_platform(game, (-24.5, 25), (1, 25), angle = 0.0)|> ignore;
+			create_platform(game, (24.5, 25), (1, 25), angle = 0.0)|> ignore;
+			create_platform(game, (0, 49.5), (23.6, 1), angle = 0.0)|> ignore;
+			create_platform(game, (0, 0.5), (23.6, 1), angle = 0.0)|> ignore;
+			create_movable_platform(game, (5,1), (10-25,10), (40-25,40), 2 ,(10-25,10))|> ignore;
+			create_movable_platform(game, (5,1), (15,10), (-15,40), 2, (0,25))|> ignore;
+			create_platform(game, (0, 10), (5, 1) , angle = 1.57)|> ignore;
+			create_platform(game, (0, 40), (5, 1) , angle = 1.57)|> ignore;
+			create_rotatable_platform(game, (-17, 25), (6, 1) , 10)|> ignore;
+			create_rotatable_platform(game, (17, 25), (6, 1) ,20)|> ignore;
+			return true
+		}
+		2 => {
+			create_platform(game, (-24.5, 25), (1, 25), angle = 0.0)|> ignore;
+			create_platform(game, (24.5, 25), (1, 25), angle = 0.0)|> ignore;
+			create_platform(game, (0, 49.5), (23.6, 1), angle = 0.0)|> ignore;
+			create_platform(game, (0, 0.5), (23.6, 1), angle = 0.0)|> ignore;
+			create_movable_platform(game, (6,1), (-16,10), (16,10), 4, (-16,10))|> ignore;
+			create_movable_platform(game, (6,1), (-16,20), (16,20), 4, (-8,20))|> ignore;
+			create_movable_platform(game, (6,1), (-16,30), (16,30), 4, (0,30))|> ignore;
+			create_movable_platform(game, (6,1), (-16,40), (16,40), 4, (8,40))|> ignore;
+			create_movable_platform(game, (6,1), (16,5), (-16,5), 4, (16,5))|> ignore;
+			create_movable_platform(game, (6,1), (16,15), (-16,15), 4, (8,15))|> ignore;
+			create_movable_platform(game, (6,1), (16,25), (-16,25), 4, (0,25))|> ignore;
+			create_movable_platform(game, (6,1), (16,35), (-16,35), 4, (-8,35))|> ignore;
+			return true
+		}
+		_ => {
+			return false
+		}
+	}
+}
+
 let level1:String=
 #|{
 #|  "world_settings": {
