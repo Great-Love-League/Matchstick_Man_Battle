@@ -344,6 +344,71 @@ fn register_show_mouse_screen_coords(game:Game) -> Unit {
   )
 }
 
+///| 实验性的，测试动画
+/// 在坐标 100，100 每秒画一个炫酷的花纹，使用 SampleAnimation
+fn register_animation(game: Game) -> Unit {
+  // 创建一个帧计数器来追踪动画进度
+  let frame_counter = { val: 0 }
+  
+  let animation = SampleAnimation::new(
+    fn(world: &@box2d.World, p5: @p5js.P5Instance) -> AnimationState {
+      world |> ignore  // 这个动画不需要物理世界
+      
+      // 每帧更新计数器
+      frame_counter.val = frame_counter.val + 1
+      
+      // 计算旋转角度（每秒转一圈，60帧/秒）
+      let angle = (frame_counter.val.to_double() / 60.0) * 2.0 * 3.14159265359
+      
+      // 在屏幕坐标 (100, 100) 绘制炫酷的螺旋花纹
+      let center_x = 100.0
+      let center_y = 100.0
+      let max_radius = 40.0  // 花纹最大半径
+      
+      // 绘制多层旋转的花瓣图案
+      let num_petals = 8
+      for i = 0; i < num_petals; i = i + 1 {
+        let petal_angle = angle + (i.to_double() / num_petals.to_double()) * 2.0 * 3.14159265359
+        
+        // 计算花瓣末端位置（相对于中心点）
+        let x = center_x + max_radius * @cmath.cos(petal_angle)
+        let y = center_y + max_radius * @cmath.sin(petal_angle)
+        
+        // 霓虹色彩渐变（随时间变化）
+        let hue = (frame_counter.val.to_double() + i.to_double() * 30.0).mod(360.0)
+        let r = 128.0 + 127.0 * @cmath.cos(hue * 0.01745329252)
+        let g = 128.0 + 127.0 * @cmath.cos((hue + 120.0) * 0.01745329252)
+        let b = 128.0 + 127.0 * @cmath.cos((hue + 240.0) * 0.01745329252)
+        
+        // 绘制发光效果 - 填充颜色
+        p5.fillColorPara(r, Some(g), Some(b), Some(80.0))
+        
+        // 绘制花瓣（椭圆）- 在花瓣位置的一半处
+        let petal_x = center_x + (max_radius / 2.0) * @cmath.cos(petal_angle)
+        let petal_y = center_y + (max_radius / 2.0) * @cmath.sin(petal_angle)
+        p5.ellipse(petal_x, petal_y, 20.0, 10.0)
+        
+        // 绘制连接线（从中心到花瓣末端）
+        p5.line(center_x, center_y, x, y)
+      }
+      
+      // 中心圆（脉动效果）
+      let pulse = 10.0 + 5.0 * @cmath.sin(angle * 3.0)
+      p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(200.0))
+      p5.noStroke()
+      p5.circle(center_x, center_y, pulse)
+      
+      // 动画持续进行
+      AnimationState::InProgress
+    }
+  )
+  
+  // 将动画添加到游戏中（需要转换为 trait 对象）
+  game.add_animation(animation)
+  
+  println("炫酷花纹动画已注册在屏幕坐标 (100, 100)")
+}
+
 fn main {
 	
 	let game = create_game()
@@ -362,6 +427,8 @@ fn main {
   register_hp_show(game)
 
   register_show_mouse_screen_coords(game)
+
+  register_animation(game)
 
   let p5_instance = getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
     clear_screen(p)

@@ -38,6 +38,8 @@ struct Game {
 	
 	// 自动瞄准配置列表（每个玩家一个配置）
 	mut auto_aim_configs : Array[AutoAimConfig]
+
+	mut animation_list : Array[&Animation]
 	
 	anchor : @box2d.B2Body
 }
@@ -46,6 +48,18 @@ trait GameCustomFunctionTrait {
 	call_custom_function(self: Self, game: Game, p5: @p5js.P5Instance) -> Unit
 	get_call_stage(self: Self) -> GameState
 }
+
+pub(all) enum AnimationState {
+	NotStarted
+	InProgress
+	Completed
+}
+
+trait Animation {
+	///| 动画更新函数，如果返回Completed则表示动画结束，反之则继续进行
+	update(self: Self, world: &@box2d.World, p5: @p5js.P5Instance) -> AnimationState
+}
+
 
 pub(all) struct GameCustomFunction {
 	stage : GameState
@@ -271,6 +285,9 @@ fn Game::running(self:Self, p5: @p5js.P5Instance) -> Unit {
 
 	self.run_custom_functions(GameRunning, p5)
 
+	// 更新动画系统
+	self.update_animations(p5)
+
 
 	self.world.step(1.0/60.0, 4)
 	self.state = GameRunning
@@ -428,7 +445,8 @@ fn create_game() -> Game{
 		anchor,
 		particle_control_configs : Array::new(),
 		custom_functions : Array::new(),
-		auto_aim_configs : Array::new()
+		auto_aim_configs : Array::new(),
+		animation_list : Array::new()
 	}
 	
 	game
@@ -505,4 +523,26 @@ fn Game::is_contact(self:Self,a:@box2d.B2Body, b:@box2d.B2Body)->Bool{
 		}
 	}
 	false
+}
+
+fn Game::update_animations(self:Self, p5: @p5js.P5Instance) -> Unit {
+
+	let animations_state = Array::new()
+	for animation in self.animation_list {
+		let state = animation.update(self.world, p5)
+		animations_state.push(state)
+	}
+	// 移除已完成的动画
+	let rest_animations = Array::new()
+	for i = 0; i < self.animation_list.length(); i = i + 1 {
+		match animations_state[i] {
+			AnimationState::Completed => ()
+			AnimationState::InProgress => rest_animations.push(self.animation_list[i])
+		}
+	}
+	self.animation_list = rest_animations
+}
+
+pub fn Game::add_animation(self:Self, animation: &Animation) -> Unit {
+	self.animation_list.push(animation)
 }
