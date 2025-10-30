@@ -50,7 +50,7 @@ fn Game::create_bullet(
   target_types? : Array[TargetType] = [Player],
   penetration? : Int = 0,
   gravity_compensation? : Double = 0.95,
-  collision_group? : Int = -1,
+  collision_group? : Int = 0,
 ) -> Bullet {
   // 创建圆形子弹物理体（优化为真实弹道效果）
   let circle_def = @box2d.b2CircleDef()

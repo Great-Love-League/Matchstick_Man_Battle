@@ -201,6 +201,22 @@ fn load_custom_functions(game:Game) -> Unit {
     )
   )
 
+  /// 添加血量输出
+  game.register_custom_function(
+    GameCustomFunction::new(
+      GameRunning,
+      fn(game: Game, p5: @p5js.P5Instance) {
+        p5 |> ignore
+        // 每100帧输出一次血量
+        if game.frame_count % 100 == 0 {
+          for particle in game.particle_list {
+            println("玩家 \{particle.index} 血量: \{particle.control.health}")
+          }
+        }
+      }
+    )
+  )
+
 }
 
 fn register_control(game:Game) -> Unit{
