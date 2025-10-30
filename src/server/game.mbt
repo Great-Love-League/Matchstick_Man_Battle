@@ -80,6 +80,7 @@ struct ParticleControlConfig {
 	jump_key : @p5js.KeyCode
 	shoot_key : @p5js.KeyCode
 	faint_key : @p5js.KeyCode
+	toggle_auto_aim_key : @p5js.KeyCode  // 切换自动瞄准的按键
 
 	target_ip : String
 	target_port : Int
@@ -93,6 +94,7 @@ fn ParticleControlConfig::new(
 	jump_key~ : @p5js.KeyCode? = Some(KeyW),
 	faint_key~ : @p5js.KeyCode? = Some(KeyS),
 	shoot_key~ : @p5js.KeyCode? = Some(KeyZ),
+	toggle_auto_aim_key~ : @p5js.KeyCode? = Some(KeyT),  // 默认使用T键
 	from_internet~ : Bool = false,
 	target_ip~ : String? = None,
 	target_port~ : Int? = None,
@@ -112,6 +114,7 @@ fn ParticleControlConfig::new(
 			jump_key: @p5js.UnknownKey,
 			shoot_key: @p5js.UnknownKey,
 			faint_key: @p5js.UnknownKey,
+			toggle_auto_aim_key: @p5js.UnknownKey,
 			target_ip: target_ip.unwrap(),
 			target_port: target_port.unwrap(),
 			target_particle_index,
@@ -121,7 +124,7 @@ fn ParticleControlConfig::new(
 
 	if from_internet == false {
 		// 检查必要参数
-		if left_key == None || right_key == None || jump_key == None || shoot_key == None {
+		if left_key == None || right_key == None || jump_key == None || shoot_key == None || toggle_auto_aim_key == None {
 			println("Error: Missing key bindings for local control.")
 			raise ParticleControlConfigError("Missing key bindings for local control.")
 		}
@@ -132,6 +135,7 @@ fn ParticleControlConfig::new(
 			jump_key: jump_key.unwrap(),
 			shoot_key: shoot_key.unwrap(),
 			faint_key: faint_key.unwrap(),
+			toggle_auto_aim_key: toggle_auto_aim_key.unwrap(),
 			target_ip: "",
 			target_port: 0,
 			target_particle_index,
@@ -291,10 +295,41 @@ fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : 
 		raise GameStateError("Internet control not implemented yet.")
 	}
 
+	// 检查自动瞄准切换键（使用cooldown避免重复触发）
+	if p.keyIsDown(control_config.toggle_auto_aim_key) {
+		if self.frame_count % 30 == 0 {  // 每半秒最多切换一次
+			self.toggle_auto_aim(particle_index)
+			match self.get_auto_aim_config(particle_index) {
+				Some(config) => {
+					if config.enabled {
+						println("玩家 \{particle_index}: 自动瞄准已启用")
+					} else {
+						println("玩家 \{particle_index}: 自动瞄准已禁用")
+					}
+				}
+				None => ()
+			}
+		}
+	}
+
 	if p.keyIsDown(control_config.shoot_key) {
 		for gun in self.weapon.gun_list {
 			if gun.owner_id == particle_index {
-				gun.attack(self)
+				// 检查是否启用自动瞄准
+				match self.get_auto_aim_config(particle_index) {
+					Some(config) => {
+						if config.enabled {
+							// 使用自动瞄准角度攻击
+							match self.get_auto_aim_angle(particle_index, config) {
+								Some(angle) => gun.attack_at_angle(self, angle)
+								None => gun.attack(self)  // 没有目标时使用默认攻击
+							}
+						} else {
+							gun.attack(self)  // 未启用自动瞄准时使用默认攻击
+						}
+					}
+					None => gun.attack(self)  // 没有配置时使用默认攻击
+				}
 				break
 			}
 		}

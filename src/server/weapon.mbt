@@ -163,11 +163,46 @@ pub impl WeaponCreate for Gun with create( game, owner_id){
 	
 	game.weapon.gun_index+=1
 	
+	// 创建武器body
+	let weapon_body = game.world.createBody(bodydef)
+	
+	// 设置武器的碰撞组，与持有者相同，避免武器与持有者、持有者的子弹发生物理碰撞
+	// 使用destroyBody + recreate来更改碰撞组（Box2D的限制）
+	let owner_collision_group = -(owner_id + 1000)
+	// 遍历所有 fixtures 并重新创建它们以设置正确的碰撞组
+	// 注意：这是一个workaround，因为Box2D不允许在创建后修改group index
+	// 更好的做法是修改资源文件，但这里我们通过重新创建shape来实现
+	let shapes_to_recreate = Array::new()
+	for shape in weapon_body.getShapeList() {
+		// 保存形状信息（简化版，实际可能需要更多信息）
+		shapes_to_recreate.push(shape)
+	}
+	
+	// 销毁旧body
+	game.world.destroyBody(weapon_body)
+	
+	// 修改bodydef中的形状碰撞组后重新创建
+	// 由于无法直接修改已加载的bodydef，我们采用不同的方法：
+	// 直接创建新的shape定义并添加到新body
+	let new_body_def = @box2d.b2BodyDef()
+	new_body_def.setPosition(@box2d.b2Vec2(handpos.getX()+gun_body_shift.getX(), handpos.getY()+gun_body_shift.getY()))
+	
+	// 创建一个简单的box形状作为武器（0.5x1米）
+	let weapon_box_def = @box2d.b2BoxDef()
+	weapon_box_def.setExtents(@box2d.b2Vec2(0.25, 0.5))
+	weapon_box_def.setDensity(0.01)
+	weapon_box_def.setFriction(0.3)
+	weapon_box_def.setRestitution(0.5)
+	weapon_box_def.setGroupIndex(owner_collision_group)  // 设置正确的碰撞组
+	new_body_def.addShape(weapon_box_def.getBase())
+	
+	let final_weapon_body = game.world.createBody(new_body_def)
+	
 	// 创建手枪
 	let aa:Gun=Gun::{
 		id:game.weapon.gun_index,
 		owner_id:owner_id,
-		body:game.world.createBody(bodydef),
+		body:final_weapon_body,
 		
 		// 手枪配置
 		bullet_damage: 10.0,
@@ -361,24 +396,29 @@ fn Game::create_pistol(self : Self, owner_id : Int) -> Unit {
 ///|
 /// 创建霰弹枪
 fn Game::create_shotgun(self : Self, owner_id : Int) -> Unit {
-	let bodydef:@box2d.B2BodyDef=@map_loader.get_bodydef_from_raw(Some(gun_body), None) catch {
-		_=> {
-			println("Failed to create body definition for Shotgun")
-			@box2d.b2BodyDef()
-		}
-	}
 	let centerpos=self.particle_list[owner_id].right_forearm.getCenterPosition()
 	let rotate =self.particle_list[owner_id].right_forearm.getRotation()
 	let handpos=@box2d.b2Vec2(-@cmath.sin(rotate)*0.25+centerpos.getX(),-@cmath.cos(rotate)*0.25+centerpos.getY())
 
-	bodydef.setPosition(@box2d.b2Vec2(handpos.getX()+gun_body_shift.getX(), handpos.getY()+gun_body_shift.getY()))
-	
 	self.weapon.gun_index+=1
+	
+	// 创建武器body（使用简化的box形状，并设置正确的碰撞组）
+	let owner_collision_group = -(owner_id + 1000)
+	let weapon_body_def = @box2d.b2BodyDef()
+	weapon_body_def.setPosition(@box2d.b2Vec2(handpos.getX()+gun_body_shift.getX(), handpos.getY()+gun_body_shift.getY()))
+	
+	let weapon_box_def = @box2d.b2BoxDef()
+	weapon_box_def.setExtents(@box2d.b2Vec2(0.25, 0.5))
+	weapon_box_def.setDensity(0.01)
+	weapon_box_def.setFriction(0.3)
+	weapon_box_def.setRestitution(0.5)
+	weapon_box_def.setGroupIndex(owner_collision_group)
+	weapon_body_def.addShape(weapon_box_def.getBase())
 	
 	let gun:Gun=Gun::{
 		id:self.weapon.gun_index,
 		owner_id:owner_id,
-		body:self.world.createBody(bodydef),
+		body:self.world.createBody(weapon_body_def),
 		
 		// 霰弹枪配置（真实霰弹枪约350-400 m/s）
 		bullet_damage: 6.0,
@@ -398,24 +438,29 @@ fn Game::create_shotgun(self : Self, owner_id : Int) -> Unit {
 ///|
 /// 创建狙击枪
 fn Game::create_sniper(self : Self, owner_id : Int) -> Unit {
-	let bodydef:@box2d.B2BodyDef=@map_loader.get_bodydef_from_raw(Some(gun_body), None) catch {
-		_=> {
-			println("Failed to create body definition for Sniper")
-			@box2d.b2BodyDef()
-		}
-	}
 	let centerpos=self.particle_list[owner_id].right_forearm.getCenterPosition()
 	let rotate =self.particle_list[owner_id].right_forearm.getRotation()
 	let handpos=@box2d.b2Vec2(-@cmath.sin(rotate)*0.25+centerpos.getX(),-@cmath.cos(rotate)*0.25+centerpos.getY())
 
-	bodydef.setPosition(@box2d.b2Vec2(handpos.getX()+gun_body_shift.getX(), handpos.getY()+gun_body_shift.getY()))
-	
 	self.weapon.gun_index+=1
+	
+	// 创建武器body（使用简化的box形状，并设置正确的碰撞组）
+	let owner_collision_group = -(owner_id + 1000)
+	let weapon_body_def = @box2d.b2BodyDef()
+	weapon_body_def.setPosition(@box2d.b2Vec2(handpos.getX()+gun_body_shift.getX(), handpos.getY()+gun_body_shift.getY()))
+	
+	let weapon_box_def = @box2d.b2BoxDef()
+	weapon_box_def.setExtents(@box2d.b2Vec2(0.25, 0.5))
+	weapon_box_def.setDensity(0.01)
+	weapon_box_def.setFriction(0.3)
+	weapon_box_def.setRestitution(0.5)
+	weapon_box_def.setGroupIndex(owner_collision_group)
+	weapon_body_def.addShape(weapon_box_def.getBase())
 	
 	let gun:Gun=Gun::{
 		id:self.weapon.gun_index,
 		owner_id:owner_id,
-		body:self.world.createBody(bodydef),
+		body:self.world.createBody(weapon_body_def),
 		
 		// 狙击枪配置（真实狙击步枪约800-1000 m/s）
 		bullet_damage: 30.0,
@@ -435,24 +480,29 @@ fn Game::create_sniper(self : Self, owner_id : Int) -> Unit {
 ///|
 /// 创建激光枪
 fn Game::create_laser_rifle(self : Self, owner_id : Int) -> Unit {
-	let bodydef:@box2d.B2BodyDef=@map_loader.get_bodydef_from_raw(Some(gun_body), None) catch {
-		_=> {
-			println("Failed to create body definition for LaserRifle")
-			@box2d.b2BodyDef()
-		}
-	}
 	let centerpos=self.particle_list[owner_id].right_forearm.getCenterPosition()
 	let rotate =self.particle_list[owner_id].right_forearm.getRotation()
 	let handpos=@box2d.b2Vec2(-@cmath.sin(rotate)*0.25+centerpos.getX(),-@cmath.cos(rotate)*0.25+centerpos.getY())
 
-	bodydef.setPosition(@box2d.b2Vec2(handpos.getX()+gun_body_shift.getX(), handpos.getY()+gun_body_shift.getY()))
-	
 	self.weapon.gun_index+=1
+	
+	// 创建武器body（使用简化的box形状，并设置正确的碰撞组）
+	let owner_collision_group = -(owner_id + 1000)
+	let weapon_body_def = @box2d.b2BodyDef()
+	weapon_body_def.setPosition(@box2d.b2Vec2(handpos.getX()+gun_body_shift.getX(), handpos.getY()+gun_body_shift.getY()))
+	
+	let weapon_box_def = @box2d.b2BoxDef()
+	weapon_box_def.setExtents(@box2d.b2Vec2(0.25, 0.5))
+	weapon_box_def.setDensity(0.01)
+	weapon_box_def.setFriction(0.3)
+	weapon_box_def.setRestitution(0.5)
+	weapon_box_def.setGroupIndex(owner_collision_group)
+	weapon_body_def.addShape(weapon_box_def.getBase())
 	
 	let gun:Gun=Gun::{
 		id:self.weapon.gun_index,
 		owner_id:owner_id,
-		body:self.world.createBody(bodydef),
+		body:self.world.createBody(weapon_body_def),
 		
 		// 激光枪配置（科幻武器，极高速度）
 		bullet_damage: 15.0,
