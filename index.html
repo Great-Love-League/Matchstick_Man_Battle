@@ -1,11 +1,17 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <script type="text/javascript">const min = Math.min;</script>
 <head>
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js" ></script>
+    <script type="text/javascript">
+    jQuery.noConflict();
+    Object.extend = jQuery.extend;
+    </script>
+    <script src="lib/jquery.svg.min.js"></script>
+    
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Matchstick Man Battle</title>
-    <link rel="stylesheet" href="./styles.css">
+    <title>My Game</title>
     <style type="text/css">
         @font-face {
             font-family: "ThaleahFat";
@@ -14,143 +20,13 @@
             font-style: normal;
         }
     </style>
-</head>
-
-<body>
-    <div class="app">
-        <header class="site-header">
-            <h1 class="title">Matchstick Man Battle</h1>
-            <p class="subtitle">轻量小游戏 · 挑战你的反应与技巧</p>
-        </header>
-
-        <main class="content">
-            <div class="game-card">
-                <!-- p5.js will create and inject the canvas here -->
-                <div class="game-overlay">
-                    <div class="hud-left">得分: <span id="score">0</span></div>
-                    <div class="hud-right">关卡: <span id="level">1</span></div>
-                </div>
-            </div>
-
-            <section class="instructions">
-                <h2>操作说明</h2>
-                <ul class="controls">
-                    <li><strong>方向键</strong> — 移动/跳跃</li>
-                    <li><strong>空格</strong> — 攻击 / 确认</li>
-                    <li><strong>M</strong> — 静音/开启声音</li>
-                </ul>
-                <p class="note">提示：如果画面没有居中，请尝试刷新或在不同分辨率下打开页面。</p>
-            </section>
-        </main>
-
-        <footer class="site-footer">
-            <div>制作：Matchstick 社区 · 使用 p5.js / box2d</div>
-            <div>资源：assets/Background</div>
-        </footer>
-    </div>
-
-    <!-- 将脚本放在底部以改善首屏渲染；保留现有脚本引用作为主逻辑 -->
-    <!-- p5 CDN 作为回退，以防本地 p5 路径不正确 -->
-    <script src="https://cdn.jsdelivr.net/npm/p5@1.6.0/lib/p5.min.js"></script>
-    <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js" ></script>
-    <script type="text/javascript">
-    jQuery.noConflict();
-    Object.extend = jQuery.extend;
-    </script>
-    <script src="lib/jquery.svg.min.js"></script>
     <script src="./box2d.js"></script>
     <script src=".mooncakes\Demonmasterlqx\MoonP5\p5.js"></script>
     <script src="./target/js/release/build/server/server.js"></script>
-    <!-- If p5 creates a canvas outside the .game-card, move it inside and size it to fit. Also resize on container/window changes. -->
-    <script>
-    (function(){
-        var lastCanvas = null;
-        var resizeTimer = null;
+</head>
 
-        function findCanvas(){
-            return document.getElementById('defaultCanvas0') || document.getElementById('canvas') || document.querySelector('canvas');
-        }
-
-        function getP5InstanceFromCanvas(canvas){
-            if(!canvas) return null;
-            // common places where p5 instance might be attached
-            return canvas._pInst || canvas._p5 || canvas._p5Instance || window._p5 || null;
-        }
-
-        function applySizing(card, canvas){
-            if(!card || !canvas) return;
-            var dpr = window.devicePixelRatio || 1;
-            // record original ratio if not set
-            if(!canvas._originalWidth || !canvas._originalHeight){
-                canvas._originalWidth = canvas.width || parseInt(canvas.getAttribute('width')) || 1000;
-                canvas._originalHeight = canvas.height || parseInt(canvas.getAttribute('height')) || 1000;
-                canvas._originalRatio = canvas._originalHeight / Math.max(1, canvas._originalWidth);
-            }
-            var cssWidth = Math.min(card.clientWidth, 980);
-            var pixelWidth = Math.round(cssWidth * dpr);
-            var pixelHeight = Math.max(1, Math.round(pixelWidth * canvas._originalRatio));
-
-            // try to find p5 instance attached
-            var p5inst = getP5InstanceFromCanvas(canvas);
-            try{
-                if(p5inst && typeof p5inst.resizeCanvas === 'function'){
-                    // p5 expects pixel values
-                    p5inst.resizeCanvas(pixelWidth, pixelHeight);
-                } else if(window.resizeCanvas && typeof window.resizeCanvas === 'function'){
-                    // global-mode p5
-                    window.resizeCanvas(pixelWidth, pixelHeight);
-                } else {
-                    // fallback: directly set canvas internal buffer and CSS size
-                    canvas.width = pixelWidth;
-                    canvas.height = pixelHeight;
-                }
-            }catch(e){
-                // if p5 resize fails, fallback to direct sizing
-                canvas.width = pixelWidth;
-                canvas.height = pixelHeight;
-            }
-
-            // CSS size (logical pixels)
-            canvas.style.width = cssWidth + 'px';
-            canvas.style.height = (pixelHeight / dpr) + 'px';
-            if(!canvas.classList.contains('game-canvas')) canvas.classList.add('game-canvas');
-            canvas.style.display = 'block';
-            canvas.style.maxWidth = '980px';
-        }
-
-        function relocateAndFit(){
-            var card = document.querySelector('.game-card');
-            if(!card) return;
-            var canvas = findCanvas();
-            if(!canvas) return;
-            if(!card.contains(canvas)){
-                card.insertBefore(canvas, card.firstChild);
-            }
-            // avoid repeated DOM thrash
-            if(canvas !== lastCanvas){
-                lastCanvas = canvas;
-            }
-            applySizing(card, canvas);
-        }
-
-        function debounceRelocate(){
-            if(resizeTimer) clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(function(){ relocateAndFit(); }, 100);
-        }
-
-        if(document.readyState === 'complete' || document.readyState === 'interactive'){
-            setTimeout(relocateAndFit, 150);
-        } else {
-            document.addEventListener('DOMContentLoaded', function(){ setTimeout(relocateAndFit,150); });
-        }
-
-        // resize on window/container changes
-        window.addEventListener('resize', debounceRelocate);
-        // observe DOM because p5 may create canvas asynchronously
-        var obs = new MutationObserver(function(){ relocateAndFit(); });
-        obs.observe(document.body, { childList:true, subtree:true });
-    })();
-    </script>
+<body>
+    <canvas id="canvas" style="display: block; margin: 0 auto;" height="32" width="32"></canvas>
 </body>
 
 </html>
