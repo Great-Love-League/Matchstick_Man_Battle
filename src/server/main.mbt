@@ -175,14 +175,33 @@ fn load_custom_functions(game:Game) -> Unit {
     )
   )
 
-  /// 自动瞄准切换功能 - T键切换自动瞄准
+  /// 自动瞄准切换功能 - T键（玩家0）和 Slash键（玩家1）切换自动瞄准
   game.register_custom_function(
     GameCustomFunction::new(
       GameRunning,
       fn(game: Game, p5: @p5js.P5Instance) {
+        // 玩家0: T键切换自动瞄准
         if p5.keyIsDown(KeyT) {
           // 使用cooldown避免重复触发
           let player_id = 0
+          if game.frame_count % 30 == 0 {  // 每半秒最多切换一次
+            game.toggle_auto_aim(player_id)
+            match game.get_auto_aim_config(player_id) {
+              Some(config) => {
+                if config.enabled {
+                  println("玩家 \{player_id}: 自动瞄准已启用")
+                } else {
+                  println("玩家 \{player_id}: 自动瞄准已禁用")
+                }
+              }
+              None => ()
+            }
+          }
+        }
+        
+        // 玩家1: Slash(/)键切换自动瞄准
+        if p5.keyIsDown(Slash) {
+          let player_id = 1
           if game.frame_count % 30 == 0 {  // 每半秒最多切换一次
             game.toggle_auto_aim(player_id)
             match game.get_auto_aim_config(player_id) {
@@ -254,10 +273,10 @@ fn register_control(game:Game) -> Unit{
 fn register_auto_aim(game:Game) -> Unit {
   // 为玩家0注册自动瞄准配置
   // 默认禁用，可通过T键切换
-  // 默认仅瞄准敌人，最大范围50米
+  // 默认瞄准其他玩家和敌人，最大范围50米
   let config_player0 = AutoAimConfig::new(
     enabled=false,
-    target_types=[EntityType::Enemy],
+    target_types=[EntityType::Player, EntityType::Enemy],
     max_range=50.0
   )
   game.register_auto_aim_config(0, config_player0)
@@ -265,14 +284,15 @@ fn register_auto_aim(game:Game) -> Unit {
   // 为玩家1注册自动瞄准配置
   let config_player1 = AutoAimConfig::new(
     enabled=false,
-    target_types=[EntityType::Enemy],
+    target_types=[EntityType::Player, EntityType::Enemy],
     max_range=50.0
   )
   game.register_auto_aim_config(1, config_player1)
   
   println("自动瞄准系统已初始化")
   println("  - 按 T 键切换自动瞄准开关")
-  println("  - 默认仅瞄准敌方AI实体")
+  println("  - 可瞄准其他玩家和敌方AI实体")
+  println("  - 自动排除瞄准自己")
   println("  - 最大瞄准距离: 50米")
 }
 
