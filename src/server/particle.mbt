@@ -178,11 +178,11 @@ fn Game::particle_walk(self:Self,particle : Particle, direction : Double) -> Uni
   let index = self.which_platform(particle)
   if index == -1 {
 		particle.control.stand_cooldown -= 1
-  	maintain_rotation(particle.torso, 0, kp=100.0, kd=10.0)
+		maintain_rotation(particle.torso, 0, kp=100.0, kd=10.0)
 		particle.torso.applyForce(
-		@box2d.b2Vec2(20.0 * direction, 0.0),
-		particle.torso.getCenterPosition(),
-	)
+			@box2d.b2Vec2(20.0 * direction, 0.0),
+			particle.torso.getCenterPosition(),
+		)
     return
   }
   let platform = self.platform_list[index]
@@ -193,6 +193,8 @@ fn Game::particle_walk(self:Self,particle : Particle, direction : Double) -> Uni
 	}
 	
 	if p_angle > 0.5 || p_angle < -0.5 {
+		particle.control.stand_cooldown -= 1
+		maintain_rotation(particle.torso, 0, kp=100.0, kd=10.0)
 		particle.torso.applyForce(
 			@box2d.b2Vec2(20.0 * direction, 0.0),
 			particle.torso.getCenterPosition(),

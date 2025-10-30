@@ -349,6 +349,8 @@ fn main {
 	let game = create_game()
 	
 	
+	load_map(game,4)|> ignore
+	
   box2d_init(game)
 	
   load_custom_functions(game)
