@@ -79,6 +79,7 @@ struct ParticleControlConfig {
 	right_key : @p5js.KeyCode
 	jump_key : @p5js.KeyCode
 	shoot_key : @p5js.KeyCode
+	faint_key : @p5js.KeyCode
 	toggle_auto_aim_key : @p5js.KeyCode  // 切换自动瞄准的按键
 
 	target_ip : String
@@ -91,6 +92,7 @@ fn ParticleControlConfig::new(
 	left_key~ : @p5js.KeyCode? = Some(KeyA),
 	right_key~ : @p5js.KeyCode? = Some(KeyD),
 	jump_key~ : @p5js.KeyCode? = Some(KeyW),
+	faint_key~ : @p5js.KeyCode? = Some(KeyS),
 	shoot_key~ : @p5js.KeyCode? = Some(KeyZ),
 	toggle_auto_aim_key~ : @p5js.KeyCode? = Some(KeyT),  // 默认使用T键
 	from_internet~ : Bool = false,
@@ -111,6 +113,7 @@ fn ParticleControlConfig::new(
 			right_key: @p5js.UnknownKey,
 			jump_key: @p5js.UnknownKey,
 			shoot_key: @p5js.UnknownKey,
+			faint_key: @p5js.UnknownKey,
 			toggle_auto_aim_key: @p5js.UnknownKey,
 			target_ip: target_ip.unwrap(),
 			target_port: target_port.unwrap(),
@@ -131,6 +134,7 @@ fn ParticleControlConfig::new(
 			right_key: right_key.unwrap(),
 			jump_key: jump_key.unwrap(),
 			shoot_key: shoot_key.unwrap(),
+			faint_key: faint_key.unwrap(),
 			toggle_auto_aim_key: toggle_auto_aim_key.unwrap(),
 			target_ip: "",
 			target_port: 0,
@@ -330,7 +334,9 @@ fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : 
 			}
 		}
 	}
-
+	if(p.keyIsDown(control_config.faint_key)){
+		return
+	}
 	if(p.keyIsDown((control_config.left_key))){
 		self.particle_walk(particle,-1)
 	}
@@ -379,21 +385,21 @@ fn Game::create_static_box(
 }
 
 fn create_game() -> Game{
-	let world = create_world(level=level1,flag=true)
+	let world = create_world()
 	
-	let platform_list=Array::new()
-	for body in world.getBodyList() {
-		if body.getMass() == 0.0 {
-			platform_list.push(body)
-		}
-	}
+	// let platform_list=Array::new()
+	// for body in world.getBodyList() {
+	// 	if body.getMass() == 0.0 {
+	// 		platform_list.push(body)
+	// 	}
+	// }
 	
-	for i in platform_list {
-		let sh = i.getShapeList()
-		for j in sh {
-			let t = j.getBase().getFriction()
-		}
-	}
+	// for i in platform_list {
+	// 	let sh = i.getShapeList()
+	// 	for j in sh {
+	// 		let t = j.getBase().getFriction()
+	// 	}
+	// }
 	
 	let weapon=create_weapon_manager()
 	
@@ -424,6 +430,9 @@ fn create_game() -> Game{
 		custom_functions : Array::new(),
 		auto_aim_configs : Array::new()
 	}
+	
+	load_map(game,3)|> ignore
+	
 	game
 }
 
