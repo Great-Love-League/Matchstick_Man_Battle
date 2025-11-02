@@ -209,7 +209,7 @@ fn register_control(game:Game) -> Unit{
     }
   }
 
-  // 玩家1: 方向键移动，Down射击，Slash(/)切换自动瞄准
+  // 玩家1: 方向键移动，句号(.)射击，Slash(/)切换自动瞄准
   game.register_particle_control_config(
     ParticleControlConfig::new(
       1,
@@ -217,7 +217,7 @@ fn register_control(game:Game) -> Unit{
       right_key = Some(@p5js.ArrowRight),
       jump_key = Some(@p5js.ArrowUp),
 			faint_key = Some(@p5js.ArrowDown),
-      shoot_key = Some(@p5js.Slash),
+      shoot_key = Some(@p5js.Period),
       toggle_auto_aim_key = Some(@p5js.Slash),
       from_internet = false,
     )
