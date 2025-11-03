@@ -141,7 +141,7 @@ fn load_custom_functions(game:Game) -> Unit {
                 // 没有自动瞄准目标，使用鼠标位置
                 let mouse_x = p5.getMouseX().to_double()
                 let mouse_y = p5.getMouseY().to_double()
-                let world_coords = screen_to_world(Width, Height, mouse_x, mouse_y, PPM)
+                let world_coords = screen_to_world(mouse_x, mouse_y)
                 let player_pos = game.particle_list[player_id].torso.getCenterPosition()
                 let dx = world_coords.0 - player_pos.getX()
                 let dy = world_coords.1 - player_pos.getY()
@@ -152,7 +152,7 @@ fn load_custom_functions(game:Game) -> Unit {
               // 没有配置自动瞄准，使用鼠标位置
               let mouse_x = p5.getMouseX().to_double()
               let mouse_y = p5.getMouseY().to_double()
-              let world_coords = screen_to_world(Width, Height, mouse_x, mouse_y, PPM)
+              let world_coords = screen_to_world(mouse_x, mouse_y)
               let player_pos = game.particle_list[player_id].torso.getCenterPosition()
               let dx = world_coords.0 - player_pos.getX()
               let dy = world_coords.1 - player_pos.getY()
@@ -265,7 +265,7 @@ pub fn register_hp_show(game:Game) -> Unit {
           // 获取角色躯干中心（world 坐标）
           let pos = particle.torso.getCenterPosition()
           // 往上偏移约 1.5 米（角色头顶位置）
-          let screen_pos = world_to_screen(Width, Height, pos.getX(), pos.getY(), PPM)
+          let screen_pos = world_to_screen(pos.getX(), pos.getY())
 
           let x = screen_pos.0
           let y = screen_pos.1 - 50.0
@@ -373,9 +373,6 @@ fn main {
 
   register_show_mouse_screen_coords(game)
 
-  let p5_instance = getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
-    game.state_machine_update(p)
-  })
+  game.start_run()
 
-  p5_instance |> ignore
 }

@@ -1,4 +1,4 @@
-pub extern "js" fn getP5Instance(
+extern "js" fn getP5Instance(
   drawww : (@p5js.P5Instance) -> Unit,
   width~ : Double = Width,
   height~ : Double = Height
@@ -34,7 +34,7 @@ pub extern "js" fn getP5Instance(
 /// canvas 的原点在画布左上角
 /// box2d 的原点在画布宽度的二分之一处，画布高度的最下面
 /// 首先通过 ppm 将单位进行转换，然后通过坐标系转换，最后进行平移
-pub fn world_to_screen(world_width: Double, world_height: Double, x: Double, y: Double, ppm : Double) -> (Double, Double) {
+pub fn world_to_screen(world_width~: Double = Width, world_height~: Double = Height, x: Double, y: Double, ppm~: Double = PPM) -> (Double, Double) {
   let screen_x_pixle_num = world_width
   let screen_y_pixle_num = world_height
   //println("Canvas Width: \{screen_x_pixle_num}, Height: \{screen_y_pixle_num}")
@@ -53,7 +53,7 @@ pub fn world_to_screen(world_width: Double, world_height: Double, x: Double, y: 
 /// canvas 的原点在画布左上角
 /// box2d 的原点在画布宽度的二分之一处，画布高度的最下面
 /// 首先通过 ppm 将单位进行转换，然后通过坐标系转换，最后进行平移
-pub fn screen_to_world(world_width: Double, world_height: Double, x: Double, y: Double, ppm : Double) -> (Double, Double) {
+pub fn screen_to_world(world_width~: Double = Width, world_height~: Double = Height, x: Double, y: Double, ppm~: Double = PPM) -> (Double, Double) {
   let screen_x_pixle_num = world_width
   let screen_y_pixle_num = world_height
   return ((x - screen_x_pixle_num/2.0) / ppm, (screen_y_pixle_num - y) / ppm)
@@ -79,7 +79,7 @@ pub fn drawPolygon(p: &@p5js.P5JS, shape: @box2d.B2PolygonShape) -> Unit {
   // 转换为屏幕坐标
   let screen_position : Array[(Double, Double)] = Array::new()
   for gvec in global_position {
-    let screen_coords = world_to_screen(Width, Height, gvec.getX(), gvec.getY(), PPM)
+    let screen_coords = world_to_screen(gvec.getX(), gvec.getY())
     screen_position.push(screen_coords)
   }
   // 绘制多边形
@@ -94,7 +94,7 @@ pub fn drawPolygon(p: &@p5js.P5JS, shape: @box2d.B2PolygonShape) -> Unit {
 pub fn drawCircle(p: &@p5js.P5JS, shape: @box2d.B2CircleShape) -> Unit{
   let position = shape.getBody().getWorldPoint(shape.getLocalPosition())
   let radius = shape.getRadius()
-  let screen_pos = world_to_screen(Width, Height, position.getX(), position.getY(), PPM)
+  let screen_pos = world_to_screen(position.getX(), position.getY())
   let screen_radius = world_to_screen_size(radius, PPM)
 //   println("Circle Position: \{position.getX()} , \{position.getY()}")
 //   println("Circle Screen Position: \{screen_pos.0} , \{screen_pos.1}")
