@@ -190,7 +190,7 @@ fn load_custom_functions(game:Game) -> Unit {
 
 }
 
-fn register_control(game:Game) -> Unit{
+pub fn register_control(game:Game) -> Unit{
   // 玩家0: WASD移动，Z射击，T切换自动瞄准
   game.register_particle_control_config(
     ParticleControlConfig::new(
@@ -228,7 +228,7 @@ fn register_control(game:Game) -> Unit{
   }
 }
 
-fn register_auto_aim(game:Game) -> Unit {
+pub fn register_auto_aim(game:Game) -> Unit {
   // 为玩家0注册自动瞄准配置
   // 默认禁用，可通过T键切换
   // 默认瞄准其他玩家和敌人，最大范围50米
@@ -254,7 +254,7 @@ fn register_auto_aim(game:Game) -> Unit {
   println("  - 最大瞄准距离: 50米")
 }
 
-fn register_hp_show(game:Game) -> Unit {
+pub fn register_hp_show(game:Game) -> Unit {
   game.register_custom_function(
     GameCustomFunction::new(
       GameRunning,
@@ -322,13 +322,23 @@ fn register_hp_show(game:Game) -> Unit {
           p5.text(particle.control.health.to_string(), text_x + 1.0, text_y + 1.0, None, None)
           p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
           p5.text(particle.control.health.to_string(), text_x, text_y, None, None)
+
+          // 显示 是玩家几 (先绘制阴影，再绘制白色文字)
+          let text_x = left + (bar_w + 2.0) / 2.0
+          let text_y = top - 10.0
+          p5.textSizeSet(12.0)
+          p5.fillColorPara(0.0, Some(0.0), Some(0.0), Some(180.0))
+          p5.text("P \{particle.index}", text_x + 1.0, text_y + 1.0, None, None)
+          p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
+          p5.text("P \{particle.index}", text_x, text_y, None, None)
+
         }
       }
     )
   )
 }
 
-fn register_show_mouse_screen_coords(game:Game) -> Unit {
+pub fn register_show_mouse_screen_coords(game:Game) -> Unit {
   game.register_custom_function(
     GameCustomFunction::new(
       GameRunning,
@@ -364,10 +374,8 @@ fn main {
   register_show_mouse_screen_coords(game)
 
   let p5_instance = getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
-    clear_screen(p)
     game.state_machine_update(p)
-    draw_world(p, game.world)
-  }, width=Width, height=Height)
+  })
 
   p5_instance |> ignore
 }
