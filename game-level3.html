@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<script type="text/javascript">const min = Math.min;</script>
+<head>
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js" ></script>
+    <script type="text/javascript">
+    jQuery.noConflict();
+    Object.extend = jQuery.extend;
+    </script>
+    <script src="lib/jquery.svg.min.js"></script>
+    
+    <meta charset="UTF-8">
+    <title>My Game</title>
+    <style type="text/css">
+        @font-face {
+            font-family: "ThaleahFat";
+            src: url("./ThaleahFat.ttf") format("truetype");
+            font-weight: normal;
+            font-style: normal;
+        }
+    </style>
+    <script src="./box2d.js"></script>
+    <script src=".mooncakes\Demonmasterlqx\MoonP5\p5.js"></script>
+    <script src="./target/js/release/build/game-level3/game-level3.js"></script>
+</head>
+
+<body>
+    <div style="text-align:center; margin:12px 0;">
+        <button id="back-to-menu" style="padding:8px 14px; font-size:14px; cursor:pointer; border-radius:6px; background:linear-gradient(90deg,#ff6ec7,#00f0ff); color:#fff; border:none; box-shadow:0 4px 12px rgba(0,0,0,0.25);">返回菜单</button>
+    </div>
+    <canvas id="canvas" style="display: block; margin: 0 auto;" height="32" width="32"></canvas>
+    <script type="text/javascript">
+        document.getElementById('back-to-menu').addEventListener('click', function() {
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+
+</html>

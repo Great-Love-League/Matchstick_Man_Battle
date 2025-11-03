@@ -1,5 +1,5 @@
 
-fn load_map(game:Game, level : Int) -> Bool {
+pub fn load_map(game:Game, level : Int) -> Bool {
   game.create_particle((-10.0, 12.0)) |> ignore
   game.create_particle((-5.0, 12.0)) |> ignore
 	match level {

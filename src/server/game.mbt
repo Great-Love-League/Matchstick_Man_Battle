@@ -135,7 +135,7 @@ pub fn ParticleControlConfig::new(
 }
 
 ///| 游戏状态
-enum GameState {
+pub(all) enum GameState {
 	GamePreparing
 	GameRunning
 	GamePaused
@@ -504,4 +504,12 @@ pub fn Game::is_contact(self:Self,a:@box2d.B2Body, b:@box2d.B2Body)->Bool{
 		}
 	}
 	false
+}
+
+// 开始游戏运行，不阻塞
+pub fn Game::start_run(self:Self) -> Unit {
+	self.state = GamePreparing
+	getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
+		self.state_machine_update(p)
+	}) |> ignore
 }

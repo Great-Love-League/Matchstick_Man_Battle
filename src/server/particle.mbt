@@ -14,7 +14,7 @@ let j_dur_B : Int = 1 // 后3帧膝盖伸直
 let j_dur_C : Int = 20 // 后3帧膝盖伸直
 let jump_force : Double = 200.0 // 跳跃力大小
 
-pub struct ParticleControl{
+pub(all) struct ParticleControl{
 	mut walk_state : Bool
 	mut walk_direction : Double
 	mut walk_cooldown : Int
@@ -26,7 +26,7 @@ pub struct ParticleControl{
 	mut faint_resistance : Int
 	mut stand_cooldown : Int
 }
-pub struct Particle{
+pub(all) struct Particle{
 	torso : @box2d.B2Body
 	head : @box2d.B2Body
 	left_thigh : @box2d.B2Body

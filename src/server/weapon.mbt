@@ -390,13 +390,13 @@ pub impl WeaponDestroy for Gun with destroy(self, game){
 
 ///|
 /// 创建手枪（快捷方法）
-fn Game::create_pistol(self : Self, owner_id : Int) -> Unit {
+pub fn Game::create_pistol(self : Self, owner_id : Int) -> Unit {
 	Gun::create(self, owner_id)  // 默认就是手枪
 }
 
 ///|
 /// 创建霰弹枪
-fn Game::create_shotgun(self : Self, owner_id : Int) -> Unit {
+pub fn Game::create_shotgun(self : Self, owner_id : Int) -> Unit {
 	let centerpos=self.particle_list[owner_id].right_forearm.getCenterPosition()
 	let rotate =self.particle_list[owner_id].right_forearm.getRotation()
 	let handpos=@box2d.b2Vec2(-@cmath.sin(rotate)*0.25+centerpos.getX(),-@cmath.cos(rotate)*0.25+centerpos.getY())
@@ -438,7 +438,7 @@ fn Game::create_shotgun(self : Self, owner_id : Int) -> Unit {
 
 ///|
 /// 创建狙击枪
-fn Game::create_sniper(self : Self, owner_id : Int) -> Unit {
+pub fn Game::create_sniper(self : Self, owner_id : Int) -> Unit {
 	let centerpos=self.particle_list[owner_id].right_forearm.getCenterPosition()
 	let rotate =self.particle_list[owner_id].right_forearm.getRotation()
 	let handpos=@box2d.b2Vec2(-@cmath.sin(rotate)*0.25+centerpos.getX(),-@cmath.cos(rotate)*0.25+centerpos.getY())
@@ -480,7 +480,7 @@ fn Game::create_sniper(self : Self, owner_id : Int) -> Unit {
 
 ///|
 /// 创建激光枪
-fn Game::create_laser_rifle(self : Self, owner_id : Int) -> Unit {
+pub fn Game::create_laser_rifle(self : Self, owner_id : Int) -> Unit {
 	let centerpos=self.particle_list[owner_id].right_forearm.getCenterPosition()
 	let rotate =self.particle_list[owner_id].right_forearm.getRotation()
 	let handpos=@box2d.b2Vec2(-@cmath.sin(rotate)*0.25+centerpos.getX(),-@cmath.cos(rotate)*0.25+centerpos.getY())
