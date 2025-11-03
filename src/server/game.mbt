@@ -4,6 +4,7 @@ pub suberror GameStateError String
 pub(all) struct Game {
 	world : @box2d.B2World
 	weapon : WeaponManager
+	render : &Renderable
 	mut state : GameState
 	mut particle_list:Array[Particle]
 	mut particle_index:Int
@@ -193,6 +194,7 @@ fn Game::run_custom_functions(self:Self, stage:GameState, p5: @p5js.P5Instance) 
 }
 
 fn Game::state_machine_update(self:Self, p5: @p5js.P5Instance) -> Unit {
+	self.render.clear_screen(self.world, p5)
 	match self.state {
 		GamePreparing => {
 			self.prepare(p5)
@@ -207,6 +209,7 @@ fn Game::state_machine_update(self:Self, p5: @p5js.P5Instance) -> Unit {
 			self.game_over(p5)
 		}
 	}
+	self.render.render(self.world, p5)
 }
 
 fn Game::prepare(self:Self, p5: @p5js.P5Instance) -> Unit {
@@ -379,7 +382,7 @@ pub fn Game::create_static_box(
 	body
 }
 
-pub fn create_game() -> Game{
+pub fn create_game(render~: &Renderable = DefaultRenderable::{}) -> Game{
 	let world = create_world()
 	
 	// let platform_list=Array::new()
@@ -411,6 +414,7 @@ pub fn create_game() -> Game{
 	let game = Game::{
 		world,
 		weapon,
+		render,
 		state: GameRunning,
 		particle_list:Array::new(),
 		particle_index:0,

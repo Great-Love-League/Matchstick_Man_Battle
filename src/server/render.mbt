@@ -1,7 +1,7 @@
-extern "js" fn getP5Instance(
+pub extern "js" fn getP5Instance(
   drawww : (@p5js.P5Instance) -> Unit,
-  width~ : Double = 400,
-  height~ : Double = 400
+  width~ : Double = Width,
+  height~ : Double = Height
 ) -> @p5js.P5Instance = 
   #| (drawww, width, height) => {
   #|   a = new p5((p)=>{
@@ -34,7 +34,7 @@ extern "js" fn getP5Instance(
 /// canvas 的原点在画布左上角
 /// box2d 的原点在画布宽度的二分之一处，画布高度的最下面
 /// 首先通过 ppm 将单位进行转换，然后通过坐标系转换，最后进行平移
-fn world_to_screen(world_width: Double, world_height: Double, x: Double, y: Double, ppm : Double) -> (Double, Double) {
+pub fn world_to_screen(world_width: Double, world_height: Double, x: Double, y: Double, ppm : Double) -> (Double, Double) {
   let screen_x_pixle_num = world_width
   let screen_y_pixle_num = world_height
   //println("Canvas Width: \{screen_x_pixle_num}, Height: \{screen_y_pixle_num}")
@@ -105,8 +105,9 @@ pub fn drawCircle(p: &@p5js.P5JS, shape: @box2d.B2CircleShape) -> Unit{
 }
 
 
-pub fn draw_world(p: &@p5js.P5JS, world: @box2d.B2World) -> Unit {
+pub fn DefaultRenderable::draw_world(self: DefaultRenderable, p: &@p5js.P5JS, world: &@box2d.World) -> Unit {
   // p.background(255.0, Some(204.0), Some(0.0), None)
+  self |> ignore
   for body in world.getBodyList() {
     for shape in body.getShapeList() {
       // 填充颜色
@@ -123,8 +124,28 @@ pub fn draw_world(p: &@p5js.P5JS, world: @box2d.B2World) -> Unit {
   }
 }
 
-pub fn clear_screen(p: &@p5js.P5JS) -> Unit {
+pub fn DefaultRenderable::clear_screen(self: DefaultRenderable, p: &@p5js.P5JS) -> Unit {
+  self |> ignore
   p.background(255.0, Some(204.0), Some(0.0), None)
+}
+pub(all) struct DefaultRenderable {}
+
+pub impl Renderable for DefaultRenderable with render(self: DefaultRenderable, world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
+  self.draw_world(p, world)
+}
+
+pub impl Renderable for DefaultRenderable with clear_screen(self: DefaultRenderable, world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
+  world |> ignore 
+  self.clear_screen(p)
+}
+
+pub trait Renderable {
+
+  // 绘画函数，在所有更新逻辑之后调用，用于绘画物理世界，但是不包含特效等
+  render(self: Self, world: &@box2d.World, p: &@p5js.P5JS) -> Unit
+
+  // 在每次绘画前清屏
+  clear_screen(self: Self, world: &@box2d.World, p: &@p5js.P5JS) -> Unit 
 }
 
 // -------------------- 绘画相关 结束 ---------------------
