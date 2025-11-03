@@ -61,7 +61,7 @@ fn load_map(game:Game, level : Int) -> Bool {
 	}
 }
 
-let level1:String=
+pub let level1:String=
 #|{
 #|  "world_settings": {
 #|    "gravity": [

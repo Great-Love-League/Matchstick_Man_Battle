@@ -54,7 +54,7 @@ pub fn AutoAimConfig::set_max_range(self : AutoAimConfig, range : Double) -> Uni
 }
 
 ///| 获取所有可瞄准的实体列表
-fn Game::get_all_targetable_entities(
+pub fn Game::get_all_targetable_entities(
   self : Game, 
   attacker_id : Int,  // 攻击者ID（避免瞄准自己）
   config : AutoAimConfig
@@ -134,7 +134,7 @@ fn Game::get_all_targetable_entities(
 }
 
 ///| 查找最近的目标
-fn Game::find_nearest_target(
+pub fn Game::find_nearest_target(
   self : Game,
   attacker_id : Int,
   config : AutoAimConfig

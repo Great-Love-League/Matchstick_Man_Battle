@@ -130,7 +130,7 @@ fn load_custom_functions(game:Game) -> Unit {
       GameRunning,
       fn(game: Game, p5: @p5js.P5Instance) {
         // 检查是否按下鼠标左键
-        if mouseIsPressed(p5) {
+        if p5.mouseIsPressed() {
           let player_id = 0
           
           // 先检查是否启用自动瞄准
@@ -139,8 +139,8 @@ fn load_custom_functions(game:Game) -> Unit {
               Some(auto_angle) => auto_angle  // 使用自动瞄准角度
               None => {
                 // 没有自动瞄准目标，使用鼠标位置
-                let mouse_x = getMouseX(p5)
-                let mouse_y = getMouseY(p5)
+                let mouse_x = p5.getMouseX().to_double()
+                let mouse_y = p5.getMouseY().to_double()
                 let world_coords = screen_to_world(Width, Height, mouse_x, mouse_y, PPM)
                 let player_pos = game.particle_list[player_id].torso.getCenterPosition()
                 let dx = world_coords.0 - player_pos.getX()
@@ -150,8 +150,8 @@ fn load_custom_functions(game:Game) -> Unit {
             }
             None => {
               // 没有配置自动瞄准，使用鼠标位置
-              let mouse_x = getMouseX(p5)
-              let mouse_y = getMouseY(p5)
+              let mouse_x = p5.getMouseX().to_double()
+              let mouse_y = p5.getMouseY().to_double()
               let world_coords = screen_to_world(Width, Height, mouse_x, mouse_y, PPM)
               let player_pos = game.particle_list[player_id].torso.getCenterPosition()
               let dx = world_coords.0 - player_pos.getX()
@@ -333,8 +333,8 @@ fn register_show_mouse_screen_coords(game:Game) -> Unit {
     GameCustomFunction::new(
       GameRunning,
       fn(game: Game, p5: @p5js.P5Instance) {
-        let mouse_x = getMouseX(p5);
-        let mouse_y = getMouseY(p5);
+        let mouse_x = p5.getMouseX().to_double();
+        let mouse_y = p5.getMouseY().to_double();
         // 每秒输出一次鼠标屏幕坐标
         if game.frame_count % 60 == 0 {
           println("鼠标位置: (\{mouse_x}, \{mouse_y})");

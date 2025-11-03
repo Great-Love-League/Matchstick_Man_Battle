@@ -67,6 +67,7 @@ pub(open) trait WeaponDestroy {
 }
 
 impl WeaponControl with get_attack_field(self) -> Double {
+	self |> ignore
 	return 1.0
 }
 
