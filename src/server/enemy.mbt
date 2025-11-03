@@ -1,6 +1,6 @@
 
 
-enum ActionType{
+pub(all) enum ActionType{
 	// 巡逻
 	Patrol
 	// 追击
@@ -19,7 +19,7 @@ pub(open) trait EnemyTrait{
 	get_position(Self) -> (Double, Double)?  // 获取敌人位置
 }
 
-struct BoxEnemy {
+pub(all) struct BoxEnemy {
 	id : Int
 	//hp
 	hp : Double
@@ -72,7 +72,7 @@ pub impl EnemyTrait for BoxEnemy with destroy(self : BoxEnemy, game:Game) -> Uni
 
 }
 
-fn create_box_enemy(game:Game, position:(Double,Double)) -> Bool {
+pub fn create_box_enemy(game:Game, position:(Double,Double)) -> Bool {
 	let body = @map_loader.get_bodydef_from_raw(Some(@assets.BOXENEMY_BOX2D_DEFINITION), None) catch {
 		_ => {
 			println("Error loading BoxEnemy body definition")
@@ -109,6 +109,8 @@ fn create_box_enemy(game:Game, position:(Double,Double)) -> Bool {
 }
 
 pub impl EnemyTrait for BoxEnemy with update(self : BoxEnemy, game:Game) {
+
+	game |> ignore
 
 	self.bodies[0].applyForce(self.acceleration, self.bodies[0].getCenterPosition())
 

@@ -59,16 +59,16 @@ pub fn screen_to_world(world_width: Double, world_height: Double, x: Double, y: 
   return ((x - screen_x_pixle_num/2.0) / ppm, (screen_y_pixle_num - y) / ppm)
 }
 
-fn screen_to_world_size(size: Double, ppm : Double) -> Double {
+pub fn screen_to_world_size(size: Double, ppm : Double) -> Double {
   return size / ppm
 }
 
-fn world_to_screen_size(size: Double, ppm : Double) -> Double {
+pub fn world_to_screen_size(size: Double, ppm : Double) -> Double {
   return size * ppm
 }
 
 
-fn drawPolygon(p: &@p5js.P5JS, shape: @box2d.B2PolygonShape) -> Unit {
+pub fn drawPolygon(p: &@p5js.P5JS, shape: @box2d.B2PolygonShape) -> Unit {
   // 获取顶点
   let vertices = shape.getVertices()
   let global_position : Array[@box2d.B2Vec2] = Array::new()
@@ -91,7 +91,7 @@ fn drawPolygon(p: &@p5js.P5JS, shape: @box2d.B2PolygonShape) -> Unit {
   p.endShape(Some("close"), None)  // "close" 表示闭合多边形
 }
 
-fn drawCircle(p: &@p5js.P5JS, shape: @box2d.B2CircleShape) -> Unit{
+pub fn drawCircle(p: &@p5js.P5JS, shape: @box2d.B2CircleShape) -> Unit{
   let position = shape.getBody().getWorldPoint(shape.getLocalPosition())
   let radius = shape.getRadius()
   let screen_pos = world_to_screen(Width, Height, position.getX(), position.getY(), PPM)
@@ -105,7 +105,7 @@ fn drawCircle(p: &@p5js.P5JS, shape: @box2d.B2CircleShape) -> Unit{
 }
 
 
-fn draw_world(p: &@p5js.P5JS, world: @box2d.B2World) -> Unit {
+pub fn draw_world(p: &@p5js.P5JS, world: @box2d.B2World) -> Unit {
   // p.background(255.0, Some(204.0), Some(0.0), None)
   for body in world.getBodyList() {
     for shape in body.getShapeList() {
@@ -123,7 +123,7 @@ fn draw_world(p: &@p5js.P5JS, world: @box2d.B2World) -> Unit {
   }
 }
 
-fn clear_screen(p: &@p5js.P5JS) -> Unit {
+pub fn clear_screen(p: &@p5js.P5JS) -> Unit {
   p.background(255.0, Some(204.0), Some(0.0), None)
 }
 

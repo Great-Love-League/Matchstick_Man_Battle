@@ -1,20 +1,7 @@
 pub suberror ParticleControlConfigError String
 pub suberror GameStateError String
 
-const GAME_BODY_NO_COLLISION_GROUP  = -1000
-
-///|
-/// 鼠标相关的JavaScript FFI函数
-extern "js" fn getMouseX(p : @p5js.P5Instance) -> Double = 
-  #| (p) => p.mouseX
-
-extern "js" fn getMouseY(p : @p5js.P5Instance) -> Double = 
-  #| (p) => p.mouseY
-
-extern "js" fn mouseIsPressed(p : @p5js.P5Instance) -> Bool = 
-  #| (p) => p.mouseIsPressed
-
-struct Game {
+pub(all) struct Game {
 	world : @box2d.B2World
 	weapon : WeaponManager
 	mut state : GameState
@@ -42,7 +29,7 @@ struct Game {
 	anchor : @box2d.B2Body
 }
 
-trait GameCustomFunctionTrait {
+pub trait GameCustomFunctionTrait {
 	call_custom_function(self: Self, game: Game, p5: @p5js.P5Instance) -> Unit
 	get_call_stage(self: Self) -> GameState
 }
@@ -72,7 +59,7 @@ pub impl GameCustomFunctionTrait for GameCustomFunction with get_call_stage(self
 
 
 ///| 玩家控制配置结构体
-struct ParticleControlConfig {
+pub(all) struct ParticleControlConfig {
 	from_internet : Bool
 
 	left_key : @p5js.KeyCode
@@ -87,7 +74,7 @@ struct ParticleControlConfig {
 	target_particle_index : Int
 }
 
-fn ParticleControlConfig::new(
+pub fn ParticleControlConfig::new(
 	target_particle_index : Int,
 	left_key~ : @p5js.KeyCode? = Some(KeyA),
 	right_key~ : @p5js.KeyCode? = Some(KeyD),
@@ -256,6 +243,14 @@ fn Game::running(self:Self, p5: @p5js.P5Instance) -> Unit {
 	
 	// 更新物品系统
 	self.update_all_items()
+
+	// 更新敌人系统
+	for enemy_opt in self.enemy_list {
+		match enemy_opt {
+			Some(enemy) => enemy.update(self)
+			None => ()
+		}
+	}
 	
 	// 更新自动瞄准系统（为每个玩家更新目标）
 	for i = 0; i < self.auto_aim_configs.length(); i = i + 1 {
@@ -367,7 +362,7 @@ pub const VIEWPORT_HEIGHT : Double = 1080 // 视口高度
 
 pub const Pi : Double = 3.141592653589793
 
-fn Game::create_static_box(
+pub fn Game::create_static_box(
 	self:Self,
 	position: (Double, Double),
 	size: (Double, Double)
@@ -384,7 +379,7 @@ fn Game::create_static_box(
 	body
 }
 
-fn create_game() -> Game{
+pub fn create_game() -> Game{
 	let world = create_world()
 	
 	// let platform_list=Array::new()
@@ -434,7 +429,7 @@ fn create_game() -> Game{
 	game
 }
 
-fn Game::create_dynamic_box(
+pub fn Game::create_dynamic_box(
 	self:Self,
 	position: (Double, Double),
 	size: (Double, Double),
@@ -455,7 +450,7 @@ fn Game::create_dynamic_box(
 	let body = self.world.createBody(body_def)
 	body
 }
-fn Game::create_revolute_joint(
+pub fn Game::create_revolute_joint(
 	self: Self,
 	body_a: @box2d.B2Body,
 	body_b: @box2d.B2Body,
@@ -474,7 +469,7 @@ fn Game::create_revolute_joint(
 	let joint = self.world.createJoint(joint_def.getBase())
 	joint
 }
-fn Game::create_prismatic_joint(
+pub fn Game::create_prismatic_joint(
 	self :Self,
 	body_a: @box2d.B2Body,
 	body_b: @box2d.B2Body,
@@ -495,7 +490,7 @@ fn Game::create_prismatic_joint(
 	let joint = self.world.createJoint(joint_def.getBase())
 	joint
 }
-fn Game::is_contact(self:Self,a:@box2d.B2Body, b:@box2d.B2Body)->Bool{
+pub fn Game::is_contact(self:Self,a:@box2d.B2Body, b:@box2d.B2Body)->Bool{
 	let contact_list=self.world.getContactList()
 	for contact in contact_list {
 		let bodyA=contact.getShape1().getBody()

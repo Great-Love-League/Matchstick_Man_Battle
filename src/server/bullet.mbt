@@ -40,7 +40,7 @@ pub struct Bullet {
 /// @param gravity_compensation 重力补偿系数，默认0.95（95%补偿，轻微下坠）
 /// @param collision_group 碰撞组索引，默认根据owner_id自动计算
 /// @return 创建的子弹对象
-fn Game::create_bullet(
+pub fn Game::create_bullet(
   self : Self,
   position : (Double, Double),
   velocity : (Double, Double),
@@ -100,7 +100,7 @@ fn Game::create_bullet(
   bullet
 }
 
-fn Game::update_bullet(self : Self, bullet : Bullet) -> Unit {
+pub fn Game::update_bullet(self : Self, bullet : Bullet) -> Unit {
   if not(bullet.is_active) {
     return
   }
@@ -142,7 +142,7 @@ fn Game::update_bullet(self : Self, bullet : Bullet) -> Unit {
 ///|
 /// 检测子弹与角色的碰撞
 /// 根据受击对象列表过滤目标
-fn Game::check_bullet_collision(self : Self, bullet : Bullet) -> Unit {
+pub fn Game::check_bullet_collision(self : Self, bullet : Bullet) -> Unit {
   // 检查玩家角色（如果目标包含Player或AllCharacters）
   let mut should_hit_players = false
   for target_type in bullet.target_types {
@@ -256,7 +256,7 @@ fn Game::check_bullet_collision(self : Self, bullet : Bullet) -> Unit {
 ///|
 /// 检测子弹与环境（静态物体）的碰撞
 /// 环境包括平台、墙壁等，子弹无法穿透环境，击中后直接回收
-fn Game::check_bullet_environment_collision(self : Self, bullet : Bullet) -> Unit {
+pub fn Game::check_bullet_environment_collision(self : Self, bullet : Bullet) -> Unit {
   // 检查与所有平台的碰撞
   for platform in self.platform_list {
     if self.is_contact(platform.get_body(), bullet.body) {
@@ -313,7 +313,7 @@ fn Game::check_bullet_environment_collision(self : Self, bullet : Bullet) -> Uni
   }
 }
 
-fn Game::update_all_bullets(self : Self) -> Unit {
+pub fn Game::update_all_bullets(self : Self) -> Unit {
   for bullet in self.bullet_list {
     if bullet.is_active {
       self.update_bullet(bullet)
@@ -334,7 +334,7 @@ fn Game::update_all_bullets(self : Self) -> Unit {
   }
 }
 
-fn Game::cleanup_bullets(self : Self) -> Unit {
+pub fn Game::cleanup_bullets(self : Self) -> Unit {
   let active_bullets : Array[Bullet] = Array::new()
   
   for bullet in self.bullet_list {
@@ -360,7 +360,7 @@ fn Game::cleanup_bullets(self : Self) -> Unit {
 /// @param gravity_compensation 重力补偿系数（0.0-1.0）
 /// @param recoil_horizontal 水平后坐力
 /// @param recoil_vertical 垂直后坐力
-fn Game::shoot_bullet_advanced(
+pub fn Game::shoot_bullet_advanced(
   self : Self, 
   player_index : Int, 
   direction : Double,
@@ -413,7 +413,7 @@ fn Game::shoot_bullet_advanced(
 /// 
 /// @param player_index 玩家索引
 /// @param direction 射击方向（-1.0 左，1.0 右）
-fn Game::shoot_bullet(self : Self, player_index : Int, direction : Double) -> Unit {
+pub fn Game::shoot_bullet(self : Self, player_index : Int, direction : Double) -> Unit {
   if player_index >= self.particle_list.length() {
     return
   }
@@ -467,7 +467,7 @@ fn Game::shoot_bullet(self : Self, player_index : Int, direction : Double) -> Un
 /// @param gravity_compensation 重力补偿系数
 /// @param recoil_horizontal 水平后坐力（沿射击方向的反向）
 /// @param recoil_vertical 垂直后坐力（向上的额外抬升）
-fn Game::shoot_bullet_at_angle(
+pub fn Game::shoot_bullet_at_angle(
   self : Self, 
   player_index : Int, 
   angle : Double,
@@ -532,7 +532,7 @@ fn Game::shoot_bullet_at_angle(
 /// @param gravity_compensation 重力补偿系数
 /// @param recoil_horizontal 水平后坐力
 /// @param recoil_vertical 垂直后坐力
-fn Game::shoot_penetrating_bullet_advanced(
+pub fn Game::shoot_penetrating_bullet_advanced(
   self : Self, 
   player_index : Int, 
   direction : Double,
@@ -584,7 +584,7 @@ fn Game::shoot_penetrating_bullet_advanced(
 /// @param player_index 玩家索引
 /// @param direction 射击方向
 /// @param penetration_count 穿透次数
-fn Game::shoot_penetrating_bullet(
+pub fn Game::shoot_penetrating_bullet(
   self : Self, 
   player_index : Int, 
   direction : Double,
@@ -635,7 +635,7 @@ fn Game::shoot_penetrating_bullet(
 /// @param gravity_compensation 重力补偿系数
 /// @param recoil_horizontal 水平后坐力（每发）
 /// @param recoil_vertical 垂直后坐力
-fn Game::shoot_shotgun(
+pub fn Game::shoot_shotgun(
   self : Self,
   player_index : Int,
   direction : Double,
@@ -701,7 +701,7 @@ fn Game::shoot_shotgun(
 /// 
 /// @param player_index 玩家索引
 /// @param direction 射击方向
-fn Game::shoot_at_enemies(self : Self, player_index : Int, direction : Double) -> Unit {
+pub fn Game::shoot_at_enemies(self : Self, player_index : Int, direction : Double) -> Unit {
   if player_index >= self.particle_list.length() {
     return
   }
@@ -732,7 +732,7 @@ fn Game::shoot_at_enemies(self : Self, player_index : Int, direction : Double) -
 /// 
 /// @param player_index 玩家索引
 /// @param direction 射击方向
-fn Game::shoot_explosive_bullet(self : Self, player_index : Int, direction : Double) -> Unit {
+pub fn Game::shoot_explosive_bullet(self : Self, player_index : Int, direction : Double) -> Unit {
   if player_index >= self.particle_list.length() {
     return
   }

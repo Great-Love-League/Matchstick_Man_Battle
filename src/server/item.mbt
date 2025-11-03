@@ -3,7 +3,7 @@
 
 ///|
 /// 物品类型枚举
-pub enum ItemType {
+pub(all) enum ItemType {
   HealthPack      // 血包 - 恢复生命值
   AmmoPack        // 弹药包 - 增加弹药（预留）
   WeaponUpgrade   // 武器升级 - 提升武器性能（预留）
@@ -12,7 +12,7 @@ pub enum ItemType {
 
 ///|
 /// 物品结构体
-pub struct Item {
+pub(all) struct Item {
   id : Int                        // 物品唯一ID
   body : @box2d.B2Body           // Box2D物理刚体
   item_type : ItemType            // 物品类型
@@ -24,7 +24,7 @@ pub struct Item {
 
 ///|
 /// 创建物品
-fn Game::create_item(
+pub fn Game::create_item(
   self : Self,
   position : (Double, Double),
   item_type : ItemType,
@@ -62,7 +62,7 @@ fn Game::create_item(
 
 ///|
 /// 检查物品拾取
-fn Game::check_item_pickup(self : Self, item : Item) -> Bool {
+pub fn Game::check_item_pickup(self : Self, item : Item) -> Bool {
   for particle in self.particle_list {
     // 跳过昏迷的角色
     if particle.control.faint_state {
@@ -83,7 +83,10 @@ fn Game::check_item_pickup(self : Self, item : Item) -> Bool {
 
 ///|
 /// 应用物品效果
-fn Game::apply_item_effect(self : Self, particle : Particle, item : Item) -> Unit {
+pub fn Game::apply_item_effect(self : Self, particle : Particle, item : Item) -> Unit {
+
+  self |> ignore
+
   match item.item_type {
     HealthPack => {
       // 恢复生命值
@@ -168,7 +171,7 @@ fn Game::cleanup_items(self : Self) -> Unit {
 
 ///|
 /// 获取活跃物品数量
-fn Game::get_active_item_count(self : Self) -> Int {
+pub fn Game::get_active_item_count(self : Self) -> Int {
   let mut count = 0
   for item in self.item_list {
     if item.is_active {
@@ -180,32 +183,32 @@ fn Game::get_active_item_count(self : Self) -> Int {
 
 ///|
 /// 生成血包（快捷方法）
-fn Game::spawn_health_pack(self : Self, position : (Double, Double), value? : Int = 30) -> Unit {
+pub fn Game::spawn_health_pack(self : Self, position : (Double, Double), value? : Int = 30) -> Unit {
   self.create_item(position, HealthPack, value=value, lifetime=600) |> ignore
 }
 
 ///|
 /// 生成弹药包（快捷方法）
-fn Game::spawn_ammo_pack(self : Self, position : (Double, Double), value? : Int = 10) -> Unit {
+pub fn Game::spawn_ammo_pack(self : Self, position : (Double, Double), value? : Int = 10) -> Unit {
   self.create_item(position, AmmoPack, value=value, lifetime=600) |> ignore
 }
 
 ///|
 /// 生成武器升级（快捷方法）
-fn Game::spawn_weapon_upgrade(self : Self, position : (Double, Double)) -> Unit {
+pub fn Game::spawn_weapon_upgrade(self : Self, position : (Double, Double)) -> Unit {
   self.create_item(position, WeaponUpgrade, value=1, lifetime=300) |> ignore
 }
 
 ///|
 /// 生成速度提升（快捷方法）
-fn Game::spawn_speed_boost(self : Self, position : (Double, Double), duration? : Int = 300) -> Unit {
+pub fn Game::spawn_speed_boost(self : Self, position : (Double, Double), duration? : Int = 300) -> Unit {
   self.create_item(position, SpeedBoost, value=duration, lifetime=600) |> ignore
 }
 
 ///|
 /// 在随机位置生成随机物品
 /// 需要在 Game 结构体中添加 rng : @random.Rand 字段
-fn Game::spawn_random_item(self : Self, rng : @random.Rand) -> Unit {
+pub fn Game::spawn_random_item(self : Self, rng : @random.Rand) -> Unit {
   // 随机位置 (-20 到 20 范围内)
   let x = rng.double() * 40.0 - 20.0
   let y = rng.double() * 20.0 + 5.0  // 5-25高度

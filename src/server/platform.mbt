@@ -1,18 +1,18 @@
 //Platform Entity
-pub struct Platform{
+pub(all) struct Platform{
 	body : @box2d.B2Body
 	index : Int
 }
-pub struct RotatablePlatform{
-	mut body : @box2d.B2Body
+pub(all) struct RotatablePlatform{
+	body : @box2d.B2Body
 	index : Int
 	angle_speed : Double // 角速度，单位弧度每秒
 	mut angle : Double
 }
-pub struct MovablePlatform{
+pub(all) struct MovablePlatform{
 	fulcrum : @box2d.B2Body
-	mut body : @box2d.B2Body
-	mut now_position : @box2d.B2Vec2
+	body : @box2d.B2Body
+	now_position : @box2d.B2Vec2
 	index : Int
 	start_position : @box2d.B2Vec2
 	end_position : @box2d.B2Vec2
@@ -49,6 +49,8 @@ pub fn create_platform(game:Game,position:(Double,Double),size:(Double,Double),a
 	new
 }
 pub impl PlatformTrait for Platform with update(self, game) -> Unit {
+	self |> ignore
+	game |> ignore
 	// 静止平台不需要更新
 }
 pub impl PlatformTrait for Platform with get_index(self) -> Int {
@@ -84,6 +86,9 @@ pub fn create_rotatable_platform(game:Game,position:(Double,Double),size:(Double
 }
 
 pub impl PlatformTrait for RotatablePlatform with update(self, game) -> Unit {
+
+	game |> ignore
+
 	let current_angle = self.body.getRotation()
 	let new_angle = current_angle + self.angle_speed * (1.0/60.0) // 假设每帧更新一次，60FPS
 	self.angle += self.angle_speed * (1.0/60.0)
@@ -127,7 +132,7 @@ pub fn create_movable_platform(game:Game, size:(Double,Double), start_position:(
 		cooldown : cooldown_time,
 		cooldown_time
 	}
-	let axis = @box2d.b2Vec2(end_position.0 - start_position.0, end_position.1 - start_position.1)
+	// let axis = @box2d.b2Vec2(end_position.0 - start_position.0, end_position.1 - start_position.1)
 	//game.create_prismatic_joint(game.anchor, body, (0.0, 0.0), axis, enable_limit=true, lower_translation=0.0, upper_translation=5.0)|> ignore
 	
 	game.platform_list.push(new)
@@ -137,6 +142,8 @@ pub fn create_movable_platform(game:Game, size:(Double,Double), start_position:(
 }
 
 impl PlatformTrait for MovablePlatform with update(self, game) -> Unit {
+
+	game |> ignore
 	
 	self.body.applyForce(@box2d.b2Vec2(0.0, 9.8*self.body.getMass()), self.body.getCenterPosition())
 	// println("rotation")

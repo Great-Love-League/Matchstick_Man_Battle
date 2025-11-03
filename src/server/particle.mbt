@@ -5,7 +5,7 @@ let elbow_angle : Double = 63.0 / 180.0 * Pi
 let arm_angle_forward = 0.5
 let arm_angle_backward = -0.5
 let knee_angle_bend_max : Double = -2.50 // 最大弯曲角度 (前10帧)
-let knee_angle_straight : Double = 0.0 // 最大伸直角度 (最后3帧)
+// let knee_angle_straight : Double = 0.0 // 最大伸直角度 (最后3帧)
 let j_thigh_angle_forward : Double = 1.0 
 let j_thigh_angle_backward : Double = 0.3
 let j_arm_angle_backward : Double = -0.3
@@ -61,6 +61,7 @@ fn Game::create_particle_control(
 	faint_state?:Bool=false,
 	faint_resistance?: Int=0
 ) -> ParticleControl{
+	self |> ignore
 	ParticleControl::{
 		walk_state,
 		walk_direction,
@@ -225,7 +226,10 @@ fn Game::particle_walk(self:Self,particle : Particle, direction : Double) -> Uni
   maintain_rotation(particle.torso, play_angle, kp=100.0, kd=10.0)
   particle.torso.applyForce(v, particle.torso.getCenterPosition())
 }
-fn Game::particle_jump(self:Self,particle : Particle, direction : Double) -> Unit {
+fn Game::particle_jump(self:Self ,particle : Particle, direction : Double) -> Unit {
+
+	self |> ignore
+
   // 控制跳跃动作的帧计数
   if particle.control.jump_state {
     // 膝盖弯曲: 前10帧
@@ -252,10 +256,10 @@ fn Game::particle_jump(self:Self,particle : Particle, direction : Double) -> Uni
       return
     } else if particle.control.jump_frame_count < j_dur_A + j_dur_B + j_dur_C {
       maintain_rotation(particle.torso, 0, kp=100.0, kd=10.0)
-      let straight_factor : Double = knee_angle_bend_max -
-        (particle.control.jump_frame_count - j_dur_A - j_dur_B).to_double() /
-        j_dur_C.to_double() *
-        knee_angle_bend_max
+      // let straight_factor : Double = knee_angle_bend_max -
+      //   (particle.control.jump_frame_count - j_dur_A - j_dur_B).to_double() /
+      //   j_dur_C.to_double() *
+      //   knee_angle_bend_max
 			maintain_joint(particle.arm_left_joint, 0, kp=30.0, kd=2.0)
 			maintain_joint(particle.arm_right_joint, 0, kp=30.0, kd=2.0)
 			maintain_joint(particle.forearm_left_joint, 0, kp=30.0, kd=2.0)
