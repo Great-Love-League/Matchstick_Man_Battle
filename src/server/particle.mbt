@@ -9,9 +9,9 @@ let knee_angle_bend_max : Double = -2.50 // 最大弯曲角度 (前10帧)
 let j_thigh_angle_forward : Double = 1.0 
 let j_thigh_angle_backward : Double = 0.3
 let j_arm_angle_backward : Double = -0.3
-let j_dur_A : Int = 40 // 前10帧膝盖弯曲
+let j_dur_A : Int = 20 // 前10帧膝盖弯曲
 let j_dur_B : Int = 1 // 后3帧膝盖伸直
-let j_dur_C : Int = 20 // 后3帧膝盖伸直
+let j_dur_C : Int = 10 // 后3帧膝盖伸直
 let jump_force : Double = 200.0 // 跳跃力大小
 
 pub(all) struct ParticleControl{
