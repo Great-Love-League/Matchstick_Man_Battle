@@ -176,6 +176,20 @@ fn DefaultRenderable::draw_game(self:Self,p: &@p5js.P5JS, game: Game) -> Unit {
     draw_body_line(particle.left_forearm, 0.15, 0.35)
     draw_body_line(particle.right_forearm, 0.15, 0.35)
   }
+	
+	for platform in game.platform_list {
+		for shape in platform.get_body().getShapeList() {
+		println("Drawing Platform \{platform.get_index()}")
+			match shape.getType() {
+				PolygonShape => drawPolygon(p, shape.toPolygonShape())
+				BoxShape => drawPolygon(p, shape.toPolygonShape())
+				CircleShape => drawCircle(p, shape.toCircleShape())
+				UnknownShape => {
+					println("Unknown Shape")
+				}
+			}
+		}
+	}
   p.strokeWeight(0.0)
 }
 
