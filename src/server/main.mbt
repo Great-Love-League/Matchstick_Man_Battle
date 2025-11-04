@@ -441,6 +441,8 @@ fn main {
   register_animation(game)
 
   register_animation(game)
+	
+	register_smoke_animation(game,500.0,500.0)
 
   game.start_run()
 
