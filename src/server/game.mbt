@@ -209,7 +209,7 @@ fn Game::state_machine_update(self:Self, p5: @p5js.P5Instance) -> Unit {
 			self.game_over(p5)
 		}
 	}
-	self.render.render(self.world, p5)
+	self.render.render(self, p5)
 }
 
 fn Game::prepare(self:Self, p5: @p5js.P5Instance) -> Unit {
@@ -384,20 +384,6 @@ pub fn Game::create_static_box(
 
 pub fn create_game(render~: &Renderable = DefaultRenderable::{}) -> Game{
 	let world = create_world()
-	
-	// let platform_list=Array::new()
-	// for body in world.getBodyList() {
-	// 	if body.getMass() == 0.0 {
-	// 		platform_list.push(body)
-	// 	}
-	// }
-	
-	// for i in platform_list {
-	// 	let sh = i.getShapeList()
-	// 	for j in sh {
-	// 		let t = j.getBase().getFriction()
-	// 	}
-	// }
 	
 	let weapon=create_weapon_manager()
 	
