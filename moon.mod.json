@@ -4,8 +4,8 @@
   "deps": {
     "Kaida-Amethyst/math": "0.1.20",
     "Demonmasterlqx/box2d_ffi": "0.2.5",
-    "Demonmasterlqx/MoonP5": "0.0.2",
-    "Demonmasterlqx/moonbit_stickman_map_loader": "0.0.2"
+    "Demonmasterlqx/MoonP5": "0.0.4",
+    "Demonmasterlqx/moonbit_stickman_map_loader": "0.0.3"
   },
   "readme": "README.mbt.md",
   "repository": "",
