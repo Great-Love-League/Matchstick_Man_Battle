@@ -124,14 +124,72 @@ pub fn DefaultRenderable::draw_world(self: DefaultRenderable, p: &@p5js.P5JS, wo
   }
 }
 
+fn DefaultRenderable::draw_game(self:Self,p: &@p5js.P5JS, game: Game) -> Unit {
+  p.strokeWeight(5.0)
+  p.strokeComponents(0.0, 0.0, 0.0, Some(255.0))
+  p.noFill()
+
+  let ppm = PPM
+  let w = Width
+  let h = Height
+
+  let to_screen = fn(x: Double, y: Double) -> (Double, Double) {
+    world_to_screen(x, y)
+  }
+
+  let ws = fn(len: Double) -> Double {
+    world_to_screen_size(len, ppm)
+  }
+  let draw_body_line = fn(body: @box2d.B2Body, half_w: Double, half_h: Double) -> Unit {
+    let pos = body.getCenterPosition()
+    let angle = body.getRotation()
+
+    let sin_a = @cmath.sin(angle)
+    let cos_a = @cmath.cos(angle)
+
+    let x1 = pos.getX() - sin_a * half_h
+    let y1 = pos.getY() + cos_a * half_h
+    let x2 = pos.getX() + sin_a * half_h
+    let y2 = pos.getY() - cos_a * half_h
+
+    let (sx1, sy1) = to_screen(x1, y1)
+    let (sx2, sy2) = to_screen(x2, y2)
+
+    p.line(sx1, sy1, sx2, sy2)
+  }
+
+  for particle in game.particle_list {
+    let head_pos = particle.head.getCenterPosition()
+    let (hx, hy) = to_screen(head_pos.getX(), head_pos.getY())
+    let r = ws(0.5)
+    p.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
+    p.circle(hx, hy, r)
+    p.noFill()
+
+    draw_body_line(particle.torso, 0.25, 0.75)
+    draw_body_line(particle.left_thigh, 0.15, 0.5)
+    draw_body_line(particle.right_thigh, 0.15, 0.5)
+    draw_body_line(particle.left_shank, 0.15, 0.5)
+    draw_body_line(particle.right_shank, 0.15, 0.5)
+    draw_body_line(particle.left_arm, 0.15, 0.5)
+    draw_body_line(particle.right_arm, 0.15, 0.5)
+    draw_body_line(particle.left_forearm, 0.15, 0.35)
+    draw_body_line(particle.right_forearm, 0.15, 0.35)
+  }
+  p.strokeWeight(0.0)
+}
+
+
 pub fn DefaultRenderable::clear_screen(self: DefaultRenderable, p: &@p5js.P5JS) -> Unit {
   self |> ignore
   p.background(255.0, Some(204.0), Some(0.0), None)
 }
 pub(all) struct DefaultRenderable {}
 
-pub impl Renderable for DefaultRenderable with render(self: DefaultRenderable, world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
-  self.draw_world(p, world)
+pub impl Renderable for DefaultRenderable with render(self: DefaultRenderable, game : Game, p: &@p5js.P5JS) -> Unit {
+  // self.draw_world(p, game.world)
+	self.draw_game(p, game)
+	// self.draw_game(p, game)
 }
 
 pub impl Renderable for DefaultRenderable with clear_screen(self: DefaultRenderable, world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
@@ -142,7 +200,7 @@ pub impl Renderable for DefaultRenderable with clear_screen(self: DefaultRendera
 pub trait Renderable {
 
   // 绘画函数，在所有更新逻辑之后调用，用于绘画物理世界，但是不包含特效等
-  render(self: Self, world: &@box2d.World, p: &@p5js.P5JS) -> Unit
+  render(self: Self, game:  Game, p: &@p5js.P5JS) -> Unit
 
   // 在每次绘画前清屏
   clear_screen(self: Self, world: &@box2d.World, p: &@p5js.P5JS) -> Unit 
