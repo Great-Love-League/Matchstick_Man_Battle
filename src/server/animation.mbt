@@ -161,7 +161,7 @@ fn register_blood_spray_animation(game: Game, x: Double, y: Double, vx: Double, 
         let count = 36
         for i = 0; i < count; i = i + 1 {
           // 扇形扩散角：±30°范围内偏移，这里加大了偏移量
-          let offset_angle = random_range(-0.6, 0.6)
+          let offset_angle = random_range(-0.2, 0.2)
           let speed_factor = random_range(0.6, 1.5) // 加大了速度范围
           let ang = dir_angle + offset_angle
           let speed = base_speed * speed_factor
