@@ -179,7 +179,7 @@ fn DefaultRenderable::draw_game(self:Self,p: &@p5js.P5JS, game: Game) -> Unit {
 	
 	for platform in game.platform_list {
 		for shape in platform.get_body().getShapeList() {
-		println("Drawing Platform \{platform.get_index()}")
+		// println("Drawing Platform \{platform.get_index()}")
 			match shape.getType() {
 				PolygonShape => drawPolygon(p, shape.toPolygonShape())
 				BoxShape => drawPolygon(p, shape.toPolygonShape())
