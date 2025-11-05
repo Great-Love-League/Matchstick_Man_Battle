@@ -62,5 +62,18 @@ fn maintain_rotation(
 	let torque=kp*error - kd*body.getAngularVelocity()
 	body.applyTorque(torque)
 }
+
+fn maintain_rotation_test(
+	body: @box2d.B2Body,
+	target_angle: Double,
+	kp?:Double=30.0,
+	kd?:Double=10.0
+)-> Unit {
+	let angle = body.getRotation()
+	let error=target_angle - angle
+	println("Current Angle: \{angle}, Target Angle: \{target_angle}, Error: \{error}")
+	let torque=kp*error - kd*body.getAngularVelocity()
+	body.applyTorque(torque)
+}
 extern "js" fn equals(a:@box2d.B2Body, b:@box2d.B2Body)->Bool=
 #|(a,b)=>{return a===b}
