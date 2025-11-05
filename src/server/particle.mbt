@@ -257,8 +257,11 @@ fn Game::particle_jump(self:Self ,particle : Particle, direction : Double) -> Un
       return
     } else if particle.control.jump_frame_count < j_dur_A + j_dur_B {
       maintain_rotation(particle.torso, 0, kp=100.0, kd=10.0)
-      let v = @box2d.b2Vec2(jump_force * direction, 50.0) // 沿x轴和y轴施加力
+      let v = @box2d.b2Vec2(jump_force * direction, 30.0) // 沿x轴和y轴施加力
       particle.torso.applyImpulse(v, particle.torso.getCenterPosition())
+			let s_pos = world_to_screen(particle.torso.getCenterPosition().getX(), particle.torso.getCenterPosition().getY()-2.0)
+			register_smoke_animation(self,s_pos.0, s_pos.1)
+			println("Jump Smoke: (\{v.getX()}, \{v.getY()})")
       return
     } else if particle.control.jump_frame_count < j_dur_A + j_dur_B + j_dur_C {
       maintain_rotation(particle.torso, 0, kp=100.0, kd=10.0)

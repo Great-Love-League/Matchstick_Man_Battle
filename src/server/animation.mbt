@@ -20,6 +20,7 @@ pub struct SmokeParticle {
   mut vy: Double
   mut rot: Double
   mut life: Double
+	beg : Int
 }
 
 let r :Ref[@random.Rand] = Ref::new(@random.Rand::new())
@@ -52,7 +53,8 @@ fn register_smoke_animation(game: Game, base_x: Double, base_y: Double) -> Unit 
             vx: @cmath.cos(ang) * speed * 0.5,  // 更轻的径向运动
             vy: random_range(-0.6, -0.25),
             rot: random_range(0.0, 6.28318530718),
-            life: random_range(60.0, 90.0)
+            life: random_range(60.0, 90.0),
+            beg: frame_counter.val
           }
           smokes.val.push(p)
         }
@@ -68,7 +70,8 @@ fn register_smoke_animation(game: Game, base_x: Double, base_y: Double) -> Unit 
           vx: random_range(-0.3, 0.3),
           vy: random_range(-0.4, -0.1),
           rot: random_range(0.0, 6.28318530718),
-          life: random_range(40.0, 70.0)
+          life: random_range(40.0, 70.0),
+          beg: frame_counter.val
         }
         smokes.val.push(p)
       }
@@ -116,7 +119,7 @@ fn register_smoke_animation(game: Game, base_x: Double, base_y: Double) -> Unit 
       }
 
       // 结束条件
-      if smokes.val.length() == 0 && frame_counter.val > 100 {
+      if smokes.val.length() == 0 {
         return AnimationState::Completed
       }
 
@@ -158,7 +161,7 @@ fn register_blood_spray_animation(game: Game, x: Double, y: Double, vx: Double, 
         let count = 36
         for i = 0; i < count; i = i + 1 {
           // 扇形扩散角：±30°范围内偏移，这里加大了偏移量
-          let offset_angle = random_range(-1, 1)
+          let offset_angle = random_range(-0.6, 0.6)
           let speed_factor = random_range(0.6, 1.5) // 加大了速度范围
           let ang = dir_angle + offset_angle
           let speed = base_speed * speed_factor
