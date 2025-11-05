@@ -227,6 +227,9 @@ pub fn Game::check_bullet_collision(self : Self, bullet : Bullet) -> Unit {
       
       
       if hit {
+        // 播放子弹击中音效
+        self.audio.play_sound(BulletHit)
+        
 				
 				let vel = bullet.body.getLinearVelocity()
 				let bvx = vel.getX()*0.1
@@ -250,6 +253,8 @@ pub fn Game::check_bullet_collision(self : Self, bullet : Bullet) -> Unit {
         
         if particle.control.health <= 0 {
           particle.control.faint_state = true
+          // 播放玩家死亡音效
+          self.audio.play_sound(PlayerDeath)
           println("玩家 \{particle.index} 被击倒!")
         }
         

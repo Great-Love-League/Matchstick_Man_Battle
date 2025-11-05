@@ -37,6 +37,9 @@ pub(all) struct Game {
 
 	mut animation_list : Array[&Animation]
 	
+	// 音频管理器
+	audio : AudioManager
+	
 	anchor : @box2d.B2Body
 }
 
@@ -518,6 +521,10 @@ pub fn create_game(render~: &RenderTrait = DefaultRenderable::{}) -> Game{
 	anchor_body_def.setAllowSleep(false)
 	let anchor = world.createBody(anchor_body_def)
 	
+	// 创建并初始化音频管理器
+	let audio = AudioManager::new()
+	audio.init_audio_configs()
+	
 	let game = Game::{
 		world,
 		weapon,
@@ -543,7 +550,8 @@ pub fn create_game(render~: &RenderTrait = DefaultRenderable::{}) -> Game{
 		particle_control_configs : Array::new(),
 		custom_functions : Array::new(),
 		auto_aim_configs : Array::new(),
-		animation_list : Array::new()
+		animation_list : Array::new(),
+		audio
 	}
 	
 	game
