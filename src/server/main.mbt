@@ -59,50 +59,49 @@ fn load_custom_functions(game:Game) -> Unit {
     GameCustomFunction::new(
       GameRunning,
       fn(game: Game, p: &@p5js.P5JS) {
+
+        let mut has_weapon = false
+        let mut index = 0
+        for gun in game.weapon.gun_list {
+          if gun.owner_id == 0 {
+            has_weapon = true
+            break
+          }
+          index += 1
+        }
+
+        let clear_old = fn(){
+          if has_weapon {
+            game.weapon.gun_list[index].destroy(game)
+            game.weapon.gun_list.remove(index) |> ignore
+          }
+        }
+
         if(p.keyIsDown(Digit1)){
           // 销毁旧武器
-          for gun in game.weapon.gun_list {
-            if gun.owner_id == 0 {
-              gun.destroy(game)
-            }
-          }
-          game.weapon.gun_list.clear()
+          clear_old()
           // 创建手枪
           game.create_pistol(0)
           println("装备手枪!")
         }
         if(p.keyIsDown(Digit2)){
           // 销毁旧武器
-          for gun in game.weapon.gun_list {
-            if gun.owner_id == 0 {
-              gun.destroy(game)
-            }
-          }
-          game.weapon.gun_list.clear()
+          clear_old()
+
           // 创建霰弹枪
           game.create_shotgun(0)
           println("装备霰弹枪!")
         }
         if(p.keyIsDown(Digit3)){
           // 销毁旧武器
-          for gun in game.weapon.gun_list {
-            if gun.owner_id == 0 {
-              gun.destroy(game)
-            }
-          }
-          game.weapon.gun_list.clear()
+          clear_old()
           // 创建狙击枪
           game.create_sniper(0)
           println("装备狙击枪!")
         }
         if(p.keyIsDown(Digit4)){
           // 销毁旧武器
-          for gun in game.weapon.gun_list {
-            if gun.owner_id == 0 {
-              gun.destroy(game)
-            }
-          }
-          game.weapon.gun_list.clear()
+          clear_old()
           // 创建激光枪
           game.create_laser_rifle(0)
           println("装备激光枪!")
