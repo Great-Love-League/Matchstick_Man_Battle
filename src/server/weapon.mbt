@@ -336,8 +336,8 @@ pub impl WeaponCreate for Gun with create( game, owner_id){
 	
 	// 创建一个简单的box形状作为武器（0.5x1米）
 	let weapon_box_def = @box2d.b2BoxDef()
-	weapon_box_def.setExtents(@box2d.b2Vec2(0.25, 0.5))
-	weapon_box_def.setDensity(0.01)
+	weapon_box_def.setExtents(@box2d.b2Vec2(0.2, 0.5))
+	weapon_box_def.setDensity(0.5)
 	weapon_box_def.setFriction(0.3)
 	weapon_box_def.setRestitution(0.5)
 	weapon_box_def.setGroupIndex(owner_collision_group)  // 设置正确的碰撞组
@@ -471,6 +471,8 @@ pub impl WeaponControl for Gun with attack_at_angle(self, game, angle){
 	if game.frame_count - self.last_fire_frame < self.fire_rate {
 		return  // 还在冷却中
 	}
+	
+	maintain_rotation_test(self.body, angle, kp=2.0, kd=2.0)
 	
 	// 根据枪械类型选择射击方式及参数
 	match self.gun_type {
@@ -632,8 +634,8 @@ pub fn Game::create_shotgun(self : Self, owner_id : Int) -> Unit {
 	weapon_body_def.setPosition(@box2d.b2Vec2(handpos.getX()+gun_body_shift.getX(), handpos.getY()+gun_body_shift.getY()))
 	
 	let weapon_box_def = @box2d.b2BoxDef()
-	weapon_box_def.setExtents(@box2d.b2Vec2(0.25, 0.5))
-	weapon_box_def.setDensity(0.01)
+	weapon_box_def.setExtents(@box2d.b2Vec2(0.2, 0.5))
+	weapon_box_def.setDensity(0.5)
 	weapon_box_def.setFriction(0.3)
 	weapon_box_def.setRestitution(0.5)
 	weapon_box_def.setGroupIndex(owner_collision_group)
@@ -674,8 +676,8 @@ pub fn Game::create_sniper(self : Self, owner_id : Int) -> Unit {
 	weapon_body_def.setPosition(@box2d.b2Vec2(handpos.getX()+gun_body_shift.getX(), handpos.getY()+gun_body_shift.getY()))
 	
 	let weapon_box_def = @box2d.b2BoxDef()
-	weapon_box_def.setExtents(@box2d.b2Vec2(0.25, 0.5))
-	weapon_box_def.setDensity(0.01)
+	weapon_box_def.setExtents(@box2d.b2Vec2(0.2, 0.5))
+	weapon_box_def.setDensity(0.5)
 	weapon_box_def.setFriction(0.3)
 	weapon_box_def.setRestitution(0.5)
 	weapon_box_def.setGroupIndex(owner_collision_group)
@@ -716,8 +718,8 @@ pub fn Game::create_laser_rifle(self : Self, owner_id : Int) -> Unit {
 	weapon_body_def.setPosition(@box2d.b2Vec2(handpos.getX()+gun_body_shift.getX(), handpos.getY()+gun_body_shift.getY()))
 	
 	let weapon_box_def = @box2d.b2BoxDef()
-	weapon_box_def.setExtents(@box2d.b2Vec2(0.25, 0.5))
-	weapon_box_def.setDensity(0.01)
+	weapon_box_def.setExtents(@box2d.b2Vec2(0.2, 0.5))
+	weapon_box_def.setDensity(0.5)
 	weapon_box_def.setFriction(0.3)
 	weapon_box_def.setRestitution(0.5)
 	weapon_box_def.setGroupIndex(owner_collision_group)
