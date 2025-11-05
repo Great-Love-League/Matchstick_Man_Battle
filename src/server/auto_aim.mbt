@@ -196,7 +196,10 @@ pub fn Game::get_auto_aim_angle(
       let dy = target.position.1 - attacker_pos.getY()
       
       // 计算角度
-      return Some(@cmath.atan2(dy, dx))
+      let angle = @cmath.atan2(dy, dx)
+
+
+      return Some(angle)
     }
     None => None
   }
