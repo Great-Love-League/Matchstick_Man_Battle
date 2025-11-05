@@ -83,9 +83,9 @@ fn AudioManager::register_audio(
 ///| 初始化音频配置（定义所有音频文件路径）
 pub fn AudioManager::init_audio_configs(self : Self) -> Unit {
   // 武器音效配置
-  self.register_audio(PistolShot, "assets/Audio/Weapons/pistol_shot.wav", SoundEffect, 0.6, false)
-  self.register_audio(ShotgunShot, "assets/Audio/Weapons/shotgun_shot.wav", SoundEffect, 0.7, false)
-  self.register_audio(SniperShot, "assets/Audio/Weapons/sniper_shot.wav", SoundEffect, 0.8, false)
+  self.register_audio(PistolShot, "assets/Audio/Weapons/pistol_shot.mp3", SoundEffect, 0.6, false)
+  self.register_audio(ShotgunShot, "assets/Audio/Weapons/shotgun_shot.mp3", SoundEffect, 0.7, false)
+  self.register_audio(SniperShot, "assets/Audio/Weapons/sniper_shot.mp3", SoundEffect, 0.8, false)
   self.register_audio(LaserShot, "assets/Audio/Weapons/laser_shot.wav", SoundEffect, 0.5, false)
   self.register_audio(SwordSwing, "assets/Audio/Weapons/sword_swing.wav", SoundEffect, 0.4, false)
   
@@ -95,7 +95,7 @@ pub fn AudioManager::init_audio_configs(self : Self) -> Unit {
   self.register_audio(PlayerDeath, "assets/Audio/Effects/player_death.wav", SoundEffect, 0.8, false)
   
   // 游戏事件音效
-  self.register_audio(LevelStart, "assets/Audio/Effects/level_start.wav", SoundEffect, 0.6, false)
+  self.register_audio(LevelStart, "assets/Audio/Effects/level_start.mp3", SoundEffect, 0.6, false)
   self.register_audio(LevelComplete, "assets/Audio/Effects/level_complete.wav", SoundEffect, 0.7, false)
   self.register_audio(GameOver, "assets/Audio/Effects/game_over.wav", SoundEffect, 0.8, false)
   
@@ -107,6 +107,75 @@ pub fn AudioManager::init_audio_configs(self : Self) -> Unit {
   self.register_audio(BgmBoss, "assets/Audio/BGM/boss.wav", BackgroundMusic, 0.4, true)
 }
 
+///| JS FFI - 播放音频（支持自动处理浏览器自动播放限制）
+extern "js" fn js_play_audio(path : String, volume : Double, should_loop : Bool) -> Unit =
+  #| (path, volume, shouldLoop) => {
+  #|   // 全局音频管理器
+  #|   if (!window.audioManager) {
+  #|     window.audioManager = {
+  #|       pendingAudios: [],
+  #|       userInteracted: false,
+  #|       init: function() {
+  #|         // 监听首次用户交互
+  #|         const events = ['click', 'keydown', 'touchstart'];
+  #|         const onFirstInteraction = () => {
+  #|           this.userInteracted = true;
+  #|           console.log('检测到首次用户交互，播放待播放音频');
+  #|           // 播放所有待播放的音频
+  #|           this.pendingAudios.forEach(({audio, path}) => {
+  #|             audio.play().catch(err => console.warn('延迟音频播放失败:', path, err));
+  #|           });
+  #|           this.pendingAudios = [];
+  #|           // 移除监听器
+  #|           events.forEach(event => document.removeEventListener(event, onFirstInteraction));
+  #|         };
+  #|         events.forEach(event => document.addEventListener(event, onFirstInteraction));
+  #|       }
+  #|     };
+  #|     window.audioManager.init();
+  #|   }
+  #|   
+  #|   try {
+  #|     const audio = new Audio(path);
+  #|     audio.volume = volume;
+  #|     audio.loop = shouldLoop;
+  #|     
+  #|     // 尝试播放
+  #|     const playPromise = audio.play();
+  #|     if (playPromise !== undefined) {
+  #|       playPromise.catch(err => {
+  #|         if (err.name === 'NotAllowedError' && !window.audioManager.userInteracted) {
+  #|           console.log('等待用户交互后播放:', path);
+  #|           window.audioManager.pendingAudios.push({audio, path});
+  #|         } else {
+  #|           console.warn('音频播放失败:', path, err);
+  #|         }
+  #|       });
+  #|     }
+  #|   } catch(err) {
+  #|     console.warn('音频加载失败:', path, err);
+  #|   }
+  #| }
+
+///| JS FFI - 停止音频（通过路径）
+extern "js" fn js_stop_audio(path : String) -> Unit =
+  #| (path) => {
+  #|   // 停止所有匹配路径的音频
+  #|   document.querySelectorAll('audio').forEach(audio => {
+  #|     if (audio.src.includes(path)) {
+  #|       audio.pause();
+  #|       audio.currentTime = 0;
+  #|     }
+  #|   });
+  #|   
+  #|   // 从待播放列表中移除
+  #|   if (window.audioManager) {
+  #|     window.audioManager.pendingAudios = window.audioManager.pendingAudios.filter(
+  #|       item => !item.path.includes(path)
+  #|     );
+  #|   }
+  #| }
+
 ///| 播放音效（实际播放逻辑需要在JS端实现）
 pub fn AudioManager::play_sound(self : Self, event_type : AudioEventType) -> Unit {
   match self.audio_configs.get(event_type) {
@@ -116,13 +185,15 @@ pub fn AudioManager::play_sound(self : Self, event_type : AudioEventType) -> Uni
         SoundEffect => {
           if self.sfx_enabled {
             println("播放音效: \{event_type}, 路径: \{config.path}")
-            // TODO: 调用JS API播放音频
+            let volume = config.default_volume * self.master_volume
+            js_play_audio(config.path, volume, config.should_loop)
           }
         }
         BackgroundMusic => {
           if self.bgm_enabled {
             println("播放背景音乐: \{event_type}, 路径: \{config.path}")
-            // TODO: 调用JS API播放音频
+            let volume = config.default_volume * self.master_volume
+            js_play_audio(config.path, volume, config.should_loop)
           }
         }
       }
@@ -138,13 +209,18 @@ pub fn AudioManager::play_bgm(self : Self, event_type : AudioEventType) -> Unit 
   // 停止当前背景音乐
   match self.current_bgm {
     Some(current) => {
-      println("停止背景音乐: \{current}")
-      // TODO: 调用JS API停止音频
+      match self.audio_configs.get(current) {
+        Some(config) => {
+          println("停止背景音乐: \{current}")
+          js_stop_audio(config.path)
+        }
+        None => ()
+      }
     }
     None => ()
   }
   
-  // 播放新的背景音乐
+  // 播放新的背景音乐（JS端会自动处理浏览器自动播放限制）
   self.play_sound(event_type)
   self.current_bgm = Some(event_type)
 }
@@ -153,8 +229,13 @@ pub fn AudioManager::play_bgm(self : Self, event_type : AudioEventType) -> Unit 
 pub fn AudioManager::stop_bgm(self : Self) -> Unit {
   match self.current_bgm {
     Some(current) => {
-      println("停止背景音乐: \{current}")
-      // TODO: 调用JS API停止音频
+      match self.audio_configs.get(current) {
+        Some(config) => {
+          println("停止背景音乐: \{current}")
+          js_stop_audio(config.path)
+        }
+        None => ()
+      }
       self.current_bgm = None
     }
     None => ()

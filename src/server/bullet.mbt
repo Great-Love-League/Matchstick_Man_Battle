@@ -224,12 +224,17 @@ pub fn Game::check_bullet_collision(self : Self, bullet : Bullet) -> Unit {
       }
       
       if hit {
+        // 播放子弹击中音效
+        self.audio.play_sound(BulletHit)
+        
         // 应用伤害
         particle.control.health -= damage
         println("子弹 #\{bullet.id} 击中玩家 \{particle.index}, 伤害 \{damage} (剩余血量: \{particle.control.health})")
         
         if particle.control.health <= 0 {
           particle.control.faint_state = true
+          // 播放玩家死亡音效
+          self.audio.play_sound(PlayerDeath)
           println("玩家 \{particle.index} 被击倒!")
         }
         
