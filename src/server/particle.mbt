@@ -49,6 +49,61 @@ pub(all) struct Particle{
 	index : Int
 	control : ParticleControl
 }
+
+///|
+/// @todo Implement rendering for Particle
+/// @chx
+pub impl RenderAble for Particle with get_render(self: Particle){
+	Some(fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
+
+		world |> ignore
+
+		let ppm = PPM
+		let to_screen = fn(x: Double, y: Double) -> (Double, Double) {
+			world_to_screen(x, y)
+		}
+
+		let ws = fn(len: Double) -> Double {
+			world_to_screen_size(len, ppm)
+		}
+		let draw_body_line = fn(body: @box2d.B2Body, half_w: Double, half_h: Double) -> Unit {
+			half_w |> ignore
+			let pos = body.getCenterPosition()
+			let angle = body.getRotation()
+
+			let sin_a = @cmath.sin(angle)
+			let cos_a = @cmath.cos(angle)
+
+			let x1 = pos.getX() - sin_a * half_h
+			let y1 = pos.getY() + cos_a * half_h
+			let x2 = pos.getX() + sin_a * half_h
+			let y2 = pos.getY() - cos_a * half_h
+
+			let (sx1, sy1) = to_screen(x1, y1)
+			let (sx2, sy2) = to_screen(x2, y2)
+
+			p.line(sx1, sy1, sx2, sy2)
+		}
+
+		let head_pos = self.head.getCenterPosition()
+		let (hx, hy) = to_screen(head_pos.getX(), head_pos.getY())
+		let r = ws(0.5)
+		p.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
+		p.circle(hx, hy, r)
+		p.noFill()
+
+		draw_body_line(self.torso, 0.25, 0.75)
+		draw_body_line(self.left_thigh, 0.15, 0.5)
+		draw_body_line(self.right_thigh, 0.15, 0.5)
+		draw_body_line(self.left_shank, 0.15, 0.5)
+		draw_body_line(self.right_shank, 0.15, 0.5)
+		draw_body_line(self.left_arm, 0.15, 0.5)
+		draw_body_line(self.right_arm, 0.15, 0.5)
+		draw_body_line(self.left_forearm, 0.15, 0.35)
+		draw_body_line(self.right_forearm, 0.15, 0.35)
+	})
+}
+
 fn Game::create_particle_control(
 	self:Self,
 	walk_state?: Bool=false,
