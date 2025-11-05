@@ -24,6 +24,14 @@ pub struct Sword{
 	id : Int
 	owner_id : Int
 	body : @box2d.B2Body
+	mut last_attack_frame : Int
+	/// | 近战武器攻击间隔（用于控制攻击频率）
+	attack_interval : Int
+
+	/// | 近战武器攻击范围（用于查询碰撞体）
+	/// 近战武器的攻击范围通常是一个较小的矩形区域，定义为Box2D的AABB（轴对齐边界框）。
+	attack_range_min : @box2d.B2Vec2
+	attack_range_max : @box2d.B2Vec2
 }
 pub struct Gun{
 	id : Int
@@ -88,7 +96,11 @@ pub impl WeaponCreate for Sword with create(game, owner_id){
 	let aa:Sword=Sword::{
 		id:game.weapon.sword_index,
 		owner_id:owner_id,
-		body:game.world.createBody(bodydef)
+		body:game.world.createBody(bodydef),
+		attack_range_max :@box2d.b2Vec2(2.0, 2.0),
+		attack_range_min :@box2d.b2Vec2(-2.0, -2.0),
+		attack_interval: 20,
+		last_attack_frame: 0
 	}
 	game.weapon.sword_list.push(aa)
 
@@ -96,46 +108,162 @@ pub impl WeaponCreate for Sword with create(game, owner_id){
 }
 
 pub impl WeaponControl for Sword with attack(self,game){
-	for i in game.particle_list {
-		if i.index==self.owner_id{
+
+	// 画攻击范围（调试用）
+	// let attack_field_counter = { val: 0 }
+	// let attack_field_frames = 10  // 显示10帧
+	
+	// game.add_animation(
+	// 	SampleAnimation::new(
+	// 		fn(world, p5) -> AnimationState {
+	// 			world |> ignore
+				
+	// 			attack_field_counter.val = attack_field_counter.val + 1
+				
+	// 			// 绘制攻击范围矩形
+	// 			self.draw_attack_field(p5)
+	// 			println("Drawing sword attack field...")
+				
+	// 			// 检查动画是否结束
+	// 			if attack_field_counter.val >= attack_field_frames {
+	// 				AnimationState::Completed
+	// 			} else {
+	// 				AnimationState::InProgress
+	// 			}
+	// 		}
+	// 	)
+	// )
+
+	// 检查攻击间隔
+	if game.frame_count - self.last_attack_frame < self.attack_interval {
+		return
+	}
+	self.last_attack_frame = game.frame_count
+
+	// 首先拿到剑攻击范围内的物体
+
+	let query_result: FixedArray[@box2d.B2Shape] = []
+
+	let res_cut = game.world.query(self.get_attack_field(), query_result, 10)
+
+
+	for attached_shape in query_result{
+		let target_particle = game.who_shape_belongs_to(attached_shape)
+		if target_particle == -1 || target_particle == self.owner_id {
 			continue
 		}
-		if game.is_contact(i.torso, self.body) || game.is_contact(i.head, self.body){
-			i.control.health-=10
-			if i.control.health<=0{
-				i.control.faint_state=true
-			}
-			break
-		}
-		else if game.is_contact(i.left_thigh, self.body) || game.is_contact(i.right_thigh, self.body){
-			i.control.health-=5
-			if i.control.health<=0{
-				i.control.faint_state=true
-			}
-			break
-		}
-		else if game.is_contact(i.left_shank, self.body) || game.is_contact(i.right_shank, self.body){
-			i.control.health-=3
-			if i.control.health<=0{
-				i.control.faint_state=true
-			}
-			break
-		}
-		else if game.is_contact(i.left_arm, self.body) || game.is_contact(i.right_arm, self.body){
-			i.control.health-=4
-			if i.control.health<=0{
-				i.control.faint_state=true
-			}
-			break
-		}
-		else if game.is_contact(i.left_forearm, self.body) || game.is_contact(i.right_forearm, self.body){
-			i.control.health-=2
-			if i.control.health<=0{
-				i.control.faint_state=true
-			}
-			break
-		}
+		println("Sword hit particle #\{target_particle}!")
+		let target = game.particle_list[target_particle]
+
+		// 简单伤害计算
+		target.control.health -= 5
+
 	}
+
+	// 添加群体攻击特效：华丽的圆形冲击波 + 粒子效果
+	let sword_pos = self.body.getCenterPosition()
+	let start_x = sword_pos.getX()
+	let start_y = sword_pos.getY()
+	
+	// 创建圆形冲击波动画（多波纹效果）
+	let frame_counter = { val: 0 }
+	let max_frames = 20  // 动画持续20帧（约0.33秒）
+	
+	game.add_animation(
+		SampleAnimation::new(
+			fn(world, p5) -> AnimationState {
+				world |> ignore
+				
+				frame_counter.val = frame_counter.val + 1
+				let progress = frame_counter.val.to_double() / max_frames.to_double()
+				
+				let center_screen = world_to_screen(start_x, start_y)
+				
+				// 绘制多层波纹（3个波纹，依次扩散）
+				for wave = 0; wave < 3; wave = wave + 1 {
+					let wave_delay = wave.to_double() * 0.25
+					let wave_progress = progress - wave_delay
+					
+					if wave_progress > 0.0 && wave_progress < 1.0 {
+						let alpha = 255.0 * (1.0 - wave_progress) * 0.8
+						let radius = wave_progress * 2.8
+						let radius_pixels = radius * PPM
+						
+						// 外层光晕（渐变色：从橙红到紫红）
+						let r = 255.0 - wave_progress * 100.0
+						let g = 50.0 + wave_progress * 50.0
+						let b = wave_progress * 200.0
+						
+						p5.noFill()
+						p5.strokeWeight(10.0 * (1.0 - wave_progress * 0.5))
+						p5.strokeComponents(r, g, b, Some(alpha * 0.3))
+						p5.ellipse(center_screen.0, center_screen.1, radius_pixels * 2.0, radius_pixels * 2.0)
+						
+						// 中层（亮黄到青色）
+						p5.strokeWeight(6.0 * (1.0 - wave_progress * 0.5))
+						p5.strokeComponents(255.0, 200.0 - wave_progress * 100.0, 100.0 + wave_progress * 155.0, Some(alpha * 0.6))
+						p5.ellipse(center_screen.0, center_screen.1, radius_pixels * 1.5, radius_pixels * 1.5)
+						
+						// 内层核心（亮白）
+						p5.strokeWeight(3.0)
+						p5.strokeComponents(255.0, 255.0, 255.0, Some(alpha * 0.85))
+						p5.ellipse(center_screen.0, center_screen.1, radius_pixels * 1.0, radius_pixels * 1.0)
+					}
+				}
+				
+				// 绘制能量粒子（围绕冲击波旋转飞散）
+				let particle_count = 16
+				for i = 0; i < particle_count; i = i + 1 {
+					let angle = (i.to_double() / particle_count.to_double()) * 6.28318 + progress * 2.0
+					let particle_radius = progress * 2.5
+					let particle_x = start_x + particle_radius * @cmath.cos(angle)
+					let particle_y = start_y + particle_radius * @cmath.sin(angle)
+					let particle_screen = world_to_screen(particle_x, particle_y)
+					
+					let alpha = 255.0 * (1.0 - progress) * 0.9
+					let size = (8.0 - progress * 4.0) * (1.0 + @cmath.sin(progress * 12.0 + i.to_double()) * 0.3)
+					
+					// 粒子颜色：从白到橙红
+					let pr = 255.0
+					let pg = 255.0 - progress * 200.0
+					let pb = 200.0 - progress * 200.0
+					
+					p5.fillColorPara(pr, Some(pg), Some(pb), Some(alpha))
+					p5.noStroke()
+					p5.ellipse(particle_screen.0, particle_screen.1, size, size)
+				}
+				
+				// 绘制中心爆发光芒（放射状线条）
+				if progress < 0.3 {
+					let ray_count = 12
+					let ray_alpha = 255.0 * (1.0 - progress / 0.3) * 0.6
+					let ray_length = progress * 1.5 * PPM
+					
+					for i = 0; i < ray_count; i = i + 1 {
+						let angle = (i.to_double() / ray_count.to_double()) * 6.28318
+						let end_x = center_screen.0 + ray_length * @cmath.cos(angle)
+						let end_y = center_screen.1 + ray_length * @cmath.sin(angle)
+						
+						p5.strokeWeight(3.0)
+						p5.strokeComponents(255.0, 255.0, 150.0, Some(ray_alpha))
+						p5.line(center_screen.0, center_screen.1, end_x, end_y)
+					}
+				}
+				
+				// 恢复默认设置
+				p5.strokeWeight(1.0)
+				p5.noStroke()
+				
+				// 检查动画是否结束
+				if frame_counter.val >= max_frames {
+					AnimationState::Completed
+				} else {
+					AnimationState::InProgress
+				}
+			}
+		)
+	)
+
 	println("Sword attack!")
 }
 
@@ -367,7 +495,7 @@ pub impl WeaponControl for Gun with attack_at_angle(self, game, angle){
 			let spread = 0.26  // 总扩散角度
 			let bullet_count = 5
 			let angle_step = spread / (bullet_count - 1).to_double()
-			let start_angle = angle - spread / 2.0
+			let start_angle = angle - spread / 10.0
 			
 			for i = 0; i < bullet_count; i = i + 1 {
 				let bullet_angle = start_angle + angle_step * i.to_double()
@@ -422,6 +550,65 @@ pub impl WeaponControl for Gun with attack_at_angle(self, game, angle){
 
 pub impl WeaponDestroy for Gun with destroy(self, game){
 	game.world.destroyBody(self.body)
+}
+
+///| Sword 相关
+
+pub fn Sword::get_attack_field(self : Sword) -> @box2d.B2AABB {
+	// 相对于剑的当前位置和旋转，计算攻击范围的实际位置
+	let body_pos = self.body.getCenterPosition()
+	
+	let attack_range = @box2d.b2AABB()
+
+	// 计算实际攻击范围（简化版，不考虑旋转，直接用AABB）
+	// 将本地坐标系的攻击范围转换到世界坐标系
+	let new_min_x = body_pos.getX() + self.attack_range_min.getX()
+	let new_min_y = body_pos.getY() + self.attack_range_min.getY()
+	let new_max_x = body_pos.getX() + self.attack_range_max.getX()
+	let new_max_y = body_pos.getY() + self.attack_range_max.getY()
+
+	attack_range.setminVertex(@box2d.b2Vec2(new_min_x, new_min_y))
+	attack_range.setmaxVertex(@box2d.b2Vec2(new_max_x, new_max_y))
+
+	attack_range
+}
+
+pub fn Sword::get_attack_field_vers(self : Sword) -> (@box2d.B2Vec2, @box2d.B2Vec2) {
+	// 相对于剑的当前位置和旋转，计算攻击范围的实际位置
+	let body_pos = self.body.getCenterPosition()
+
+	// 计算实际攻击范围（简化版，不考虑旋转，直接用AABB）
+	// 将本地坐标系的攻击范围转换到世界坐标系
+	let new_min_x = body_pos.getX() + self.attack_range_min.getX()
+	let new_min_y = body_pos.getY() + self.attack_range_min.getY()
+	let new_max_x = body_pos.getX() + self.attack_range_max.getX()
+	let new_max_y = body_pos.getY() + self.attack_range_max.getY()
+
+	(@box2d.b2Vec2(new_min_x, new_min_y), @box2d.b2Vec2(new_max_x, new_max_y))
+}
+
+pub fn Sword::draw_attack_field(self : Sword, p5 : &@p5js.P5JS) -> Unit {
+
+	let (min_vertex, max_vertex) = self.get_attack_field_vers()
+	
+	let screen_min = world_to_screen(min_vertex.getX(), min_vertex.getY())
+	let screen_max = world_to_screen(max_vertex.getX(), max_vertex.getY())
+
+	// 绘制攻击范围矩形（半透明红色，用于调试可视化）
+	p5.noFill()
+	p5.strokeComponents(255.0, 0.0, 0.0, Some(150.0))  // 半透明红色
+	p5.strokeWeight(10.0)
+	
+	// 计算矩形的宽度和高度
+	let rect_x = screen_min.0
+	let rect_y = screen_min.1
+	let rect_w = screen_max.0 - screen_min.0
+	let rect_h = screen_max.1 - screen_min.1
+	
+	p5.rect(rect_x, rect_y, rect_w, rect_h)
+	
+	// 恢复默认设置
+	p5.strokeWeight(1.0)
 }
 
 ///|
