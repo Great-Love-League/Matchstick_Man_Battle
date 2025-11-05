@@ -266,6 +266,9 @@ pub impl WeaponControl for Sword with attack(self,game){
 		)
 	)
 
+	// 播放剑挥舞音效
+	game.audio.play_sound(SwordSwing)
+	
 	println("Sword attack!")
 }
 

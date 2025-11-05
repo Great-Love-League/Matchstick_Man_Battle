@@ -496,6 +496,9 @@ fn main {
   // 注册音频控制
   register_audio_controls(game)
 
+  // 播放背景音乐
+  game.audio.play_bgm(AudioEventType::BgmMenu)
+
   game.start_run()
 
 }
