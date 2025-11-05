@@ -56,7 +56,7 @@ pub(open) trait WeaponCreate {
 	create(game:Game,owner_id:Int) -> Unit
 }
 
-pub(open) trait WeaponControl {
+pub(open) trait WeaponControl : RenderAble{
 	attack(Self, game:Game) -> Unit
 	attack_at_angle(Self, game:Game, angle:Double) -> Unit
   get_attack_field(Self) -> Double = _
@@ -139,6 +139,24 @@ pub impl WeaponControl for Sword with attack(self,game){
 	println("Sword attack!")
 }
 
+pub impl RenderAble for Sword with get_render(self: Sword){
+	Some(
+		fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
+			world |> ignore
+			for shape in self.body.getShapeList() {
+				match shape.getType() {
+					PolygonShape => drawPolygon(p, shape.toPolygonShape())
+					BoxShape => drawPolygon(p, shape.toPolygonShape())
+					CircleShape => drawCircle(p, shape.toCircleShape())
+					UnknownShape => {
+						println("Unknown Shape")
+					}
+				}
+			}
+		}
+	)
+}
+
 ///|
 /// 剑的角度攻击（近战武器不需要角度，直接调用普通攻击）
 pub impl WeaponControl for Sword with attack_at_angle(self, game, _angle){
@@ -219,6 +237,24 @@ pub impl WeaponCreate for Gun with create( game, owner_id){
 	game.weapon.gun_list.push(aa)
 
 	game.create_revolute_joint(game.particle_list[owner_id].right_forearm, aa.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
+}
+
+pub impl RenderAble for Gun with get_render(self: Gun){
+	Some(
+		fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
+			world |> ignore
+			for shape in self.body.getShapeList() {
+				match shape.getType() {
+					PolygonShape => drawPolygon(p, shape.toPolygonShape())
+					BoxShape => drawPolygon(p, shape.toPolygonShape())
+					CircleShape => drawCircle(p, shape.toCircleShape())
+					UnknownShape => {
+						println("Unknown Shape")
+					}
+				}
+			}
+		}
+	)
 }
 
 pub impl WeaponControl for Gun with attack(self,game){

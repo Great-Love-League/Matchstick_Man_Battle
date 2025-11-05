@@ -182,6 +182,15 @@ fn DefaultRenderable::draw_game(self:Self,p: &@p5js.P5JS, game: Game) -> Unit {
     }
   }
 
+  // 武器
+  for weapon in game.weapon.sword_list {
+    unwrap_renderable(weapon.get_render())
+  }
+
+  for weapon in game.weapon.gun_list {
+    unwrap_renderable(weapon.get_render())
+  }
+
   for render_fn in renderable_list {
     render_fn(game.world, p)
   }
