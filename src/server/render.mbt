@@ -140,7 +140,7 @@ fn DefaultRenderable::draw_game(self:Self,p: &@p5js.P5JS, game: Game) -> Unit {
   let ws = fn(len: Double) -> Double {
     world_to_screen_size(len, ppm)
   }
-  let draw_body_line = fn(body: @box2d.B2Body, half_w: Double, half_h: Double) -> Unit {
+  let draw_body_line = fn(body: @box2d.B2Body, half_w: Double, half_h: Double, shake_dx: Double, shake_dy: Double) -> Unit {
     let pos = body.getCenterPosition()
     let angle = body.getRotation()
 
@@ -155,7 +155,16 @@ fn DefaultRenderable::draw_game(self:Self,p: &@p5js.P5JS, game: Game) -> Unit {
     let (sx1, sy1) = to_screen(x1, y1)
     let (sx2, sy2) = to_screen(x2, y2)
 
-    p.line(sx1, sy1, sx2, sy2)
+    p.line(sx1 + shake_dx, sy1 + shake_dy, sx2 + shake_dx, sy2 + shake_dy)
+  }
+
+  // 计算抖动偏移（如果有）
+  let mut shake_dx = 0.0
+  let mut shake_dy = 0.0
+  if game.shake_timer > 0 {
+    let mag = game.shake_magnitude
+    shake_dx = random_range(-mag, mag)
+    shake_dy = random_range(-mag, mag)
   }
 
   for particle in game.particle_list {
@@ -163,33 +172,68 @@ fn DefaultRenderable::draw_game(self:Self,p: &@p5js.P5JS, game: Game) -> Unit {
     let (hx, hy) = to_screen(head_pos.getX(), head_pos.getY())
     let r = ws(0.5)
     p.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
-    p.circle(hx, hy, r)
+    p.circle(hx + shake_dx, hy + shake_dy, r)
     p.noFill()
 
-    draw_body_line(particle.torso, 0.25, 0.75)
-    draw_body_line(particle.left_thigh, 0.15, 0.5)
-    draw_body_line(particle.right_thigh, 0.15, 0.5)
-    draw_body_line(particle.left_shank, 0.15, 0.5)
-    draw_body_line(particle.right_shank, 0.15, 0.5)
-    draw_body_line(particle.left_arm, 0.15, 0.5)
-    draw_body_line(particle.right_arm, 0.15, 0.5)
-    draw_body_line(particle.left_forearm, 0.15, 0.35)
-    draw_body_line(particle.right_forearm, 0.15, 0.35)
+    draw_body_line(particle.torso, 0.25, 0.75, shake_dx, shake_dy)
+    draw_body_line(particle.left_thigh, 0.15, 0.5, shake_dx, shake_dy)
+    draw_body_line(particle.right_thigh, 0.15, 0.5, shake_dx, shake_dy)
+    draw_body_line(particle.left_shank, 0.15, 0.5, shake_dx, shake_dy)
+    draw_body_line(particle.right_shank, 0.15, 0.5, shake_dx, shake_dy)
+    draw_body_line(particle.left_arm, 0.15, 0.5, shake_dx, shake_dy)
+    draw_body_line(particle.right_arm, 0.15, 0.5, shake_dx, shake_dy)
+    draw_body_line(particle.left_forearm, 0.15, 0.35, shake_dx, shake_dy)
+    draw_body_line(particle.right_forearm, 0.15, 0.35, shake_dx, shake_dy)
   }
 	
-	for platform in game.platform_list {
-		for shape in platform.get_body().getShapeList() {
-		// println("Drawing Platform \{platform.get_index()}")
-			match shape.getType() {
-				PolygonShape => drawPolygon(p, shape.toPolygonShape())
-				BoxShape => drawPolygon(p, shape.toPolygonShape())
-				CircleShape => drawCircle(p, shape.toCircleShape())
-				UnknownShape => {
-					println("Unknown Shape")
-				}
-			}
-		}
-	}
+  for platform in game.platform_list {
+    for shape in platform.get_body().getShapeList() {
+      // println("Drawing Platform \{platform.get_index()}")
+      match shape.getType() {
+        PolygonShape => {
+          // 手动将多边形顶点转换为屏幕坐标并应用抖动偏移
+          let vertices = shape.toPolygonShape().getVertices()
+          let global_pos: Array[@box2d.B2Vec2] = Array::new()
+          for v in vertices {
+            let gv = shape.toPolygonShape().getBody().getWorldPoint(v)
+            global_pos.push(gv)
+          }
+          p.beginShape(None)
+          for gv in global_pos {
+            let sc = world_to_screen(gv.getX(), gv.getY())
+            p.vertex(sc.0 + shake_dx, sc.1 + shake_dy, None, None, None)
+          }
+          p.endShape(Some("close"), None)
+        }
+        BoxShape => {
+          // BoxShape 同样作为多边形处理
+          let poly = shape.toPolygonShape()
+          let vertices = poly.getVertices()
+          let global_pos: Array[@box2d.B2Vec2] = Array::new()
+          for v in vertices {
+            let gv = poly.getBody().getWorldPoint(v)
+            global_pos.push(gv)
+          }
+          p.beginShape(None)
+          for gv in global_pos {
+            let sc = world_to_screen(gv.getX(), gv.getY())
+            p.vertex(sc.0 + shake_dx, sc.1 + shake_dy, None, None, None)
+          }
+          p.endShape(Some("close"), None)
+        }
+        CircleShape => {
+          let circle = shape.toCircleShape()
+          let pos = circle.getBody().getWorldPoint(circle.getLocalPosition())
+          let sc = world_to_screen(pos.getX(), pos.getY())
+          let r = world_to_screen_size(circle.getRadius(), PPM)
+          p.circle(sc.0 + shake_dx, sc.1 + shake_dy, r * 2.0)
+        }
+        UnknownShape => {
+          println("Unknown Shape")
+        }
+      }
+    }
+  }
   p.strokeWeight(0.0)
 }
 
