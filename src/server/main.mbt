@@ -35,7 +35,7 @@ fn load_custom_functions(game:Game) -> Unit {
   game.register_custom_function(
     GameCustomFunction::new(
       GameRunning,
-      fn(game: Game, p5: @p5js.P5Instance) {
+      fn(game: Game, p5: &@p5js.P5JS) {
         if(game.particle_list[0].control.faint_state){
           if(game.particle_list[0].control.faint_resistance<300){
             game.particle_list[0].control.faint_resistance+=1
@@ -58,7 +58,7 @@ fn load_custom_functions(game:Game) -> Unit {
   game.register_custom_function(
     GameCustomFunction::new(
       GameRunning,
-      fn(game: Game, p: @p5js.P5Instance) {
+      fn(game: Game, p: &@p5js.P5JS) {
         if(p.keyIsDown(Digit1)){
           // 销毁旧武器
           for gun in game.weapon.gun_list {
@@ -115,7 +115,7 @@ fn load_custom_functions(game:Game) -> Unit {
   game.register_custom_function(
     GameCustomFunction::new(
       GameRunning,
-      fn(game: Game, p5: @p5js.P5Instance) {
+      fn(game: Game, p5: &@p5js.P5JS) {
         if(p5.keyIsDown(KeyK)){
           let particle_pos = game.particle_list[0].torso.getCenterPosition()
           game.spawn_health_pack((particle_pos.getX() + 3.0, particle_pos.getY()))
@@ -128,7 +128,7 @@ fn load_custom_functions(game:Game) -> Unit {
   game.register_custom_function(
     GameCustomFunction::new(
       GameRunning,
-      fn(game: Game, p5: @p5js.P5Instance) {
+      fn(game: Game, p5: &@p5js.P5JS) {
         // 检查是否按下鼠标左键
         if p5.mouseIsPressed() {
           let player_id = 0
@@ -176,7 +176,7 @@ fn load_custom_functions(game:Game) -> Unit {
   game.register_custom_function(
     GameCustomFunction::new(
       GameRunning,
-      fn(game: Game, p5: @p5js.P5Instance) {
+      fn(game: Game, p5: &@p5js.P5JS) {
         p5 |> ignore
         // 每100帧输出一次血量
         if game.frame_count % 100 == 0 {
@@ -258,7 +258,7 @@ pub fn register_hp_show(game:Game) -> Unit {
   game.register_custom_function(
     GameCustomFunction::new(
       GameRunning,
-      fn(game: Game, p5: @p5js.P5Instance) {
+      fn(game: Game, p5: &@p5js.P5JS) {
         // 在画布上为每个角色绘制血量条（屏幕坐标）
         // 位置：取角色躯干中心向上偏移一点，避免遮挡角色
         for particle in game.particle_list {
@@ -342,7 +342,7 @@ pub fn register_show_mouse_screen_coords(game:Game) -> Unit {
   game.register_custom_function(
     GameCustomFunction::new(
       GameRunning,
-      fn(game: Game, p5: @p5js.P5Instance) {
+      fn(game: Game, p5: &@p5js.P5JS) {
         let mouse_x = p5.getMouseX().to_double();
         let mouse_y = p5.getMouseY().to_double();
         // 每秒输出一次鼠标屏幕坐标
@@ -361,7 +361,7 @@ fn register_animation(game: Game) -> Unit {
   let frame_counter = { val: 0 }
   
   let animation = SampleAnimation::new(
-    fn(world: &@box2d.World, p5: @p5js.P5Instance) -> AnimationState {
+    fn(world: &@box2d.World, p5: &@p5js.P5JS) -> AnimationState {
       world |> ignore  // 这个动画不需要物理世界
       
       // 每帧更新计数器

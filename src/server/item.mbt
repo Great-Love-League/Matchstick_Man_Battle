@@ -23,6 +23,28 @@ pub(all) struct Item {
 }
 
 ///|
+/// 使用默认的渲染接口
+/// @todo Implement rendering for Item
+pub impl RenderAble for Item with get_render(self: Item){
+  Some(fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
+
+    world |> ignore
+
+    for shape in self.body.getShapeList() {
+    // println("Drawing Item \{self.item_type}")
+      match shape.getType() {
+        PolygonShape => drawPolygon(p, shape.toPolygonShape())
+        BoxShape => drawPolygon(p, shape.toPolygonShape())
+        CircleShape => drawCircle(p, shape.toCircleShape())
+        UnknownShape => {
+          println("Unknown Shape")
+        }
+      }
+    }
+  })
+}
+
+///|
 /// 创建物品
 pub fn Game::create_item(
   self : Self,

@@ -1,14 +1,14 @@
 pub(all) struct SampleAnimation {
-  fun : (&@box2d.World, @p5js.P5Instance) -> AnimationState
+  fun : (&@box2d.World, &@p5js.P5JS) -> AnimationState
 }
 
-pub fn SampleAnimation::new(fun: (&@box2d.World, @p5js.P5Instance) -> AnimationState) -> Self {
+pub fn SampleAnimation::new(fun: (&@box2d.World, &@p5js.P5JS) -> AnimationState) -> Self {
   SampleAnimation::{
     fun: fun
   }
 }
 
-pub impl Animation for SampleAnimation with update (self: SampleAnimation, world: &@box2d.World, p5: @p5js.P5Instance) -> AnimationState {
+pub impl Animation for SampleAnimation with update (self: SampleAnimation, world: &@box2d.World, p5: &@p5js.P5JS) -> AnimationState {
   (self.fun)(world, p5)
 }
 pub struct SmokeParticle {
@@ -33,7 +33,7 @@ fn register_smoke_animation(game: Game, base_x: Double, base_y: Double) -> Unit 
   let smokes: Ref[Array[SmokeParticle]] = Ref::new(Array::new())
 
   let animation = SampleAnimation::new(
-    fn(world: &@box2d.World, p5: @p5js.P5Instance) -> AnimationState {
+    fn(world: &@box2d.World, p5: &@p5js.P5JS) -> AnimationState {
       world |> ignore
       frame_counter.val = frame_counter.val + 1
 
@@ -149,7 +149,7 @@ fn register_blood_spray_animation(game: Game, x: Double, y: Double, vx: Double, 
   let base_speed = @cmath.sqrt(vx * vx + vy * vy) * 5.0  // 基础速度与输入方向强度相关
 
   let animation = SampleAnimation::new(
-    fn(world: &@box2d.World, p5: @p5js.P5Instance) -> AnimationState {
+    fn(world: &@box2d.World, p5: &@p5js.P5JS) -> AnimationState {
       world |> ignore
       frame_counter.val = frame_counter.val + 1
 

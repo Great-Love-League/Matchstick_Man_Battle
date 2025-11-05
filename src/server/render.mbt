@@ -130,9 +130,6 @@ fn DefaultRenderable::draw_game(self:Self,p: &@p5js.P5JS, game: Game) -> Unit {
   p.noFill()
 
   let ppm = PPM
-  let w = Width
-  let h = Height
-
   let to_screen = fn(x: Double, y: Double) -> (Double, Double) {
     world_to_screen(x, y)
   }
@@ -140,56 +137,55 @@ fn DefaultRenderable::draw_game(self:Self,p: &@p5js.P5JS, game: Game) -> Unit {
   let ws = fn(len: Double) -> Double {
     world_to_screen_size(len, ppm)
   }
-  let draw_body_line = fn(body: @box2d.B2Body, half_w: Double, half_h: Double) -> Unit {
-    let pos = body.getCenterPosition()
-    let angle = body.getRotation()
 
-    let sin_a = @cmath.sin(angle)
-    let cos_a = @cmath.cos(angle)
+  let renderable_list : Array[(&@box2d.World, &@p5js.P5JS) -> Unit] = Array::new()
 
-    let x1 = pos.getX() - sin_a * half_h
-    let y1 = pos.getY() + cos_a * half_h
-    let x2 = pos.getX() + sin_a * half_h
-    let y2 = pos.getY() - cos_a * half_h
-
-    let (sx1, sy1) = to_screen(x1, y1)
-    let (sx2, sy2) = to_screen(x2, y2)
-
-    p.line(sx1, sy1, sx2, sy2)
+  let unwrap_renderable = fn (rend : Option[(&@box2d.World, &@p5js.P5JS) -> Unit]) {
+    match rend {
+      Some(render_fn) => renderable_list.push(render_fn)
+      _ => {
+        println("Entity is not renderable")
+      }
+    }
   }
 
   for particle in game.particle_list {
-    let head_pos = particle.head.getCenterPosition()
-    let (hx, hy) = to_screen(head_pos.getX(), head_pos.getY())
-    let r = ws(0.5)
-    p.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
-    p.circle(hx, hy, r)
-    p.noFill()
-
-    draw_body_line(particle.torso, 0.25, 0.75)
-    draw_body_line(particle.left_thigh, 0.15, 0.5)
-    draw_body_line(particle.right_thigh, 0.15, 0.5)
-    draw_body_line(particle.left_shank, 0.15, 0.5)
-    draw_body_line(particle.right_shank, 0.15, 0.5)
-    draw_body_line(particle.left_arm, 0.15, 0.5)
-    draw_body_line(particle.right_arm, 0.15, 0.5)
-    draw_body_line(particle.left_forearm, 0.15, 0.35)
-    draw_body_line(particle.right_forearm, 0.15, 0.35)
+    unwrap_renderable(particle.get_render())
   }
 	
 	for platform in game.platform_list {
-		for shape in platform.get_body().getShapeList() {
-		println("Drawing Platform \{platform.get_index()}")
-			match shape.getType() {
-				PolygonShape => drawPolygon(p, shape.toPolygonShape())
-				BoxShape => drawPolygon(p, shape.toPolygonShape())
-				CircleShape => drawCircle(p, shape.toCircleShape())
-				UnknownShape => {
-					println("Unknown Shape")
-				}
-			}
-		}
+		unwrap_renderable(platform.get_render())
 	}
+
+  for bullet in game.bullet_list {
+    if !bullet.is_active {
+      continue
+    }
+    unwrap_renderable(bullet.get_render())
+  }
+
+  for item in game.item_list {
+    if !item.is_active {
+      continue
+    }
+    unwrap_renderable(item.get_render())
+  }
+
+  for enemy_option in game.enemy_list {
+    match enemy_option {
+      Some(enemy) => {
+        unwrap_renderable(enemy.get_render())
+      }
+      _ => {
+        println("Enemy is None, skipping rendering")
+      }
+    }
+  }
+
+  for render_fn in renderable_list {
+    render_fn(game.world, p)
+  }
+
   p.strokeWeight(0.0)
 }
 
@@ -200,18 +196,18 @@ pub fn DefaultRenderable::clear_screen(self: DefaultRenderable, p: &@p5js.P5JS) 
 }
 pub(all) struct DefaultRenderable {}
 
-pub impl Renderable for DefaultRenderable with render(self: DefaultRenderable, game : Game, p: &@p5js.P5JS) -> Unit {
+pub impl RenderTrait for DefaultRenderable with render(self: DefaultRenderable, game : Game, p: &@p5js.P5JS) -> Unit {
   // self.draw_world(p, game.world)
 	self.draw_game(p, game)
 	// self.draw_game(p, game)
 }
 
-pub impl Renderable for DefaultRenderable with clear_screen(self: DefaultRenderable, world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
+pub impl RenderTrait for DefaultRenderable with clear_screen(self: DefaultRenderable, world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
   world |> ignore 
   self.clear_screen(p)
 }
 
-pub trait Renderable {
+pub trait RenderTrait {
 
   // 绘画函数，在所有更新逻辑之后调用，用于绘画物理世界，但是不包含特效等
   render(self: Self, game:  Game, p: &@p5js.P5JS) -> Unit
