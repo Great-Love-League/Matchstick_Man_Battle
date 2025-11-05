@@ -218,7 +218,7 @@ pub fn register_control(game:Game) -> Unit{
       jump_key = Some(@p5js.ArrowUp),
 			faint_key = Some(@p5js.ArrowDown),
       shoot_key = Some(@p5js.Slash),
-      toggle_auto_aim_key = Some(@p5js.Slash),
+      toggle_auto_aim_key = Some(@p5js.Period),
       from_internet = false,
     )
   ) catch {
@@ -441,6 +441,9 @@ fn main {
   register_animation(game)
 
   register_animation(game)
+	
+	register_blood_spray_animation(game,500.0,500.0, 1.0, 1.0)
+	register_smoke_animation(game,500.0,500.0)
 
   game.start_run()
 
