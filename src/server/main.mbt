@@ -418,6 +418,55 @@ fn register_animation(game: Game) -> Unit {
   println("炫酷花纹动画已注册在屏幕坐标 (100, 100)")
 }
 
+/// 注册音频控制功能
+pub fn register_audio_controls(game: Game) -> Unit {
+  // 音频控制：M键切换背景音乐，N键切换音效，7键降低音量，0键提高音量
+  game.register_custom_function(
+    GameCustomFunction::new(
+      GameRunning,
+      fn(game: Game, p5: &@p5js.P5JS) {
+        // 使用帧计数来防止按键重复触发（每30帧才能触发一次）
+        let cooldown = 30
+        let volume_cooldown = 10  // 音量调节使用更短的冷却时间
+        
+        // M键：切换背景音乐
+        if p5.keyIsDown(KeyM) && game.frame_count % cooldown == 0 {
+          game.audio.toggle_bgm()
+          let status = if game.audio.bgm_enabled { "开启" } else { "关闭" }
+          println("背景音乐已\{status}")
+        }
+        
+        // N键：切换音效
+        if p5.keyIsDown(KeyN) && game.frame_count % cooldown == 0 {
+          game.audio.toggle_sfx()
+          let status = if game.audio.sfx_enabled { "开启" } else { "关闭" }
+          println("音效已\{status}")
+        }
+        
+        // 7键：降低音量
+        if p5.keyIsDown(Digit7) && game.frame_count % volume_cooldown == 0 {
+          let new_volume = game.audio.master_volume - 0.1
+          game.audio.set_master_volume(new_volume)
+          println("主音量: \{game.audio.master_volume}")
+        }
+        
+        // 0键：提高音量
+        if p5.keyIsDown(Digit0) && game.frame_count % volume_cooldown == 0 {
+          let new_volume = game.audio.master_volume + 0.1
+          game.audio.set_master_volume(new_volume)
+          println("主音量: \{game.audio.master_volume}")
+        }
+      }
+    )
+  )
+  
+  println("音频控制已注册:")
+  println("  M键 - 切换背景音乐")
+  println("  N键 - 切换音效")
+  println("  7键 - 降低音量")
+  println("  0键 - 提高音量")
+}
+
 fn main {
 	
 	let game = create_game()
@@ -443,6 +492,12 @@ fn main {
 	
 	register_blood_spray_animation(game,500.0,500.0, 1.0, 1.0)
 	register_smoke_animation(game,500.0,500.0)
+  
+  // 注册音频控制
+  register_audio_controls(game)
+
+  // 播放背景音乐
+  game.audio.play_bgm(AudioEventType::BgmMenu)
 
   game.start_run()
 

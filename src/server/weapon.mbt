@@ -108,6 +108,8 @@ pub impl WeaponCreate for Sword with create(game, owner_id){
 }
 
 pub impl WeaponControl for Sword with attack(self,game){
+	// 播放剑挥击音效
+	game.audio.play_sound(SwordSwing)
 
 	// 画攻击范围（调试用）
 	// let attack_field_counter = { val: 0 }
@@ -264,6 +266,9 @@ pub impl WeaponControl for Sword with attack(self,game){
 		)
 	)
 
+	// 播放剑挥舞音效
+	game.audio.play_sound(SwordSwing)
+	
 	println("Sword attack!")
 }
 
@@ -398,6 +403,9 @@ pub impl WeaponControl for Gun with attack(self,game){
 	// 根据枪械类型选择射击方式及参数
 	match self.gun_type {
 		Pistol => {
+			// 播放手枪音效
+			game.audio.play_sound(PistolShot)
+			
 			// 手枪：轻微下坠，轻微后坐力
 			game.shoot_bullet_advanced(
 				self.owner_id, 
@@ -414,6 +422,9 @@ pub impl WeaponControl for Gun with attack(self,game){
 		}
 		
 		Shotgun => {
+			// 播放霰弹枪音效
+			game.audio.play_sound(ShotgunShot)
+			
 			// 霰弹枪：明显下坠，强烈后坐力
 			game.shoot_shotgun(
 				self.owner_id, 
@@ -428,6 +439,9 @@ pub impl WeaponControl for Gun with attack(self,game){
 		}
 		
 		Sniper => {
+			// 播放狙击枪音效
+			game.audio.play_sound(SniperShot)
+			
 			// 狙击枪：轻微下坠，中等后坐力
 			game.shoot_penetrating_bullet_advanced(
 				self.owner_id, 
@@ -444,6 +458,9 @@ pub impl WeaponControl for Gun with attack(self,game){
 		}
 		
 		LaserRifle => {
+			// 播放激光枪音效
+			game.audio.play_sound(LaserShot)
+			
 			// 激光枪：完全无下坠，无后坐力（能量武器）
 			game.shoot_penetrating_bullet_advanced(
 				self.owner_id, 
@@ -477,6 +494,9 @@ pub impl WeaponControl for Gun with attack_at_angle(self, game, angle){
 	// 根据枪械类型选择射击方式及参数
 	match self.gun_type {
 		Pistol => {
+			// 播放手枪音效
+			game.audio.play_sound(PistolShot)
+			
 			// 手枪：轻微下坠，轻微后坐力
 			game.shoot_bullet_at_angle(
 				self.owner_id, 
@@ -492,6 +512,9 @@ pub impl WeaponControl for Gun with attack_at_angle(self, game, angle){
 		}
 		
 		Shotgun => {
+			// 播放霰弹枪音效
+			game.audio.play_sound(ShotgunShot)
+			
 			// 霰弹枪：5发子弹，分散射击
 			// 角度范围：±15度 (约0.26弧度)
 			let spread = 0.26  // 总扩散角度
@@ -516,6 +539,9 @@ pub impl WeaponControl for Gun with attack_at_angle(self, game, angle){
 		}
 		
 		Sniper => {
+			// 播放狙击枪音效
+			game.audio.play_sound(SniperShot)
+			
 			// 狙击枪：轻微下坠，中等后坐力
 			game.shoot_bullet_at_angle(
 				self.owner_id, 
@@ -531,6 +557,9 @@ pub impl WeaponControl for Gun with attack_at_angle(self, game, angle){
 		}
 		
 		LaserRifle => {
+			// 播放激光枪音效
+			game.audio.play_sound(LaserShot)
+			
 			// 激光枪：完全无下坠，无后坐力（能量武器）
 			game.shoot_bullet_at_angle(
 				self.owner_id, 
