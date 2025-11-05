@@ -289,7 +289,13 @@ fn Game::running(self:Self, p5: &@p5js.P5JS) -> Unit {
 		self.cleanup_bullets()
 		self.cleanup_items()
 	}
-		
+	
+	// 保证玩家血量不低于0
+	for particle in self.particle_list {
+		if particle.control.health < 0 {
+			particle.control.health = 0
+		}
+	}
 
 	self.run_custom_functions(GameRunning, p5)
 
@@ -355,6 +361,13 @@ fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : 
 					}
 					None => gun.attack(self)  // 没有配置时使用默认攻击
 				}
+				break
+			}
+		}
+		// 近战武器
+		for sword in self.weapon.sword_list {
+			if sword.owner_id == particle_index {
+				sword.attack(self)
 				break
 			}
 		}
@@ -518,6 +531,45 @@ pub fn Game::is_contact(self:Self,a:@box2d.B2Body, b:@box2d.B2Body)->Bool{
 		}
 	}
 	false
+}
+
+pub fn Game::who_shape_belongs_to(self:Self, shape:@box2d.B2Shape) -> (Int) {
+	let father = shape.getBody()
+	for i = 0; i < self.particle_list.length(); i = i + 1 {
+		let particle = self.particle_list[i]
+
+		if equals(particle.head, father) {
+			return i
+		}
+		if equals(particle.left_arm, father) {
+			return i
+		}
+		if equals(particle.right_arm, father) {
+			return i
+		}
+		if equals(particle.torso, father) {
+			return i
+		}
+		if equals(particle.left_forearm, father) {
+			return i
+		}
+		if equals(particle.right_forearm, father) {
+			return i
+		}
+		if equals(particle.right_thigh, father) {
+			return i
+		}
+		if equals(particle.right_shank, father) {
+			return i
+		}
+		if equals(particle.left_thigh, father) {
+			return i
+		}
+		if equals(particle.left_shank, father) {
+			return i
+		}
+	}
+	return -1
 }
 
 fn Game::update_animations(self:Self, p5: &@p5js.P5JS) -> Unit {

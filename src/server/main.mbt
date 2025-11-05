@@ -26,7 +26,7 @@ fn box2d_init(game:Game) ->Unit{
 	
 	
 	Gun::create(game,0)
-	Gun::create(game,1)
+	Sword::create(game,1)
 }
 
 fn load_custom_functions(game:Game) -> Unit {
