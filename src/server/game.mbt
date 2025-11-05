@@ -355,8 +355,13 @@ fn Game::running(self:Self, p5: &@p5js.P5JS) -> Unit {
 			self.cleanup_items()
 		}
 			
+		for i in self.weapon.gun_list {
+			maintain_rotation(i.body, 0, kp=2.0, kd=2.0)
+		}
 		// 物理步进
 	}
+	
+	
 	
 	if(self.slow_mode){
 			println("1/4 速模式：物理步进")
@@ -412,7 +417,16 @@ fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : 
 			}
 		}
 	}
-
+	
+	// for gun in self.weapon.gun_list {
+	// 	if gun.owner_id == self.particle_index {
+	// 		// 若玩家有多把枪，只调整第一把匹配到的武器
+	// 		println("自动瞄准调整武器朝向至角度：\{0}")
+	// 		maintain_rotation(gun.body, 0, kp=200.0, kd=20.0)
+	// 		break
+	// 	}
+	// }
+	
 	if p.keyIsDown(control_config.shoot_key) {
 		for gun in self.weapon.gun_list {
 			if gun.owner_id == particle_index {

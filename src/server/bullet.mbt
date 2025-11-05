@@ -222,11 +222,31 @@ pub fn Game::check_bullet_collision(self : Self, bullet : Bullet) -> Unit {
         damage = bullet.damage / 3  // 前臂 0.33x
         hit = true
       }
+      // 注册溅血特效：在子弹速度反方向上生成血雾
+      // 获取子弹当前速度（世界坐标系）并取反作为血雾喷射方向
+      
       
       if hit {
         // 播放子弹击中音效
         self.audio.play_sound(BulletHit)
         
+				
+				let vel = bullet.body.getLinearVelocity()
+				let bvx = vel.getX()*0.1
+				let bvy = vel.getY()*0.1
+				let hit_pos = bullet.body.getCenterPosition()
+				let norm = @cmath.sqrt(bvx * bvx + bvy * bvy)
+				let norm_vec = @box2d.b2Vec2(bvx / norm, bvy / norm)
+				let hx = world_to_screen(hit_pos.getX() + norm_vec.getX(), hit_pos.getY() + norm_vec.getY()).0
+				let hy = world_to_screen(hit_pos.getX() + norm_vec.getX(), hit_pos.getY() + norm_vec.getY()).1
+				// 如果速度为 (0,0)，使用一个默认的向上方向，避免完全静止的向量
+				if bvx == 0.0 && bvy == 0.0 {
+					register_blood_spray_animation(self, hx, hy, 0.0, -1.0)
+				} else {
+					register_blood_spray_animation(self, hx, hy, -bvx, -bvy)
+				}
+				
+				
         // 应用伤害
         particle.control.health -= damage
         println("子弹 #\{bullet.id} 击中玩家 \{particle.index}, 伤害 \{damage} (剩余血量: \{particle.control.health})")
