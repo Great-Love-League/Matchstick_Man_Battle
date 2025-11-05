@@ -15,6 +15,33 @@ extern "js" fn getP5Instance(
   #|return a
   #|}
 
+///| 简单的图片绘制接口
+/// 在指定坐标以指定角度和大小绘制图片
+/// @param p - P5.js 实例
+/// @param img - 图片对象
+/// @param x - 屏幕 x 坐标
+/// @param y - 屏幕 y 坐标
+/// @param width - 图片宽度（像素）
+/// @param height - 图片高度（像素）
+/// @param angle - 旋转角度（弧度制，0 表示不旋转）
+pub extern "js" fn draw_image_at(
+  p: &@p5js.P5JS, 
+  img: @p5js.P5Image, 
+  x: Double, 
+  y: Double, 
+  width: Double, 
+  height: Double,
+  angle: Double
+) -> Unit = 
+  #| (p, img, x, y, width, height, angle) => {
+  #|   p.push();
+  #|   p.translate(x, y);
+  #|   p.rotate(angle);
+  #|   p.imageMode('center');
+  #|   p.image(img, 0, 0, width, height);
+  #|   p.pop();
+  #| }
+
 // extern "js" fn getCanvasWidth(self : &@p5js.P5JS) -> Double =
 //   #| (self) => self.width
 
