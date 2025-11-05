@@ -18,6 +18,14 @@ pub(all) struct Game {
 	mut item_list : Array[Item]
 	mut frame_count : Int
 
+	// 时间控制（两档：正常 / 1/4 速度）
+	mut slow_mode : Bool
+
+	// 窗口振动（屏幕抖动）
+	mut shake_timer : Int
+	mut shake_duration : Int
+	mut shake_magnitude : Double
+
 	// 玩家控制配置列表
 	mut particle_control_configs : Array[ParticleControlConfig]
 
@@ -240,54 +248,93 @@ fn Game::running(self:Self, p5: @p5js.P5Instance) -> Unit {
 
 	self.frame_count += 1
 
-	for platform in self.platform_list {
-		platform.update(self)
+	// 全局按键：
+	// 按 8 触发屏幕振动；按 9 减速；按 0 加速。
+	// 使用 frame_count 做简单节流，避免按下时瞬间多次变化。
+	if p5.keyIsDown(@p5js.Digit8) {
+		self.shake_timer = self.shake_duration
 	}
 
-	for config in self.particle_control_configs {
-		if !config.from_internet {
-			self.particle_control(config, p5) catch{
-				e => {
-					println("Error in particle_control: \{e} in particle index \{config.target_particle_index}.")
+	// 按 9 切换到 1/4 速（只在每 4 帧步进一次物理）
+	// if p5.keyIsDown(@p5js.Digit9) {
+	// 	if self.frame_count % 10 == 0 {
+	// 		self.slow_mode = true
+	// 		println("切换到 1/4 时间模式")
+	// 	}
+	// }
+
+	// // 按 0 切换回正常速度
+	// if p5.keyIsDown(@p5js.Digit0) {
+	// 	if self.frame_count % 10 == 0 {
+	// 		self.slow_mode = false
+	// 		println("切换到正常时间模式")
+	// 	}
+	// }
+
+	// 如果处于慢速模式，则只在每 4 的倍数帧执行完整的游戏更新逻辑（包括物理步进）
+	let do_tick = true
+
+	if do_tick {
+
+		for platform in self.platform_list {
+			platform.update(self)
+		}
+
+		for config in self.particle_control_configs {
+			if !config.from_internet {
+				self.particle_control(config, p5) catch{
+					e => {
+						println("Error in particle_control: \{e} in particle index \{config.target_particle_index}.")
+					}
 				}
 			}
+			// 网络控制待实现
 		}
-		// 网络控制待实现
-	}
 
-	// 更新子弹系统
-	self.update_all_bullets()
-	
-	// 更新物品系统
-	self.update_all_items()
-
-	// 更新敌人系统
-	for enemy_opt in self.enemy_list {
-		match enemy_opt {
-			Some(enemy) => enemy.update(self)
-			None => ()
-		}
-	}
-	
-	// 更新自动瞄准系统（为每个玩家更新目标）
-	for i = 0; i < self.auto_aim_configs.length(); i = i + 1 {
-		self.update_auto_aim_target(i, self.auto_aim_configs[i])
-	}
-	
-	// 每60帧清理一次
-	if self.frame_count % 60 == 0 {
-		self.cleanup_bullets()
-		self.cleanup_items()
-	}
+		// 更新子弹系统
+		self.update_all_bullets()
 		
+		// 更新物品系统
+		self.update_all_items()
 
-	self.run_custom_functions(GameRunning, p5)
+		// 更新敌人系统
+		for enemy_opt in self.enemy_list {
+			match enemy_opt {
+				Some(enemy) => enemy.update(self)
+				None => ()
+			}
+		}
+		
+		// 更新自动瞄准系统（为每个玩家更新目标）
+		for i = 0; i < self.auto_aim_configs.length(); i = i + 1 {
+			self.update_auto_aim_target(i, self.auto_aim_configs[i])
+		}
+		
+		// 每60帧清理一次（基于全局 frame_count）
+		if self.frame_count % 60 == 0 {
+			self.cleanup_bullets()
+			self.cleanup_items()
+		}
+			
+		// 物理步进
+	}
+	
+	if(self.slow_mode){
+			println("1/4 速模式：物理步进")
+		self.world.step(1.0/60.0/4.0, 4)
+		}
+		else{
+			self.world.step(1.0/60.0, 4)
+		}
+		self.run_custom_functions(GameRunning, p5)
 
-	// 更新动画系统
-	self.update_animations(p5)
+		// 更新动画系统
+		self.update_animations(p5)
 
-
-	self.world.step(1.0/60.0, 4)
+	// 振动计时器每帧递减（即使在慢速下也要每帧表现抖动）
+	if self.shake_timer > 0 {
+		self.shake_timer = self.shake_timer - 1
+	}
 	self.state = GameRunning
 }
 
@@ -418,7 +465,7 @@ pub fn create_game(render~: &Renderable = DefaultRenderable::{}) -> Game{
 		world,
 		weapon,
 		render,
-		state: GameRunning,
+			state: GameRunning,
 		particle_list:Array::new(),
 		particle_index:0,
 		platform_list:Array::new(),
@@ -426,7 +473,15 @@ pub fn create_game(render~: &Renderable = DefaultRenderable::{}) -> Game{
 		enemy_list : Array::new(),
 		bullet_list : Array::new(),
 		item_list : Array::new(),
-		frame_count : 0,
+			frame_count : 0,
+
+			// 默认正常速度
+			slow_mode: false,
+
+			// shake defaults
+			shake_timer: 0,
+			shake_duration: 15,
+			shake_magnitude: 8.0,
 		anchor,
 		particle_control_configs : Array::new(),
 		custom_functions : Array::new(),
