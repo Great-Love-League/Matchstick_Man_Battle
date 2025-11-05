@@ -22,8 +22,58 @@ pub(all) struct MovablePlatform{
 	cooldown_time : Int // 冷却时间总长
 }
 
+pub impl RenderAble for Platform with get_render(platform: Platform){
+	Some(fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
+		world|> ignore
+		for shape in platform.get_body().getShapeList() {
+		// println("Drawing Platform \{platform.get_index()}")
+			match shape.getType() {
+				PolygonShape => drawPolygon(p, shape.toPolygonShape())
+				BoxShape => drawPolygon(p, shape.toPolygonShape())
+				CircleShape => drawCircle(p, shape.toCircleShape())
+				UnknownShape => {
+					println("Unknown Shape")
+				}
+			}
+		}
+	})
+}
+
+pub impl RenderAble for RotatablePlatform with get_render(rotatable_platform: RotatablePlatform){
+	Some(fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
+		world|> ignore
+		for shape in rotatable_platform.get_body().getShapeList() {
+		// println("Drawing RotatablePlatform \{rotatable_platform.get_index()}")
+			match shape.getType() {
+				PolygonShape => drawPolygon(p, shape.toPolygonShape())
+				BoxShape => drawPolygon(p, shape.toPolygonShape())
+				CircleShape => drawCircle(p, shape.toCircleShape())
+				UnknownShape => {
+					println("Unknown Shape")
+				}
+			}
+		}
+	})
+}
+
+pub impl RenderAble for MovablePlatform with get_render(movable_platform: MovablePlatform){
+	Some(fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
+		for shape in movable_platform.get_body().getShapeList() {
+		// println("Drawing MovablePlatform \{movable_platform.get_index()}")
+			match shape.getType() {
+				PolygonShape => drawPolygon(p, shape.toPolygonShape())
+				BoxShape => drawPolygon(p, shape.toPolygonShape())
+				CircleShape => drawCircle(p, shape.toCircleShape())
+				UnknownShape => {
+					println("Unknown Shape")
+				}
+			}
+		}
+	})
+}
+
 // 还需要一个操作 , 探测某个人是否能站在平台上
-pub(open) trait PlatformTrait{
+pub(open) trait PlatformTrait : RenderAble{
 	//destroy(Self, game:Game) -> Unit
 	update(Self, game:Game) -> Unit
 	get_index(Self) -> Int
