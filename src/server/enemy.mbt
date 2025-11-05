@@ -9,7 +9,7 @@ pub(all) enum ActionType{
 	Attack
 }
 
-pub(open) trait EnemyTrait{
+pub(open) trait EnemyTrait : RenderAble {
 	// create(Self,game:Game,position:(Double,Double)) -> Bool
 	destroy(Self, game:Game) -> Unit
 	update(Self, game:Game) -> Unit
@@ -17,6 +17,30 @@ pub(open) trait EnemyTrait{
 	get_hp(Self) -> Double
 	get_hp_limit(Self) -> Double
 	get_position(Self) -> (Double, Double)?  // 获取敌人位置
+}
+
+///| 使用默认的渲染接口
+///| @todo Implement rendering for BoxEnemy
+///  @ht
+pub impl RenderAble for BoxEnemy with get_render(self: BoxEnemy){
+	Some(fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
+
+		world |> ignore
+
+		for body in self.bodies {
+			for shape in body.getShapeList() {
+			// println("Drawing BoxEnemy")
+				match shape.getType() {
+					PolygonShape => drawPolygon(p, shape.toPolygonShape())
+					BoxShape => drawPolygon(p, shape.toPolygonShape())
+					CircleShape => drawCircle(p, shape.toCircleShape())
+					UnknownShape => {
+						println("Unknown Shape")
+					}
+				}
+			}
+		}
+	})
 }
 
 pub(all) struct BoxEnemy {

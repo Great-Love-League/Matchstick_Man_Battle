@@ -4,7 +4,7 @@ pub suberror GameStateError String
 pub(all) struct Game {
 	world : @box2d.B2World
 	weapon : WeaponManager
-	render : &Renderable
+	render : &RenderTrait
 	mut state : GameState
 	mut particle_list:Array[Particle]
 	mut particle_index:Int
@@ -40,8 +40,18 @@ pub(all) struct Game {
 	anchor : @box2d.B2Body
 }
 
+// pub trait renderable 用于每个可渲染对象的渲染接口，如果没有设置则使用 render 的默认实现
+pub trait RenderAble {
+	get_render(self: Self) -> Option[(&@box2d.World, &@p5js.P5JS) -> Unit] = _
+}
+
+impl RenderAble with get_render(self: Self) -> Option[(&@box2d.World, &@p5js.P5JS) -> Unit] {
+	self |> ignore
+	None
+}
+
 pub trait GameCustomFunctionTrait {
-	call_custom_function(self: Self, game: Game, p5: @p5js.P5Instance) -> Unit
+	call_custom_function(self: Self, game: Game, p5: &@p5js.P5JS) -> Unit
 	get_call_stage(self: Self) -> GameState
 }
 
@@ -53,18 +63,18 @@ pub(all) enum AnimationState {
 
 trait Animation {
 	///| 动画更新函数，如果返回Completed则表示动画结束，反之则继续进行
-	update(self: Self, world: &@box2d.World, p5: @p5js.P5Instance) -> AnimationState
+	update(self: Self, world: &@box2d.World, p5: &@p5js.P5JS) -> AnimationState
 }
 
 
 pub(all) struct GameCustomFunction {
 	stage : GameState
-	func : (Game, @p5js.P5Instance) -> Unit
+	func : (Game, &@p5js.P5JS) -> Unit
 }
 
 pub fn GameCustomFunction::new(
 	stage : GameState,
-	func : (Game, @p5js.P5Instance) -> Unit
+	func : (Game, &@p5js.P5JS) -> Unit
 ) -> Self {
 	GameCustomFunction::{
 		stage,
@@ -72,7 +82,7 @@ pub fn GameCustomFunction::new(
 	}
 }
 
-pub impl GameCustomFunctionTrait for GameCustomFunction with call_custom_function(self, game: Game, p5: @p5js.P5Instance) -> Unit {
+pub impl GameCustomFunctionTrait for GameCustomFunction with call_custom_function(self, game: Game, p5: &@p5js.P5JS) -> Unit {
 		(self.func)(game, p5)
 }
 
@@ -207,7 +217,7 @@ pub fn Game::toggle_auto_aim(self : Self, player_id : Int) -> Unit {
 	}
 }
 
-fn Game::run_custom_functions(self:Self, stage:GameState, p5: @p5js.P5Instance) -> Unit {
+fn Game::run_custom_functions(self:Self, stage:GameState, p5: &@p5js.P5JS) -> Unit {
 	for func in self.custom_functions {
 		if func.get_call_stage() == stage {
 			func.call_custom_function(self, p5)
@@ -215,7 +225,7 @@ fn Game::run_custom_functions(self:Self, stage:GameState, p5: @p5js.P5Instance) 
 	}
 }
 
-fn Game::state_machine_update(self:Self, p5: @p5js.P5Instance) -> Unit {
+fn Game::state_machine_update(self:Self, p5: &@p5js.P5JS) -> Unit {
 	self.render.clear_screen(self.world, p5)
 	match self.state {
 		GamePreparing => {
@@ -234,17 +244,17 @@ fn Game::state_machine_update(self:Self, p5: @p5js.P5Instance) -> Unit {
 	self.render.render(self, p5)
 }
 
-fn Game::prepare(self:Self, p5: @p5js.P5Instance) -> Unit {
+fn Game::prepare(self:Self, p5: &@p5js.P5JS) -> Unit {
 	self.run_custom_functions(GamePreparing, p5)
 	self.state = GameRunning
 }
 
-fn Game::pause(self:Self, p5: @p5js.P5Instance) -> Unit {
+fn Game::pause(self:Self, p5: &@p5js.P5JS) -> Unit {
 	self.run_custom_functions(GamePaused, p5)
 	self.state = GameRunning
 }
 
-fn Game::running(self:Self, p5: @p5js.P5Instance) -> Unit {
+fn Game::running(self:Self, p5: &@p5js.P5JS) -> Unit {
 
 	self.frame_count += 1
 
@@ -291,11 +301,37 @@ fn Game::running(self:Self, p5: @p5js.P5Instance) -> Unit {
 			// 网络控制待实现
 		}
 
-		// 更新子弹系统
-		self.update_all_bullets()
-		
-		// 更新物品系统
-		self.update_all_items()
+	// 更新子弹系统
+	self.update_all_bullets()
+	
+	// 更新物品系统
+	self.update_all_items()
+
+	// 更新敌人系统
+	for enemy_opt in self.enemy_list {
+		match enemy_opt {
+			Some(enemy) => enemy.update(self)
+			None => ()
+		}
+	}
+	
+	// 更新自动瞄准系统（为每个玩家更新目标）
+	for i = 0; i < self.auto_aim_configs.length(); i = i + 1 {
+		self.update_auto_aim_target(i, self.auto_aim_configs[i])
+	}
+	
+	// 每60帧清理一次
+	if self.frame_count % 60 == 0 {
+		self.cleanup_bullets()
+		self.cleanup_items()
+	}
+	
+	// 保证玩家血量不低于0
+	for particle in self.particle_list {
+		if particle.control.health < 0 {
+			particle.control.health = 0
+		}
+	}
 
 		// 更新敌人系统
 		for enemy_opt in self.enemy_list {
@@ -338,13 +374,13 @@ fn Game::running(self:Self, p5: @p5js.P5Instance) -> Unit {
 	self.state = GameRunning
 }
 
-fn Game::game_over(self:Self, p5: @p5js.P5Instance) -> Unit {
+fn Game::game_over(self:Self, p5: &@p5js.P5JS) -> Unit {
 	self.run_custom_functions(GameOver, p5)
 	self.state = GameRunning
 }
 
 ///| 重构后的玩家移动函数
-fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : @p5js.P5Instance) -> Unit raise{
+fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : &@p5js.P5JS) -> Unit raise{
 
 	let particle_index = control_config.target_particle_index
 	if particle_index < 0 || particle_index >= self.particle_list.length() {
@@ -392,6 +428,13 @@ fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : 
 					}
 					None => gun.attack(self)  // 没有配置时使用默认攻击
 				}
+				break
+			}
+		}
+		// 近战武器
+		for sword in self.weapon.sword_list {
+			if sword.owner_id == particle_index {
+				sword.attack(self)
 				break
 			}
 		}
@@ -446,7 +489,7 @@ pub fn Game::create_static_box(
 	body
 }
 
-pub fn create_game(render~: &Renderable = DefaultRenderable::{}) -> Game{
+pub fn create_game(render~: &RenderTrait = DefaultRenderable::{}) -> Game{
 	let world = create_world()
 	
 	let weapon=create_weapon_manager()
@@ -565,7 +608,46 @@ pub fn Game::is_contact(self:Self,a:@box2d.B2Body, b:@box2d.B2Body)->Bool{
 	false
 }
 
-fn Game::update_animations(self:Self, p5: @p5js.P5Instance) -> Unit {
+pub fn Game::who_shape_belongs_to(self:Self, shape:@box2d.B2Shape) -> (Int) {
+	let father = shape.getBody()
+	for i = 0; i < self.particle_list.length(); i = i + 1 {
+		let particle = self.particle_list[i]
+
+		if equals(particle.head, father) {
+			return i
+		}
+		if equals(particle.left_arm, father) {
+			return i
+		}
+		if equals(particle.right_arm, father) {
+			return i
+		}
+		if equals(particle.torso, father) {
+			return i
+		}
+		if equals(particle.left_forearm, father) {
+			return i
+		}
+		if equals(particle.right_forearm, father) {
+			return i
+		}
+		if equals(particle.right_thigh, father) {
+			return i
+		}
+		if equals(particle.right_shank, father) {
+			return i
+		}
+		if equals(particle.left_thigh, father) {
+			return i
+		}
+		if equals(particle.left_shank, father) {
+			return i
+		}
+	}
+	return -1
+}
+
+fn Game::update_animations(self:Self, p5: &@p5js.P5JS) -> Unit {
 
 	let animations_state = Array::new()
 	for animation in self.animation_list {
