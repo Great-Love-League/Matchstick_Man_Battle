@@ -152,18 +152,21 @@ pub fn DefaultRenderable::draw_world(self: DefaultRenderable, p: &@p5js.P5JS, wo
 }
 
 fn DefaultRenderable::draw_game(self:Self,p: &@p5js.P5JS, game: Game) -> Unit {
+
+  self |> ignore
+
   p.strokeWeight(5.0)
   p.strokeComponents(0.0, 0.0, 0.0, Some(255.0))
   p.noFill()
 
-  let ppm = PPM
-  let to_screen = fn(x: Double, y: Double) -> (Double, Double) {
-    world_to_screen(x, y)
-  }
+  // let ppm = PPM
+  // let to_screen = fn(x: Double, y: Double) -> (Double, Double) {
+  //   world_to_screen(x, y)
+  // }
 
-  let ws = fn(len: Double) -> Double {
-    world_to_screen_size(len, ppm)
-  }
+  // let ws = fn(len: Double) -> Double {
+  //   world_to_screen_size(len, ppm)
+  // }
 
   let renderable_list : Array[(&@box2d.World, &@p5js.P5JS) -> Unit] = Array::new()
 

@@ -146,8 +146,7 @@ pub impl WeaponControl for Sword with attack(self,game){
 
 	let query_result: FixedArray[@box2d.B2Shape] = []
 
-	let res_cut = game.world.query(self.get_attack_field(), query_result, 10)
-
+	game.world.query(self.get_attack_field(), query_result, 10) |> ignore
 
 	for attached_shape in query_result{
 		let target_particle = game.who_shape_belongs_to(attached_shape)
