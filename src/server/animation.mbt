@@ -16,8 +16,8 @@ pub struct SmokeParticle {
   mut y: Double
   mut r: Double
   mut alpha: Double
-  mut vx: Double
-  mut vy: Double
+  vx: Double
+  vy: Double
   mut rot: Double
   mut life: Double
 	beg : Int
@@ -82,7 +82,7 @@ fn register_smoke_animation(game: Game, base_x: Double, base_y: Double) -> Unit 
 
       let alive: Array[SmokeParticle] = []
       for s in smokes.val {
-        let mut p = s
+        let p = s
 
         // —— 运动更新 —— 
         p.x = p.x + p.vx + 0.08 * @cmath.sin(p.rot + frame_counter.val.to_double() * 0.07)
@@ -186,7 +186,7 @@ fn register_blood_spray_animation(game: Game, x: Double, y: Double, vx: Double, 
       let alive: Array[BloodParticle] = []
 
       for s in particles.val {
-        let mut p = s
+        let p = s
 
         // 基本物理更新
         p.x = p.x + p.vx * 0.16

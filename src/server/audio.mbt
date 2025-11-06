@@ -47,7 +47,7 @@ pub struct AudioManager {
   mut sfx_enabled : Bool                                 // 音效开关
   mut bgm_enabled : Bool                                 // 背景音乐开关
   mut master_volume : Double                             // 主音量
-  mut audio_configs : Map[AudioEventType, AudioConfig]   // 音频配置
+  audio_configs : Map[AudioEventType, AudioConfig]   // 音频配置
   mut current_bgm : AudioEventType?                      // 当前播放的背景音乐
 }
 

@@ -58,6 +58,9 @@ pub impl RenderAble for RotatablePlatform with get_render(rotatable_platform: Ro
 
 pub impl RenderAble for MovablePlatform with get_render(movable_platform: MovablePlatform){
 	Some(fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
+
+		world |> ignore
+
 		for shape in movable_platform.get_body().getShapeList() {
 		// println("Drawing MovablePlatform \{movable_platform.get_index()}")
 			match shape.getType() {
