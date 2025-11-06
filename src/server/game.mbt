@@ -379,12 +379,59 @@ fn Game::running(self:Self, p5: &@p5js.P5JS) -> Unit {
 	if self.shake_timer > 0 {
 		self.shake_timer = self.shake_timer - 1
 	}
+
+	// 如果有玩家死亡，则切换到游戏结束状态
+	for i in self.particle_list {
+		if i.control.health <= 0 {
+			self.state = GameOver
+			return
+		}
+	}
+
 	self.state = GameRunning
 }
 
 fn Game::game_over(self:Self, p5: &@p5js.P5JS) -> Unit {
 	self.run_custom_functions(GameOver, p5)
-	self.state = GameRunning
+
+	// 画一个简单的游戏结束画面
+	// 找出获胜者（血量大于0的玩家）
+	let mut winner_index = -1
+	for i = 0; i < self.particle_list.length(); i = i + 1 {
+		if self.particle_list[i].control.health > 0 {
+			winner_index = i
+			break
+		}
+	}
+	
+	// 显示半透明背景
+	p5.fillColorPara(0.0, Some(0.0), Some(0.0), Some(180.0))
+	p5.noStroke()
+	p5.rect(0.0, 0.0, VIEWPORT_WIDTH, VIEWPORT_HEIGHT)
+	
+	// 显示游戏结束文字
+	p5.textSizeSet(80.0)
+	p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
+	p5.textAlign("center", Some("center"))
+	p5.text("游戏结束", VIEWPORT_WIDTH / 2.0, VIEWPORT_HEIGHT / 2.0 - 80.0, None, None)
+	
+	// 显示获胜者
+	if winner_index >= 0 {
+		p5.textSizeSet(60.0)
+		p5.fillColorPara(255.0, Some(215.0), Some(0.0), Some(255.0))  // 金色
+		p5.text("玩家 \{winner_index} 获胜!", VIEWPORT_WIDTH / 2.0, VIEWPORT_HEIGHT / 2.0, None, None)
+	} else {
+		p5.textSizeSet(60.0)
+		p5.fillColorPara(200.0, Some(200.0), Some(200.0), Some(255.0))
+		p5.text("平局", VIEWPORT_WIDTH / 2.0, VIEWPORT_HEIGHT / 2.0, None, None)
+	}
+	
+	// 显示提示文字
+	p5.textSizeSet(30.0)
+	p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
+	p5.text("刷新页面重新开始", VIEWPORT_WIDTH / 2.0, VIEWPORT_HEIGHT / 2.0 + 80.0, None, None)
+
+	self.state = GameOver
 }
 
 ///| 重构后的玩家移动函数
@@ -484,8 +531,8 @@ fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : 
 
 }
 
-pub const VIEWPORT_WIDTH : Double = 1920 // 视口宽度
-pub const VIEWPORT_HEIGHT : Double = 1080 // 视口高度
+pub const VIEWPORT_WIDTH : Double = Width // 视口宽度
+pub const VIEWPORT_HEIGHT : Double = Height // 视口高度
 
 pub const Pi : Double = 3.141592653589793
 
