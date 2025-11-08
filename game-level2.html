@@ -1,39 +1,286 @@
 <!DOCTYPE html>
-<html>
-<script type="text/javascript">const min = Math.min;</script>
+<html lang="zh-CN">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的游戏 - Level 2</title>
 
+    <script type="text/javascript">const min = Math.min;</script>
+
+    <!-- 保留旧项目的 jQuery（若其它脚本依赖） -->
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.4.2.min.js" ></script>
     <script type="text/javascript">
     jQuery.noConflict();
     Object.extend = jQuery.extend;
     </script>
     <script src="lib/jquery.svg.min.js"></script>
-    
-    <meta charset="UTF-8">
-    <title>My Game</title>
-    <style type="text/css">
+
+    <!-- 视觉与容器样式（见步骤三：页面居中） -->
+    <style>
         @font-face {
             font-family: "ThaleahFat";
             src: url("./ThaleahFat.ttf") format("truetype");
             font-weight: normal;
             font-style: normal;
         }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f2f5;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+
+        /* 游戏画布的容器（画框）
+           容器尺寸将根据内部 canvas 自动调整（通过 JS 监听 canvas 的创建与尺寸变化）
+        */
+        #game-container {
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            line-height: 0; /* 修复 p5 默认下方空白 */
+            background: #ffffff; /* 白色背景作为画布容器 */
+            display: inline-block; /* 随内部 canvas 尺寸伸缩 */
+            position: relative;
+        }
+
+        /* HUD（覆盖在画布上） */
+        #hud {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            left: 12px;
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            z-index: 50;
+            pointer-events: none; /* 让点击穿透到画布 */
+        }
+        .player-panel {
+            pointer-events: auto; /* 面板内可交互（如果需要） */
+            background: rgba(0,0,0,0.55);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(4px);
+            min-width: 220px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.24);
+        }
+        .pp-left { justify-content: flex-start; }
+        .pp-right { justify-content: flex-end; }
+        .avatar { width:40px; height:40px; border-radius:6px; background:linear-gradient(180deg,#333,#111); overflow:hidden; flex:0 0 40px; }
+        .avatar img { width:100%; height:100%; object-fit:cover; display:block; }
+        .meta { display:flex; flex-direction:column; gap:4px; }
+        .meta .name { font-weight:700; font-size:14px; }
+        .meta .sub { font-size:12px; opacity:0.9; }
+        .hp { display:flex; align-items:center; gap:8px; }
+        .bar { width:140px; height:12px; background:rgba(255,255,255,0.12); border-radius:6px; overflow:hidden; }
+        .bar .fill { height:100%; background:linear-gradient(90deg,#ff5f6d,#ffc371); width:100%; transition: width 160ms linear; }
+        .hp .value { min-width:48px; text-align:right; font-variant-numeric: tabular-nums; }
+        .stat { font-weight:600; font-size:12px; }
+
+        /* 返回按钮样式（保留） */
+        .top-controls { text-align: center; margin: 12px 0; position: absolute; top: 12px; width: 100%; left: 0; }
+        #back-to-menu { padding:8px 14px; font-size:14px; cursor:pointer; border-radius:6px; background:linear-gradient(90deg,#ff6ec7,#00f0ff); color:#fff; border:none; box-shadow:0 4px 12px rgba(0,0,0,0.25); }
+
+        /* 若页面宽度小于容器，允许横向缩放（基本响应式） */
+        @media (max-width: 1000px) {
+            #game-container { width: calc(100vw - 40px); height: calc((100vw - 40px) * 2/3); }
+        }
     </style>
-    <script src="./box2d.js"></script>
-    <script src=".mooncakes\Demonmasterlqx\MoonP5\p5.js"></script>
-    <script src="./target/js/release/build/game-level2/game-level2.js"></script>
+    <!-- 不在 head 中加载 p5/box2d，改在 body 底部按依赖顺序加载 -->
 </head>
 
 <body>
-    <div style="text-align:center; margin:12px 0;">
-        <button id="back-to-menu" style="padding:8px 14px; font-size:14px; cursor:pointer; border-radius:6px; background:linear-gradient(90deg,#ff6ec7,#00f0ff); color:#fff; border:none; box-shadow:0 4px 12px rgba(0,0,0,0.25);">返回菜单</button>
+    <div class="top-controls">
+        <button id="back-to-menu">返回菜单</button>
     </div>
-    <canvas id="canvas" style="display: block; margin: 0 auto;" height="32" width="32"></canvas>
-    <script type="text/javascript">
+
+    <!-- 这是我们的“画框”/“容器” -->
+    <div id="game-container">
+        <!-- 若旧代码有 canvas（静态 fallback），我们会把它移动到这里；p5 创建的 canvas 也会被 re-parent 到此容器 -->
+        <canvas id="canvas" style="display:block;" height="32" width="32"></canvas>
+        <!-- HUD：左右分别展示玩家 0 / 玩家 1 的信息（头像、名字、HP、弹药、分数） -->
+        <div id="hud" aria-live="polite">
+            <div id="player-0" class="player-panel pp-left" role="region" aria-label="Player 0">
+                <div class="avatar"><img id="p0-avatar" src="" alt="P0"></div>
+                <div class="meta">
+                    <div class="name" id="p0-name">P0</div>
+                    <div class="sub hp"><div class="bar"><div class="fill" id="p0-hp-fill" style="width:100%"></div></div><div class="value" id="p0-hp-text">100/100</div></div>
+                </div>
+                <div style="margin-left:auto; text-align:right; display:flex; flex-direction:column; gap:6px;">
+                    <div class="stat">Ammo: <span id="p0-ammo">—</span></div>
+                    <div class="stat">Score: <span id="p0-score">—</span></div>
+                </div>
+            </div>
+
+            <div id="player-1" class="player-panel pp-right" role="region" aria-label="Player 1">
+                <div style="display:flex; flex-direction:column; gap:6px; text-align:left;">
+                    <div class="stat">Score: <span id="p1-score">—</span></div>
+                    <div class="stat">Ammo: <span id="p1-ammo">—</span></div>
+                </div>
+                <div style="margin-left:12px; text-align:left;" class="meta">
+                    <div class="name" id="p1-name">P1</div>
+                    <div class="sub hp"><div class="bar"><div class="fill" id="p1-hp-fill" style="width:100%"></div></div><div class="value" id="p1-hp-text">100/100</div></div>
+                </div>
+                <div class="avatar"><img id="p1-avatar" src="" alt="P1"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 先加载运行时依赖（CDN），再加载本地构建的游戏脚本 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
+
+    <!-- 使用本地 box2d.js（替代被阻止的 CDN 版本） -->
+    <script src="./box2d.js"></script>
+
+    <!-- 运行时检测（如果 Box2D 未定义，打印警告） -->
+    <script>
+        (function(){
+            function checkBox2D(){
+                if (typeof Box2D === 'undefined') {
+                    console.warn('Box2D 未定义：本地 ./box2d.js 可能未正确加载。请检查文件路径或脚本错误。');
+                }
+            }
+            if (document.readyState === 'complete') {
+                setTimeout(checkBox2D, 50);
+            } else {
+                window.addEventListener('load', function(){ setTimeout(checkBox2D, 50); });
+            }
+        })();
+    </script>
+
+    <!-- 游戏构建脚本（可能包含 p5 代码），确保在 p5 之后加载 -->
+    <script src="./target/js/release/build/game-level2/game-level2.js"></script>
+
+    <!-- 脚本：返回菜单按钮行为 + 把现有或新创建的 canvas 归位到 #game-container -->
+    <script>
         document.getElementById('back-to-menu').addEventListener('click', function() {
             window.location.href = 'index.html';
         });
+
+        // 在页面完全加载后把 canvas 元素移动到容器内，并根据 canvas 实际尺寸调整容器大小。
+        // 兼容场景：静态 <canvas id="canvas"> 或 p5 在外部脚本中创建的 canvas。
+        (function() {
+            var container = document.getElementById('game-container');
+            if (!container) return;
+
+            // 把 body 直接子节点的 canvas（若存在）移动进容器
+            function moveExistingCanvases() {
+                var canvases = Array.prototype.slice.call(document.querySelectorAll('body > canvas'));
+                canvases.forEach(function(c) {
+                    if (c.parentNode !== container) {
+                        container.appendChild(c);
+                    }
+                });
+            }
+
+            // 根据 canvas 的宽高属性（canvas.width / canvas.height）调整容器尺寸
+            function fitContainerToCanvas(canvas) {
+                if (!canvas) return;
+                // prefer canvas.width/height which reflect drawing buffer size
+                var w = canvas.width || canvas.clientWidth || canvas.getBoundingClientRect().width;
+                var h = canvas.height || canvas.clientHeight || canvas.getBoundingClientRect().height;
+                if (w) container.style.width = w + 'px';
+                if (h) container.style.height = h + 'px';
+            }
+
+            // Observe additions to the container: 当 p5 createCanvas 时，canvas 会被 parent 到 container
+            var mo = new MutationObserver(function(mutations) {
+                mutations.forEach(function(m) {
+                    if (m.type === 'childList' && m.addedNodes.length) {
+                        m.addedNodes.forEach(function(node) {
+                            if (node.nodeName === 'CANVAS') {
+                                // 确保容器大小匹配新 canvas
+                                fitContainerToCanvas(node);
+
+                                // 如果浏览器支持 ResizeObserver，监听 canvas 大小变化（例如 p.resizeCanvas）
+                                if (window.ResizeObserver) {
+                                    var ro = new ResizeObserver(function() { fitContainerToCanvas(node); });
+                                    ro.observe(node);
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+            mo.observe(container, { childList: true, subtree: false });
+
+            // 也把页面上已存在的 canvas 移入并适配（例如静态 fallback）
+            if (document.readyState === 'complete') {
+                moveExistingCanvases();
+                // 如果已存在 canvas，则适配第一个
+                var firstCanvas = container.querySelector('canvas');
+                if (firstCanvas) fitContainerToCanvas(firstCanvas);
+            } else {
+                window.addEventListener('load', function() {
+                    moveExistingCanvases();
+                    var firstCanvas = container.querySelector('canvas');
+                    if (firstCanvas) fitContainerToCanvas(firstCanvas);
+                });
+            }
+        })();
+    
+                // HUD 更新逻辑：定期从 window.__mmb_get_state() 读取（若存在）并更新显示
+                (function() {
+                    function safeText(id, v) { var el = document.getElementById(id); if (el) el.textContent = (v===null || v===undefined) ? '—' : v; }
+                    function safeImg(id, url, fallback) { var el = document.getElementById(id); if (!el) return; if (url) el.src = url; else if (fallback) el.src = fallback; else el.removeAttribute('src'); }
+                    function safeFill(id, pct, textId) { var f = document.getElementById(id); if (f) f.style.width = (pct) + '%'; if (textId) { var t = document.getElementById(textId); if (t) t.textContent = pct + '/100'; } }
+
+                    function updateHUD() {
+                        try {
+                            var getter = window.__mmb_get_state;
+                            var state = undefined;
+                            if (typeof getter === 'function') state = getter();
+                            else if (window.__mmb_game) {
+                                // best-effort fallback
+                                var raw = window.__mmb_game;
+                                if (raw && raw.particle_list && raw.particle_list.length>0) {
+                                    state = { players: [] };
+                                    for (var i=0;i<raw.particle_list.length;i++) {
+                                        var p = raw.particle_list[i];
+                                        var ctrl = p && p.control ? p.control : { health:0 };
+                                        state.players.push({ index: p.index, health: ctrl.health, name: (p.name||null) });
+                                    }
+                                }
+                            }
+
+                            if (!state || !state.players) return;
+
+                            // update player 0
+                            var p0 = state.players[0] || { health:0, name:'P0', ammo:null, score:null, avatar:null };
+                            var hp0 = Math.max(0, Math.min(100, (p0.health===undefined||p0.health===null)?0:p0.health));
+                            safeFill('p0-hp-fill', hp0, 'p0-hp-text');
+                            safeText('p0-name', p0.name || ('P'+(p0.index===undefined?0:p0.index)));
+                            safeText('p0-ammo', (p0.ammo===null||p0.ammo===undefined)?'—':p0.ammo);
+                            safeText('p0-score', (p0.score===null||p0.score===undefined)?'—':p0.score);
+                            safeImg('p0-avatar', p0.avatar, 'assets/Menu/Buttons/default-avatar.png');
+
+                            // update player 1
+                            var p1 = state.players[1] || { health:0, name:'P1', ammo:null, score:null, avatar:null };
+                            var hp1 = Math.max(0, Math.min(100, (p1.health===undefined||p1.health===null)?0:p1.health));
+                            safeFill('p1-hp-fill', hp1, 'p1-hp-text');
+                            safeText('p1-name', p1.name || ('P'+(p1.index===undefined?1:p1.index)));
+                            safeText('p1-ammo', (p1.ammo===null||p1.ammo===undefined)?'—':p1.ammo);
+                            safeText('p1-score', (p1.score===null||p1.score===undefined)?'—':p1.score);
+                            safeImg('p1-avatar', p1.avatar, 'assets/Menu/Buttons/default-avatar.png');
+
+                        } catch (e) {
+                            // ignore update errors
+                        }
+                    }
+
+                    // Poll at 10Hz for smooth but light updates
+                    setInterval(updateHUD, 100);
+                    setTimeout(updateHUD, 250);
+                })();
     </script>
 </body>
 
