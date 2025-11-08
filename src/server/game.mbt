@@ -1,6 +1,9 @@
 pub suberror ParticleControlConfigError String
 pub suberror GameStateError String
 
+///| 全局变量：存储子弹贴图
+let bullet_image : Ref[@p5js.P5Image?] = { val: None }
+
 pub(all) struct Game {
 	world : @box2d.B2World
 	weapon : WeaponManager
@@ -743,6 +746,15 @@ pub fn Game::add_animation(self:Self, animation: &Animation) -> Unit {
 pub fn Game::start_run(self:Self) -> Unit {
 	self.state = GamePreparing
 	getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
+		// 加载子弹贴图
+		if bullet_image.val.is_empty() {
+			let img = p.loadImage(
+				"assets/Traps/Blocks/Idle.png",
+				Some(fn(_img) { println("✓ 子弹贴图加载成功") }),
+				Some(fn(err) { println("✗ 子弹贴图加载失败: \{err}") })
+			)
+			bullet_image.val = Some(img)
+		}
 		self.state_machine_update(p)
 	}) |> ignore
 }
