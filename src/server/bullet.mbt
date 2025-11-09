@@ -31,18 +31,8 @@ pub struct Bullet {
 /// @ltl
 pub impl RenderAble for Bullet with get_render(self: Bullet){
   Some(fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
-    let ppm = PPM
-    let ws = fn(len: Double) -> Double {
-      world_to_screen_size(len, ppm)
-    }
-
     world |> ignore
-    let pos = self.body.getCenterPosition()
-    let (sx, sy) = world_to_screen(pos.getX(), pos.getY())
-    let r = ws(0.16)
-    p.fillColorPara(255.0, Some(0.0), Some(0.0), Some(255.0))
-    p.circle(sx, sy, r)
-    p.noFill()
+    draw_body(p, self.body)
   })
 }
 

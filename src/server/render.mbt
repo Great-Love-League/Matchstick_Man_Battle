@@ -131,6 +131,18 @@ pub fn drawCircle(p: &@p5js.P5JS, shape: @box2d.B2CircleShape) -> Unit{
 
 }
 
+pub fn draw_body(p: &@p5js.P5JS, body: @box2d.B2Body) -> Unit {
+  for shape in body.getShapeList() {
+    match shape.getType() {
+      PolygonShape => drawPolygon(p, shape.toPolygonShape())
+      BoxShape => drawPolygon(p, shape.toPolygonShape())
+      CircleShape => drawCircle(p, shape.toCircleShape())
+      UnknownShape => {
+        println("Unknown Shape")
+      }
+    }
+  }
+}
 
 pub fn DefaultRenderable::draw_world(self: DefaultRenderable, p: &@p5js.P5JS, world: &@box2d.World) -> Unit {
   // p.background(255.0, Some(204.0), Some(0.0), None)
