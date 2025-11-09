@@ -9,10 +9,10 @@ fn create_world(
       global_box2d_world.val = Some(@map_loader.load_map(file_content=level).construct_world())
     } catch {
       @map_loader.MapLoaderError(e) => {
-        println("Error loading map: \{e}")
+        printlndebug("Error loading map: \{e}")
       }
       e => {
-        println("Unknown error loading map: \{e}")
+        printlndebug("Unknown error loading map: \{e}")
       }
     }
 
@@ -71,7 +71,7 @@ fn maintain_rotation_test(
 )-> Unit {
 	let angle = body.getRotation()
 	let error=target_angle - angle
-	println("Current Angle: \{angle}, Target Angle: \{target_angle}, Error: \{error}")
+	printlndebug("Current Angle: \{angle}, Target Angle: \{target_angle}, Error: \{error}")
 	let torque=kp*error - kd*body.getAngularVelocity()
 	body.applyTorque(torque)
 }

@@ -184,14 +184,14 @@ pub fn AudioManager::play_sound(self : Self, event_type : AudioEventType) -> Uni
       match config.category {
         SoundEffect => {
           if self.sfx_enabled {
-            println("播放音效: \{event_type}, 路径: \{config.path}")
+            printlndebug("播放音效: \{event_type}, 路径: \{config.path}")
             let volume = config.default_volume * self.master_volume
             js_play_audio(config.path, volume, config.should_loop)
           }
         }
         BackgroundMusic => {
           if self.bgm_enabled {
-            println("播放背景音乐: \{event_type}, 路径: \{config.path}")
+            printlndebug("播放背景音乐: \{event_type}, 路径: \{config.path}")
             let volume = config.default_volume * self.master_volume
             js_play_audio(config.path, volume, config.should_loop)
           }
@@ -199,7 +199,7 @@ pub fn AudioManager::play_sound(self : Self, event_type : AudioEventType) -> Uni
       }
     }
     None => {
-      println("警告: 未找到音频配置 \{event_type}")
+      printlndebug("警告: 未找到音频配置 \{event_type}")
     }
   }
 }
@@ -211,7 +211,7 @@ pub fn AudioManager::play_bgm(self : Self, event_type : AudioEventType) -> Unit 
     Some(current) => {
       match self.audio_configs.get(current) {
         Some(config) => {
-          println("停止背景音乐: \{current}")
+          printlndebug("停止背景音乐: \{current}")
           js_stop_audio(config.path)
         }
         None => ()
@@ -231,7 +231,7 @@ pub fn AudioManager::stop_bgm(self : Self) -> Unit {
     Some(current) => {
       match self.audio_configs.get(current) {
         Some(config) => {
-          println("停止背景音乐: \{current}")
+          printlndebug("停止背景音乐: \{current}")
           js_stop_audio(config.path)
         }
         None => ()
@@ -246,7 +246,7 @@ pub fn AudioManager::stop_bgm(self : Self) -> Unit {
 pub fn AudioManager::toggle_sfx(self : Self) -> Unit {
   self.sfx_enabled = not(self.sfx_enabled)
   let status = if self.sfx_enabled { "开启" } else { "关闭" }
-  println("音效: \{status}")
+  printlndebug("音效: \{status}")
 }
 
 ///| 切换背景音乐开关
@@ -263,7 +263,7 @@ pub fn AudioManager::toggle_bgm(self : Self) -> Unit {
   }
   
   let status = if self.bgm_enabled { "开启" } else { "关闭" }
-  println("背景音乐: \{status}")
+  printlndebug("背景音乐: \{status}")
 }
 
 ///| 设置主音量
@@ -278,5 +278,5 @@ pub fn AudioManager::set_master_volume(self : Self, volume : Double) -> Unit {
   }
   
   self.master_volume = clamped
-  println("主音量设置为: \{self.master_volume}")
+  printlndebug("主音量设置为: \{self.master_volume}")
 }

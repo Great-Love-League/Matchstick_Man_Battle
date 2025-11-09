@@ -20,6 +20,7 @@ pub struct Bullet {
   max_distance : Double           // 最大射程
   mut traveled_distance : Double  // 已飞行距离
   start_position : (Double, Double) // 起始位置
+  mut last_position : (Double, Double) // 上一帧位置（用于段检测）
   mut is_active : Bool           // 是否激活
   target_types : Array[TargetType] // 受击目标列表
   hit_targets : Array[Int]       // 已命中的目标ID（防止穿透时重复伤害）
@@ -107,6 +108,7 @@ pub fn Game::create_bullet(
     max_distance,
     traveled_distance: 0.0,
     start_position: position,
+    last_position: position,
     is_active: true,
     target_types,
     hit_targets: Array::new(),
@@ -115,7 +117,7 @@ pub fn Game::create_bullet(
   }
   
   self.bullet_list.push(bullet)
-  println("创建子弹 #\{bullet_id}: 位置(\{position.0}, \{position.1}), 伤害\{damage}, 目标\{target_types}")
+  printlndebug("创建子弹 #\{bullet_id}: 位置(\{position.0}, \{position.1}), 伤害\{damage}, 目标\{target_types}")
   bullet
 }
 
@@ -156,13 +158,107 @@ pub fn Game::update_bullet(self : Self, bullet : Bullet) -> Unit {
   // 对于高速子弹（60-100 m/s），每帧移动约1-1.67米
   // 多次检测可以捕获与薄墙壁的碰撞
   self.check_bullet_collision(bullet)
+
+  // 更新上一帧位置，以便下一帧使用（用于段检测以避免子弹穿透）
+  if bullet.is_active {
+    let cp = bullet.body.getCenterPosition()
+    bullet.last_position = (cp.getX(), cp.getY())
+  }
 }
 
 ///|
 /// 检测子弹与角色的碰撞
 /// 根据受击对象列表过滤目标
-pub fn Game::check_bullet_collision(self : Self, bullet : Bullet) -> Unit {
-  // 检查玩家角色（如果目标包含Player或AllCharacters）
+// 内部函数：使用给定的线段(prev->cur)处理子弹与角色/环境的碰撞检测与命中处理
+pub fn Game::process_bullet_collision_segment(self : Self, bullet : Bullet, prev_x : Double, prev_y : Double, cur_x : Double, cur_y : Double) -> Unit {
+  // 辅助：点到点距离平方
+  let point_dist2 = fn(ax: Double, ay: Double, bx: Double, by: Double) -> Double {
+    let dx = ax - bx
+    let dy = ay - by
+    dx * dx + dy * dy
+  }
+
+  // 辅助：线段与圆相交
+  let seg_circle_intersect = fn(x1: Double, y1: Double, x2: Double, y2: Double, cx: Double, cy: Double, r: Double) -> Bool {
+    let vx = x2 - x1
+    let vy = y2 - y1
+    let wx = cx - x1
+    let wy = cy - y1
+    let vv = vx * vx + vy * vy
+    if vv == 0.0 {
+      return point_dist2(x1, y1, cx, cy) <= r * r
+    }
+    let t = (wx * vx + wy * vy) / vv
+    let tt = if t < 0.0 { 0.0 } else if t > 1.0 { 1.0 } else { t }
+    let px = x1 + vx * tt
+    let py = y1 + vy * tt
+    point_dist2(px, py, cx, cy) <= r * r
+  }
+
+  // 辅助：线段与线段相交（包括端点）
+  let seg_seg_intersect = fn(x1: Double, y1: Double, x2: Double, y2: Double, x3: Double, y3: Double, x4: Double, y4: Double) -> Bool {
+    let eps = 0.000000001
+    let cross = fn(ax: Double, ay: Double, bx: Double, by: Double) -> Double { ax * by - ay * bx }
+    let r_x = x2 - x1
+    let r_y = y2 - y1
+    let s_x = x4 - x3
+    let s_y = y4 - y3
+    let denom = cross(r_x, r_y, s_x, s_y)
+    let qp_x = x3 - x1
+    let qp_y = y3 - y1
+    if denom > -eps && denom < eps {
+      // 共线或平行，退化为 bbox 重叠近似
+      let minax = if x1 < x2 { x1 } else { x2 }
+      let maxax = if x1 > x2 { x1 } else { x2 }
+      let minay = if y1 < y2 { y1 } else { y2 }
+      let maxay = if y1 > y2 { y1 } else { y2 }
+      let minbx = if x3 < x4 { x3 } else { x4 }
+      let maxbx = if x3 > x4 { x3 } else { x4 }
+      let minby = if y3 < y4 { y3 } else { y4 }
+      let maxby = if y3 > y4 { y3 } else { y4 }
+      not (maxax < minbx || maxbx < minax || maxay < minby || maxby < minay)
+    } else {
+      let t = cross(qp_x, qp_y, s_x, s_y) / denom
+      let u = cross(qp_x, qp_y, r_x, r_y) / denom
+      t >= 0.0 && t <= 1.0 && u >= 0.0 && u <= 1.0
+    }
+  }
+
+  // 检测线段 (x1,y1)-(x2,y2) 是否与 body 的任一 shape 相交
+  let segment_intersects_body = fn(body: @box2d.B2Body, x1: Double, y1: Double, x2: Double, y2: Double) -> Bool {
+    for shape in body.getShapeList() {
+      match shape.getType() {
+        CircleShape => {
+          let cs = shape.toCircleShape()
+          let local_pos = cs.getLocalPosition()
+          let wp = body.getWorldPoint(local_pos)
+          let r = cs.getRadius()
+          if seg_circle_intersect(x1, y1, x2, y2, wp.getX(), wp.getY(), r) {
+            return true
+          }
+        }
+        PolygonShape | BoxShape => {
+          let ps = shape.toPolygonShape()
+          let verts = ps.getVertices()
+          if verts.length() >= 2 {
+            for i = 0; i < verts.length(); i = i + 1 {
+              let a = verts[i]
+              let b = verts[(i + 1) % verts.length()]
+              let wa = body.getWorldPoint(a)
+              let wb = body.getWorldPoint(b)
+              if seg_seg_intersect(x1, y1, x2, y2, wa.getX(), wa.getY(), wb.getX(), wb.getY()) {
+                return true
+              }
+            }
+          }
+        }
+        UnknownShape => ()
+      }
+    }
+    false
+  }
+
+  // 根据目标类型判断是否需要检测玩家
   let mut should_hit_players = false
   for target_type in bullet.target_types {
     if target_type == Player || target_type == AllCharacters {
@@ -170,210 +266,278 @@ pub fn Game::check_bullet_collision(self : Self, bullet : Bullet) -> Unit {
       break
     }
   }
-  
+
+  // 使用传入的 prev_x/prev_y 与 cur_x/cur_y
+
   if should_hit_players {
     for particle in self.particle_list {
-      // 跳过发射者
-      if particle.index == bullet.owner_id {
-        continue
-      }
-      
+      if particle.index == bullet.owner_id { continue }
       // 跳过已经命中的目标（穿透时）
       let mut already_hit = false
       for hit_id in bullet.hit_targets {
-        if hit_id == particle.index {
-          already_hit = true
-          break
-        }
+        if hit_id == particle.index { already_hit = true; break }
       }
-      if already_hit {
-        continue
-      }
-      
-      // 跳过昏迷的角色
-      if particle.control.faint_state {
-        continue
-      }
-      
+      if already_hit { continue }
+      if particle.control.faint_state { continue }
+
       let mut hit = false
       let mut damage = 0
-      
-      // 根据命中部位计算伤害倍率
-      if self.is_contact(particle.head, bullet.body) {
-        damage = bullet.damage * 2  // 头部 2.0x
-        hit = true
-      } else if self.is_contact(particle.torso, bullet.body) {
-        damage = bullet.damage  // 躯干 1.0x
-        hit = true
-      } else if self.is_contact(particle.left_thigh, bullet.body) ||
-                self.is_contact(particle.right_thigh, bullet.body) {
-        damage = bullet.damage / 2  // 大腿 0.5x
-        hit = true
-      } else if self.is_contact(particle.left_shank, bullet.body) ||
-                self.is_contact(particle.right_shank, bullet.body) {
-        damage = bullet.damage / 3  // 小腿 0.33x
-        hit = true
-      } else if self.is_contact(particle.left_arm, bullet.body) ||
-                self.is_contact(particle.right_arm, bullet.body) {
-        damage = bullet.damage / 2  // 大臂 0.5x
-        hit = true
-      } else if self.is_contact(particle.left_forearm, bullet.body) ||
-                self.is_contact(particle.right_forearm, bullet.body) {
-        damage = bullet.damage / 3  // 前臂 0.33x
-        hit = true
+
+      let seg_hit_head = segment_intersects_body(particle.head, prev_x, prev_y, cur_x, cur_y)
+      let seg_hit_torso = segment_intersects_body(particle.torso, prev_x, prev_y, cur_x, cur_y)
+      let seg_hit_l_thigh = segment_intersects_body(particle.left_thigh, prev_x, prev_y, cur_x, cur_y)
+      let seg_hit_r_thigh = segment_intersects_body(particle.right_thigh, prev_x, prev_y, cur_x, cur_y)
+      let seg_hit_l_shank = segment_intersects_body(particle.left_shank, prev_x, prev_y, cur_x, cur_y)
+      let seg_hit_r_shank = segment_intersects_body(particle.right_shank, prev_x, prev_y, cur_x, cur_y)
+      let seg_hit_l_arm = segment_intersects_body(particle.left_arm, prev_x, prev_y, cur_x, cur_y)
+      let seg_hit_r_arm = segment_intersects_body(particle.right_arm, prev_x, prev_y, cur_x, cur_y)
+      let seg_hit_l_fore = segment_intersects_body(particle.left_forearm, prev_x, prev_y, cur_x, cur_y)
+      let seg_hit_r_fore = segment_intersects_body(particle.right_forearm, prev_x, prev_y, cur_x, cur_y)
+
+      if seg_hit_head {
+        damage = bullet.damage * 2; hit = true
+      } else if seg_hit_torso {
+        damage = bullet.damage; hit = true
+      } else if (seg_hit_l_thigh || seg_hit_r_thigh) {
+        damage = bullet.damage / 2; hit = true
+      } else if (seg_hit_l_shank || seg_hit_r_shank) {
+        damage = bullet.damage / 3; hit = true
+      } else if (seg_hit_l_arm || seg_hit_r_arm) {
+        damage = bullet.damage / 2; hit = true
+      } else if (seg_hit_l_fore || seg_hit_r_fore) {
+        damage = bullet.damage / 3; hit = true
       }
-      // 注册溅血特效：在子弹速度反方向上生成血雾
-      // 获取子弹当前速度（世界坐标系）并取反作为血雾喷射方向
-      
-      
+
       if hit {
-        // 播放子弹击中音效
         self.audio.play_sound(BulletHit)
-        
-				
-				let vel = bullet.body.getLinearVelocity()
-				let bvx = vel.getX()*0.1
-				let bvy = vel.getY()*0.1
-				let hit_pos = bullet.body.getCenterPosition()
-				let norm = @cmath.sqrt(bvx * bvx + bvy * bvy)
-				let norm_vec = @box2d.b2Vec2(bvx / norm, bvy / norm)
-				let hx = world_to_screen(hit_pos.getX() + norm_vec.getX(), hit_pos.getY() + norm_vec.getY()).0
-				let hy = world_to_screen(hit_pos.getX() + norm_vec.getX(), hit_pos.getY() + norm_vec.getY()).1
-				// 如果速度为 (0,0)，使用一个默认的向上方向，避免完全静止的向量
-				if bvx == 0.0 && bvy == 0.0 {
-					register_blood_spray_animation(self, hx, hy, 0.0, -1.0)
-				} else {
-					register_blood_spray_animation(self, hx, hy, -bvx, -bvy)
-				}
-				
-				
-        // 应用伤害
+        let vel = bullet.body.getLinearVelocity()
+        let bvx = vel.getX()*0.1
+        let bvy = vel.getY()*0.1
+        let hit_pos = bullet.body.getCenterPosition()
+        let norm = @cmath.sqrt(bvx * bvx + bvy * bvy)
+        if norm == 0.0 {
+          register_blood_spray_animation(self, world_to_screen(hit_pos.getX(), hit_pos.getY()).0, world_to_screen(hit_pos.getX(), hit_pos.getY()).1, 0.0, -1.0)
+        } else {
+          let norm_vec = @box2d.b2Vec2(bvx / norm, bvy / norm)
+          let hx = world_to_screen(hit_pos.getX() + norm_vec.getX(), hit_pos.getY() + norm_vec.getY()).0
+          let hy = world_to_screen(hit_pos.getX() + norm_vec.getX(), hit_pos.getY() + norm_vec.getY()).1
+          register_blood_spray_animation(self, hx, hy, -bvx, -bvy)
+        }
+
         particle.control.health -= damage
-        println("子弹 #\{bullet.id} 击中玩家 \{particle.index}, 伤害 \{damage} (剩余血量: \{particle.control.health})")
-        
+        printlndebug("子弹 #\{bullet.id} 击中玩家 \{particle.index}, 伤害 \{damage} (剩余血量: \{particle.control.health})")
         if particle.control.health <= 0 {
           particle.control.faint_state = true
-          // 播放玩家死亡音效
           self.audio.play_sound(PlayerDeath)
-          println("玩家 \{particle.index} 被击倒!")
+          printlndebug("玩家 \{particle.index} 被击倒!")
         }
-        
-        // 记录已命中目标
+
         bullet.hit_targets.push(particle.index)
-        
-        // 检查穿透：只有人物可以被穿透
+
         if bullet.penetration <= 0 {
-          // 穿透次数用完，回收子弹
           bullet.is_active = false
-          println("子弹 #\{bullet.id} 穿透次数用完，回收子弹")
+          printlndebug("子弹 #\{bullet.id} 穿透次数用完，回收子弹")
           break
         } else {
           bullet.penetration -= 1
-          println("子弹 #\{bullet.id} 穿透! 剩余穿透次数: \{bullet.penetration}")
-          // 如果穿透次数刚好用完（减到0），在下一次命中时会被回收
+          printlndebug("子弹 #\{bullet.id} 穿透! 剩余穿透次数: \{bullet.penetration}")
         }
       }
     }
   }
-  
-  // TODO: 检查敌人（如果目标包含Enemy或AllCharacters）
-  // let mut should_hit_enemies = false
-  // for target_type in bullet.target_types {
-  //   if target_type == Enemy || target_type == AllCharacters {
-  //     should_hit_enemies = true
-  //     break
-  //   }
-  // }
-  // if should_hit_enemies {
-  //   for enemy in self.enemy_list {
-  //     // 类似玩家的碰撞检测逻辑
-  //   }
-  // }
-  
-  // 检查与环境的碰撞（平台、墙壁等静态物体）
-  // 环境无法穿透，子弹击中环境后直接回收
+
+  // 环境碰撞（如果仍然激活）
   if bullet.is_active {
+    // 环境检测仍使用 is_contact 回退（静态物体）
     self.check_bullet_environment_collision(bullet)
   }
+}
+
+// 原始接口：使用子弹记录的上一帧位置作为段起点，然后处理并更新 last_position
+pub fn Game::check_bullet_collision(self : Self, bullet : Bullet) -> Unit {
+  let cur_pos = bullet.body.getCenterPosition()
+  let prev_x = bullet.last_position.0
+  let prev_y = bullet.last_position.1
+  self.process_bullet_collision_segment(bullet, prev_x, prev_y, cur_pos.getX(), cur_pos.getY())
 }
 
 ///|
 /// 检测子弹与环境（静态物体）的碰撞
 /// 环境包括平台、墙壁等，子弹无法穿透环境，击中后直接回收
 pub fn Game::check_bullet_environment_collision(self : Self, bullet : Bullet) -> Unit {
-  // 检查与所有平台的碰撞
+  // 使用段检测判断与平台的碰撞（不再依赖 is_contact）
+  // 复制段/圆与段/段相交的逻辑以检测平台形状
+  let point_dist2 = fn(ax: Double, ay: Double, bx: Double, by: Double) -> Double {
+    let dx = ax - bx
+    let dy = ay - by
+    dx * dx + dy * dy
+  }
+  let seg_circle_intersect = fn(x1: Double, y1: Double, x2: Double, y2: Double, cx: Double, cy: Double, r: Double) -> Bool {
+    let vx = x2 - x1
+    let vy = y2 - y1
+    let wx = cx - x1
+    let wy = cy - y1
+    let vv = vx * vx + vy * vy
+    if vv == 0.0 { return point_dist2(x1, y1, cx, cy) <= r * r }
+    let t = (wx * vx + wy * vy) / vv
+    let tt = if t < 0.0 { 0.0 } else if t > 1.0 { 1.0 } else { t }
+    let px = x1 + vx * tt
+    let py = y1 + vy * tt
+    point_dist2(px, py, cx, cy) <= r * r
+  }
+  let seg_seg_intersect = fn(x1: Double, y1: Double, x2: Double, y2: Double, x3: Double, y3: Double, x4: Double, y4: Double) -> Bool {
+    let eps = 0.000000001
+    let cross = fn(ax: Double, ay: Double, bx: Double, by: Double) -> Double { ax * by - ay * bx }
+    let r_x = x2 - x1
+    let r_y = y2 - y1
+    let s_x = x4 - x3
+    let s_y = y4 - y3
+    let denom = cross(r_x, r_y, s_x, s_y)
+    let qp_x = x3 - x1
+    let qp_y = y3 - y1
+    if denom > -eps && denom < eps {
+      let minax = if x1 < x2 { x1 } else { x2 }
+      let maxax = if x1 > x2 { x1 } else { x2 }
+      let minay = if y1 < y2 { y1 } else { y2 }
+      let maxay = if y1 > y2 { y1 } else { y2 }
+      let minbx = if x3 < x4 { x3 } else { x4 }
+      let maxbx = if x3 > x4 { x3 } else { x4 }
+      let minby = if y3 < y4 { y3 } else { y4 }
+      let maxby = if y3 > y4 { y3 } else { y4 }
+      not (maxax < minbx || maxbx < minax || maxay < minby || maxby < minay)
+    } else {
+      let t = cross(qp_x, qp_y, s_x, s_y) / denom
+      let u = cross(qp_x, qp_y, r_x, r_y) / denom
+      t >= 0.0 && t <= 1.0 && u >= 0.0 && u <= 1.0
+    }
+  }
+
+  let prev_x = bullet.last_position.0
+  let prev_y = bullet.last_position.1
+  let cur = bullet.body.getCenterPosition()
+  let cur_x = cur.getX()
+  let cur_y = cur.getY()
+
   for platform in self.platform_list {
-    if self.is_contact(platform.get_body(), bullet.body) {
-      bullet.is_active = false
-      //println("子弹 #\{bullet.id} 击中环境（平台 #\{platform.index}），回收子弹")
-      return
+    // 先检查线段与平台形状相交（捕获穿透、边缘命中）
+    // if segment_intersects_body(platform.get_body(), prev_x, prev_y, cur_x, cur_y) {
+    //   println("Bullet \{bullet.id} hit platform \{platform.get_index()}")
+    //   bullet.is_active = false
+    //   return
+    // }
+
+    // 再检查子弹当前点是否位于平台多边形内部（处理子弹位于矩形内部的情形）
+    for shape in platform.get_body().getShapeList() {
+      match shape.getType() {
+        PolygonShape | BoxShape => {
+          let ps = shape.toPolygonShape()
+          let verts = ps.getVertices()
+          if verts.length() >= 3 {
+            // 将顶点转换到世界坐标
+            let world_pts : Array[(Double, Double)] = Array::new()
+            for i = 0; i < verts.length(); i = i + 1 {
+              let v = verts[i]
+              let wv = platform.get_body().getWorldPoint(v)
+              world_pts.push((wv.getX(), wv.getY()))
+            }
+
+            // 点在多边形内检测（射线法）
+            let point_in_poly = fn(px: Double, py: Double, poly: Array[(Double, Double)]) -> Bool {
+              let mut inside = false
+              for j = 0; j < poly.length(); j = j + 1 {
+                let a = poly[j]
+                let b = poly[(j + 1) % poly.length()]
+                let ax = a.0; let ay = a.1
+                let bx = b.0; let by = b.1
+                let intersect = ((ay > py) != (by > py)) && (px < (bx - ax) * (py - ay) / (by - ay + 0.0) + ax)
+                if intersect { inside = if inside { false } else { true } }
+              }
+              inside
+            }
+
+            if point_in_poly(cur_x, cur_y, world_pts) {
+              println("Bullet \{bullet.id} inside platform \{platform.get_index()}")
+              bullet.is_active = false
+              return
+            }
+          }
+        }
+        CircleShape | UnknownShape => ()
+      }
     }
   }
   
   // 检查与世界中其他静态物体的碰撞
   // 通过 Box2D 的接触列表检测
-  let contact_list = self.world.getContactList()
-  for contact in contact_list {
-    let shape1 = contact.getShape1()
-    let shape2 = contact.getShape2()
-    let body1 = shape1.getBody()
-    let body2 = shape2.getBody()
+//   let contact_list = self.world.getContactList()
+//   for contact in contact_list {
+//     let shape1 = contact.getShape1()
+//     let shape2 = contact.getShape2()
+//     let body1 = shape1.getBody()
+//     let body2 = shape2.getBody()
     
-    // 检查是否有一个是子弹，另一个是静态物体
-    let bullet_body = bullet.body
-    if equals(body1, bullet_body) || equals(body2, bullet_body) {
-      let other_body = if equals(body1, bullet_body) { body2 } else { body1 }
+//     // 检查是否有一个是子弹，另一个是静态物体
+//     let bullet_body = bullet.body
+//     if equals(body1, bullet_body) || equals(body2, bullet_body) {
+//       let other_body = if equals(body1, bullet_body) { body2 } else { body1 }
       
-      // 如果另一个物体是静态的（密度为0），则子弹应该被回收
-      if other_body.getMass() == 0.0 {
-        // 需要确认不是角色的某个部位（角色部位也可能是质量为0的传感器）
-        let mut is_character_part = false
+//       // 如果另一个物体是静态的（密度为0），则子弹应该被回收
+//       if other_body.getMass() == 0.0 {
+//         // 需要确认不是角色的某个部位（角色部位也可能是质量为0的传感器）
+//         let mut is_character_part = false
         
-        // 检查是否是角色的某个部位
-        for particle in self.particle_list {
-          if equals(other_body, particle.head) ||
-             equals(other_body, particle.torso) ||
-             equals(other_body, particle.left_thigh) ||
-             equals(other_body, particle.right_thigh) ||
-             equals(other_body, particle.left_shank) ||
-             equals(other_body, particle.right_shank) ||
-             equals(other_body, particle.left_arm) ||
-             equals(other_body, particle.right_arm) ||
-             equals(other_body, particle.left_forearm) ||
-             equals(other_body, particle.right_forearm) {
-            is_character_part = true
-            break
-          }
-        }
+//         // 检查是否是角色的某个部位
+//         for particle in self.particle_list {
+//           if equals(other_body, particle.head) ||
+//              equals(other_body, particle.torso) ||
+//              equals(other_body, particle.left_thigh) ||
+//              equals(other_body, particle.right_thigh) ||
+//              equals(other_body, particle.left_shank) ||
+//              equals(other_body, particle.right_shank) ||
+//              equals(other_body, particle.left_arm) ||
+//              equals(other_body, particle.right_arm) ||
+//              equals(other_body, particle.left_forearm) ||
+//              equals(other_body, particle.right_forearm) {
+//             is_character_part = true
+//             break
+//           }
+//         }
         
-        // 如果不是角色部位，则是环境物体，回收子弹
-        if not(is_character_part) {
-          bullet.is_active = false
-          println("子弹 #\{bullet.id} 击中环境（静态物体），回收子弹")
-          return
-        }
-      }
-    }
-  }
+//         // 如果不是角色部位，则是环境物体，回收子弹
+//         if not(is_character_part) {
+//           bullet.is_active = false
+//           printlndebug("子弹 #\{bullet.id} 击中环境（静态物体），回收子弹")
+//           return
+//         }
+//       }
+//     }
+//   }
 }
 
 pub fn Game::update_all_bullets(self : Self) -> Unit {
+  // 记录本帧开始时的上一帧位置快照（用于后续的额外检测，避免被 update_bullet 覆盖）
+  let prev_positions : Array[(Double, Double)] = Array::new()
+  for bullet in self.bullet_list {
+    prev_positions.push(bullet.last_position)
+  }
+
+  // 正常更新每个子弹（会在 update_bullet 内执行一次碰撞检测并更新 last_position）
   for bullet in self.bullet_list {
     if bullet.is_active {
       self.update_bullet(bullet)
     }
   }
-  
+
   // 额外的高频碰撞检测：在物理更新后再检测几次
-  // 这样可以捕获快速移动子弹与薄墙壁的碰撞
-  // 不重复施加力，只检测碰撞
-  let extra_checks = 10  // 额外检测3次，总共4次检测
+  // 使用快照的上一帧位置 -> 当前世界位置 作为段，重复检测而不覆盖 last_position
+  let extra_checks = 10
   for _i in 0..<extra_checks {
-    for bullet in self.bullet_list {
-      if bullet.is_active {
-        // 只检测碰撞，不更新物理状态
-        self.check_bullet_collision(bullet)
-      }
+    for i = 0; i < self.bullet_list.length(); i = i + 1 {
+      let bullet = self.bullet_list[i]
+      if not(bullet.is_active) { continue }
+      let prev = prev_positions[i]
+      let cp = bullet.body.getCenterPosition()
+      self.process_bullet_collision_segment(bullet, prev.0, prev.1, cp.getX(), cp.getY())
     }
   }
 }
@@ -496,7 +660,7 @@ pub fn Game::shoot_bullet(self : Self, player_index : Int, direction : Double) -
   let torso_pos = particle.torso.getCenterPosition()
   particle.torso.applyImpulse(recoil_impulse, torso_pos)
   
-  println("玩家 \{player_index} 发射了普通子弹")
+  printlndebug("玩家 \{player_index} 发射了普通子弹")
 }
 
 ///|
@@ -619,7 +783,7 @@ pub fn Game::shoot_penetrating_bullet_advanced(
   let torso_pos = particle.torso.getCenterPosition()
   particle.torso.applyImpulse(recoil_impulse, torso_pos)
   
-  println("玩家 \{player_index} 发射了穿透子弹 (穿透\{penetration_count}次)")
+  printlndebug("玩家 \{player_index} 发射了穿透子弹 (穿透\{penetration_count}次)")
 }
 
 ///|
@@ -666,7 +830,7 @@ pub fn Game::shoot_penetrating_bullet(
   let torso_pos = particle.torso.getCenterPosition()
   particle.torso.applyImpulse(recoil_impulse, torso_pos)
   
-  println("玩家 \{player_index} 发射了穿透子弹 (穿透\{penetration_count}次)")
+  printlndebug("玩家 \{player_index} 发射了穿透子弹 (穿透\{penetration_count}次)")
 }
 
 ///|
@@ -737,7 +901,7 @@ pub fn Game::shoot_shotgun(
   let torso_pos = particle.torso.getCenterPosition()
   particle.torso.applyImpulse(recoil_impulse, torso_pos)
   
-  println("玩家 \{player_index} 发射了散弹 (\{bullet_count}发)")
+  printlndebug("玩家 \{player_index} 发射了散弹 (\{bullet_count}发)")
 }
 
 ///|
@@ -768,7 +932,7 @@ pub fn Game::shoot_at_enemies(self : Self, player_index : Int, direction : Doubl
     penetration=0
   ) |> ignore
   
-  println("玩家 \{player_index} 发射了反敌子弹")
+  printlndebug("玩家 \{player_index} 发射了反敌子弹")
 }
 
 ///|
@@ -799,5 +963,5 @@ pub fn Game::shoot_explosive_bullet(self : Self, player_index : Int, direction :
     penetration=0
   ) |> ignore
   
-  println("玩家 \{player_index} 发射了爆炸弹 (危险！伤害所有人)")
+  printlndebug("玩家 \{player_index} 发射了爆炸弹 (危险！伤害所有人)")
 }

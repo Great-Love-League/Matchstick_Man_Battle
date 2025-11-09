@@ -31,13 +31,13 @@ pub impl RenderAble for Item with get_render(self: Item){
     world |> ignore
 
     for shape in self.body.getShapeList() {
-    // println("Drawing Item \{self.item_type}")
+    // printlndebug("Drawing Item \{self.item_type}")
       match shape.getType() {
         PolygonShape => drawPolygon(p, shape.toPolygonShape())
         BoxShape => drawPolygon(p, shape.toPolygonShape())
         CircleShape => drawCircle(p, shape.toCircleShape())
         UnknownShape => {
-          println("Unknown Shape")
+          printlndebug("Unknown Shape")
         }
       }
     }
@@ -78,7 +78,7 @@ pub fn Game::create_item(
   }
   
   self.item_list.push(item)
-  println("Created \{item_type} at (\{position.0}, \{position.1})")
+  printlndebug("Created \{item_type} at (\{position.0}, \{position.1})")
   item
 }
 
@@ -118,28 +118,28 @@ pub fn Game::apply_item_effect(self : Self, particle : Particle, item : Item) ->
         particle.control.health = 100
       }
       let recovered = particle.control.health - old_health
-      println("玩家 \{particle.index} 拾取了血包! 恢复 \{recovered} 点生命值 (当前: \{particle.control.health}/100)")
+      printlndebug("玩家 \{particle.index} 拾取了血包! 恢复 \{recovered} 点生命值 (当前: \{particle.control.health}/100)")
       
       // 如果角色昏迷且血量恢复到一定程度，可以苏醒
       if particle.control.faint_state && particle.control.health >= 50 {
         particle.control.faint_state = false
         particle.control.faint_resistance = 0
-        println("玩家 \{particle.index} 苏醒了!")
+        printlndebug("玩家 \{particle.index} 苏醒了!")
       }
     }
     AmmoPack => {
       // 弹药包效果（预留）
-      println("玩家 \{particle.index} 拾取了弹药包! +\{item.value} 发子弹 (功能待实现)")
+      printlndebug("玩家 \{particle.index} 拾取了弹药包! +\{item.value} 发子弹 (功能待实现)")
       // TODO: particle.control.ammo += item.value
     }
     WeaponUpgrade => {
       // 武器升级效果（预留）
-      println("玩家 \{particle.index} 拾取了武器升级! (功能待实现)")
+      printlndebug("玩家 \{particle.index} 拾取了武器升级! (功能待实现)")
       // TODO: 提升武器伤害或射速
     }
     SpeedBoost => {
       // 速度提升效果（预留）
-      println("玩家 \{particle.index} 拾取了速度提升! 持续 \{item.value} 帧 (功能待实现)")
+      printlndebug("玩家 \{particle.index} 拾取了速度提升! 持续 \{item.value} 帧 (功能待实现)")
       // TODO: particle.control.speed_boost = item.value
     }
   }
@@ -155,7 +155,7 @@ fn Game::update_all_items(self : Self) -> Unit {
         item.lifetime -= 1
         if item.lifetime == 0 {
           item.is_active = false
-          println("物品 \{item.item_type} 已过期消失")
+          printlndebug("物品 \{item.item_type} 已过期消失")
           continue
         }
       }
@@ -185,7 +185,7 @@ fn Game::cleanup_items(self : Self) -> Unit {
   }
   
   if cleaned_count > 0 {
-    println("清理了 \{cleaned_count} 个物品")
+    printlndebug("清理了 \{cleaned_count} 个物品")
   }
   
   self.item_list = active_items

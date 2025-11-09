@@ -1,6 +1,11 @@
 pub suberror ParticleControlConfigError String
 pub suberror GameStateError String
 
+fn printlndebug(msg: String) -> Unit {
+	// Uncomment the next line to enable debug logging
+	// printlndebug("DEBUG: \{msg}")
+}
+
 pub(all) struct Game {
 	world : @box2d.B2World
 	weapon : WeaponManager
@@ -126,7 +131,7 @@ pub fn ParticleControlConfig::new(
 	if from_internet {
 		// 检查必要参数
 		if target_ip == None || target_port == None {
-			println("Error: Missing target_ip or target_port for internet control.")
+			printlndebug("Error: Missing target_ip or target_port for internet control.")
 			raise ParticleControlConfigError("Missing target_ip or target_port for internet control.")
 		}
 
@@ -148,7 +153,7 @@ pub fn ParticleControlConfig::new(
 	if from_internet == false {
 		// 检查必要参数
 		if left_key == None || right_key == None || jump_key == None || shoot_key == None || toggle_auto_aim_key == None {
-			println("Error: Missing key bindings for local control.")
+			printlndebug("Error: Missing key bindings for local control.")
 			raise ParticleControlConfigError("Missing key bindings for local control.")
 		}
 		return ParticleControlConfig::{
@@ -272,7 +277,7 @@ fn Game::running(self:Self, p5: &@p5js.P5JS) -> Unit {
 	// if p5.keyIsDown(@p5js.Digit9) {
 	// 	if self.frame_count % 10 == 0 {
 	// 		self.slow_mode = true
-	// 		println("切换到 1/4 时间模式")
+	// 		printlndebug("切换到 1/4 时间模式")
 	// 	}
 	// }
 
@@ -280,7 +285,7 @@ fn Game::running(self:Self, p5: &@p5js.P5JS) -> Unit {
 	// if p5.keyIsDown(@p5js.Digit0) {
 	// 	if self.frame_count % 10 == 0 {
 	// 		self.slow_mode = false
-	// 		println("切换到正常时间模式")
+	// 		printlndebug("切换到正常时间模式")
 	// 	}
 	// }
 
@@ -297,7 +302,7 @@ fn Game::running(self:Self, p5: &@p5js.P5JS) -> Unit {
 			if !config.from_internet {
 				self.particle_control(config, p5) catch{
 					e => {
-						println("Error in particle_control: \{e} in particle index \{config.target_particle_index}.")
+						printlndebug("Error in particle_control: \{e} in particle index \{config.target_particle_index}.")
 					}
 				}
 			}
@@ -364,7 +369,7 @@ fn Game::running(self:Self, p5: &@p5js.P5JS) -> Unit {
 	
 	
 	if(self.slow_mode){
-			println("1/4 速模式：物理步进")
+			printlndebug("1/4 速模式：物理步进")
 		self.world.step(1.0/60.0/4.0, 4)
 		}
 		else{
@@ -439,7 +444,7 @@ fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : 
 
 	let particle_index = control_config.target_particle_index
 	if particle_index < 0 || particle_index >= self.particle_list.length() {
-		println("Error: Invalid target_particle_index \{particle_index} in particle_control.")
+		printlndebug("Error: Invalid target_particle_index \{particle_index} in particle_control.")
 		raise GameStateError("Invalid target_particle_index in particle_control. want to control \{particle_index}, but only \{self.particle_list.length()} particles exist.")
 	}
 	let particle = self.particle_list[particle_index]
@@ -455,9 +460,9 @@ fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : 
 			match self.get_auto_aim_config(particle_index) {
 				Some(config) => {
 					if config.enabled {
-						println("玩家 \{particle_index}: 自动瞄准已启用")
+						printlndebug("玩家 \{particle_index}: 自动瞄准已启用")
 					} else {
-						println("玩家 \{particle_index}: 自动瞄准已禁用")
+						printlndebug("玩家 \{particle_index}: 自动瞄准已禁用")
 					}
 				}
 				None => ()
@@ -468,7 +473,7 @@ fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : 
 	// for gun in self.weapon.gun_list {
 	// 	if gun.owner_id == self.particle_index {
 	// 		// 若玩家有多把枪，只调整第一把匹配到的武器
-	// 		println("自动瞄准调整武器朝向至角度：\{0}")
+	// 		printlndebug("自动瞄准调整武器朝向至角度：\{0}")
 	// 		maintain_rotation(gun.body, 0, kp=200.0, kd=20.0)
 	// 		break
 	// 	}
@@ -671,6 +676,19 @@ pub fn Game::is_contact(self:Self,a:@box2d.B2Body, b:@box2d.B2Body)->Bool{
 		let bodyA=contact.getShape1().getBody()
 		let bodyB=contact.getShape2().getBody()
 		if (equals(bodyA, a) && equals(bodyB, b)) || (equals(bodyA, b) && equals(bodyB, a)) {
+			return true
+		}
+	}
+	false
+}
+
+pub fn Game::is_contact_test(self:Self,a:@box2d.B2Body, b:@box2d.B2Body)->Bool{
+	let contact_list=self.world.getContactList()
+	for contact in contact_list {
+		let bodyA=contact.getShape1().getBody()
+		let bodyB=contact.getShape2().getBody()
+		if (equals(bodyA, a) && equals(bodyB, b)) || (equals(bodyA, b) && equals(bodyB, a)) {
+			println("\{contact.getShape1().getBody().getCenterPosition().getY()} and \{contact.getShape2().getBody().getCenterPosition().getY()} are in contact")
 			return true
 		}
 	}

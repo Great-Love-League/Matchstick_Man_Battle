@@ -26,13 +26,13 @@ pub impl RenderAble for Platform with get_render(platform: Platform){
 	Some(fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
 		world|> ignore
 		for shape in platform.get_body().getShapeList() {
-		// println("Drawing Platform \{platform.get_index()}")
+		// printlndebug("Drawing Platform \{platform.get_index()}")
 			match shape.getType() {
 				PolygonShape => drawPolygon(p, shape.toPolygonShape())
 				BoxShape => drawPolygon(p, shape.toPolygonShape())
 				CircleShape => drawCircle(p, shape.toCircleShape())
 				UnknownShape => {
-					println("Unknown Shape")
+					printlndebug("Unknown Shape")
 				}
 			}
 		}
@@ -43,13 +43,13 @@ pub impl RenderAble for RotatablePlatform with get_render(rotatable_platform: Ro
 	Some(fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
 		world|> ignore
 		for shape in rotatable_platform.get_body().getShapeList() {
-		// println("Drawing RotatablePlatform \{rotatable_platform.get_index()}")
+		// printlndebug("Drawing RotatablePlatform \{rotatable_platform.get_index()}")
 			match shape.getType() {
 				PolygonShape => drawPolygon(p, shape.toPolygonShape())
 				BoxShape => drawPolygon(p, shape.toPolygonShape())
 				CircleShape => drawCircle(p, shape.toCircleShape())
 				UnknownShape => {
-					println("Unknown Shape")
+					printlndebug("Unknown Shape")
 				}
 			}
 		}
@@ -62,13 +62,13 @@ pub impl RenderAble for MovablePlatform with get_render(movable_platform: Movabl
 		world |> ignore
 
 		for shape in movable_platform.get_body().getShapeList() {
-		// println("Drawing MovablePlatform \{movable_platform.get_index()}")
+		// printlndebug("Drawing MovablePlatform \{movable_platform.get_index()}")
 			match shape.getType() {
 				PolygonShape => drawPolygon(p, shape.toPolygonShape())
 				BoxShape => drawPolygon(p, shape.toPolygonShape())
 				CircleShape => drawCircle(p, shape.toCircleShape())
 				UnknownShape => {
-					println("Unknown Shape")
+					printlndebug("Unknown Shape")
 				}
 			}
 		}
@@ -145,7 +145,7 @@ pub impl PlatformTrait for RotatablePlatform with update(self, game) -> Unit {
 	let current_angle = self.body.getRotation()
 	let new_angle = current_angle + self.angle_speed * (1.0/60.0) // 假设每帧更新一次，60FPS
 	self.angle += self.angle_speed * (1.0/60.0)
-	// println("RotatablePlatform ${self.index} angle: ${self.angle}")
+	// printlndebug("RotatablePlatform ${self.index} angle: ${self.angle}")
 	maintain_rotation(self.body, new_angle,kp=100000.0, kd=10000.0)
 }
 
@@ -199,7 +199,7 @@ impl PlatformTrait for MovablePlatform with update(self, game) -> Unit {
 	game |> ignore
 	
 	self.body.applyForce(@box2d.b2Vec2(0.0, 9.8*self.body.getMass()), self.body.getCenterPosition())
-	// println("rotation")
+	// printlndebug("rotation")
 	maintain_rotation(self.body, 0.0, kp=100000.0, kd=10000.0)
 	
 	let current_pos = self.body.getCenterPosition()
@@ -207,7 +207,7 @@ impl PlatformTrait for MovablePlatform with update(self, game) -> Unit {
 	let to_target = @box2d.b2Vec2(target_pos.getX() - current_pos.getX(), target_pos.getY() - current_pos.getY())
 	let distance = to_target.length()
 	
-	// println("\{self.direction} \{self.cooldown} \{distance}")
+	// printlndebug("\{self.direction} \{self.cooldown} \{distance}")
 	self.cooldown -= 1
 	
 	if distance < 0.1 && self.cooldown<0 {
@@ -222,7 +222,7 @@ impl PlatformTrait for MovablePlatform with update(self, game) -> Unit {
 		move_vector.setY(move_vector.getY() * move_distance/len )
 		let new_pos = @box2d.b2Vec2(current_pos.getX() + move_vector.getX(), current_pos.getY() + move_vector.getY())
 		
-		//println("MovablePlatform \{self.index} position: (\{new_pos.getX()}, \{new_pos.getY()})")
+		//printlndebug("MovablePlatform \{self.index} position: (\{new_pos.getX()}, \{new_pos.getY()})")
 		
 		maintain_position(self.body,(new_pos.getX(), new_pos.getY()), kp=1000000.0, kd=5000.0)
 	}
