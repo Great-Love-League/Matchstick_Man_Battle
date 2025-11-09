@@ -375,17 +375,10 @@ pub impl RenderAble for Gun with get_render(self: Gun){
 	Some(
 		fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
 			world |> ignore
-			for shape in self.body.getShapeList() {
-				match shape.getType() {
-					PolygonShape => drawPolygon(p, shape.toPolygonShape())
-					BoxShape => drawPolygon(p, shape.toPolygonShape())
-					CircleShape => drawCircle(p, shape.toCircleShape())
-					UnknownShape => {
-						println("Unknown Shape")
-					}
-				}
+				let image_size = 35.0; // 默认图片大小
+				drawBody(p, self.body, gun_image.val, image_size, image_size)
+				return
 			}
-		}
 	)
 }
 

@@ -47,6 +47,55 @@ pub fn draw_image_at(
   p.image(img, 0.0, 0.0, Some(width), Some(height))
 }
 
+///| 通用的物体绘制函数
+/// 如果有图片就渲染图片，否则渲染默认的 Box2D 形状
+/// @param p - P5.js 实例
+/// @param body - Box2D 刚体
+/// @param img - 可选的图片（如果为 Some 则用图片渲染）
+/// @param image_size - 图片大小（像素）
+/// @param use_velocity_angle - 是否使用速度方向作为旋转角度（适用于子弹等）
+pub fn drawBody(
+  p: &@p5js.P5JS,
+  body: @box2d.B2Body,
+  img: @p5js.P5Image?,
+  image_width: Double,
+  image_height: Double
+) -> Unit {
+  let pos = body.getCenterPosition()
+  let (sx, sy) = world_to_screen(pos.getX(), pos.getY())
+  
+  match img {
+    Some(img) => {
+      // 对于静态物体（速度接近0），使用 body 的旋转角度
+      // 对于动态物体（有速度），使用速度方向作为角度
+      let vel = body.getLinearVelocity()
+      let speed_squared = vel.getX() * vel.getX() + vel.getY() * vel.getY()
+      
+      let angle = if speed_squared > 0.01 {
+        // 有速度：使用速度方向（适用于子弹）
+        @cmath.atan2(vel.getY(), vel.getX())
+      } else {
+        // 静止：使用 body 的旋转角度（适用于平台）
+        body.getRotation()
+      }
+      
+      draw_image_at(p, img, sx, sy, image_width, image_height, angle)
+    }
+    None => {
+      // 没有图片：渲染默认形状
+      for shape in body.getShapeList() {
+        p.fillColorPara(127.0, Some(127.0), Some(127.0), Some(200.0))
+        match shape.getType() {
+          PolygonShape => drawPolygon(p, shape.toPolygonShape())
+          BoxShape => drawPolygon(p, shape.toPolygonShape())
+          CircleShape => drawCircle(p, shape.toCircleShape())
+          UnknownShape => println("Unknown Shape")
+        }
+      }
+    }
+  }
+}
+
 // extern "js" fn getCanvasWidth(self : &@p5js.P5JS) -> Double =
 //   #| (self) => self.width
 
