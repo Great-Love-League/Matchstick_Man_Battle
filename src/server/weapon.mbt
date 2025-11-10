@@ -302,7 +302,7 @@ pub impl WeaponDestroy for Sword with destroy(self, game){
 	game.world.destroyBody(self.body)
 }
 
-pub impl WeaponCreate for Gun with create( game, owner_id,url:String?){
+pub impl WeaponCreate for Gun with create(game, owner_id,url:String?){
 	let bodydef:@box2d.B2BodyDef=@map_loader.get_bodydef_from_raw(Some(gun_body), None) catch {
 				_=> {
 					println("Failed to create body definition for Gun")
@@ -370,6 +370,8 @@ pub impl WeaponCreate for Gun with create( game, owner_id,url:String?){
 		gun_type: Pistol,
 		img: ImageLoader::new(url)
 	}
+	aa.img.set_image_offset(7.0, 1.0)
+	aa.img.set_image_size(35.0, 35.0)
 	game.weapon.gun_list.push(aa)
 	game.create_revolute_joint(game.particle_list[owner_id].right_forearm, aa.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
 }
@@ -378,9 +380,9 @@ pub impl RenderAble for Gun with get_render(self: Gun){
 	Some(
 		fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
 			world |> ignore
-				let image_size = 35.0; // 默认图片大小
-				drawBody(p, self.body, self.img.get_image(p), image_size, image_size)
-				return
+
+			drawBody(p, self.body, self.img.get_image(p), self.img.get_image_size_x(p), self.img.get_image_size_y(p), self.img.get_image_offset_x(p), self.img.get_image_offset_y(p))
+			return
 			}
 	)
 }
@@ -682,13 +684,15 @@ pub fn Game::create_shotgun(self : Self, owner_id : Int, url: String?) -> Unit {
 		gun_type: Shotgun,
 		img: ImageLoader::new(url)
 	}
+	gun.img.set_image_offset(21.0, 1.0)
+	gun.img.set_image_size(100.0, 100.0)
 	self.weapon.gun_list.push(gun)
 	self.create_revolute_joint(self.particle_list[owner_id].right_forearm, gun.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
 }
 
 ///|
 /// 创建狙击枪
-pub fn Game::create_sniper(self : Self, owner_id : Int, url~: String?=None) -> Unit {
+pub fn Game::create_sniper(self : Self, owner_id : Int, url: String?) -> Unit {
 	let centerpos=self.particle_list[owner_id].right_forearm.getCenterPosition()
 	let rotate =self.particle_list[owner_id].right_forearm.getRotation()
 	let handpos=@box2d.b2Vec2(-@cmath.sin(rotate)*0.25+centerpos.getX(),-@cmath.cos(rotate)*0.25+centerpos.getY())
@@ -725,13 +729,15 @@ pub fn Game::create_sniper(self : Self, owner_id : Int, url~: String?=None) -> U
 		gun_type: Sniper,
 		img: ImageLoader::new(url)
 	}
+	gun.img.set_image_offset(20.0, -2.0)
+	gun.img.set_image_size(100.0, 100.0)
 	self.weapon.gun_list.push(gun)
 	self.create_revolute_joint(self.particle_list[owner_id].right_forearm, gun.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
 }
 
 ///|
 /// 创建激光枪
-pub fn Game::create_laser_rifle(self : Self, owner_id : Int, url~: String?=None) -> Unit {
+pub fn Game::create_laser_rifle(self : Self, owner_id : Int, url: String?) -> Unit {
 	let centerpos=self.particle_list[owner_id].right_forearm.getCenterPosition()
 	let rotate =self.particle_list[owner_id].right_forearm.getRotation()
 	let handpos=@box2d.b2Vec2(-@cmath.sin(rotate)*0.25+centerpos.getX(),-@cmath.cos(rotate)*0.25+centerpos.getY())
@@ -768,6 +774,8 @@ pub fn Game::create_laser_rifle(self : Self, owner_id : Int, url~: String?=None)
 		gun_type: LaserRifle,
 		img: ImageLoader::new(url)
 	}
+	gun.img.set_image_offset(7.0, -5.0)
+	gun.img.set_image_size(70.0, 70.0)
 	self.weapon.gun_list.push(gun)
 	self.create_revolute_joint(self.particle_list[owner_id].right_forearm, gun.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
 }
