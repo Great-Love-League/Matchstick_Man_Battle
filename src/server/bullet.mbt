@@ -548,6 +548,8 @@ pub fn Game::shoot_bullet_at_angle(
   if player_index >= self.particle_list.length() {
     return
   }
+	
+	
   
   let particle = self.particle_list[player_index]
   let hand_pos = particle.right_forearm.getCenterPosition()
