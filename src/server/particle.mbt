@@ -50,6 +50,21 @@ pub(all) struct Particle{
 	control : ParticleControl
 }
 
+pub fn Particle::get_all_bodies(self: Particle) -> Array[@box2d.B2Body] {
+	let body_list = []
+	body_list.push(self.torso)
+	body_list.push(self.head)
+	body_list.push(self.left_thigh)
+	body_list.push(self.right_thigh)
+	body_list.push(self.left_shank)
+	body_list.push(self.right_shank)
+	body_list.push(self.left_arm)
+	body_list.push(self.right_arm)
+	body_list.push(self.left_forearm)
+	body_list.push(self.right_forearm)
+	body_list
+}
+
 ///|
 /// @todo Implement rendering for Particle
 /// @chx
