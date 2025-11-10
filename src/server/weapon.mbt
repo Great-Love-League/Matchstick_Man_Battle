@@ -92,7 +92,7 @@ impl WeaponControl with get_attack_field(self) -> Double {
 pub impl WeaponCreate for Sword with create(game, owner_id, url:String?){
 	let bodydef=@map_loader.get_bodydef_from_raw(Some(sword_body), None) catch {
         _=> {
-					println("Failed to create body definition for Sword")
+					debugln("Failed to create body definition for Sword")
 					@box2d.b2BodyDef()
 				}
     }
@@ -135,7 +135,7 @@ pub impl WeaponControl for Sword with attack(self,game){
 				
 	// 			// 绘制攻击范围矩形
 	// 			self.draw_attack_field(p5)
-	// 			println("Drawing sword attack field...")
+	// 			debugln("Drawing sword attack field...")
 				
 	// 			// 检查动画是否结束
 	// 			if attack_field_counter.val >= attack_field_frames {
@@ -164,7 +164,7 @@ pub impl WeaponControl for Sword with attack(self,game){
 		if target_particle == -1 || target_particle == self.owner_id {
 			continue
 		}
-		println("Sword hit particle #\{target_particle}!")
+		debugln("Sword hit particle #\{target_particle}!")
 		let target = game.particle_list[target_particle]
 
 		// 简单伤害计算
@@ -279,7 +279,7 @@ pub impl WeaponControl for Sword with attack(self,game){
 	// 播放剑挥舞音效
 	game.audio.play_sound(SwordSwing)
 	
-	println("Sword attack!")
+	debugln("Sword attack!")
 }
 
 pub impl RenderAble for Sword with get_render(self: Sword){
@@ -292,7 +292,7 @@ pub impl RenderAble for Sword with get_render(self: Sword){
 					BoxShape => drawPolygon(p, shape.toPolygonShape())
 					CircleShape => drawCircle(p, shape.toCircleShape())
 					UnknownShape => {
-						println("Unknown Shape")
+						debugln("Unknown Shape")
 					}
 				}
 			}
@@ -313,7 +313,7 @@ pub impl WeaponDestroy for Sword with destroy(self, game){
 pub impl WeaponCreate for Gun with create(game, owner_id,url:String?){
 	let bodydef:@box2d.B2BodyDef=@map_loader.get_bodydef_from_raw(Some(gun_body), None) catch {
 				_=> {
-					println("Failed to create body definition for Gun")
+					debugln("Failed to create body definition for Gun")
 					@box2d.b2BodyDef()
 				}
 		}
@@ -390,13 +390,13 @@ pub impl RenderAble for Gun with get_render(self: Gun){
 		fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
 			world |> ignore
 
-			drawBody(p, self.body, 
-				self.img.get_image(p), 
-				self.img.get_image_size_x(), 
-				self.img.get_image_size_y(), 
-				self.img.get_image_offset_x(), 
-				self.img.get_image_offset_y())
-			return
+			// drawBody(p, self.body, 
+			// 	self.img.get_image(p), 
+			// 	self.img.get_image_size_x(), 
+			// 	self.img.get_image_size_y(), 
+			// 	self.img.get_image_offset_x(), 
+			// 	self.img.get_image_offset_y())
+			// return
 			}
 	)
 }
@@ -430,7 +430,7 @@ pub impl WeaponControl for Gun with attack(self,game){
 				recoil_horizontal=3,       // 轻微水平后坐力
 				recoil_vertical=0.3          // 轻微向上抬升
 			)
-			println("手枪射击，持有者: #\{self.owner_id}")
+			debugln("手枪射击，持有者: #\{self.owner_id}")
 		}
 		
 		Shotgun => {
@@ -447,7 +447,7 @@ pub impl WeaponControl for Gun with attack(self,game){
 				recoil_horizontal=4.0,      // 强烈水平后坐力
 				recoil_vertical=0.6         // 明显向上抬升
 			)
-			println("霰弹枪射击，持有者: #\{self.owner_id}")
+			debugln("霰弹枪射击，持有者: #\{self.owner_id}")
 		}
 		
 		Sniper => {
@@ -466,7 +466,7 @@ pub impl WeaponControl for Gun with attack(self,game){
 				recoil_horizontal=30.0,       // 高水平后坐力
 				recoil_vertical=0.5          // 中等向上抬升
 			)
-			println("狙击枪射击，持有者: #\{self.owner_id}")
+			debugln("狙击枪射击，持有者: #\{self.owner_id}")
 		}
 		
 		LaserRifle => {
@@ -485,7 +485,7 @@ pub impl WeaponControl for Gun with attack(self,game){
 				recoil_horizontal=0.0,       // 无后坐力 ✨
 				recoil_vertical=0.0          // 无向上抬升 ✨
 			)
-			println("激光枪射击，持有者: #\{self.owner_id}")
+			debugln("激光枪射击，持有者: #\{self.owner_id}")
 		}
 	}
 	

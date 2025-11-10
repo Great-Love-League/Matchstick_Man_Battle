@@ -2,14 +2,16 @@
 pub(all) struct Platform{
 	body : @box2d.B2Body
 	index : Int
-	// width : Double   // 半宽度（Box2D 的 extent）
-	// height : Double  // 半高度（Box2D 的 extent）
+	width : Double   // 半宽度（Box2D 的 extent）
+	height : Double  // 半高度（Box2D 的 extent）
 	img : ImageLoader
 }
 pub(all) struct RotatablePlatform{
 	body : @box2d.B2Body
 	index : Int
 	angle_speed : Double // 角速度，单位弧度每秒
+	width : Double   // 半宽度（Box2D 的 extent）
+	height : Double  // 半高度（Box2D 的 extent）
 	mut angle : Double
 }
 pub(all) struct MovablePlatform{
@@ -23,52 +25,55 @@ pub(all) struct MovablePlatform{
 	mut direction : Int // 1表示从start到end，-1表示从end到start
 	mut cooldown : Int  // 冷却时间，防止频繁切换方向
 	cooldown_time : Int // 冷却时间总长
+	width : Double   // 半宽度（Box2D 的 extent）
+	height : Double  // 半高度（Box2D 的 extent）
 }
 
 pub impl RenderAble for Platform with get_render(platform: Platform){
-	Some(
-		fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
-			world |> ignore
-			
-			// 将物理世界的尺寸（半宽度/半高度）转换为屏幕像素尺寸
-			// platform.width 和 platform.height 是半宽度和半高度
-			// 完整宽度 = width * 2, 完整高度 = height * 2
-			let pixel_width = 0.0;
-			let pixel_height = 0.0;
-
-			drawBody(p, platform.body, None, pixel_width, pixel_height, 0.0, 0.0)
-		}
-	)
 	// Some(
 	// 	fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
 	// 		world |> ignore
 			
-	// 		// 使用 PlatformTrait 获取物理世界的宽度和高度（单位：米）
-	// 		let width_meters = platform.get_width()
-	// 		let height_meters = platform.get_hight()
-			
-	// 		// 使用 world_to_screen_size 转换为屏幕像素
-	// 		// PPM (Pixels Per Meter) 是转换比例
-	// 		let pixel_width = world_to_screen_size(width_meters, PPM)
-	// 		let pixel_height = world_to_screen_size(height_meters, PPM)
-			
-	// 		// 使用 ImageLoader 获取图片并渲染
-	// 		drawBody(p, platform.body, platform.img.get_image(p), pixel_width, pixel_height, 0.0, 0.0)
+	// 		// 将物理世界的尺寸（半宽度/半高度）转换为屏幕像素尺寸
+	// 		// platform.width 和 platform.height 是半宽度和半高度
+	// 		// 完整宽度 = width * 2, 完整高度 = height * 2
+	// 		let pixel_width = 0.0;
+	// 		let pixel_height = 0.0;
+
+	// 		drawBody(p, platform.body, None, pixel_width, pixel_height, 0.0, 0.0)
 	// 	}
 	// )
+	Some(
+		fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
+			world |> ignore
+			
+			// 使用 PlatformTrait 获取物理世界的宽度和高度（单位：米）
+			let width_meters = platform.get_width()
+			let height_meters = platform.get_height()
+			
+			// 使用 world_to_screen_size 转换为屏幕像素
+			// PPM (Pixels Per Meter) 是转换比例
+			let pixel_width = world_to_screen_size(width_meters, PPM)
+			let pixel_height = world_to_screen_size(height_meters, PPM)
+			
+			debugln("Drawing Platform \{platform.get_index()} with pixel size (\{pixel_width}, \{pixel_height})", prio=11)
+			
+			drawBody(p, platform.body, platform.img.get_image(p), pixel_width, pixel_height, 0.0, 0.0)
+		}
+	)
 }
 
 pub impl RenderAble for RotatablePlatform with get_render(rotatable_platform: RotatablePlatform){
 	Some(fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
 		world|> ignore
 		for shape in rotatable_platform.get_body().getShapeList() {
-		// println("Drawing RotatablePlatform \{rotatable_platform.get_index()}")
+		// debugln("Drawing RotatablePlatform \{rotatable_platform.get_index()}")
 			match shape.getType() {
 				PolygonShape => drawPolygon(p, shape.toPolygonShape())
 				BoxShape => drawPolygon(p, shape.toPolygonShape())
 				CircleShape => drawCircle(p, shape.toCircleShape())
 				UnknownShape => {
-					println("Unknown Shape")
+					debugln("Unknown Shape")
 				}
 			}
 		}
@@ -81,13 +86,13 @@ pub impl RenderAble for MovablePlatform with get_render(movable_platform: Movabl
 		world |> ignore
 
 		for shape in movable_platform.get_body().getShapeList() {
-		// println("Drawing MovablePlatform \{movable_platform.get_index()}")
+		// debugln("Drawing MovablePlatform \{movable_platform.get_index()}")
 			match shape.getType() {
 				PolygonShape => drawPolygon(p, shape.toPolygonShape())
 				BoxShape => drawPolygon(p, shape.toPolygonShape())
 				CircleShape => drawCircle(p, shape.toCircleShape())
 				UnknownShape => {
-					println("Unknown Shape")
+					debugln("Unknown Shape")
 				}
 			}
 		}
@@ -100,72 +105,30 @@ pub(open) trait PlatformTrait : RenderAble{
 	update(Self, game:Game) -> Unit
 	get_index(Self) -> Int
 	get_body(Self) -> @box2d.B2Body
-	get_width(Self) -> Double = _
-	get_hight(Self) -> Double = _
+	get_height(Self) -> Double 
+	get_width(Self) -> Double 
 	get_rotation(Self) -> Double = _
 }
 
-impl PlatformTrait with get_width(self) -> Double {
-	let body = self.get_body()
-	if body.getShapeList().length() != 1 {
-		println("Warning: Platform \{self.get_index()} has multiple shapes, the default impl only support one shape.")
-	}
-	if body.getShapeList().length() == 0 {
-		println("Warning: Platform \{self.get_index()} has no shape, returning 0.")
-		return 0.0
-	}
-	let shape = body.getShapeList()[0]
-
-	if shape.getType() != BoxShape {
-		println("Warning: Platform \{self.get_index()} shape is not BoxShape, the default impl only support BoxShape.")
-		return 0.0
-	}
-
-	let box_shape = shape.toPolygonShape()
-	if box_shape.getVertexCount() != 4 {
-		println("Warning: Platform \{self.get_index()} BoxShape vertex count is not 4, the default impl only support rectangle.")
-		return 0.0
-	}
-
-	let vertexs = box_shape.getVertices()
-	let width = @cmath.sqrt(
-		(vertexs[0].getX() - vertexs[1].getX()) * (vertexs[0].getX() - vertexs[1].getX()) +
-		(vertexs[0].getY() - vertexs[1].getY()) * (vertexs[0].getY() - vertexs[1].getY())
-	)
-	return width
-
+pub impl PlatformTrait for Platform with get_width(self) -> Double {
+	return self.width
+}
+pub impl PlatformTrait for Platform with get_height(self) -> Double {
+	return self.height
+}
+pub impl PlatformTrait for RotatablePlatform with get_width(self) -> Double {
+	return self.width
+}
+pub impl PlatformTrait for RotatablePlatform with get_height(self) -> Double {
+	return self.height
+}
+pub impl PlatformTrait for MovablePlatform with get_width(self) -> Double {
+	return self.width
+}
+pub impl PlatformTrait for MovablePlatform with get_height(self) -> Double {
+	return self.height
 }
 
-impl PlatformTrait with get_hight(self) -> Double {
-	let body = self.get_body()
-	if body.getShapeList().length() != 1 {
-		println("Warning: Platform \{self.get_index()} has multiple shapes, the default impl only support one shape.")
-	}
-	if body.getShapeList().length() == 0 {
-		println("Warning: Platform \{self.get_index()} has no shape, returning 0.")
-		return 0.0
-	}
-	let shape = body.getShapeList()[0]
-
-	if shape.getType() != BoxShape {
-		println("Warning: Platform \{self.get_index()} shape is not BoxShape, the default impl only support BoxShape.")
-		return 0.0
-	}
-
-	let box_shape = shape.toPolygonShape()
-	if box_shape.getVertexCount() != 4 {
-		println("Warning: Platform \{self.get_index()} BoxShape vertex count is not 4, the default impl only support rectangle.")
-		return 0.0
-	}
-
-	let vertexs = box_shape.getVertices()
-	let hight = @cmath.sqrt(
-		(vertexs[2].getX() - vertexs[1].getX()) * (vertexs[2].getX() - vertexs[1].getX()) +
-		(vertexs[2].getY() - vertexs[1].getY()) * (vertexs[2].getY() - vertexs[1].getY())
-	)
-	return hight
-
-}
 
 impl PlatformTrait with get_rotation(self) -> Double {
 	return self.get_body().getRotation()
@@ -184,6 +147,8 @@ pub fn create_platform(game:Game,position:(Double,Double),size:(Double,Double),a
 	let new = Platform::{
 		body : game.world.createBody(body_def),
 		index : game.platform_index,
+		width : size.0,
+		height : size.1,
 		img : ImageLoader::new(Some("src/assets/platform1.png"))
 	}
 	// new.body.getShapeList()[0].getBase().getRestitution
@@ -191,6 +156,7 @@ pub fn create_platform(game:Game,position:(Double,Double),size:(Double,Double),a
 	game.platform_index += 1
 	new
 }
+
 pub impl PlatformTrait for Platform with update(self, game) -> Unit {
 	self |> ignore
 	game |> ignore
@@ -217,6 +183,8 @@ pub fn create_rotatable_platform(game:Game,position:(Double,Double),size:(Double
 		index : game.platform_index,
 		angle_speed : angle_speed,
 		angle : initial_angle,
+		width : size.0,
+		height : size.1
 	}
 	
 	let pos = (body.getCenterPosition().getX(), body.getCenterPosition().getY())
@@ -235,7 +203,7 @@ pub impl PlatformTrait for RotatablePlatform with update(self, game) -> Unit {
 	let current_angle = self.body.getRotation()
 	let new_angle = current_angle + self.angle_speed * (1.0/60.0) // 假设每帧更新一次，60FPS
 	self.angle += self.angle_speed * (1.0/60.0)
-	// println("RotatablePlatform ${self.index} angle: ${self.angle}")
+	// debugln("RotatablePlatform ${self.index} angle: ${self.angle}")
 	maintain_rotation(self.body, new_angle,kp=100000.0, kd=10000.0)
 }
 
@@ -273,7 +241,9 @@ pub fn create_movable_platform(game:Game, size:(Double,Double), start_position:(
 		speed,
 		direction : 1,
 		cooldown : cooldown_time,
-		cooldown_time
+		cooldown_time,
+		width : size.0,
+		height : size.1
 	}
 	// let axis = @box2d.b2Vec2(end_position.0 - start_position.0, end_position.1 - start_position.1)
 	//game.create_prismatic_joint(game.anchor, body, (0.0, 0.0), axis, enable_limit=true, lower_translation=0.0, upper_translation=5.0)|> ignore
@@ -284,12 +254,12 @@ pub fn create_movable_platform(game:Game, size:(Double,Double), start_position:(
 	new
 }
 
-impl PlatformTrait for MovablePlatform with update(self, game) -> Unit {
+pub impl PlatformTrait for MovablePlatform with update(self, game) -> Unit {
 
 	game |> ignore
 	
 	self.body.applyForce(@box2d.b2Vec2(0.0, 9.8*self.body.getMass()), self.body.getCenterPosition())
-	// println("rotation")
+	// debugln("rotation")
 	maintain_rotation(self.body, 0.0, kp=100000.0, kd=10000.0)
 	
 	let current_pos = self.body.getCenterPosition()
@@ -297,7 +267,7 @@ impl PlatformTrait for MovablePlatform with update(self, game) -> Unit {
 	let to_target = @box2d.b2Vec2(target_pos.getX() - current_pos.getX(), target_pos.getY() - current_pos.getY())
 	let distance = to_target.length()
 	
-	// println("\{self.direction} \{self.cooldown} \{distance}")
+	// debugln("\{self.direction} \{self.cooldown} \{distance}")
 	self.cooldown -= 1
 	
 	if distance < 0.1 && self.cooldown<0 {
@@ -312,15 +282,15 @@ impl PlatformTrait for MovablePlatform with update(self, game) -> Unit {
 		move_vector.setY(move_vector.getY() * move_distance/len )
 		let new_pos = @box2d.b2Vec2(current_pos.getX() + move_vector.getX(), current_pos.getY() + move_vector.getY())
 		
-		//println("MovablePlatform \{self.index} position: (\{new_pos.getX()}, \{new_pos.getY()})")
+		//debugln("MovablePlatform \{self.index} position: (\{new_pos.getX()}, \{new_pos.getY()})")
 		
 		maintain_position(self.body,(new_pos.getX(), new_pos.getY()), kp=1000000.0, kd=5000.0)
 	}
 }
 
-impl PlatformTrait for MovablePlatform with get_index(self) -> Int {
+pub impl PlatformTrait for MovablePlatform with get_index(self) -> Int {
 	return self.index
 }
-impl PlatformTrait for MovablePlatform with get_body(self) -> @box2d.B2Body {
+pub impl PlatformTrait for MovablePlatform with get_body(self) -> @box2d.B2Body {
 	return self.body
 }

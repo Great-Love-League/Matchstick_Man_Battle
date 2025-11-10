@@ -128,7 +128,7 @@ fn register_smoke_animation(game: Game, base_x: Double, base_y: Double) -> Unit 
   )
 
   game.add_animation(animation)
-  println("踏空气场烟雾已注册在 (\{base_x}, \{base_y})")
+  debugln("踏空气场烟雾已注册在 (\{base_x}, \{base_y})")
 }
 
 
@@ -233,5 +233,5 @@ fn register_blood_spray_animation(game: Game, x: Double, y: Double, vx: Double, 
   )
 
   game.add_animation(animation)
-  println("血雾动画已注册在 (\{x}, \{y})，方向 (\{vx}, \{vy})")
+  debugln("血雾动画已注册在 (\{x}, \{y})，方向 (\{vx}, \{vy})")
 }

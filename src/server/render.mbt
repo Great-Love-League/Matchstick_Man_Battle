@@ -68,6 +68,9 @@ pub fn drawBody(
   let pos = body.getCenterPosition()
   let (sx, sy) = world_to_screen(pos.getX(), pos.getY())
   
+	// debugln("Drawing Body at world position (\{pos.getX()}, \{pos.getY()})")
+	// debugln("Drawing Body at screen position (\{sx}, \{sy})")
+	
   match img {
     Some(img) => {
       // 对于静态物体（速度接近0），使用 body 的旋转角度
@@ -93,7 +96,7 @@ pub fn drawBody(
           PolygonShape => drawPolygon(p, shape.toPolygonShape())
           BoxShape => drawPolygon(p, shape.toPolygonShape())
           CircleShape => drawCircle(p, shape.toCircleShape())
-          UnknownShape => println("Unknown Shape")
+          UnknownShape => debugln("Unknown Shape")
         }
       }
     }
@@ -122,7 +125,7 @@ pub fn drawBody(
 pub fn world_to_screen(world_width~: Double = Width, world_height~: Double = Height, x: Double, y: Double, ppm~: Double = PPM) -> (Double, Double) {
   let screen_x_pixle_num = world_width
   let screen_y_pixle_num = world_height
-  //println("Canvas Width: \{screen_x_pixle_num}, Height: \{screen_y_pixle_num}")
+  //debugln("Canvas Width: \{screen_x_pixle_num}, Height: \{screen_y_pixle_num}")
   return (screen_x_pixle_num/2.0 + x * ppm, screen_y_pixle_num - y * ppm)
 }
 ///|
@@ -181,9 +184,9 @@ pub fn drawCircle(p: &@p5js.P5JS, shape: @box2d.B2CircleShape) -> Unit{
   let radius = shape.getRadius()
   let screen_pos = world_to_screen(position.getX(), position.getY())
   let screen_radius = world_to_screen_size(radius, PPM)
-//   println("Circle Position: \{position.getX()} , \{position.getY()}")
-//   println("Circle Screen Position: \{screen_pos.0} , \{screen_pos.1}")
-//   println("Circle Radius: \{radius}")
+//   debugln("Circle Position: \{position.getX()} , \{position.getY()}")
+//   debugln("Circle Screen Position: \{screen_pos.0} , \{screen_pos.1}")
+//   debugln("Circle Radius: \{radius}")
   // p.fillColorPara(200, Some(0.0), Some(0.0), None) //子弹射出后全部物体变红bug
   p.circle(screen_pos.0, screen_pos.1, screen_radius * 2.0)
 
@@ -202,7 +205,7 @@ pub fn DefaultRender::draw_world(self: DefaultRender, p: &@p5js.P5JS, world: &@b
         BoxShape => drawPolygon(p, shape.toPolygonShape())
         CircleShape => drawCircle(p, shape.toCircleShape())
         UnknownShape => {
-          println("Unknown Shape")
+          debugln("Unknown Shape")
         }
       }
     }
@@ -241,18 +244,19 @@ fn DefaultRender::draw_game(self:Self,p: &@p5js.P5JS, game: Game) -> Unit {
     match rend {
       Some(render_fn) => renderable_list.push(render_fn)
       _ => {
-        println("Entity is not renderable")
+        debugln("Entity is not renderable")
       }
     }
   }
-
+	
+	// 玩家
   for particle in game.particle_list {
     unwrap_renderable(particle.get_render())
   }
-	
-	for platform in game.platform_list {
-		unwrap_renderable(platform.get_render())
-	}
+  for render_fn in renderable_list {
+    render_fn(game.world, p)
+  }
+	renderable_list.clear()
 
   for bullet in game.bullet_list {
     if !bullet.is_active {
@@ -260,26 +264,6 @@ fn DefaultRender::draw_game(self:Self,p: &@p5js.P5JS, game: Game) -> Unit {
     }
     unwrap_renderable(bullet.get_render())
   }
-
-  for item in game.item_list {
-    if !item.is_active {
-      continue
-    }
-    unwrap_renderable(item.get_render())
-  }
-
-  for enemy_option in game.enemy_list {
-    match enemy_option {
-      Some(enemy) => {
-        unwrap_renderable(enemy.get_render())
-      }
-      _ => {
-        println("Enemy is None, skipping rendering")
-      }
-    }
-  }
-
-  // 武器
   for weapon in game.weapon.sword_list {
     unwrap_renderable(weapon.get_render())
   }
@@ -287,12 +271,52 @@ fn DefaultRender::draw_game(self:Self,p: &@p5js.P5JS, game: Game) -> Unit {
   for weapon in game.weapon.gun_list {
     unwrap_renderable(weapon.get_render())
   }
-
+  
+	unwrap_renderable(game.platform_list[4].get_render())
+	
+	for render_fn in renderable_list {
+    render_fn(game.world, p)
+  }
+	
+	
+	
+	renderable_list.clear()
+	
+	
+	
+	for platform in game.platform_list {
+		unwrap_renderable(platform.get_render())
+	}
   for render_fn in renderable_list {
     render_fn(game.world, p)
   }
+	renderable_list.clear()
 
-  p.strokeWeight(0.0)
+  // for item in game.item_list {
+  //   if !item.is_active {
+  //     continue
+  //   }
+  //   unwrap_renderable(item.get_render())
+  // }
+
+  // for enemy_option in game.enemy_list {
+  //   match enemy_option {
+  //     Some(enemy) => {
+  //       unwrap_renderable(enemy.get_render())
+  //     }
+  //     _ => {
+  //       debugln("Enemy is None, skipping rendering")
+  //     }
+  //   }
+  // }
+
+  // // 武器
+
+
+	for platform in game.platform_list {
+		unwrap_renderable(platform.get_render())
+	}
+  // p.strokeWeight(0.0)
 }
 
 
@@ -381,16 +405,16 @@ pub fn ImageLoader::try_load_image(self: ImageLoader, p: &@p5js.P5JS) -> Unit {
       self.img = loaded_img
       match loaded_img{
         Some(_) => {
-          println("Image loaded successfully from path: \{path}")
+          debugln("Image loaded successfully from path: \{path}")
         }
         None => {
-          println("Failed to load image from path: \{path}")
+          debugln("Failed to load image from path: \{path}")
           self.is_failed = true
         }
       }
     }
     None => {
-      println("Image path is None, cannot load image")
+      debugln("Image path is None, cannot load image")
       self.is_failed = true
     }
   }
@@ -459,7 +483,7 @@ pub impl RenderAble for BackgroundImage with get_render(self: BackgroundImage) {
       None => {
         // 如果图片加载失败，则使用默认背景色
         p.background(255.0, Some(204.0), Some(0.0), None)
-        println("Background加载失败，使用默认背景")
+        debugln("Background加载失败，使用默认背景")
       }
     }
   }

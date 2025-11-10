@@ -29,13 +29,13 @@ pub impl RenderAble for BoxEnemy with get_render(self: BoxEnemy){
 
 		for body in self.bodies {
 			for shape in body.getShapeList() {
-			// println("Drawing BoxEnemy")
+			// debugln("Drawing BoxEnemy")
 				match shape.getType() {
 					PolygonShape => drawPolygon(p, shape.toPolygonShape())
 					BoxShape => drawPolygon(p, shape.toPolygonShape())
 					CircleShape => drawCircle(p, shape.toCircleShape())
 					UnknownShape => {
-						println("Unknown Shape")
+						debugln("Unknown Shape")
 					}
 				}
 			}
@@ -99,7 +99,7 @@ pub impl EnemyTrait for BoxEnemy with destroy(self : BoxEnemy, game:Game) -> Uni
 pub fn create_box_enemy(game:Game, position:(Double,Double)) -> Bool {
 	let body = @map_loader.get_bodydef_from_raw(Some(@assets.BOXENEMY_BOX2D_DEFINITION), None) catch {
 		_ => {
-			println("Error loading BoxEnemy body definition")
+			debugln("Error loading BoxEnemy body definition")
 			return false
 		}
 	}

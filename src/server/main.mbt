@@ -82,7 +82,7 @@ fn load_custom_functions(game:Game) -> Unit {
           clear_old()
           // 创建手枪
           game.create_pistol(0)
-          println("装备手枪!")
+          debugln("装备手枪!")
         }
         if(p.keyIsDown(Digit2)){
           // 销毁旧武器
@@ -90,21 +90,21 @@ fn load_custom_functions(game:Game) -> Unit {
 
           // 创建霰弹枪
           game.create_shotgun(0, Some("src/assets/gun2.png"))
-          println("装备霰弹枪!")
+          debugln("装备霰弹枪!")
         }
         if(p.keyIsDown(Digit3)){
           // 销毁旧武器
           clear_old()
           // 创建狙击枪
           game.create_sniper(0, Some("src/assets/gun3.png"))
-          println("装备狙击枪!")
+          debugln("装备狙击枪!")
         }
         if(p.keyIsDown(Digit4)){
           // 销毁旧武器
           clear_old()
           // 创建激光枪
           game.create_laser_rifle(0, Some("src/assets/gun4.png"))
-          println("装备激光枪!")
+          debugln("装备激光枪!")
         }
       }
     )
@@ -180,7 +180,7 @@ fn load_custom_functions(game:Game) -> Unit {
         // 每100帧输出一次血量
         if game.frame_count % 100 == 0 {
           for particle in game.particle_list {
-            println("玩家 \{particle.index} 血量: \{particle.control.health}")
+            debugln("玩家 \{particle.index} 血量: \{particle.control.health}")
           }
         }
       }
@@ -221,7 +221,7 @@ pub fn register_control(game:Game) -> Unit{
     )
   ) catch {
     ParticleControlConfigError(e) =>{
-      println("Error registering particle control config: \{e}")
+      debugln("Error registering particle control config: \{e}")
     }
   }
 
@@ -239,7 +239,7 @@ pub fn register_control(game:Game) -> Unit{
     )
   ) catch {
     ParticleControlConfigError(e) =>{
-      println("Error registering particle control config: \{e}")
+      debugln("Error registering particle control config: \{e}")
     }
   }
 }
@@ -263,11 +263,11 @@ pub fn register_auto_aim(game:Game) -> Unit {
   )
   game.register_auto_aim_config(1, config_player1)
   
-  println("自动瞄准系统已初始化")
-  println("  - 按 T 键切换自动瞄准开关")
-  println("  - 可瞄准其他玩家和敌方AI实体")
-  println("  - 自动排除瞄准自己")
-  println("  - 最大瞄准距离: 50米")
+  debugln("自动瞄准系统已初始化")
+  debugln("  - 按 T 键切换自动瞄准开关")
+  debugln("  - 可瞄准其他玩家和敌方AI实体")
+  debugln("  - 自动排除瞄准自己")
+  debugln("  - 最大瞄准距离: 50米")
 }
 
 pub fn register_hp_show(game:Game) -> Unit {
@@ -287,7 +287,7 @@ pub fn register_hp_show(game:Game) -> Unit {
           let y = screen_pos.1 - 50.0
 
           if game.frame_count % 60 == 0 {
-            println("绘制血量条，角色 \{particle.index} 屏幕位置: (\{x}, \{y})")
+            debugln("绘制血量条，角色 \{particle.index} 屏幕位置: (\{x}, \{y})")
           }
 
           // 血条尺寸（像素）
@@ -363,7 +363,7 @@ pub fn register_show_mouse_screen_coords(game:Game) -> Unit {
         let mouse_y = p5.getMouseY().to_double();
         // 每秒输出一次鼠标屏幕坐标
         if game.frame_count % 60 == 0 {
-          println("鼠标位置: (\{mouse_x}, \{mouse_y})");
+          debugln("鼠标位置: (\{mouse_x}, \{mouse_y})");
         }
       }
     )
@@ -432,7 +432,7 @@ fn register_animation(game: Game) -> Unit {
   // 将动画添加到游戏中（需要转换为 trait 对象）
   game.add_animation(animation)
   
-  println("炫酷花纹动画已注册在屏幕坐标 (100, 100)")
+  debugln("炫酷花纹动画已注册在屏幕坐标 (100, 100)")
 }
 
 /// 注册音频控制功能
@@ -450,38 +450,38 @@ pub fn register_audio_controls(game: Game) -> Unit {
         if p5.keyIsDown(KeyM) && game.frame_count % cooldown == 0 {
           game.audio.toggle_bgm()
           let status = if game.audio.bgm_enabled { "开启" } else { "关闭" }
-          println("背景音乐已\{status}")
+          debugln("背景音乐已\{status}")
         }
         
         // N键：切换音效
         if p5.keyIsDown(KeyN) && game.frame_count % cooldown == 0 {
           game.audio.toggle_sfx()
           let status = if game.audio.sfx_enabled { "开启" } else { "关闭" }
-          println("音效已\{status}")
+          debugln("音效已\{status}")
         }
         
         // 7键：降低音量
         if p5.keyIsDown(Digit7) && game.frame_count % volume_cooldown == 0 {
           let new_volume = game.audio.master_volume - 0.1
           game.audio.set_master_volume(new_volume)
-          println("主音量: \{game.audio.master_volume}")
+          debugln("主音量: \{game.audio.master_volume}")
         }
         
         // 0键：提高音量
         if p5.keyIsDown(Digit0) && game.frame_count % volume_cooldown == 0 {
           let new_volume = game.audio.master_volume + 0.1
           game.audio.set_master_volume(new_volume)
-          println("主音量: \{game.audio.master_volume}")
+          debugln("主音量: \{game.audio.master_volume}")
         }
       }
     )
   )
   
-  println("音频控制已注册:")
-  println("  M键 - 切换背景音乐")
-  println("  N键 - 切换音效")
-  println("  7键 - 降低音量")
-  println("  0键 - 提高音量")
+  debugln("音频控制已注册:")
+  debugln("  M键 - 切换背景音乐")
+  debugln("  N键 - 切换音效")
+  debugln("  7键 - 降低音量")
+  debugln("  0键 - 提高音量")
 }
 
 fn main {

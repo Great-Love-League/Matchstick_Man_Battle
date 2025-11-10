@@ -124,7 +124,7 @@ pub fn ParticleControlConfig::new(
 	if from_internet {
 		// 检查必要参数
 		if target_ip == None || target_port == None {
-			println("Error: Missing target_ip or target_port for internet control.")
+			debugln("Error: Missing target_ip or target_port for internet control.")
 			raise ParticleControlConfigError("Missing target_ip or target_port for internet control.")
 		}
 
@@ -146,7 +146,7 @@ pub fn ParticleControlConfig::new(
 	if from_internet == false {
 		// 检查必要参数
 		if left_key == None || right_key == None || jump_key == None || shoot_key == None || toggle_auto_aim_key == None {
-			println("Error: Missing key bindings for local control.")
+			debugln("Error: Missing key bindings for local control.")
 			raise ParticleControlConfigError("Missing key bindings for local control.")
 		}
 		return ParticleControlConfig::{
@@ -270,7 +270,7 @@ fn Game::running(self:Self, p5: &@p5js.P5JS) -> Unit {
 	// if p5.keyIsDown(@p5js.Digit9) {
 	// 	if self.frame_count % 10 == 0 {
 	// 		self.slow_mode = true
-	// 		println("切换到 1/4 时间模式")
+	// 		debugln("切换到 1/4 时间模式")
 	// 	}
 	// }
 
@@ -278,7 +278,7 @@ fn Game::running(self:Self, p5: &@p5js.P5JS) -> Unit {
 	// if p5.keyIsDown(@p5js.Digit0) {
 	// 	if self.frame_count % 10 == 0 {
 	// 		self.slow_mode = false
-	// 		println("切换到正常时间模式")
+	// 		debugln("切换到正常时间模式")
 	// 	}
 	// }
 
@@ -295,7 +295,7 @@ fn Game::running(self:Self, p5: &@p5js.P5JS) -> Unit {
 			if !config.from_internet {
 				self.particle_control(config, p5) catch{
 					e => {
-						println("Error in particle_control: \{e} in particle index \{config.target_particle_index}.")
+						debugln("Error in particle_control: \{e} in particle index \{config.target_particle_index}.")
 					}
 				}
 			}
@@ -362,7 +362,7 @@ fn Game::running(self:Self, p5: &@p5js.P5JS) -> Unit {
 	
 	
 	if(self.slow_mode){
-			println("1/4 速模式：物理步进")
+			debugln("1/4 速模式：物理步进")
 		self.world.step(1.0/60.0/4.0, 4)
 		}
 		else{
@@ -406,8 +406,8 @@ pub fn Game::check_particle_out_of_bounds(self:Self, particle: Particle) -> Bool
 	let (max_x, min_y) = world_to_screen(body_aabb.getmaxVertex().getX(), body_aabb.getmaxVertex().getY())
 
 	if max_y < 0.0 || min_y > Height || max_x < 0.0 || min_x > Width {
-		println("max_y : \{max_y}, min_y : \{min_y}, max_x : \{max_x}, min_x : \{min_x}")
-		println("Height : \{Height}, Width : \{Width}")
+		debugln("max_y : \{max_y}, min_y : \{min_y}, max_x : \{max_x}, min_x : \{min_x}")
+		debugln("Height : \{Height}, Width : \{Width}")
 		return true
 	}
 
@@ -462,7 +462,7 @@ fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : 
 
 	let particle_index = control_config.target_particle_index
 	if particle_index < 0 || particle_index >= self.particle_list.length() {
-		println("Error: Invalid target_particle_index \{particle_index} in particle_control.")
+		debugln("Error: Invalid target_particle_index \{particle_index} in particle_control.")
 		raise GameStateError("Invalid target_particle_index in particle_control. want to control \{particle_index}, but only \{self.particle_list.length()} particles exist.")
 	}
 	let particle = self.particle_list[particle_index]
@@ -478,9 +478,9 @@ fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : 
 			match self.get_auto_aim_config(particle_index) {
 				Some(config) => {
 					if config.enabled {
-						println("玩家 \{particle_index}: 自动瞄准已启用")
+						debugln("玩家 \{particle_index}: 自动瞄准已启用")
 					} else {
-						println("玩家 \{particle_index}: 自动瞄准已禁用")
+						debugln("玩家 \{particle_index}: 自动瞄准已禁用")
 					}
 				}
 				None => ()
@@ -491,7 +491,7 @@ fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : 
 	// for gun in self.weapon.gun_list {
 	// 	if gun.owner_id == self.particle_index {
 	// 		// 若玩家有多把枪，只调整第一把匹配到的武器
-	// 		println("自动瞄准调整武器朝向至角度：\{0}")
+	// 		debugln("自动瞄准调整武器朝向至角度：\{0}")
 	// 		maintain_rotation(gun.body, 0, kp=200.0, kd=20.0)
 	// 		break
 	// 	}

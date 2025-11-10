@@ -137,7 +137,7 @@ pub fn Game::create_bullet(
   }
   
   self.bullet_list.push(bullet)
-  println("创建子弹 #\{bullet_id}: 位置(\{position.0}, \{position.1}), 伤害\{damage}, 目标\{target_types}")
+  debugln("创建子弹 #\{bullet_id}: 位置(\{position.0}, \{position.1}), 伤害\{damage}, 目标\{target_types}")
   bullet
 }
 
@@ -271,13 +271,13 @@ pub fn Game::check_bullet_collision(self : Self, bullet : Bullet) -> Unit {
 				
         // 应用伤害
         particle.control.health -= damage
-        println("子弹 #\{bullet.id} 击中玩家 \{particle.index}, 伤害 \{damage} (剩余血量: \{particle.control.health})")
+        debugln("子弹 #\{bullet.id} 击中玩家 \{particle.index}, 伤害 \{damage} (剩余血量: \{particle.control.health})")
         
         if particle.control.health <= 0 {
           particle.control.faint_state = true
           // 播放玩家死亡音效
           self.audio.play_sound(PlayerDeath)
-          println("玩家 \{particle.index} 被击倒!")
+          debugln("玩家 \{particle.index} 被击倒!")
         }
         
         // 记录已命中目标
@@ -287,11 +287,11 @@ pub fn Game::check_bullet_collision(self : Self, bullet : Bullet) -> Unit {
         if bullet.penetration <= 0 {
           // 穿透次数用完，回收子弹
           bullet.is_active = false
-          println("子弹 #\{bullet.id} 穿透次数用完，回收子弹")
+          debugln("子弹 #\{bullet.id} 穿透次数用完，回收子弹")
           break
         } else {
           bullet.penetration -= 1
-          println("子弹 #\{bullet.id} 穿透! 剩余穿透次数: \{bullet.penetration}")
+          debugln("子弹 #\{bullet.id} 穿透! 剩余穿透次数: \{bullet.penetration}")
           // 如果穿透次数刚好用完（减到0），在下一次命中时会被回收
         }
       }
@@ -327,7 +327,7 @@ pub fn Game::check_bullet_environment_collision(self : Self, bullet : Bullet) ->
   for platform in self.platform_list {
     if self.is_contact(platform.get_body(), bullet.body, strict=true) {
       bullet.is_active = false
-      println("子弹 #\{bullet.id} 击中环境（平台），回收子弹")
+      debugln("子弹 #\{bullet.id} 击中环境（平台），回收子弹")
       return
     }
   }
@@ -371,7 +371,7 @@ pub fn Game::check_bullet_environment_collision(self : Self, bullet : Bullet) ->
         // 如果不是角色部位，则是环境物体，回收子弹
         if not(is_character_part) {
           bullet.is_active = false
-          println("子弹 #\{bullet.id} 击中环境（静态物体），回收子弹")
+          debugln("子弹 #\{bullet.id} 击中环境（静态物体），回收子弹")
           return
         }
       }
@@ -515,7 +515,7 @@ pub fn Game::shoot_bullet(self : Self, player_index : Int, direction : Double) -
   let torso_pos = particle.torso.getCenterPosition()
   particle.torso.applyImpulse(recoil_impulse, torso_pos)
   
-  println("玩家 \{player_index} 发射了普通子弹")
+  debugln("玩家 \{player_index} 发射了普通子弹")
 }
 
 ///|
@@ -640,7 +640,7 @@ pub fn Game::shoot_penetrating_bullet_advanced(
   let torso_pos = particle.torso.getCenterPosition()
   particle.torso.applyImpulse(recoil_impulse, torso_pos)
   
-  println("玩家 \{player_index} 发射了穿透子弹 (穿透\{penetration_count}次)")
+  debugln("玩家 \{player_index} 发射了穿透子弹 (穿透\{penetration_count}次)")
 }
 
 ///|
@@ -687,7 +687,7 @@ pub fn Game::shoot_penetrating_bullet(
   let torso_pos = particle.torso.getCenterPosition()
   particle.torso.applyImpulse(recoil_impulse, torso_pos)
   
-  println("玩家 \{player_index} 发射了穿透子弹 (穿透\{penetration_count}次)")
+  debugln("玩家 \{player_index} 发射了穿透子弹 (穿透\{penetration_count}次)")
 }
 
 ///|
@@ -758,7 +758,7 @@ pub fn Game::shoot_shotgun(
   let torso_pos = particle.torso.getCenterPosition()
   particle.torso.applyImpulse(recoil_impulse, torso_pos)
   
-  println("玩家 \{player_index} 发射了散弹 (\{bullet_count}发)")
+  debugln("玩家 \{player_index} 发射了散弹 (\{bullet_count}发)")
 }
 
 ///|
@@ -789,7 +789,7 @@ pub fn Game::shoot_at_enemies(self : Self, player_index : Int, direction : Doubl
     penetration=0
   ) |> ignore
   
-  println("玩家 \{player_index} 发射了反敌子弹")
+  debugln("玩家 \{player_index} 发射了反敌子弹")
 }
 
 ///|
@@ -820,5 +820,5 @@ pub fn Game::shoot_explosive_bullet(self : Self, player_index : Int, direction :
     penetration=0
   ) |> ignore
   
-  println("玩家 \{player_index} 发射了爆炸弹 (危险！伤害所有人)")
+  debugln("玩家 \{player_index} 发射了爆炸弹 (危险！伤害所有人)")
 }

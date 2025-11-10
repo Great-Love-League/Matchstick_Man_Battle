@@ -297,7 +297,7 @@ fn Game::particle_walk(self:Self,particle : Particle, direction : Double) -> Uni
 		play_angle -= 2.0*3.14
 	}
 	
-	println("Fuck: \{play_angle}")
+	debugln("Fuck: \{play_angle}")
 
   maintain_rotation(particle.torso, play_angle, kp=200.0, kd=20.0)
   particle.torso.applyForce(v, particle.torso.getCenterPosition())
@@ -315,7 +315,7 @@ fn Game::particle_jump(self:Self ,particle : Particle, direction : Double) -> Un
       let bend_factor : Double = particle.control.jump_frame_count.to_double() /
         j_dur_A.to_double() *
         knee_angle_bend_max
-      // println(bend_factor)
+      // debugln(bend_factor)
 			maintain_joint(particle.arm_left_joint, j_arm_angle_backward*particle.control.walk_direction, kp=30.0, kd=1.0)
 			maintain_joint(particle.arm_right_joint, j_arm_angle_backward*particle.control.walk_direction, kp=30.0, kd=1.0)
 			maintain_joint(particle.forearm_left_joint, elbow_angle * particle.control.walk_direction, kp=30.0, kd=1.0)
@@ -331,7 +331,7 @@ fn Game::particle_jump(self:Self ,particle : Particle, direction : Double) -> Un
       particle.torso.applyImpulse(v, particle.torso.getCenterPosition())
 			let s_pos = world_to_screen(particle.torso.getCenterPosition().getX(), particle.torso.getCenterPosition().getY()-2.0)
 			register_smoke_animation(self,s_pos.0, s_pos.1)
-			println("Jump Smoke: (\{v.getX()}, \{v.getY()})")
+			debugln("Jump Smoke: (\{v.getX()}, \{v.getY()})")
       return
     } else if particle.control.jump_frame_count < j_dur_A + j_dur_B + j_dur_C {
       maintain_rotation(particle.torso, 0, kp=100.0, kd=10.0)
@@ -360,7 +360,7 @@ fn Game::particle_stand(self:Self,particle : Particle) -> Unit {
     	return
 		}
 		particle.control.stand_cooldown -= 1
-		println("Stand cooldown: \{particle.control.stand_cooldown}")
+		debugln("Stand cooldown: \{particle.control.stand_cooldown}")
   }
 	particle.control.stand_cooldown = 10
   maintain_joint(particle.thigh_left_joint, 0.0, kp=50.0, kd=2.0)
