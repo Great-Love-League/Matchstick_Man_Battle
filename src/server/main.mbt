@@ -96,14 +96,14 @@ fn load_custom_functions(game:Game) -> Unit {
           // 销毁旧武器
           clear_old()
           // 创建狙击枪
-          game.create_sniper(0)
+          game.create_sniper(0, Some("src/assets/gun3.png"))
           println("装备狙击枪!")
         }
         if(p.keyIsDown(Digit4)){
           // 销毁旧武器
           clear_old()
           // 创建激光枪
-          game.create_laser_rifle(0)
+          game.create_laser_rifle(0, Some("src/assets/gun4.png"))
           println("装备激光枪!")
         }
       }
