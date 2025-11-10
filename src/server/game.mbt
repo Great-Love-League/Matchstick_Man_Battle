@@ -5,8 +5,6 @@ pub suberror GameStateError String
 // let bullet_image : Ref[@p5js.P5Image?] = { val: None }
 // let gun_image : Ref[@p5js.P5Image?] = { val: None }
 let platform_image : Ref[@p5js.P5Image?] = { val: None }
-let bg_image : Ref[@p5js.P5Image?] = { val: None }
-
 pub(all) struct Game {
 	world : @box2d.B2World
 	weapon : WeaponManager
@@ -404,8 +402,8 @@ pub fn Game::check_particle_out_of_bounds(self:Self, particle: Particle) -> Bool
 
 	let body_aabb = get_entity_aabb(particle.get_all_bodies())
 
-	let (max_x, max_y) = world_to_screen(body_aabb.getminVertex().getX(), body_aabb.getminVertex().getY())
-	let (min_x, min_y) = world_to_screen(body_aabb.getmaxVertex().getX(), body_aabb.getmaxVertex().getY())
+	let (min_x, max_y) = world_to_screen(body_aabb.getminVertex().getX(), body_aabb.getminVertex().getY())
+	let (max_x, min_y) = world_to_screen(body_aabb.getmaxVertex().getX(), body_aabb.getmaxVertex().getY())
 
 	if max_y < 0.0 || min_y > Height || max_x < 0.0 || min_x > Width {
 		println("max_y : \{max_y}, min_y : \{min_y}, max_x : \{max_x}, min_x : \{min_x}")
