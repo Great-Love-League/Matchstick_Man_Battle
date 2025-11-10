@@ -166,8 +166,8 @@ pub fn Game::update_bullet(self : Self, bullet : Bullet) -> Unit {
   
   let x = current_pos.getX()
   let y = current_pos.getY()
-  let half_width = VIEWPORT_WIDTH / PPM / 2.0
-  let half_height = VIEWPORT_HEIGHT / PPM / 2.0
+  let half_width = Width / PPM / 2.0
+  let half_height = Height / PPM / 2.0
   
   if x < -half_width || x > half_width || y < 0.0 || y > half_height * 2.0 {
     bullet.is_active = false

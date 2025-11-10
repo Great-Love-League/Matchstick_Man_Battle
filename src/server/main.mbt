@@ -187,6 +187,23 @@ fn load_custom_functions(game:Game) -> Unit {
     )
   )
 
+  /// 添加body aabb绘制
+  game.register_custom_function(
+    GameCustomFunction::new(
+      GameRunning,
+      fn(game: Game, p5: &@p5js.P5JS) {
+        for i in game.particle_list {
+          draw_aabb(p5, 
+          get_entity_aabb(i.get_all_bodies()), 
+          fn (p5){
+            p5.noFill()
+            p5.fillColorPara(255.0, Some(0.0), Some(0.0), Some(150.0))
+          })
+        }
+      }
+    )
+  )
+
 }
 
 pub fn register_control(game:Game) -> Unit{
