@@ -81,6 +81,75 @@ pub(open) trait PlatformTrait : RenderAble{
 	update(Self, game:Game) -> Unit
 	get_index(Self) -> Int
 	get_body(Self) -> @box2d.B2Body
+	get_width(Self) -> Double = _
+	get_hight(Self) -> Double = _
+	get_rotation(Self) -> Double = _
+}
+
+impl PlatformTrait with get_width(self) -> Double {
+	let body = self.get_body()
+	if body.getShapeList().length() != 1 {
+		println("Warning: Platform \{self.get_index()} has multiple shapes, the default impl only support one shape.")
+	}
+	if body.getShapeList().length() == 0 {
+		println("Warning: Platform \{self.get_index()} has no shape, returning 0.")
+		return 0.0
+	}
+	let shape = body.getShapeList()[0]
+
+	if shape.getType() != BoxShape {
+		println("Warning: Platform \{self.get_index()} shape is not BoxShape, the default impl only support BoxShape.")
+		return 0.0
+	}
+
+	let box_shape = shape.toPolygonShape()
+	if box_shape.getVertexCount() != 4 {
+		println("Warning: Platform \{self.get_index()} BoxShape vertex count is not 4, the default impl only support rectangle.")
+		return 0.0
+	}
+
+	let vertexs = box_shape.getVertices()
+	let width = @cmath.sqrt(
+		(vertexs[0].getX() - vertexs[1].getX()) * (vertexs[0].getX() - vertexs[1].getX()) +
+		(vertexs[0].getY() - vertexs[1].getY()) * (vertexs[0].getY() - vertexs[1].getY())
+	)
+	return width
+
+}
+
+impl PlatformTrait with get_hight(self) -> Double {
+	let body = self.get_body()
+	if body.getShapeList().length() != 1 {
+		println("Warning: Platform \{self.get_index()} has multiple shapes, the default impl only support one shape.")
+	}
+	if body.getShapeList().length() == 0 {
+		println("Warning: Platform \{self.get_index()} has no shape, returning 0.")
+		return 0.0
+	}
+	let shape = body.getShapeList()[0]
+
+	if shape.getType() != BoxShape {
+		println("Warning: Platform \{self.get_index()} shape is not BoxShape, the default impl only support BoxShape.")
+		return 0.0
+	}
+
+	let box_shape = shape.toPolygonShape()
+	if box_shape.getVertexCount() != 4 {
+		println("Warning: Platform \{self.get_index()} BoxShape vertex count is not 4, the default impl only support rectangle.")
+		return 0.0
+	}
+
+	let vertexs = box_shape.getVertices()
+	let hight = @cmath.sqrt(
+		(vertexs[2].getX() - vertexs[1].getX()) * (vertexs[2].getX() - vertexs[1].getX()) +
+		(vertexs[2].getY() - vertexs[1].getY()) * (vertexs[2].getY() - vertexs[1].getY())
+	)
+	return hight
+
+}
+
+impl PlatformTrait with get_rotation(self) -> Double {
+	return self.get_body().getRotation()
 }
 
 pub fn create_platform(game:Game,position:(Double,Double),size:(Double,Double),angle?:Double=0.0)
