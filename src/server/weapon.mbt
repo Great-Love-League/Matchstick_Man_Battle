@@ -174,7 +174,7 @@ pub impl WeaponControl for Sword with attack(self,game){
 	let start_y = sword_pos.getY()
 	
 	// 创建圆形冲击波动画（多波纹效果）
-	let frame_counter = { val: 0 }
+	let frame_counter : Ref[Int] = { val: 0 }
 	let max_frames = 20  // 动画持续20帧（约0.33秒）
 	
 	game.add_animation(
