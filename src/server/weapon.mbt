@@ -52,7 +52,7 @@ pub struct Gun{
 	gun_type : GunType
 
 	// img
-	mut img : @p5js.P5Image?
+	img : ImageLoader
 }
 
 // 枪械类型
@@ -368,18 +368,8 @@ pub impl WeaponCreate for Gun with create( game, owner_id){
 		last_fire_frame: 0,
 
 		gun_type: Pistol,
-		img: None
+		img: ImageLoader::new(Some("src/assets/gun.png"))
 	}
-	getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
-		if aa.img.is_empty() {
-			let img = p.loadImage(
-				"src/assets/gun.png",
-				Some(fn(_img) {}),
-				Some(fn(_err) {})
-			)
-			aa.img = Some(img)
-		}
-	}) |> ignore
 	game.weapon.gun_list.push(aa)
 	game.create_revolute_joint(game.particle_list[owner_id].right_forearm, aa.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
 }
@@ -389,7 +379,7 @@ pub impl RenderAble for Gun with get_render(self: Gun){
 		fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
 			world |> ignore
 				let image_size = 35.0; // 默认图片大小
-				drawBody(p, self.body, self.img, image_size, image_size)
+				drawBody(p, self.body, self.img.get_image(p), image_size, image_size)
 				return
 			}
 	)
@@ -655,7 +645,7 @@ pub fn Game::create_pistol(self : Self, owner_id : Int) -> Unit {
 
 ///|
 /// 创建霰弹枪
-pub fn Game::create_shotgun(self : Self, owner_id : Int) -> Unit {
+pub fn Game::create_shotgun(self : Self, owner_id : Int, url~: String?=None) -> Unit {
 	let centerpos=self.particle_list[owner_id].right_forearm.getCenterPosition()
 	let rotate =self.particle_list[owner_id].right_forearm.getRotation()
 	let handpos=@box2d.b2Vec2(-@cmath.sin(rotate)*0.25+centerpos.getX(),-@cmath.cos(rotate)*0.25+centerpos.getY())
@@ -690,25 +680,15 @@ pub fn Game::create_shotgun(self : Self, owner_id : Int) -> Unit {
 		last_fire_frame: 0,
 		
 		gun_type: Shotgun,
-		img: None
+		img: ImageLoader::new(url)
 	}
-	getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
-		if gun.img.is_empty() {
-			let img = p.loadImage(
-				"src/assets/gun.png",
-				Some(fn(_img) {}),
-				Some(fn(_err) {})
-			)
-			gun.img = Some(img)
-		}
-	}) |> ignore
 	self.weapon.gun_list.push(gun)
 	self.create_revolute_joint(self.particle_list[owner_id].right_forearm, gun.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
 }
 
 ///|
 /// 创建狙击枪
-pub fn Game::create_sniper(self : Self, owner_id : Int) -> Unit {
+pub fn Game::create_sniper(self : Self, owner_id : Int, url~: String?=None) -> Unit {
 	let centerpos=self.particle_list[owner_id].right_forearm.getCenterPosition()
 	let rotate =self.particle_list[owner_id].right_forearm.getRotation()
 	let handpos=@box2d.b2Vec2(-@cmath.sin(rotate)*0.25+centerpos.getX(),-@cmath.cos(rotate)*0.25+centerpos.getY())
@@ -743,25 +723,15 @@ pub fn Game::create_sniper(self : Self, owner_id : Int) -> Unit {
 		last_fire_frame: 0,
 
 		gun_type: Sniper,
-		img: None
+		img: ImageLoader::new(url)
 	}
-	getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
-		if gun.img.is_empty() {
-			let img = p.loadImage(
-				"src/assets/gun.png",
-				Some(fn(_img) {}),
-				Some(fn(_err) {})
-			)
-			gun.img = Some(img)
-		}
-	}) |> ignore
 	self.weapon.gun_list.push(gun)
 	self.create_revolute_joint(self.particle_list[owner_id].right_forearm, gun.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
 }
 
 ///|
 /// 创建激光枪
-pub fn Game::create_laser_rifle(self : Self, owner_id : Int) -> Unit {
+pub fn Game::create_laser_rifle(self : Self, owner_id : Int, url~: String?=None) -> Unit {
 	let centerpos=self.particle_list[owner_id].right_forearm.getCenterPosition()
 	let rotate =self.particle_list[owner_id].right_forearm.getRotation()
 	let handpos=@box2d.b2Vec2(-@cmath.sin(rotate)*0.25+centerpos.getX(),-@cmath.cos(rotate)*0.25+centerpos.getY())
@@ -796,18 +766,8 @@ pub fn Game::create_laser_rifle(self : Self, owner_id : Int) -> Unit {
 		last_fire_frame: 0,
 
 		gun_type: LaserRifle,
-		img: None
+		img: ImageLoader::new(url)
 	}
-	getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
-		if gun.img.is_empty() {
-			let img = p.loadImage(
-				"src/assets/gun.png",
-				Some(fn(_img) {}),
-				Some(fn(_err) {})
-			)
-			gun.img = Some(img)
-		}
-	}) |> ignore
 	self.weapon.gun_list.push(gun)
 	self.create_revolute_joint(self.particle_list[owner_id].right_forearm, gun.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
 }
