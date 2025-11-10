@@ -39,12 +39,14 @@ pub fn draw_image_at(
   y: Double, 
   width: Double, 
   height: Double,
-  angle: Double
+  angle: Double,
+  offset_x: Double,
+  offset_y: Double
 ) -> Unit {
   p.translate(x, y, None)
   p.rotate(angle, None)
   p.imageMode("center")
-  p.image(img, 0.0, 0.0, Some(width), Some(height))
+  p.image(img, offset_x, offset_y, Some(width), Some(height))
 }
 
 ///| 通用的物体绘制函数
@@ -59,7 +61,9 @@ pub fn drawBody(
   body: @box2d.B2Body,
   img: @p5js.P5Image?,
   image_width: Double,
-  image_height: Double
+  image_height: Double,
+  offset_x: Double,
+  offset_y: Double
 ) -> Unit {
   let pos = body.getCenterPosition()
   let (sx, sy) = world_to_screen(pos.getX(), pos.getY())
@@ -79,7 +83,7 @@ pub fn drawBody(
         body.getRotation()
       }
       
-      draw_image_at(p, img, sx, sy, image_width, image_height, angle)
+      draw_image_at(p, img, sx, sy, image_width, image_height, angle, offset_x, offset_y)
     }
     None => {
       // 没有图片：渲染默认形状
@@ -340,10 +344,12 @@ pub struct ImageLoader{
   mut img : @p5js.P5Image?
   // 表示是否加载失败
   mut is_failed : Bool
-  x : Double
-  y : Double
-  angle : Double
-  large_image : Bool
+  // 缩放量
+  mut x : Double
+  mut y : Double
+  // 偏移量
+  mut offset_x : Double
+  mut offset_y : Double
 }
 
 pub fn ImageLoader::new(path: String?) -> ImageLoader {
@@ -352,10 +358,10 @@ pub fn ImageLoader::new(path: String?) -> ImageLoader {
     img: None,
     // 表示导入尝试是否失败
     is_failed: false,
-    x: 0.0,
-    y: 0.0,
-    angle: 0.0,
-    large_image: false
+    x: 1.0,
+    y: 1.0,
+    offset_x: 0.0,
+    offset_y: 0.0
   }
 }
 
@@ -390,6 +396,31 @@ pub fn ImageLoader::get_image(self: ImageLoader, p: &@p5js.P5JS) -> @p5js.P5Imag
   if self.is_failed != true && self.img.is_empty() {
     self.try_load_image(p)
   }
-
   return self.img
+}
+
+pub fn ImageLoader::get_image_size_x(self: ImageLoader, p: &@p5js.P5JS) -> Double {
+  return self.x
+}
+
+pub fn ImageLoader::get_image_size_y(self: ImageLoader, p: &@p5js.P5JS) -> Double {
+  return self.y
+}
+
+pub fn ImageLoader::set_image_size(self: ImageLoader, x: Double, y: Double) -> Unit {
+  self.x = x
+  self.y = y
+}
+
+pub fn ImageLoader::get_image_offset_x(self: ImageLoader, p: &@p5js.P5JS) -> Double {
+  return self.offset_x
+}
+
+pub fn ImageLoader::get_image_offset_y(self: ImageLoader, p: &@p5js.P5JS) -> Double {
+  return self.offset_y
+}
+
+pub fn ImageLoader::set_image_offset(self: ImageLoader, offset_x: Double, offset_y: Double) -> Unit {
+  self.offset_x = offset_x
+  self.offset_y = offset_y
 }

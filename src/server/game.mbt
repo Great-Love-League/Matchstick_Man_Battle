@@ -780,7 +780,7 @@ pub fn Game::start_run(self:Self) -> Unit {
 		// 加载背景图片
 		if bg_image.val.is_empty() {
 			let img = p.loadImage(
-				"src/assets/background.png",
+				"src/assets/background1.png",
 				Some(fn(_img) {}),
 				Some(fn(_err) {})
 			)
