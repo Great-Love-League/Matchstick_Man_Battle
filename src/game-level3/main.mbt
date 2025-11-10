@@ -61,7 +61,7 @@ fn load_custom_functions(game:@server.Game) -> Unit {
           }
           game.weapon.gun_list.clear()
           // 创建狙击枪
-          game.create_sniper(0)
+          game.create_sniper(0, Some("src/assets/gun3.png"))
           println("装备狙击枪!")
         }
         if(p.keyIsDown(Digit4)){
@@ -73,7 +73,7 @@ fn load_custom_functions(game:@server.Game) -> Unit {
           }
           game.weapon.gun_list.clear()
           // 创建激光枪
-          game.create_laser_rifle(0)
+          game.create_laser_rifle(0, Some("src/assets/gun4.png"))
           println("装备激光枪!")
         }
       }

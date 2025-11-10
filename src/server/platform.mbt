@@ -35,7 +35,7 @@ pub impl RenderAble for Platform with get_render(platform: Platform){
 			let pixel_width = 0.0;
 			let pixel_height = 0.0;
 
-			drawBody(p, platform.body, None, pixel_width, pixel_height)
+			drawBody(p, platform.body, None, pixel_width, pixel_height, 0.0, 0.0)
 		}
 	)
 }
