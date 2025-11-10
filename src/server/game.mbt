@@ -5,6 +5,7 @@ pub suberror GameStateError String
 let bullet_image : Ref[@p5js.P5Image?] = { val: None }
 let gun_image : Ref[@p5js.P5Image?] = { val: None }
 let platform_image : Ref[@p5js.P5Image?] = { val: None }
+let bg_image : Ref[@p5js.P5Image?] = { val: None }
 
 pub(all) struct Game {
 	world : @box2d.B2World
@@ -775,6 +776,15 @@ pub fn Game::start_run(self:Self) -> Unit {
 				Some(fn(err) {})
 			)
 			platform_image.val = Some(img)
+		}
+		// 加载背景图片
+		if bg_image.val.is_empty() {
+			let img = p.loadImage(
+				"src/assets/background.png",
+				Some(fn(_img) {}),
+				Some(fn(err) {})
+			)
+			bg_image.val = Some(img)
 		}
 		self.state_machine_update(p)
 	}) |> ignore
