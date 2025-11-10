@@ -285,7 +285,18 @@ fn DefaultRenderable::draw_game(self:Self,p: &@p5js.P5JS, game: Game) -> Unit {
 
 pub fn DefaultRenderable::clear_screen(self: DefaultRenderable, p: &@p5js.P5JS) -> Unit {
   self |> ignore
-  p.background(255.0, Some(204.0), Some(0.0), None)
+    match bg_image.val {
+    Some(img) => {
+      p.imageMode("corner")
+      p.image(img, 0.0, 0.0, Some(Width), Some(Height))
+      // println("Background加载成功")
+    }
+    None => {
+      p.background(255.0, Some(204.0), Some(0.0), None)
+      // println("Background加载失败，使用默认背景")
+    }
+  }
+
 }
 pub(all) struct DefaultRenderable {}
 
