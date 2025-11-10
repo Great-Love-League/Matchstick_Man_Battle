@@ -213,14 +213,14 @@ fn DefaultRender::draw_game(self:Self,p: &@p5js.P5JS, game: Game) -> Unit {
 
   self |> ignore
   // 画背景
-  match game.background.get_render() {
-    None => {
-      p.background(255.0, Some(204.0), Some(0.0), None)
-    }
-    Some(draw_background) => {
-      draw_background(game.world, p)
-    }
-  }
+  // match game.background.get_render() {
+  //   None => {
+  //     p.background(255.0, Some(204.0), Some(0.0), None)
+  //   }
+  //   Some(draw_background) => {
+  //     draw_background(game.world, p)
+  //   }
+  // }
 
   p.strokeWeight(5.0)
   p.strokeComponents(0.0, 0.0, 0.0, Some(255.0))
@@ -296,17 +296,14 @@ fn DefaultRender::draw_game(self:Self,p: &@p5js.P5JS, game: Game) -> Unit {
 }
 
 
-pub fn DefaultRender::clear_screen(self: DefaultRender, p: &@p5js.P5JS) -> Unit {
+pub fn DefaultRender::clear_screen(self: DefaultRender, p: &@p5js.P5JS, game: Game) -> Unit {
   self |> ignore
-    match bg_image.val {
-    Some(img) => {
-      p.imageMode("corner")
-      p.image(img, 0.0, 0.0, Some(Width), Some(Height))
-      // println("Background加载成功")
-    }
+  match game.background.get_render() {
     None => {
       p.background(255.0, Some(204.0), Some(0.0), None)
-      // println("Background加载失败，使用默认背景")
+    }
+    Some(draw_background) => {
+      draw_background(game.world, p)
     }
   }
 
@@ -319,9 +316,8 @@ pub impl RenderTrait for DefaultRender with render(self: DefaultRender, game : G
 	// self.draw_game(p, game)
 }
 
-pub impl RenderTrait for DefaultRender with clear_screen(self: DefaultRender, world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
-  world |> ignore 
-  self.clear_screen(p)
+pub impl RenderTrait for DefaultRender with clear_screen(self: DefaultRender, game : Game, p: &@p5js.P5JS) -> Unit {
+  self.clear_screen(p, game)
 }
 
 pub trait RenderTrait {
@@ -330,7 +326,7 @@ pub trait RenderTrait {
   render(self: Self, game:  Game, p: &@p5js.P5JS) -> Unit
 
   // 在每次绘画前清屏
-  clear_screen(self: Self, world: &@box2d.World, p: &@p5js.P5JS) -> Unit 
+  clear_screen(self: Self, game : Game, p: &@p5js.P5JS) -> Unit 
 }
 
 // -------------------- 绘画相关 结束 ---------------------
