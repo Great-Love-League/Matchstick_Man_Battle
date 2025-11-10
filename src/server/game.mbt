@@ -229,7 +229,7 @@ fn Game::run_custom_functions(self:Self, stage:GameState, p5: &@p5js.P5JS) -> Un
 }
 
 fn Game::state_machine_update(self:Self, p5: &@p5js.P5JS) -> Unit {
-	self.render.clear_screen(self.world, p5)
+	self.render.clear_screen(self, p5)
 	match self.state {
 		GamePreparing => {
 			self.prepare(p5)
