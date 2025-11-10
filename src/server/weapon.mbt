@@ -302,7 +302,7 @@ pub impl WeaponDestroy for Sword with destroy(self, game){
 	game.world.destroyBody(self.body)
 }
 
-pub impl WeaponCreate for Gun with create( game, owner_id){
+pub impl WeaponCreate for Gun with create(game, owner_id){
 	let bodydef:@box2d.B2BodyDef=@map_loader.get_bodydef_from_raw(Some(gun_body), None) catch {
 				_=> {
 					println("Failed to create body definition for Gun")
