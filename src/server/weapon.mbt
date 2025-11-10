@@ -50,9 +50,13 @@ pub struct Gun{
 	
 	// 武器类型
 	gun_type : GunType
-
+	mut angle : Double
 	// img
 	img : ImageLoader
+}
+
+pub fn Gun::get_angle(self : Gun) -> Double {
+	self.angle
 }
 
 // 枪械类型
@@ -368,7 +372,8 @@ pub impl WeaponCreate for Gun with create( game, owner_id,url:String?){
 		last_fire_frame: 0,
 
 		gun_type: Pistol,
-		img: ImageLoader::new(url)
+		img: ImageLoader::new(url),
+		angle: 0.0
 	}
 	game.weapon.gun_list.push(aa)
 	game.create_revolute_joint(game.particle_list[owner_id].right_forearm, aa.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
@@ -394,6 +399,7 @@ pub impl WeaponControl for Gun with attack(self,game){
 	// 获取持有者信息
 	let holder = game.particle_list[self.owner_id]
 	let direction = if holder.control.walk_direction > 0.0 { 1.0 } else { -1.0 }
+	self.angle = 0.0
 	
 	// 根据枪械类型选择射击方式及参数
 	match self.gun_type {
@@ -485,7 +491,7 @@ pub impl WeaponControl for Gun with attack_at_angle(self, game, angle){
 	}
 	
 	maintain_rotation_test(self.body, angle, kp=2.0, kd=2.0)
-	
+	self.angle = angle
 	// 根据枪械类型选择射击方式及参数
 	match self.gun_type {
 		Pistol => {
@@ -680,7 +686,8 @@ pub fn Game::create_shotgun(self : Self, owner_id : Int, url: String?) -> Unit {
 		last_fire_frame: 0,
 		
 		gun_type: Shotgun,
-		img: ImageLoader::new(url)
+		img: ImageLoader::new(url),
+		angle: 0.0
 	}
 	self.weapon.gun_list.push(gun)
 	self.create_revolute_joint(self.particle_list[owner_id].right_forearm, gun.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
@@ -723,7 +730,8 @@ pub fn Game::create_sniper(self : Self, owner_id : Int, url~: String?=None) -> U
 		last_fire_frame: 0,
 
 		gun_type: Sniper,
-		img: ImageLoader::new(url)
+		img: ImageLoader::new(url),
+		angle: 0.0
 	}
 	self.weapon.gun_list.push(gun)
 	self.create_revolute_joint(self.particle_list[owner_id].right_forearm, gun.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
@@ -766,7 +774,8 @@ pub fn Game::create_laser_rifle(self : Self, owner_id : Int, url~: String?=None)
 		last_fire_frame: 0,
 
 		gun_type: LaserRifle,
-		img: ImageLoader::new(url)
+		img: ImageLoader::new(url),
+		angle: 0.0
 	}
 	self.weapon.gun_list.push(gun)
 	self.create_revolute_joint(self.particle_list[owner_id].right_forearm, gun.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
