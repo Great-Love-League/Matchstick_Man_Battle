@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "deps": {
     "Kaida-Amethyst/math": "0.1.20",
-    "Demonmasterlqx/box2d_ffi": "0.2.5",
+    "Demonmasterlqx/box2d_ffi": "0.2.6",
     "Demonmasterlqx/MoonP5": "0.0.5",
     "Demonmasterlqx/moonbit_stickman_map_loader": "0.0.5"
   },

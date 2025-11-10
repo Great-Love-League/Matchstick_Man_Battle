@@ -25,8 +25,8 @@ fn box2d_init(game:Game) ->Unit{
   // static_box.setAngularVelocity(0.5)
 	
 	
-	Gun::create(game,0)
-	Sword::create(game,1)
+	Gun::create(game,0,Some("src/assets/gun1.png"))
+	Sword::create(game,1,Some("sword"))
 }
 
 fn load_custom_functions(game:Game) -> Unit {
@@ -89,7 +89,7 @@ fn load_custom_functions(game:Game) -> Unit {
           clear_old()
 
           // 创建霰弹枪
-          game.create_shotgun(0)
+          game.create_shotgun(0, Some("src/assets/gun2.png"))
           println("装备霰弹枪!")
         }
         if(p.keyIsDown(Digit3)){
@@ -182,6 +182,23 @@ fn load_custom_functions(game:Game) -> Unit {
           for particle in game.particle_list {
             println("玩家 \{particle.index} 血量: \{particle.control.health}")
           }
+        }
+      }
+    )
+  )
+
+  /// 添加body aabb绘制
+  game.register_custom_function(
+    GameCustomFunction::new(
+      GameRunning,
+      fn(game: Game, p5: &@p5js.P5JS) {
+        for i in game.particle_list {
+          draw_aabb(p5, 
+          get_entity_aabb(i.get_all_bodies()), 
+          fn (p5){
+            p5.noFill()
+            p5.fillColorPara(255.0, Some(0.0), Some(0.0), Some(150.0))
+          })
         }
       }
     )

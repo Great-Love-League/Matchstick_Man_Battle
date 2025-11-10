@@ -2,8 +2,8 @@ pub suberror ParticleControlConfigError String
 pub suberror GameStateError String
 
 ///| 全局变量：存储子弹贴图
-let bullet_image : Ref[@p5js.P5Image?] = { val: None }
-let gun_image : Ref[@p5js.P5Image?] = { val: None }
+// let bullet_image : Ref[@p5js.P5Image?] = { val: None }
+// let gun_image : Ref[@p5js.P5Image?] = { val: None }
 let platform_image : Ref[@p5js.P5Image?] = { val: None }
 let bg_image : Ref[@p5js.P5Image?] = { val: None }
 
@@ -387,6 +387,13 @@ fn Game::running(self:Self, p5: &@p5js.P5JS) -> Unit {
 		self.shake_timer = self.shake_timer - 1
 	}
 
+	// 判断玩家是否掉出屏幕
+	for particle in self.particle_list {
+		if self.check_particle_out_of_bounds(particle) {
+			particle.control.health = 0  // 掉出屏幕后血量归0
+		}
+	}
+
 	// 如果有玩家死亡，则切换到游戏结束状态
 	for i in self.particle_list {
 		if i.control.health <= 0 {
@@ -396,6 +403,24 @@ fn Game::running(self:Self, p5: &@p5js.P5JS) -> Unit {
 	}
 
 	self.state = GameRunning
+}
+
+pub fn Game::check_particle_out_of_bounds(self:Self, particle: Particle) -> Bool {
+
+	self |> ignore
+
+	let body_aabb = get_entity_aabb(particle.get_all_bodies())
+
+	let (max_x, max_y) = world_to_screen(body_aabb.getminVertex().getX(), body_aabb.getminVertex().getY())
+	let (min_x, min_y) = world_to_screen(body_aabb.getmaxVertex().getX(), body_aabb.getmaxVertex().getY())
+
+	if max_y < 0.0 || min_y > Height || max_x < 0.0 || min_x > Width {
+		println("max_y : \{max_y}, min_y : \{min_y}, max_x : \{max_x}, min_x : \{min_x}")
+		println("Height : \{Height}, Width : \{Width}")
+		return true
+	}
+
+	false
 }
 
 fn Game::game_over(self:Self, p5: &@p5js.P5JS) -> Unit {
@@ -414,29 +439,29 @@ fn Game::game_over(self:Self, p5: &@p5js.P5JS) -> Unit {
 	// 显示半透明背景
 	p5.fillColorPara(0.0, Some(0.0), Some(0.0), Some(180.0))
 	p5.noStroke()
-	p5.rect(0.0, 0.0, VIEWPORT_WIDTH, VIEWPORT_HEIGHT)
+	p5.rect(0.0, 0.0, Width, Height)
 	
 	// 显示游戏结束文字
 	p5.textSizeSet(80.0)
 	p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
 	p5.textAlign("center", Some("center"))
-	p5.text("游戏结束", VIEWPORT_WIDTH / 2.0, VIEWPORT_HEIGHT / 2.0 - 80.0, None, None)
+	p5.text("游戏结束", Width / 2.0, Height / 2.0 - 80.0, None, None)
 	
 	// 显示获胜者
 	if winner_index >= 0 {
 		p5.textSizeSet(60.0)
 		p5.fillColorPara(255.0, Some(215.0), Some(0.0), Some(255.0))  // 金色
-		p5.text("玩家 \{winner_index} 获胜!", VIEWPORT_WIDTH / 2.0, VIEWPORT_HEIGHT / 2.0, None, None)
+		p5.text("玩家 \{winner_index} 获胜!", Width / 2.0, Height / 2.0, None, None)
 	} else {
 		p5.textSizeSet(60.0)
 		p5.fillColorPara(200.0, Some(200.0), Some(200.0), Some(255.0))
-		p5.text("平局", VIEWPORT_WIDTH / 2.0, VIEWPORT_HEIGHT / 2.0, None, None)
+		p5.text("平局", Width / 2.0, Height / 2.0, None, None)
 	}
 	
 	// 显示提示文字
 	p5.textSizeSet(30.0)
 	p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
-	p5.text("刷新页面重新开始", VIEWPORT_WIDTH / 2.0, VIEWPORT_HEIGHT / 2.0 + 80.0, None, None)
+	p5.text("刷新页面重新开始", Width / 2.0, Height / 2.0 + 80.0, None, None)
 
 	self.state = GameOver
 }
@@ -537,10 +562,6 @@ fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : 
 	self.particle_jump(particle,0)
 
 }
-
-pub const VIEWPORT_WIDTH : Double = Width // 视口宽度
-pub const VIEWPORT_HEIGHT : Double = Height // 视口高度
-
 pub const Pi : Double = 3.141592653589793
 
 pub fn Game::create_static_box(
@@ -751,29 +772,29 @@ pub fn Game::start_run(self:Self) -> Unit {
 	self.state = GamePreparing
 	getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
 		// 加载子弹贴图
-		if bullet_image.val.is_empty() {
-			let img = p.loadImage(
-				"assets/Traps/Blocks/Idle.png",
-				Some(fn(_img) { }),
-				Some(fn(err) { })
-			)
-			bullet_image.val = Some(img)
-		}
+		// if bullet_image.val.is_empty() {
+		// 	let img = p.loadImage(
+		// 		"assets/Traps/Blocks/Idle.png",
+		// 		Some(fn(_img) { }),
+		// 		Some(fn(_err) { })
+		// 	)
+		// 	bullet_image.val = Some(img)
+		// }
 		// 加载枪械贴图
-		if gun_image.val.is_empty() {
-			let img = p.loadImage(
-				"src/assets/gun.png",
-				Some(fn(_img) {}),
-				Some(fn(err) {})
-			)
-			gun_image.val = Some(img)
-		}
+		// if gun_image.val.is_empty() {
+		// 	let img = p.loadImage(
+		// 		"src/assets/gun.png",
+		// 		Some(fn(_img) {}),
+		// 		Some(fn(_err) {})
+		// 	)
+		// 	gun_image.val = Some(img)
+		// }
 		// 加载平台贴图
 		if platform_image.val.is_empty() {
 			let img = p.loadImage(
 				"src/assets/platform.png",
 				Some(fn(_img) {}),
-				Some(fn(err) {})
+				Some(fn(_err) {})
 			)
 			platform_image.val = Some(img)
 		}
@@ -782,7 +803,7 @@ pub fn Game::start_run(self:Self) -> Unit {
 			let img = p.loadImage(
 				"src/assets/background.png",
 				Some(fn(_img) {}),
-				Some(fn(err) {})
+				Some(fn(_err) {})
 			)
 			bg_image.val = Some(img)
 		}
