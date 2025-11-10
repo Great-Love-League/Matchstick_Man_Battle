@@ -325,9 +325,9 @@ pub fn Game::check_bullet_collision(self : Self, bullet : Bullet) -> Unit {
 pub fn Game::check_bullet_environment_collision(self : Self, bullet : Bullet) -> Unit {
   // 检查与所有平台的碰撞
   for platform in self.platform_list {
-    if self.is_contact(platform.get_body(), bullet.body) {
+    if self.is_contact(platform.get_body(), bullet.body, strict=true) {
       bullet.is_active = false
-      //println("子弹 #\{bullet.id} 击中环境（平台 #\{platform.index}），回收子弹")
+      println("子弹 #\{bullet.id} 击中环境（平台），回收子弹")
       return
     }
   }
@@ -389,13 +389,10 @@ pub fn Game::update_all_bullets(self : Self) -> Unit {
   // 额外的高频碰撞检测：在物理更新后再检测几次
   // 这样可以捕获快速移动子弹与薄墙壁的碰撞
   // 不重复施加力，只检测碰撞
-  let extra_checks = 10  // 额外检测3次，总共4次检测
-  for _i in 0..<extra_checks {
-    for bullet in self.bullet_list {
-      if bullet.is_active {
-        // 只检测碰撞，不更新物理状态
-        self.check_bullet_collision(bullet)
-      }
+  for bullet in self.bullet_list {
+    if bullet.is_active {
+      // 只检测碰撞，不更新物理状态
+      self.check_bullet_collision(bullet)
     }
   }
 }
@@ -548,6 +545,8 @@ pub fn Game::shoot_bullet_at_angle(
   if player_index >= self.particle_list.length() {
     return
   }
+	
+	
   
   let particle = self.particle_list[player_index]
   let hand_pos = particle.right_forearm.getCenterPosition()
