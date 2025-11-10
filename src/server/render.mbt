@@ -190,7 +190,7 @@ pub fn drawCircle(p: &@p5js.P5JS, shape: @box2d.B2CircleShape) -> Unit{
 }
 
 
-pub fn DefaultRenderable::draw_world(self: DefaultRenderable, p: &@p5js.P5JS, world: &@box2d.World) -> Unit {
+pub fn DefaultRender::draw_world(self: DefaultRender, p: &@p5js.P5JS, world: &@box2d.World) -> Unit {
   // p.background(255.0, Some(204.0), Some(0.0), None)
   self |> ignore
   for body in world.getBodyList() {
@@ -209,9 +209,18 @@ pub fn DefaultRenderable::draw_world(self: DefaultRenderable, p: &@p5js.P5JS, wo
   }
 }
 
-fn DefaultRenderable::draw_game(self:Self,p: &@p5js.P5JS, game: Game) -> Unit {
+fn DefaultRender::draw_game(self:Self,p: &@p5js.P5JS, game: Game) -> Unit {
 
   self |> ignore
+  // 画背景
+  match game.background.get_render() {
+    None => {
+      p.background(255.0, Some(204.0), Some(0.0), None)
+    }
+    Some(draw_background) => {
+      draw_background(game.world, p)
+    }
+  }
 
   p.strokeWeight(5.0)
   p.strokeComponents(0.0, 0.0, 0.0, Some(255.0))
@@ -287,7 +296,7 @@ fn DefaultRenderable::draw_game(self:Self,p: &@p5js.P5JS, game: Game) -> Unit {
 }
 
 
-pub fn DefaultRenderable::clear_screen(self: DefaultRenderable, p: &@p5js.P5JS) -> Unit {
+pub fn DefaultRender::clear_screen(self: DefaultRender, p: &@p5js.P5JS) -> Unit {
   self |> ignore
     match bg_image.val {
     Some(img) => {
@@ -302,15 +311,15 @@ pub fn DefaultRenderable::clear_screen(self: DefaultRenderable, p: &@p5js.P5JS) 
   }
 
 }
-pub(all) struct DefaultRenderable {}
+pub(all) struct DefaultRender {}
 
-pub impl RenderTrait for DefaultRenderable with render(self: DefaultRenderable, game : Game, p: &@p5js.P5JS) -> Unit {
+pub impl RenderTrait for DefaultRender with render(self: DefaultRender, game : Game, p: &@p5js.P5JS) -> Unit {
   // self.draw_world(p, game.world)
 	self.draw_game(p, game)
 	// self.draw_game(p, game)
 }
 
-pub impl RenderTrait for DefaultRenderable with clear_screen(self: DefaultRenderable, world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
+pub impl RenderTrait for DefaultRender with clear_screen(self: DefaultRender, world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
   world |> ignore 
   self.clear_screen(p)
 }
@@ -399,11 +408,11 @@ pub fn ImageLoader::get_image(self: ImageLoader, p: &@p5js.P5JS) -> @p5js.P5Imag
   return self.img
 }
 
-pub fn ImageLoader::get_image_size_x(self: ImageLoader, p: &@p5js.P5JS) -> Double {
+pub fn ImageLoader::get_image_size_x(self: ImageLoader) -> Double {
   return self.x
 }
 
-pub fn ImageLoader::get_image_size_y(self: ImageLoader, p: &@p5js.P5JS) -> Double {
+pub fn ImageLoader::get_image_size_y(self: ImageLoader) -> Double {
   return self.y
 }
 
@@ -412,15 +421,57 @@ pub fn ImageLoader::set_image_size(self: ImageLoader, x: Double, y: Double) -> U
   self.y = y
 }
 
-pub fn ImageLoader::get_image_offset_x(self: ImageLoader, p: &@p5js.P5JS) -> Double {
+pub fn ImageLoader::get_image_offset_x(self: ImageLoader) -> Double {
   return self.offset_x
 }
 
-pub fn ImageLoader::get_image_offset_y(self: ImageLoader, p: &@p5js.P5JS) -> Double {
+pub fn ImageLoader::get_image_offset_y(self: ImageLoader) -> Double {
   return self.offset_y
 }
 
 pub fn ImageLoader::set_image_offset(self: ImageLoader, offset_x: Double, offset_y: Double) -> Unit {
   self.offset_x = offset_x
   self.offset_y = offset_y
+}
+
+
+///|
+///  pub trait renderable 用于每个可渲染对象的渲染接口，如果没有设置则使用 render 的默认实现
+pub trait RenderAble {
+	get_render(self: Self) -> Option[(&@box2d.World, &@p5js.P5JS) -> Unit] = _
+}
+
+impl RenderAble with get_render(self: Self) -> Option[(&@box2d.World, &@p5js.P5JS) -> Unit] {
+	self |> ignore
+	None
+}
+
+pub(all) struct BackgroundImage{
+  val : ImageLoader
+}
+
+pub impl RenderAble for BackgroundImage
+
+pub impl RenderAble for BackgroundImage with get_render(self: BackgroundImage) {
+  let render_fn = fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
+    world |> ignore
+    match self.val.get_image(p) {
+      Some(img) => {
+        p.imageMode("corner")
+        p.image(img, 0.0, 0.0, Some(Width), Some(Height))
+      }
+      None => {
+        // 如果图片加载失败，则使用默认背景色
+        p.background(255.0, Some(204.0), Some(0.0), None)
+        println("Background加载失败，使用默认背景")
+      }
+    }
+  }
+  return Some(render_fn)
+}
+
+pub fn BackgroundImage::new(path~: String?=None) -> BackgroundImage {
+  return BackgroundImage::{
+    val: ImageLoader::new(path)
+  }
 }

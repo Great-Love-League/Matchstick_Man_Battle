@@ -32,6 +32,9 @@ pub struct Sword{
 	/// 近战武器的攻击范围通常是一个较小的矩形区域，定义为Box2D的AABB（轴对齐边界框）。
 	attack_range_min : @box2d.B2Vec2
 	attack_range_max : @box2d.B2Vec2
+
+	// img
+	img : ImageLoader
 }
 pub struct Gun{
 	id : Int
@@ -107,7 +110,8 @@ pub impl WeaponCreate for Sword with create(game, owner_id, url:String?){
 		attack_range_max :@box2d.b2Vec2(2.0, 2.0),
 		attack_range_min :@box2d.b2Vec2(-2.0, -2.0),
 		attack_interval: 20,
-		last_attack_frame: 0
+		last_attack_frame: 0,
+		img: ImageLoader::new(url)
 	}
 	game.weapon.sword_list.push(aa)
 
@@ -174,7 +178,7 @@ pub impl WeaponControl for Sword with attack(self,game){
 	let start_y = sword_pos.getY()
 	
 	// 创建圆形冲击波动画（多波纹效果）
-	let frame_counter = { val: 0 }
+	let frame_counter : Ref[Int] = { val: 0 }
 	let max_frames = 20  // 动画持续20帧（约0.33秒）
 	
 	game.add_animation(
@@ -386,7 +390,12 @@ pub impl RenderAble for Gun with get_render(self: Gun){
 		fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
 			world |> ignore
 
-			drawBody(p, self.body, self.img.get_image(p), self.img.get_image_size_x(p), self.img.get_image_size_y(p), self.img.get_image_offset_x(p), self.img.get_image_offset_y(p))
+			drawBody(p, self.body, 
+				self.img.get_image(p), 
+				self.img.get_image_size_x(), 
+				self.img.get_image_size_y(), 
+				self.img.get_image_offset_x(), 
+				self.img.get_image_offset_y())
 			return
 			}
 	)

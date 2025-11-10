@@ -374,7 +374,7 @@ pub fn register_show_mouse_screen_coords(game:Game) -> Unit {
 /// 在坐标 100，100 每秒画一个炫酷的花纹，使用 SampleAnimation
 fn register_animation(game: Game) -> Unit {
   // 创建一个帧计数器来追踪动画进度
-  let frame_counter = { val: 0 }
+  let frame_counter: Ref[Int] = { val: 0 }
   
   let animation = SampleAnimation::new(
     fn(world: &@box2d.World, p5: &@p5js.P5JS) -> AnimationState {
@@ -486,7 +486,7 @@ pub fn register_audio_controls(game: Game) -> Unit {
 
 fn main {
 	
-	let game = create_game()
+	let game = create_game(background = BackgroundImage::new(path = Some("./src/assets/background1.png")))
 	
 	
 	load_map(game,4)|> ignore
