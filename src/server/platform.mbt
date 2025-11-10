@@ -2,6 +2,8 @@
 pub(all) struct Platform{
 	body : @box2d.B2Body
 	index : Int
+	// width : Double   // 半宽度（Box2D 的 extent）
+	// height : Double  // 半高度（Box2D 的 extent）
 }
 pub(all) struct RotatablePlatform{
 	body : @box2d.B2Body
@@ -23,20 +25,19 @@ pub(all) struct MovablePlatform{
 }
 
 pub impl RenderAble for Platform with get_render(platform: Platform){
-	Some(fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
-		world|> ignore
-		for shape in platform.get_body().getShapeList() {
-		// println("Drawing Platform \{platform.get_index()}")
-			match shape.getType() {
-				PolygonShape => drawPolygon(p, shape.toPolygonShape())
-				BoxShape => drawPolygon(p, shape.toPolygonShape())
-				CircleShape => drawCircle(p, shape.toCircleShape())
-				UnknownShape => {
-					println("Unknown Shape")
-				}
-			}
+	Some(
+		fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
+			world |> ignore
+			
+			// 将物理世界的尺寸（半宽度/半高度）转换为屏幕像素尺寸
+			// platform.width 和 platform.height 是半宽度和半高度
+			// 完整宽度 = width * 2, 完整高度 = height * 2
+			let pixel_width = 0.0;
+			let pixel_height = 0.0;
+
+			drawBody(p, platform.body, None, pixel_width, pixel_height)
 		}
-	})
+	)
 }
 
 pub impl RenderAble for RotatablePlatform with get_render(rotatable_platform: RotatablePlatform){

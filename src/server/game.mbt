@@ -3,6 +3,9 @@ pub suberror GameStateError String
 
 ///| 全局变量：存储子弹贴图
 let bullet_image : Ref[@p5js.P5Image?] = { val: None }
+let gun_image : Ref[@p5js.P5Image?] = { val: None }
+let platform_image : Ref[@p5js.P5Image?] = { val: None }
+let bg_image : Ref[@p5js.P5Image?] = { val: None }
 
 pub(all) struct Game {
 	world : @box2d.B2World
@@ -44,6 +47,7 @@ pub(all) struct Game {
 	audio : AudioManager
 	
 	anchor : @box2d.B2Body
+	
 }
 
 // pub trait renderable 用于每个可渲染对象的渲染接口，如果没有设置则使用 render 的默认实现
@@ -750,10 +754,37 @@ pub fn Game::start_run(self:Self) -> Unit {
 		if bullet_image.val.is_empty() {
 			let img = p.loadImage(
 				"assets/Traps/Blocks/Idle.png",
-				Some(fn(_img) { println("✓ 子弹贴图加载成功") }),
-				Some(fn(err) { println("✗ 子弹贴图加载失败: \{err}") })
+				Some(fn(_img) { }),
+				Some(fn(err) { })
 			)
 			bullet_image.val = Some(img)
+		}
+		// 加载枪械贴图
+		if gun_image.val.is_empty() {
+			let img = p.loadImage(
+				"src/assets/gun.png",
+				Some(fn(_img) {}),
+				Some(fn(err) {})
+			)
+			gun_image.val = Some(img)
+		}
+		// 加载平台贴图
+		if platform_image.val.is_empty() {
+			let img = p.loadImage(
+				"src/assets/platform.png",
+				Some(fn(_img) {}),
+				Some(fn(err) {})
+			)
+			platform_image.val = Some(img)
+		}
+		// 加载背景图片
+		if bg_image.val.is_empty() {
+			let img = p.loadImage(
+				"src/assets/background.png",
+				Some(fn(_img) {}),
+				Some(fn(err) {})
+			)
+			bg_image.val = Some(img)
 		}
 		self.state_machine_update(p)
 	}) |> ignore

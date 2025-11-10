@@ -37,28 +37,34 @@ pub impl RenderAble for Bullet with get_render(self: Bullet){
     }
 
     world |> ignore
+    
+    // 使用通用的 drawBody 函数
+    // 子弹使用速度方向作为角度，大小为原来圆形的10倍
+
+    // let size = ws(0.16) * 10.0
+    // drawBody(p, self.body, self.img, size)
     let pos = self.body.getCenterPosition()
     let (sx, sy) = world_to_screen(pos.getX(), pos.getY())
     
     // 尝试使用图片渲染子弹
-    match bullet_image.val {
-      Some(img) => {
-        // 计算子弹的旋转角度（根据速度方向）
-        let vel = self.body.getLinearVelocity()
-        let angle = @cmath.atan2(vel.getY(), vel.getX())
+    // match bullet_image.val {
+    //   Some(img) => {
+    //     // 计算子弹的旋转角度（根据速度方向）
+    //     let vel = self.body.getLinearVelocity()
+    //     let angle = @cmath.atan2(vel.getY(), vel.getX())
         
-        // 使用图片渲染，大小原来圆形的10倍
-        let size = ws(0.16) * 10.0
-        draw_image_at(p, img, sx, sy, size, size, angle)
-      }
-      None => {
-        // 图片未加载，使用默认圆形
+    //     // 使用图片渲染，大小原来圆形的10倍
+    //     let size = ws(0.16) * 10.0
+    //     draw_image_at(p, img, sx, sy, size, size, angle)
+    //   }
+    //   None => {
+    //     // 图片未加载，使用默认圆形
         let r = ws(0.16)
         p.fillColorPara(255.0, Some(0.0), Some(0.0), Some(255.0))
         p.circle(sx, sy, r)
         p.noFill()
-      }
-    }
+      // }
+    // }
   })
 }
 
@@ -127,7 +133,7 @@ pub fn Game::create_bullet(
     target_types,
     hit_targets: Array::new(),
     penetration,
-    gravity_compensation,
+    gravity_compensation
   }
   
   self.bullet_list.push(bullet)
