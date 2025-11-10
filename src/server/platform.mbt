@@ -98,6 +98,7 @@ pub fn create_platform(game:Game,position:(Double,Double),size:(Double,Double),a
 		body : game.world.createBody(body_def),
 		index : game.platform_index
 	}
+	// new.body.getShapeList()[0].getBase().getRestitution
 	game.platform_list.push(new)
 	game.platform_index += 1
 	new
