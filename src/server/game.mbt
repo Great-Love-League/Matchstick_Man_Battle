@@ -690,13 +690,20 @@ pub fn Game::create_prismatic_joint(
 	let joint = self.world.createJoint(joint_def.getBase())
 	joint
 }
-pub fn Game::is_contact(self:Self,a:@box2d.B2Body, b:@box2d.B2Body)->Bool{
+pub fn Game::is_contact(self:Self,a:@box2d.B2Body, b:@box2d.B2Body, strict~: Bool = false)->Bool{
 	let contact_list=self.world.getContactList()
 	for contact in contact_list {
 		let bodyA=contact.getShape1().getBody()
 		let bodyB=contact.getShape2().getBody()
 		if (equals(bodyA, a) && equals(bodyB, b)) || (equals(bodyA, b) && equals(bodyB, a)) {
-			return true
+			if strict {
+				if contact.getManifoldCount() > 0 {
+					return true
+				}
+			}
+			else{
+				return true
+			}
 		}
 	}
 	false
