@@ -799,7 +799,7 @@ pub fn Game::start_run(self:Self) -> Unit {
 		// 加载平台贴图
 		if platform_image.val.is_empty() {
 			let img = p.loadImage(
-				"src/assets/platform.png",
+				"src/assets/platform1.png",
 				Some(fn(_img) {}),
 				Some(fn(_err) {})
 			)

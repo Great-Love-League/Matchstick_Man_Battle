@@ -4,6 +4,7 @@ pub(all) struct Platform{
 	index : Int
 	// width : Double   // 半宽度（Box2D 的 extent）
 	// height : Double  // 半高度（Box2D 的 extent）
+	img : ImageLoader
 }
 pub(all) struct RotatablePlatform{
 	body : @box2d.B2Body
@@ -38,6 +39,23 @@ pub impl RenderAble for Platform with get_render(platform: Platform){
 			drawBody(p, platform.body, None, pixel_width, pixel_height, 0.0, 0.0)
 		}
 	)
+	// Some(
+	// 	fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
+	// 		world |> ignore
+			
+	// 		// 使用 PlatformTrait 获取物理世界的宽度和高度（单位：米）
+	// 		let width_meters = platform.get_width()
+	// 		let height_meters = platform.get_hight()
+			
+	// 		// 使用 world_to_screen_size 转换为屏幕像素
+	// 		// PPM (Pixels Per Meter) 是转换比例
+	// 		let pixel_width = world_to_screen_size(width_meters, PPM)
+	// 		let pixel_height = world_to_screen_size(height_meters, PPM)
+			
+	// 		// 使用 ImageLoader 获取图片并渲染
+	// 		drawBody(p, platform.body, platform.img.get_image(p), pixel_width, pixel_height, 0.0, 0.0)
+	// 	}
+	// )
 }
 
 pub impl RenderAble for RotatablePlatform with get_render(rotatable_platform: RotatablePlatform){
@@ -165,7 +183,8 @@ pub fn create_platform(game:Game,position:(Double,Double),size:(Double,Double),a
 	body_def.setAllowSleep(false)
 	let new = Platform::{
 		body : game.world.createBody(body_def),
-		index : game.platform_index
+		index : game.platform_index,
+		img : ImageLoader::new(Some("src/assets/platform1.png"))
 	}
 	// new.body.getShapeList()[0].getBase().getRestitution
 	game.platform_list.push(new)
@@ -197,7 +216,7 @@ pub fn create_rotatable_platform(game:Game,position:(Double,Double),size:(Double
 		body,
 		index : game.platform_index,
 		angle_speed : angle_speed,
-		angle : initial_angle
+		angle : initial_angle,
 	}
 	
 	let pos = (body.getCenterPosition().getX(), body.getCenterPosition().getY())
