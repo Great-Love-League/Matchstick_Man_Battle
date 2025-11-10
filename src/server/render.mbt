@@ -399,11 +399,11 @@ pub fn ImageLoader::get_image(self: ImageLoader, p: &@p5js.P5JS) -> @p5js.P5Imag
   return self.img
 }
 
-pub fn ImageLoader::get_image_size_x(self: ImageLoader, p: &@p5js.P5JS) -> Double {
+pub fn ImageLoader::get_image_size_x(self: ImageLoader) -> Double {
   return self.x
 }
 
-pub fn ImageLoader::get_image_size_y(self: ImageLoader, p: &@p5js.P5JS) -> Double {
+pub fn ImageLoader::get_image_size_y(self: ImageLoader) -> Double {
   return self.y
 }
 
@@ -412,11 +412,11 @@ pub fn ImageLoader::set_image_size(self: ImageLoader, x: Double, y: Double) -> U
   self.y = y
 }
 
-pub fn ImageLoader::get_image_offset_x(self: ImageLoader, p: &@p5js.P5JS) -> Double {
+pub fn ImageLoader::get_image_offset_x(self: ImageLoader) -> Double {
   return self.offset_x
 }
 
-pub fn ImageLoader::get_image_offset_y(self: ImageLoader, p: &@p5js.P5JS) -> Double {
+pub fn ImageLoader::get_image_offset_y(self: ImageLoader) -> Double {
   return self.offset_y
 }
 
