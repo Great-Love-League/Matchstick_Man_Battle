@@ -25,8 +25,8 @@ fn box2d_init(game:Game) ->Unit{
   // static_box.setAngularVelocity(0.5)
 	
 	
-	Gun::create(game,0)
-	Sword::create(game,1)
+	Gun::create(game,0,Some("src/assets/gun1.png"))
+	Sword::create(game,1,Some("sword"))
 }
 
 fn load_custom_functions(game:Game) -> Unit {
@@ -89,7 +89,7 @@ fn load_custom_functions(game:Game) -> Unit {
           clear_old()
 
           // 创建霰弹枪
-          game.create_shotgun(0)
+          game.create_shotgun(0, Some("src/assets/gun2.png"))
           println("装备霰弹枪!")
         }
         if(p.keyIsDown(Digit3)){
