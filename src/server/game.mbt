@@ -2,8 +2,8 @@ pub suberror ParticleControlConfigError String
 pub suberror GameStateError String
 
 ///| 全局变量：存储子弹贴图
-let bullet_image : Ref[@p5js.P5Image?] = { val: None }
-let gun_image : Ref[@p5js.P5Image?] = { val: None }
+// let bullet_image : Ref[@p5js.P5Image?] = { val: None }
+// let gun_image : Ref[@p5js.P5Image?] = { val: None }
 let platform_image : Ref[@p5js.P5Image?] = { val: None }
 let bg_image : Ref[@p5js.P5Image?] = { val: None }
 
@@ -751,29 +751,29 @@ pub fn Game::start_run(self:Self) -> Unit {
 	self.state = GamePreparing
 	getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
 		// 加载子弹贴图
-		if bullet_image.val.is_empty() {
-			let img = p.loadImage(
-				"assets/Traps/Blocks/Idle.png",
-				Some(fn(_img) { }),
-				Some(fn(err) { })
-			)
-			bullet_image.val = Some(img)
-		}
+		// if bullet_image.val.is_empty() {
+		// 	let img = p.loadImage(
+		// 		"assets/Traps/Blocks/Idle.png",
+		// 		Some(fn(_img) { }),
+		// 		Some(fn(_err) { })
+		// 	)
+		// 	bullet_image.val = Some(img)
+		// }
 		// 加载枪械贴图
-		if gun_image.val.is_empty() {
-			let img = p.loadImage(
-				"src/assets/gun.png",
-				Some(fn(_img) {}),
-				Some(fn(err) {})
-			)
-			gun_image.val = Some(img)
-		}
+		// if gun_image.val.is_empty() {
+		// 	let img = p.loadImage(
+		// 		"src/assets/gun.png",
+		// 		Some(fn(_img) {}),
+		// 		Some(fn(_err) {})
+		// 	)
+		// 	gun_image.val = Some(img)
+		// }
 		// 加载平台贴图
 		if platform_image.val.is_empty() {
 			let img = p.loadImage(
 				"src/assets/platform.png",
 				Some(fn(_img) {}),
-				Some(fn(err) {})
+				Some(fn(_err) {})
 			)
 			platform_image.val = Some(img)
 		}
@@ -782,7 +782,7 @@ pub fn Game::start_run(self:Self) -> Unit {
 			let img = p.loadImage(
 				"src/assets/background.png",
 				Some(fn(_img) {}),
-				Some(fn(err) {})
+				Some(fn(_err) {})
 			)
 			bg_image.val = Some(img)
 		}
