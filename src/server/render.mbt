@@ -340,6 +340,10 @@ pub struct ImageLoader{
   mut img : @p5js.P5Image?
   // 表示是否加载失败
   mut is_failed : Bool
+  x : Double
+  y : Double
+  angle : Double
+  large_image : Bool
 }
 
 pub fn ImageLoader::new(path: String?) -> ImageLoader {
@@ -347,7 +351,11 @@ pub fn ImageLoader::new(path: String?) -> ImageLoader {
     image_path: path,
     img: None,
     // 表示导入尝试是否失败
-    is_failed: false
+    is_failed: false,
+    x: 0.0,
+    y: 0.0,
+    angle: 0.0,
+    large_image: false
   }
 }
 

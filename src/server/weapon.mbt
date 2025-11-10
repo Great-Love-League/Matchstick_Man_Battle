@@ -64,7 +64,7 @@ pub enum GunType {
 } derive(Show, Eq)
 
 pub(open) trait WeaponCreate {
-	create(game:Game,owner_id:Int) -> Unit
+	create(game:Game,owner_id:Int,url:String?) -> Unit
 }
 
 pub(open) trait WeaponControl : RenderAble{
@@ -82,7 +82,7 @@ impl WeaponControl with get_attack_field(self) -> Double {
 	return 1.0
 }
 
-pub impl WeaponCreate for Sword with create(game, owner_id){
+pub impl WeaponCreate for Sword with create(game, owner_id, url:String?){
 	let bodydef=@map_loader.get_bodydef_from_raw(Some(sword_body), None) catch {
         _=> {
 					println("Failed to create body definition for Sword")
@@ -302,7 +302,7 @@ pub impl WeaponDestroy for Sword with destroy(self, game){
 	game.world.destroyBody(self.body)
 }
 
-pub impl WeaponCreate for Gun with create( game, owner_id){
+pub impl WeaponCreate for Gun with create( game, owner_id,url:String?){
 	let bodydef:@box2d.B2BodyDef=@map_loader.get_bodydef_from_raw(Some(gun_body), None) catch {
 				_=> {
 					println("Failed to create body definition for Gun")
@@ -368,7 +368,7 @@ pub impl WeaponCreate for Gun with create( game, owner_id){
 		last_fire_frame: 0,
 
 		gun_type: Pistol,
-		img: ImageLoader::new(Some("src/assets/gun.png"))
+		img: ImageLoader::new(url)
 	}
 	game.weapon.gun_list.push(aa)
 	game.create_revolute_joint(game.particle_list[owner_id].right_forearm, aa.body, (handpos.getX(),handpos.getY()), enable_limit=false)|> ignore
@@ -640,12 +640,12 @@ pub fn Sword::draw_attack_field(self : Sword, p5 : &@p5js.P5JS) -> Unit {
 ///|
 /// 创建手枪（快捷方法）
 pub fn Game::create_pistol(self : Self, owner_id : Int) -> Unit {
-	Gun::create(self, owner_id)  // 默认就是手枪
+	Gun::create(self, owner_id,None)  // 默认就是手枪
 }
 
 ///|
 /// 创建霰弹枪
-pub fn Game::create_shotgun(self : Self, owner_id : Int, url~: String?=None) -> Unit {
+pub fn Game::create_shotgun(self : Self, owner_id : Int, url: String?) -> Unit {
 	let centerpos=self.particle_list[owner_id].right_forearm.getCenterPosition()
 	let rotate =self.particle_list[owner_id].right_forearm.getRotation()
 	let handpos=@box2d.b2Vec2(-@cmath.sin(rotate)*0.25+centerpos.getX(),-@cmath.cos(rotate)*0.25+centerpos.getY())
