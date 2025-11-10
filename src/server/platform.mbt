@@ -36,7 +36,8 @@ pub impl RenderAble for Platform with get_render(platform: Platform){
 			let pixel_width = 0.0;
 			let pixel_height = 0.0;
 
-			drawBody(p, platform.body, None, pixel_width, pixel_height, 0.0, 0.0)
+			// drawBody(p, platform.body, None, 400, 400, 0.0, 0.0)
+			drawBody(p, platform.body, platform.img.get_image(p), 10, 10, 0.0, 0.0)
 		}
 	)
 	// Some(
@@ -184,7 +185,7 @@ pub fn create_platform(game:Game,position:(Double,Double),size:(Double,Double),a
 	let new = Platform::{
 		body : game.world.createBody(body_def),
 		index : game.platform_index,
-		img : ImageLoader::new(Some("src/assets/platform1.png"))
+		img : ImageLoader::new(None)
 	}
 	// new.body.getShapeList()[0].getBase().getRestitution
 	game.platform_list.push(new)

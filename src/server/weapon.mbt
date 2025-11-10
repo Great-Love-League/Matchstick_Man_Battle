@@ -391,7 +391,7 @@ pub impl RenderAble for Gun with get_render(self: Gun){
 			world |> ignore
 
 			drawBody(p, self.body, 
-				self.img.get_image(p), 
+				self.img.get_image__(game), 
 				self.img.get_image_size_x(), 
 				self.img.get_image_size_y(), 
 				self.img.get_image_offset_x(), 

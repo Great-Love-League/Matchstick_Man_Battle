@@ -46,6 +46,8 @@ pub(all) struct Game {
 	
 	anchor : @box2d.B2Body
 
+	images_cache : Map[String, @p5js.P5Image]
+
 	// background
 	background : &RenderAble
 	
@@ -621,6 +623,7 @@ pub fn create_game(
 		auto_aim_configs : Array::new(),
 		animation_list : Array::new(),
 		audio,
+		images_cache : Map::new(),
 		background : background
 	}
 	
@@ -772,34 +775,52 @@ pub fn Game::add_animation(self:Self, animation: &Animation) -> Unit {
 // 开始游戏运行，不阻塞
 pub fn Game::start_run(self:Self) -> Unit {
 	self.state = GamePreparing
-	getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
-		// 加载子弹贴图
-		// if bullet_image.val.is_empty() {
-		// 	let img = p.loadImage(
-		// 		"assets/Traps/Blocks/Idle.png",
-		// 		Some(fn(_img) { }),
-		// 		Some(fn(_err) { })
-		// 	)
-		// 	bullet_image.val = Some(img)
-		// }
-		// 加载枪械贴图
-		// if gun_image.val.is_empty() {
-		// 	let img = p.loadImage(
-		// 		"src/assets/gun.png",
-		// 		Some(fn(_img) {}),
-		// 		Some(fn(_err) {})
-		// 	)
-		// 	gun_image.val = Some(img)
-		// }
-		// 加载平台贴图
-		if platform_image.val.is_empty() {
-			let img = p.loadImage(
-				"src/assets/platform1.png",
-				Some(fn(_img) {}),
-				Some(fn(_err) {})
-			)
-			platform_image.val = Some(img)
-		}
-		self.state_machine_update(p)
-	}) |> ignore
+
+	let preload = fn(p : @p5js.P5Instance) -> Unit {
+		self.images_cache["platform1"] = p.loadImage(
+			"src/assets/platform1.png",
+			Some(fn(_img) {}),
+			Some(fn(_err) {})
+		)
+		self.images_cache["gun"] = p.loadImage(
+			"src/assets/gun1.png",
+			Some(fn(_img) {}),
+			Some(fn(_err) {})
+		)
+		// 预加载资源
+	}
+
+	getP5Instance(
+		fn(p : @p5js.P5Instance) -> Unit {
+			// 加载子弹贴图
+			// if bullet_image.val.is_empty() {
+			// 	let img = p.loadImage(
+			// 		"assets/Traps/Blocks/Idle.png",
+			// 		Some(fn(_img) { }),
+			// 		Some(fn(_err) { })
+			// 	)
+			// 	bullet_image.val = Some(img)
+			// }
+			// 加载枪械贴图
+			// if gun_image.val.is_empty() {
+			// 	let img = p.loadImage(
+			// 		"src/assets/gun.png",
+			// 		Some(fn(_img) {}),
+			// 		Some(fn(_err) {})
+			// 	)
+			// 	gun_image.val = Some(img)
+			// }
+			// 加载平台贴图
+			if platform_image.val.is_empty() {
+				let img = p.loadImage(
+					"src/assets/platform1.png",
+					Some(fn(_img) {}),
+					Some(fn(_err) {})
+				)
+				platform_image.val = Some(img)
+			}
+			self.state_machine_update(p)
+		},
+		preload
+	) |> ignore
 }

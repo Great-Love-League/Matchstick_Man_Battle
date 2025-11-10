@@ -1,12 +1,16 @@
 extern "js" fn getP5Instance(
   drawww : (@p5js.P5Instance) -> Unit,
+  preload : (@p5js.P5Instance) -> Unit,
   width~ : Double = Width,
   height~ : Double = Height
 ) -> @p5js.P5Instance = 
-  #| (drawww, width, height) => {
+  #| (drawww, preload, width, height) => {
   #|   a = new p5((p)=>{
   #|  p.setup = function() {
   #|    p.createCanvas(width, height);
+  #|  }
+  #|  p.preload = function() {
+  #|    preload(p);
   #|  }
   #|  p.draw = function() {
   #|    drawww(p);
@@ -74,6 +78,7 @@ pub fn drawBody(
       // 对于动态物体（有速度），使用速度方向作为角度
       let vel = body.getLinearVelocity()
       let speed_squared = vel.getX() * vel.getX() + vel.getY() * vel.getY()
+
       
       let angle = if speed_squared > 0.01 {
         // 有速度：使用速度方向（适用于子弹）
@@ -82,6 +87,12 @@ pub fn drawBody(
         // 静止：使用 body 的旋转角度（适用于平台）
         body.getRotation()
       }
+
+      println("Body Position: \{pos.getX()} , \{pos.getY()}")
+      println("Body Screen Position: \{sx} , \{sy}")
+      println("Body Angle: \{angle}")
+      println("image_width : \{image_width}, image_height : \{image_height}")
+      println("offset_x : \{offset_x}, offset_y : \{offset_y}")
       
       draw_image_at(p, img, sx, sy, image_width, image_height, angle, offset_x, offset_y)
     }
@@ -390,7 +401,6 @@ pub fn ImageLoader::try_load_image(self: ImageLoader, p: &@p5js.P5JS) -> Unit {
       }
     }
     None => {
-      println("Image path is None, cannot load image")
       self.is_failed = true
     }
   }
@@ -402,6 +412,15 @@ pub fn ImageLoader::get_image(self: ImageLoader, p: &@p5js.P5JS) -> @p5js.P5Imag
     self.try_load_image(p)
   }
   return self.img
+}
+
+pub fn ImageLoader::get_image__(self: ImageLoader, game: Game) -> @p5js.P5Image? {
+
+  if game.images_cache.contains(self.image_path.unwrap()){
+    return Some(game.images_cache[self.image_path.unwrap()])
+  }
+
+  return None
 }
 
 pub fn ImageLoader::get_image_size_x(self: ImageLoader) -> Double {
@@ -459,7 +478,7 @@ pub impl RenderAble for BackgroundImage with get_render(self: BackgroundImage) {
       None => {
         // 如果图片加载失败，则使用默认背景色
         p.background(255.0, Some(204.0), Some(0.0), None)
-        println("Background加载失败，使用默认背景")
+        // println("Background加载失败，使用默认背景")
       }
     }
   }

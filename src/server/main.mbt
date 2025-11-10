@@ -25,8 +25,8 @@ fn box2d_init(game:Game) ->Unit{
   // static_box.setAngularVelocity(0.5)
 	
 	
-	Gun::create(game,0,Some("src/assets/gun1.png"))
-	Sword::create(game,1,Some("sword"))
+	Gun::create(game,0,Some("gun"))
+	Gun::create(game,1,Some("gun"))
 }
 
 fn load_custom_functions(game:Game) -> Unit {
@@ -204,6 +204,23 @@ fn load_custom_functions(game:Game) -> Unit {
     )
   )
 
+  /// 添加平台 aabb 绘制
+  game.register_custom_function(
+    GameCustomFunction::new(
+      GameRunning,
+      fn(game: Game, p5: &@p5js.P5JS) {
+        for platform in game.platform_list {
+          draw_aabb(p5, 
+          get_entity_aabb([platform.get_body()]), 
+          fn (p5){
+            p5.noFill()
+            p5.fillColorPara(0.0, Some(255.0), Some(0.0), Some(150.0))
+          })
+        }
+      }
+    )
+  )
+
 }
 
 pub fn register_control(game:Game) -> Unit{
@@ -361,6 +378,30 @@ pub fn register_show_mouse_screen_coords(game:Game) -> Unit {
       fn(game: Game, p5: &@p5js.P5JS) {
         let mouse_x = p5.getMouseX().to_double();
         let mouse_y = p5.getMouseY().to_double();
+
+        // 如果画到界外了，就画到屏幕内边缘
+        let display_x = if mouse_x + 300.0 > Width {
+          mouse_x - 300.0
+        } else {
+          mouse_x + 10.0
+        };
+
+        let display_y = if mouse_y - 40.0 < 0.0 {
+          mouse_y + 40.0
+        } else {
+          mouse_y - 10.0
+        };
+
+        p5.fillColorPara(0.0, Some(0.0), Some(0.0), Some(200.0));
+        p5.textSizeSet(30.0);
+        p5.text(
+          "(\{mouse_x}, \{mouse_y})",
+          display_x,
+          display_y,
+          None,
+          None
+        );
+
         // 每秒输出一次鼠标屏幕坐标
         if game.frame_count % 60 == 0 {
           println("鼠标位置: (\{mouse_x}, \{mouse_y})");
@@ -484,10 +525,9 @@ pub fn register_audio_controls(game: Game) -> Unit {
   println("  0键 - 提高音量")
 }
 
+let game : Game = create_game(background = BackgroundImage::new(path = Some("./src/assets/background1.png")))
+
 fn main {
-	
-	let game = create_game(background = BackgroundImage::new(path = Some("./src/assets/background1.png")))
-	
 	
 	load_map(game,4)|> ignore
 	
