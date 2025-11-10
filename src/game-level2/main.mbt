@@ -49,7 +49,7 @@ fn load_custom_functions(game:@server.Game) -> Unit {
           }
           game.weapon.gun_list.clear()
           // 创建霰弹枪
-          game.create_shotgun(0)
+          game.create_shotgun(0, Some("src/assets/gun2.png"))
           println("装备霰弹枪!")
         }
         if(p.keyIsDown(Digit3)){
@@ -162,8 +162,8 @@ fn load_custom_functions(game:@server.Game) -> Unit {
 fn main {
   let game = @server.create_game()
   @server.load_map(game, 2) |> ignore
-	@server.Gun::create(game,0)
-	@server.Gun::create(game,1)
+	@server.Gun::create(game,0,Some("src/assets/gun1.png"))
+	@server.Gun::create(game,1,Some("pistol"))
 
   load_custom_functions(game)
   
