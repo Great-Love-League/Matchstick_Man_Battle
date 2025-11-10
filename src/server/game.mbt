@@ -47,17 +47,10 @@ pub(all) struct Game {
 	audio : AudioManager
 	
 	anchor : @box2d.B2Body
+
+	// background
+	background : &RenderAble
 	
-}
-
-// pub trait renderable 用于每个可渲染对象的渲染接口，如果没有设置则使用 render 的默认实现
-pub trait RenderAble {
-	get_render(self: Self) -> Option[(&@box2d.World, &@p5js.P5JS) -> Unit] = _
-}
-
-impl RenderAble with get_render(self: Self) -> Option[(&@box2d.World, &@p5js.P5JS) -> Unit] {
-	self |> ignore
-	None
 }
 
 pub trait GameCustomFunctionTrait {
@@ -567,7 +560,7 @@ pub const Pi : Double = 3.141592653589793
 pub fn Game::create_static_box(
 	self:Self,
 	position: (Double, Double),
-	size: (Double, Double)
+	size: (Double, Double),
 )-> @box2d.B2Body{
 	let box_def = @box2d.b2BoxDef()
 	box_def.setExtents(@box2d.b2Vec2(size.0, size.1))
@@ -581,7 +574,10 @@ pub fn Game::create_static_box(
 	body
 }
 
-pub fn create_game(render~: &RenderTrait = DefaultRenderable::{}) -> Game{
+pub fn create_game(
+	render~: &RenderTrait = DefaultRender::{},
+	background~: &RenderAble = BackgroundImage::new()
+	) -> Game{
 	let world = create_world()
 	
 	let weapon=create_weapon_manager()
@@ -626,7 +622,8 @@ pub fn create_game(render~: &RenderTrait = DefaultRenderable::{}) -> Game{
 		custom_functions : Array::new(),
 		auto_aim_configs : Array::new(),
 		animation_list : Array::new(),
-		audio
+		audio,
+		background : background
 	}
 	
 	game
@@ -797,15 +794,6 @@ pub fn Game::start_run(self:Self) -> Unit {
 				Some(fn(_err) {})
 			)
 			platform_image.val = Some(img)
-		}
-		// 加载背景图片
-		if bg_image.val.is_empty() {
-			let img = p.loadImage(
-				"src/assets/background1.png",
-				Some(fn(_img) {}),
-				Some(fn(_err) {})
-			)
-			bg_image.val = Some(img)
 		}
 		self.state_machine_update(p)
 	}) |> ignore

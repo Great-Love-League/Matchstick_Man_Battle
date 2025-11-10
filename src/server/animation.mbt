@@ -30,7 +30,7 @@ pub fn random_range(min: Double, max: Double) -> Double {
 }
 
 fn register_smoke_animation(game: Game, base_x: Double, base_y: Double) -> Unit {
-  let frame_counter = { val: 0 }
+  let frame_counter : Ref[Int] = Ref::new(0)
   let smokes: Ref[Array[SmokeParticle]] = Ref::new(Array::new())
 
   let animation = SampleAnimation::new(
@@ -144,7 +144,7 @@ pub struct BloodParticle {
 }
 
 fn register_blood_spray_animation(game: Game, x: Double, y: Double, vx: Double, vy: Double) -> Unit {
-  let frame_counter = { val: 0 }
+  let frame_counter: Ref[Int] = Ref::new(0)
   let particles: Ref[Array[BloodParticle]] = Ref::new(Array::new())
 
   // 计算打击方向角度
