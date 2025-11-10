@@ -334,3 +334,54 @@ pub trait RenderTrait {
 /// 
 /// 
 /// 绘画只需要调用 draw_world 即可，注意要step world!!!!!!!!
+ 
+pub struct ImageLoader{
+  image_path : String?
+  mut img : @p5js.P5Image?
+  // 表示是否加载失败
+  mut is_failed : Bool
+}
+
+pub fn ImageLoader::new(path: String?) -> ImageLoader {
+  return ImageLoader::{
+    image_path: path,
+    img: None,
+    // 表示导入尝试是否失败
+    is_failed: false
+  }
+}
+
+pub fn ImageLoader::try_load_image(self: ImageLoader, p: &@p5js.P5JS) -> Unit {
+  match self.image_path {
+    Some(path) => {
+      let loaded_img = Some(p.loadImage(
+        path,
+        None,
+        None
+      ))
+      self.img = loaded_img
+      match loaded_img{
+        Some(_) => {
+          println("Image loaded successfully from path: \{path}")
+        }
+        None => {
+          println("Failed to load image from path: \{path}")
+          self.is_failed = true
+        }
+      }
+    }
+    None => {
+      println("Image path is None, cannot load image")
+      self.is_failed = true
+    }
+  }
+}
+
+pub fn ImageLoader::get_image(self: ImageLoader, p: &@p5js.P5JS) -> @p5js.P5Image? {
+
+  if self.is_failed != true && self.img.is_empty() {
+    self.try_load_image(p)
+  }
+
+  return self.img
+}
