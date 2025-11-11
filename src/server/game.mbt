@@ -1,6 +1,16 @@
 pub suberror ParticleControlConfigError String
 pub suberror GameStateError String
 
+extern "js" fn navigateTo(url: String) -> Unit =
+	#| (url) => {
+	#|   window.location.href = url;
+	#| }
+
+extern "js" fn reloadPage() -> Unit =
+	#| () => {
+	#|   window.location.reload();
+	#| }
+
 ///| 全局变量：存储子弹贴图
 pub(all) struct Game {
 	world : @box2d.B2World
@@ -45,6 +55,10 @@ pub(all) struct Game {
 
 	// background
 	background : &RenderAble
+
+	// navigation guard: 防止在 GameOver 时每帧重复触发导航/刷新，导致递归或多次调用
+	mut navigation_requested : Bool
+	mut navigation_target : String?
 	
 }
 
@@ -433,23 +447,23 @@ fn Game::game_over(self:Self, p5: &@p5js.P5JS) -> Unit {
 	p5.textSizeSet(80.0)
 	p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
 	p5.textAlign("center", Some("center"))
-	p5.text("游戏结束", Width / 2.0, Height / 2.0 - 80.0, None, None)
+	p5.text("游戏结束", Width / 2.0, Height / 2.0 - 80.0, Some(Width), Some(Height))
 	
 	// 显示获胜者
 	if winner_index >= 0 {
 		p5.textSizeSet(60.0)
 		p5.fillColorPara(255.0, Some(215.0), Some(0.0), Some(255.0))  // 金色
-		p5.text("玩家 \{winner_index} 获胜!", Width / 2.0, Height / 2.0, None, None)
+		p5.text("玩家 \{winner_index} 获胜!", Width / 2.0, Height / 2.0, Some(Width), Some(Height))
 	} else {
 		p5.textSizeSet(60.0)
 		p5.fillColorPara(200.0, Some(200.0), Some(200.0), Some(255.0))
-		p5.text("平局", Width / 2.0, Height / 2.0, None, None)
+		p5.text("平局", Width / 2.0, Height / 2.0, Some(Width), Some(Height))
 	}
 	
 	// 显示提示文字
 	p5.textSizeSet(30.0)
 	p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
-	p5.text("刷新页面重新开始", Width / 2.0, Height / 2.0 + 80.0, None, None)
+	p5.text("按 1-4 载入对应关卡，R 刷新", Width / 2.0, Height / 2.0 + 80.0, Some(Width), Some(Height))
 
 	self.state = GameOver
 }
@@ -524,6 +538,7 @@ fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : 
 		}
 	}
 	if(p.keyIsDown(control_config.faint_key)){
+		particle.torso.applyForce(@box2d.b2Vec2(0.0, -100.0), particle.torso.getCenterPosition())
 		return
 	}
 	if(p.keyIsDown((control_config.left_key))){
@@ -619,6 +634,8 @@ pub fn create_game(
 		animation_list : Array::new(),
 		audio,
 		background : background,
+		navigation_requested: false,
+		navigation_target: None
 	}
 	
 	game
