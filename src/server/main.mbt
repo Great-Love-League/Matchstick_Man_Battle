@@ -336,18 +336,18 @@ pub fn register_hp_show(game:Game) -> Unit {
           let text_y = top + (bar_h + 2.0) / 2.0 + 3.0
           p5.textSizeSet(10.0)
           p5.fillColorPara(0.0, Some(0.0), Some(0.0), Some(180.0))
-          p5.text(particle.control.health.to_string(), text_x + 1.0, text_y + 1.0, None, None)
+          p5.text(particle.control.health.to_string(), text_x + 1.0, text_y + 1.0, Some(Width), Some(Height))
           p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
-          p5.text(particle.control.health.to_string(), text_x, text_y, None, None)
+          p5.text(particle.control.health.to_string(), text_x, text_y, Some(Width), Some(Height))
 
           // 显示 是玩家几 (先绘制阴影，再绘制白色文字)
           let text_x = left + (bar_w + 2.0) / 2.0
           let text_y = top - 10.0
           p5.textSizeSet(12.0)
           p5.fillColorPara(0.0, Some(0.0), Some(0.0), Some(180.0))
-          p5.text("P \{particle.index}", text_x + 1.0, text_y + 1.0, None, None)
+          p5.text("P \{particle.index}", text_x + 1.0, text_y + 1.0, Some(Width), Some(Height))
           p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
-          p5.text("P \{particle.index}", text_x, text_y, None, None)
+          p5.text("P \{particle.index}", text_x, text_y, Some(Width), Some(Height))
 
         }
       }
@@ -490,33 +490,51 @@ fn main {
 	let game = create_game(background = BackgroundImage::new(Some("./src/assets/background1.png")))
 	
 	
-	load_map(game,4)|> ignore
+	// load_map(game,5)|> ignore
 	
-  box2d_init(game)
+  // box2d_init(game)
 	
-  load_custom_functions(game)
+  // load_custom_functions(game)
 
-  register_control(game)
+  // register_control(game)
   
-  register_auto_aim(game)
+  // register_auto_aim(game)
 
-  register_hp_show(game)
+  // register_hp_show(game)
 
-  register_show_mouse_screen_coords(game)
+  // register_show_mouse_screen_coords(game)
 
-  register_animation(game)
+  // register_animation(game)
 
-  register_animation(game)
+  // register_animation(game)
 	
-	register_blood_spray_animation(game,500.0,500.0, 1.0, 1.0)
-	register_smoke_animation(game,500.0,500.0)
+	// register_blood_spray_animation(game,500.0,500.0, 1.0, 1.0)
+	// register_smoke_animation(game,500.0,500.0)
   
-  // 注册音频控制
-  register_audio_controls(game)
+  // // 注册音频控制
+  // register_audio_controls(game)
 
-  // 播放背景音乐
-  game.audio.play_bgm(AudioEventType::BgmMenu)
-
-  game.start_run()
+  // // 播放背景音乐
+  // game.audio.play_bgm(AudioEventType::BgmMenu)
+	
+	{
+		let game = create_game(background = BackgroundImage::new(path = Some("./src/assets/background1.png")))
+		load_map(game,5)|> ignore
+		box2d_init(game)
+		load_custom_functions(game)
+		register_control(game)
+		register_auto_aim(game)
+		register_hp_show(game)
+		register_show_mouse_screen_coords(game)
+		register_animation(game)
+		register_animation(game)
+		register_blood_spray_animation(game,500.0,500.0, 1.0, 1.0)
+		register_smoke_animation(game,500.0,500.0)
+		// 注册音频控制
+		register_audio_controls(game)
+		// 播放背景音乐
+		game.audio.play_bgm(AudioEventType::BgmMenu)
+		game.start_run()
+	}
 
 }

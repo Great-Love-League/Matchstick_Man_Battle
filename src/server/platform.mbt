@@ -297,7 +297,7 @@ impl PlatformTrait for MovablePlatform with update(self, game) -> Unit {
 	
 	self.body.applyForce(@box2d.b2Vec2(0.0, 9.8*self.body.getMass()), self.body.getCenterPosition())
 	// println("rotation")
-	maintain_rotation(self.body, 0.0, kp=100000.0, kd=10000.0)
+	maintain_rotation(self.body, 0.0, kp=1000000.0, kd=100000.0)
 	
 	let current_pos = self.body.getCenterPosition()
 	let target_pos = if self.direction == 1 { self.end_position } else { self.start_position }
@@ -321,7 +321,7 @@ impl PlatformTrait for MovablePlatform with update(self, game) -> Unit {
 		
 		//println("MovablePlatform \{self.index} position: (\{new_pos.getX()}, \{new_pos.getY()})")
 		
-		maintain_position(self.body,(new_pos.getX(), new_pos.getY()), kp=1000000.0, kd=5000.0)
+		maintain_position(self.body,(new_pos.getX(), new_pos.getY()), kp=1000000.0, kd=50000.0)
 	}
 }
 
