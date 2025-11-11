@@ -44,14 +44,13 @@ pub fn load_map(game:Game, level : Int) -> Bool {
 			return true
 		}
 		4 => {
-			
-			create_platform(game, (-24.5, 25), (1, 25), angle = 0.0)|> ignore;
-			create_platform(game, (24.5, 25), (1, 25), angle = 0.0)|> ignore;
-			create_platform(game, (0, 49.5), (23.6, 1), angle = 0.0)|> ignore;
-			create_platform(game, (0, 0.5), (23.6, 1), angle = 0.0)|> ignore;
-			
-			
-			create_rotatable_platform(game, (0, 25), (20, 0.8), 1, initial_angle=0) |> ignore;
+
+			create_platform(game, (-24.5, 25), (1, 25), angle = 0.0, path = Some("src/assets/platform1.png"))|> ignore;
+			create_platform(game, (24.5, 25), (1, 25), angle = 0.0, path = Some("src/assets/platform1.png"))|> ignore;
+			create_platform(game, (0, 49.5), (23.6, 1), angle = 0.0, path = Some("src/assets/platform1.png"))|> ignore;
+			create_platform(game, (0, 0.5), (23.6, 1), angle = 0.0, path = Some("src/assets/platform1.png"))|> ignore;
+
+			create_rotatable_platform(game, (0, 25), (20, 0.8), 1, initial_angle=0, path = Some("src/assets/platform1.png")) |> ignore;
 			
 			return true
 		}
