@@ -518,7 +518,7 @@ fn main {
   // game.audio.play_bgm(AudioEventType::BgmMenu)
 	
 	{
-		let game = create_game(background = BackgroundImage::new(path = Some("./src/assets/background1.png")))
+		let game = create_game(background = BackgroundImage::new(Some("./src/assets/background1.png")))
 		load_map(game,5)|> ignore
 		box2d_init(game)
 		load_custom_functions(game)
