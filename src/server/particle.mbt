@@ -73,13 +73,12 @@ pub impl RenderAble for Particle with get_render(self: Particle){
 
 		world |> ignore
 
-		let ppm = PPM
 		let to_screen = fn(x: Double, y: Double) -> (Double, Double) {
 			world_to_screen(x, y)
 		}
 
 		let ws = fn(len: Double) -> Double {
-			world_to_screen_size(len, ppm)
+			world_to_screen_size(len)
 		}
 		let draw_body_line = fn(body: @box2d.B2Body, half_w: Double, half_h: Double) -> Unit {
 			half_w |> ignore

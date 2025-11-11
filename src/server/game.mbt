@@ -12,9 +12,6 @@ extern "js" fn reloadPage() -> Unit =
 	#| }
 
 ///| 全局变量：存储子弹贴图
-// let bullet_image : Ref[@p5js.P5Image?] = { val: None }
-// let gun_image : Ref[@p5js.P5Image?] = { val: None }
-let platform_image : Ref[@p5js.P5Image?] = { val: None }
 pub(all) struct Game {
 	world : @box2d.B2World
 	weapon : WeaponManager
@@ -589,7 +586,7 @@ pub fn Game::create_static_box(
 
 pub fn create_game(
 	render~: &RenderTrait = DefaultRender::{},
-	background~: &RenderAble = BackgroundImage::new()
+	background~: &RenderAble = BackgroundImage::new(None)
 	) -> Game{
 	let world = create_world()
 	
@@ -789,66 +786,13 @@ pub fn Game::add_animation(self:Self, animation: &Animation) -> Unit {
 // 开始游戏运行，不阻塞
 pub fn Game::start_run(self:Self) -> Unit {
 	self.state = GamePreparing
-	getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
-		// 加载子弹贴图
-		// if bullet_image.val.is_empty() {
-		// 	let img = p.loadImage(
-		// 		"assets/Traps/Blocks/Idle.png",
-		// 		Some(fn(_img) { }),
-		// 		Some(fn(_err) { })
-		// 	)
-		// 	bullet_image.val = Some(img)
-		// }
-		// 加载枪械贴图
-		// if gun_image.val.is_empty() {
-		// 	let img = p.loadImage(
-		// 		"src/assets/gun.png",
-		// 		Some(fn(_img) {}),
-		// 		Some(fn(_err) {})
-		// 	)
-		// 	gun_image.val = Some(img)
-		// }
-		// 加载平台贴图
-		// if platform_image.val.is_empty() {
-		// 	let img = p.loadImage(
-		// 		"src/assets/platform1.png",
-		// 		Some(fn(_img) {}),
-		// 		Some(fn(_err) {})
-		// 	)
-		// 	platform_image.val = Some(img)
-		// }
-		if(self.state == GameOver) {
-			// 先渲染 GameOver 画面
-			self.game_over(p)
+	let draw = (p5: @p5js.P5Instance) => {
+		self.state_machine_update(p5)
+	}
+	let preload = (p5: @p5js.P5Instance) => {
+		p5 |> ignore
+		// 预加载图片资源
+	}
 
-			// 仅在未请求过导航时响应按键，避免每帧重复触发或递归调用
-			if !self.navigation_requested {
-				if (p.keyIsDown(@p5js.KeyR)) {
-					self.navigation_requested = true
-					self.navigation_target = None
-					reloadPage()
-				} else if (p.keyIsDown(@p5js.Digit1)) {
-					self.navigation_requested = true
-					self.navigation_target = Some("game-level1.html")
-					navigateTo("game-level1.html")
-				} else if (p.keyIsDown(@p5js.Digit2)) {
-					self.navigation_requested = true
-					self.navigation_target = Some("game-level2.html")
-					navigateTo("game-level2.html")
-				} else if (p.keyIsDown(@p5js.Digit3)) {
-					self.navigation_requested = true
-					self.navigation_target = Some("game-level3.html")
-					navigateTo("game-level3.html")
-				} else if (p.keyIsDown(@p5js.Digit4)) {
-					self.navigation_requested = true
-					self.navigation_target = Some("game-level4.html")
-					navigateTo("game-level4.html")
-				}
-			}
-		}
-		else{
-			self.state_machine_update(p)
-		}
-
-	}) |> ignore
+	getP5Instance(draw, preload) |> ignore
 }
