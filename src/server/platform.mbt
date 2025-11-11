@@ -11,6 +11,7 @@ pub(all) struct RotatablePlatform{
 	index : Int
 	angle_speed : Double // 角速度，单位弧度每秒
 	mut angle : Double
+	img : ImageLoader
 }
 pub(all) struct MovablePlatform{
 	fulcrum : @box2d.B2Body
@@ -23,75 +24,79 @@ pub(all) struct MovablePlatform{
 	mut direction : Int // 1表示从start到end，-1表示从end到start
 	mut cooldown : Int  // 冷却时间，防止频繁切换方向
 	cooldown_time : Int // 冷却时间总长
+	img : ImageLoader
 }
 
-pub impl RenderAble for Platform with get_render(platform: Platform){
+pub impl RenderAble for Platform with get_render(self: Platform){
 	Some(
 		fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
 			world |> ignore
 			
-			// 将物理世界的尺寸（半宽度/半高度）转换为屏幕像素尺寸
-			// platform.width 和 platform.height 是半宽度和半高度
-			// 完整宽度 = width * 2, 完整高度 = height * 2
-			let pixel_width = 0.0;
-			let pixel_height = 0.0;
+			let pixel_width = world_to_screen_size(self.get_width());
+			let pixel_height = world_to_screen_size(self.get_hight());
 
-			drawBody(p, platform.body, None, pixel_width, pixel_height, 0.0, 0.0)
+			drawBody(p, self.body, self.img.get_image(p), pixel_width, pixel_height, 0.0, 0.0)
 		}
 	)
-	// Some(
-	// 	fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
-	// 		world |> ignore
-			
-	// 		// 使用 PlatformTrait 获取物理世界的宽度和高度（单位：米）
-	// 		let width_meters = platform.get_width()
-	// 		let height_meters = platform.get_hight()
-			
-	// 		// 使用 world_to_screen_size 转换为屏幕像素
-	// 		// PPM (Pixels Per Meter) 是转换比例
-	// 		let pixel_width = world_to_screen_size(width_meters, PPM)
-	// 		let pixel_height = world_to_screen_size(height_meters, PPM)
-			
-	// 		// 使用 ImageLoader 获取图片并渲染
-	// 		drawBody(p, platform.body, platform.img.get_image(p), pixel_width, pixel_height, 0.0, 0.0)
+}
+
+pub impl RenderAble for RotatablePlatform with get_render(self: RotatablePlatform){
+	// Some(fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
+	// 	world|> ignore
+	// 	for shape in rotatable_platform.get_body().getShapeList() {
+	// 	// println("Drawing RotatablePlatform \{rotatable_platform.get_index()}")
+	// 		match shape.getType() {
+	// 			PolygonShape => drawPolygon(p, shape.toPolygonShape())
+	// 			BoxShape => drawPolygon(p, shape.toPolygonShape())
+	// 			CircleShape => drawCircle(p, shape.toCircleShape())
+	// 			UnknownShape => {
+	// 				println("Unknown Shape")
+	// 			}
+	// 		}
 	// 	}
-	// )
+	// })
+
+	Some(
+		fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
+			world |> ignore
+			
+			let pixel_width = world_to_screen_size(self.get_width());
+			let pixel_height = world_to_screen_size(self.get_hight());
+
+			drawBody(p, self.body, self.img.get_image(p), pixel_width, pixel_height, 0.0, 0.0)
+		}
+	)
 }
 
-pub impl RenderAble for RotatablePlatform with get_render(rotatable_platform: RotatablePlatform){
-	Some(fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
-		world|> ignore
-		for shape in rotatable_platform.get_body().getShapeList() {
-		// println("Drawing RotatablePlatform \{rotatable_platform.get_index()}")
-			match shape.getType() {
-				PolygonShape => drawPolygon(p, shape.toPolygonShape())
-				BoxShape => drawPolygon(p, shape.toPolygonShape())
-				CircleShape => drawCircle(p, shape.toCircleShape())
-				UnknownShape => {
-					println("Unknown Shape")
-				}
-			}
+pub impl RenderAble for MovablePlatform with get_render(self: MovablePlatform){
+	// Some(fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
+
+	// 	world |> ignore
+
+	// 	for shape in movable_platform.get_body().getShapeList() {
+	// 	// println("Drawing MovablePlatform \{movable_platform.get_index()}")
+	// 		match shape.getType() {
+	// 			PolygonShape => drawPolygon(p, shape.toPolygonShape())
+	// 			BoxShape => drawPolygon(p, shape.toPolygonShape())
+	// 			CircleShape => drawCircle(p, shape.toCircleShape())
+	// 			UnknownShape => {
+	// 				println("Unknown Shape")
+	// 			}
+	// 		}
+	// 	}
+	// })
+
+	Some(
+		fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
+			world |> ignore
+			
+			let pixel_width = world_to_screen_size(self.get_width());
+			let pixel_height = world_to_screen_size(self.get_hight());
+
+			drawBody(p, self.body, self.img.get_image(p), pixel_width, pixel_height, 0.0, 0.0)
 		}
-	})
-}
+	)
 
-pub impl RenderAble for MovablePlatform with get_render(movable_platform: MovablePlatform){
-	Some(fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
-
-		world |> ignore
-
-		for shape in movable_platform.get_body().getShapeList() {
-		// println("Drawing MovablePlatform \{movable_platform.get_index()}")
-			match shape.getType() {
-				PolygonShape => drawPolygon(p, shape.toPolygonShape())
-				BoxShape => drawPolygon(p, shape.toPolygonShape())
-				CircleShape => drawCircle(p, shape.toCircleShape())
-				UnknownShape => {
-					println("Unknown Shape")
-				}
-			}
-		}
-	})
 }
 
 // 还需要一个操作 , 探测某个人是否能站在平台上
@@ -171,7 +176,7 @@ impl PlatformTrait with get_rotation(self) -> Double {
 	return self.get_body().getRotation()
 }
 
-pub fn create_platform(game:Game,position:(Double,Double),size:(Double,Double),angle?:Double=0.0)
+pub fn create_platform(game:Game,position:(Double,Double),size:(Double,Double),angle?:Double=0.0, path~:String? = None)
 ->Platform {
 	let box_def = @box2d.b2BoxDef()
 	box_def.setExtents(@box2d.b2Vec2(size.0, size.1))
@@ -184,7 +189,7 @@ pub fn create_platform(game:Game,position:(Double,Double),size:(Double,Double),a
 	let new = Platform::{
 		body : game.world.createBody(body_def),
 		index : game.platform_index,
-		img : ImageLoader::new(Some("src/assets/platform1.png"))
+		img : ImageLoader::new(path)
 	}
 	// new.body.getShapeList()[0].getBase().getRestitution
 	game.platform_list.push(new)
@@ -202,7 +207,7 @@ pub impl PlatformTrait for Platform with get_index(self) -> Int {
 pub impl PlatformTrait for Platform with get_body(self) -> @box2d.B2Body {
 	return self.body
 }
-pub fn create_rotatable_platform(game:Game,position:(Double,Double),size:(Double,Double),angle_speed:Double,initial_angle?:Double=0.0) -> RotatablePlatform {
+pub fn create_rotatable_platform(game:Game,position:(Double,Double),size:(Double,Double),angle_speed:Double,initial_angle?:Double=0.0, path~:String? = None) -> RotatablePlatform {
 	let box_def = @box2d.b2BoxDef()
 	box_def.setExtents(@box2d.b2Vec2(size.0, size.1))
 	box_def.setDensity(50.0)
@@ -217,6 +222,7 @@ pub fn create_rotatable_platform(game:Game,position:(Double,Double),size:(Double
 		index : game.platform_index,
 		angle_speed : angle_speed,
 		angle : initial_angle,
+		img : ImageLoader::new(path)
 	}
 	
 	let pos = (body.getCenterPosition().getX(), body.getCenterPosition().getY())
@@ -248,7 +254,7 @@ pub impl PlatformTrait for RotatablePlatform with get_body(self) -> @box2d.B2Bod
 }
 
 
-pub fn create_movable_platform(game:Game, size:(Double,Double), start_position:(Double,Double), end_position:(Double,Double), speed:Double, now_position:(Double,Double)) -> MovablePlatform {
+pub fn create_movable_platform(game:Game, size:(Double,Double), start_position:(Double,Double), end_position:(Double,Double), speed:Double, now_position:(Double,Double), path~: String? =None) -> MovablePlatform {
 	let box_def = @box2d.b2BoxDef()
 	box_def.setExtents(@box2d.b2Vec2(size.0, size.1))
 	box_def.setDensity(50.0)
@@ -273,7 +279,8 @@ pub fn create_movable_platform(game:Game, size:(Double,Double), start_position:(
 		speed,
 		direction : 1,
 		cooldown : cooldown_time,
-		cooldown_time
+		cooldown_time,
+		img : ImageLoader::new(path)
 	}
 	// let axis = @box2d.b2Vec2(end_position.0 - start_position.0, end_position.1 - start_position.1)
 	//game.create_prismatic_joint(game.anchor, body, (0.0, 0.0), axis, enable_limit=true, lower_translation=0.0, upper_translation=5.0)|> ignore

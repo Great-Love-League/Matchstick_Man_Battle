@@ -25,15 +25,15 @@ pub struct Bullet {
   hit_targets : Array[Int]       // 已命中的目标ID（防止穿透时重复伤害）
   mut penetration : Int           // 剩余穿透次数（0表示不穿透）
   gravity_compensation : Double   // 重力补偿系数（0.0-1.0，0为完全下坠，1为完全无下坠）
+  img: ImageLoader               // 子弹图片资源
 }
 
 ///| 使用默认的渲染接口
 /// @ltl
 pub impl RenderAble for Bullet with get_render(self: Bullet){
   Some(fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
-    let ppm = PPM
     let ws = fn(len: Double) -> Double {
-      world_to_screen_size(len, ppm)
+      world_to_screen_size(len)
     }
 
     world |> ignore
@@ -92,6 +92,7 @@ pub fn Game::create_bullet(
   penetration? : Int = 0,
   gravity_compensation? : Double = 0.95,
   collision_group? : Int? = None,
+  path~: String? = None
 ) -> Bullet {
   // 自动计算碰撞组：与发射者使用相同的碰撞组
   // 这样子弹不会与发射者及其武器发生物理碰撞
@@ -133,7 +134,8 @@ pub fn Game::create_bullet(
     target_types,
     hit_targets: Array::new(),
     penetration,
-    gravity_compensation
+    gravity_compensation,
+    img: ImageLoader::new(path)
   }
   
   self.bullet_list.push(bullet)

@@ -161,7 +161,7 @@ fn load_custom_functions(game:@server.Game) -> Unit {
 
 fn main {
   let game = @server.create_game(
-    background = @server.BackgroundImage::new(path = Some("./src/assets/R-C (2).jpg"))
+    background = @server.BackgroundImage::new(None)
   )
   @server.load_map(game, 3) |> ignore
 	@server.Gun::create(game,0,Some("./src/assets/gun1.png"))

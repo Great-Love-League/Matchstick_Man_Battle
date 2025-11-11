@@ -1,15 +1,19 @@
 extern "js" fn getP5Instance(
   drawww : (@p5js.P5Instance) -> Unit,
+  prelaod : (@p5js.P5Instance) -> Unit,
   width~ : Double = Width,
   height~ : Double = Height
 ) -> @p5js.P5Instance = 
-  #| (drawww, width, height) => {
+  #| (drawww, prelaod, width, height) => {
   #|   a = new p5((p)=>{
   #|  p.setup = function() {
   #|    p.createCanvas(width, height);
   #|  }
   #|  p.draw = function() {
   #|    drawww(p);
+  #|  }
+  #|  p.preload = function() {
+  #|    prelaod(p);
   #|  }
   #|})
   #|return a
@@ -144,11 +148,11 @@ pub fn screen_to_world(world_width~: Double = Width, world_height~: Double = Hei
   return ((x - screen_x_pixle_num/2.0) / ppm, (screen_y_pixle_num - y) / ppm)
 }
 
-pub fn screen_to_world_size(size: Double, ppm : Double) -> Double {
+pub fn screen_to_world_size(size: Double, ppm~ : Double=PPM) -> Double {
   return size / ppm
 }
 
-pub fn world_to_screen_size(size: Double, ppm : Double) -> Double {
+pub fn world_to_screen_size(size: Double, ppm~ : Double=PPM) -> Double {
   return size * ppm
 }
 
@@ -180,7 +184,7 @@ pub fn drawCircle(p: &@p5js.P5JS, shape: @box2d.B2CircleShape) -> Unit{
   let position = shape.getBody().getWorldPoint(shape.getLocalPosition())
   let radius = shape.getRadius()
   let screen_pos = world_to_screen(position.getX(), position.getY())
-  let screen_radius = world_to_screen_size(radius, PPM)
+  let screen_radius = world_to_screen_size(radius)
 //   println("Circle Position: \{position.getX()} , \{position.getY()}")
 //   println("Circle Screen Position: \{screen_pos.0} , \{screen_pos.1}")
 //   println("Circle Radius: \{radius}")
@@ -212,28 +216,12 @@ pub fn DefaultRender::draw_world(self: DefaultRender, p: &@p5js.P5JS, world: &@b
 fn DefaultRender::draw_game(self:Self,p: &@p5js.P5JS, game: Game) -> Unit {
 
   self |> ignore
-  // 画背景
-  // match game.background.get_render() {
-  //   None => {
-  //     p.background(255.0, Some(204.0), Some(0.0), None)
-  //   }
-  //   Some(draw_background) => {
-  //     draw_background(game.world, p)
-  //   }
-  // }
+
+  p.push()
 
   p.strokeWeight(5.0)
   p.strokeComponents(0.0, 0.0, 0.0, Some(255.0))
   p.noFill()
-
-  // let ppm = PPM
-  // let to_screen = fn(x: Double, y: Double) -> (Double, Double) {
-  //   world_to_screen(x, y)
-  // }
-
-  // let ws = fn(len: Double) -> Double {
-  //   world_to_screen_size(len, ppm)
-  // }
 
   let renderable_list : Array[(&@box2d.World, &@p5js.P5JS) -> Unit] = Array::new()
 
@@ -289,15 +277,19 @@ fn DefaultRender::draw_game(self:Self,p: &@p5js.P5JS, game: Game) -> Unit {
   }
 
   for render_fn in renderable_list {
+    p.push()
     render_fn(game.world, p)
+    p.pop()
   }
 
   p.strokeWeight(0.0)
+  p.pop()
 }
 
 
 pub fn DefaultRender::clear_screen(self: DefaultRender, p: &@p5js.P5JS, game: Game) -> Unit {
   self |> ignore
+  p.push()
   match game.background.get_render() {
     None => {
       p.background(255.0, Some(204.0), Some(0.0), None)
@@ -306,6 +298,7 @@ pub fn DefaultRender::clear_screen(self: DefaultRender, p: &@p5js.P5JS, game: Ga
       draw_background(game.world, p)
     }
   }
+  p.pop()
 
 }
 pub(all) struct DefaultRender {}
@@ -373,21 +366,19 @@ pub fn ImageLoader::new(path: String?) -> ImageLoader {
 pub fn ImageLoader::try_load_image(self: ImageLoader, p: &@p5js.P5JS) -> Unit {
   match self.image_path {
     Some(path) => {
-      let loaded_img = Some(p.loadImage(
+      p.loadImage(
         path,
-        None,
-        None
-      ))
-      self.img = loaded_img
-      match loaded_img{
-        Some(_) => {
+        Some(fn(img: @p5js.P5Image) -> Unit {
+          self.img = Some(img)
           println("Image loaded successfully from path: \{path}")
-        }
-        None => {
-          println("Failed to load image from path: \{path}")
+          self.is_failed = false
+        }),
+        Some(fn(err) -> Unit {
+          println("Failed to load image from path: \{path} with error: \{err}")
           self.is_failed = true
-        }
-      }
+          self.img = None
+        })
+      ) |> ignore
     }
     None => {
       println("Image path is None, cannot load image")
@@ -466,7 +457,7 @@ pub impl RenderAble for BackgroundImage with get_render(self: BackgroundImage) {
   return Some(render_fn)
 }
 
-pub fn BackgroundImage::new(path~: String?=None) -> BackgroundImage {
+pub fn BackgroundImage::new(path: String?) -> BackgroundImage {
   return BackgroundImage::{
     val: ImageLoader::new(path)
   }
