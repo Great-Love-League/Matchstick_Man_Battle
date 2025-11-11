@@ -25,7 +25,7 @@ pub(all) struct MovablePlatform{
 	cooldown_time : Int // 冷却时间总长
 }
 
-pub impl RenderAble for Platform with get_render(platform: Platform){
+pub impl RenderAble for Platform with get_render(self: Platform){
 	Some(
 		fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
 			world |> ignore
@@ -33,29 +33,13 @@ pub impl RenderAble for Platform with get_render(platform: Platform){
 			// 将物理世界的尺寸（半宽度/半高度）转换为屏幕像素尺寸
 			// platform.width 和 platform.height 是半宽度和半高度
 			// 完整宽度 = width * 2, 完整高度 = height * 2
-			let pixel_width = 0.0;
-			let pixel_height = 0.0;
+			let pixel_width = world_to_screen_size(self.get_width());
+			let pixel_height = world_to_screen_size(self.get_hight());
+			
 
-			drawBody(p, platform.body, None, pixel_width, pixel_height, 0.0, 0.0)
+			drawBody(p, self.body, self.img.get_image(p), pixel_width, pixel_height, 0.0, 0.0)
 		}
 	)
-	// Some(
-	// 	fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
-	// 		world |> ignore
-			
-	// 		// 使用 PlatformTrait 获取物理世界的宽度和高度（单位：米）
-	// 		let width_meters = platform.get_width()
-	// 		let height_meters = platform.get_hight()
-			
-	// 		// 使用 world_to_screen_size 转换为屏幕像素
-	// 		// PPM (Pixels Per Meter) 是转换比例
-	// 		let pixel_width = world_to_screen_size(width_meters, PPM)
-	// 		let pixel_height = world_to_screen_size(height_meters, PPM)
-			
-	// 		// 使用 ImageLoader 获取图片并渲染
-	// 		drawBody(p, platform.body, platform.img.get_image(p), pixel_width, pixel_height, 0.0, 0.0)
-	// 	}
-	// )
 }
 
 pub impl RenderAble for RotatablePlatform with get_render(rotatable_platform: RotatablePlatform){

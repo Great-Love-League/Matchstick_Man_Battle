@@ -26,7 +26,8 @@ fn box2d_init(game:Game) ->Unit{
 	
 	
 	Gun::create(game,0,Some("src/assets/gun1.png"))
-	Sword::create(game,1,Some("sword"))
+	Gun::create(game,1,Some("src/assets/gun1.png"))
+	// Sword::create(game,1,Some("sword"))
 }
 
 fn load_custom_functions(game:Game) -> Unit {
@@ -486,7 +487,7 @@ pub fn register_audio_controls(game: Game) -> Unit {
 
 fn main {
 	
-	let game = create_game(background = BackgroundImage::new(path = Some("./src/assets/background1.png")))
+	let game = create_game(background = BackgroundImage::new(Some("./src/assets/background1.png")))
 	
 	
 	load_map(game,4)|> ignore

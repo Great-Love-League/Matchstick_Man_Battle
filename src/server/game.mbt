@@ -2,9 +2,6 @@ pub suberror ParticleControlConfigError String
 pub suberror GameStateError String
 
 ///| 全局变量：存储子弹贴图
-// let bullet_image : Ref[@p5js.P5Image?] = { val: None }
-// let gun_image : Ref[@p5js.P5Image?] = { val: None }
-let platform_image : Ref[@p5js.P5Image?] = { val: None }
 pub(all) struct Game {
 	world : @box2d.B2World
 	weapon : WeaponManager
@@ -574,7 +571,7 @@ pub fn Game::create_static_box(
 
 pub fn create_game(
 	render~: &RenderTrait = DefaultRender::{},
-	background~: &RenderAble = BackgroundImage::new()
+	background~: &RenderAble = BackgroundImage::new(None)
 	) -> Game{
 	let world = create_world()
 	
@@ -621,7 +618,7 @@ pub fn create_game(
 		auto_aim_configs : Array::new(),
 		animation_list : Array::new(),
 		audio,
-		background : background
+		background : background,
 	}
 	
 	game
@@ -772,34 +769,13 @@ pub fn Game::add_animation(self:Self, animation: &Animation) -> Unit {
 // 开始游戏运行，不阻塞
 pub fn Game::start_run(self:Self) -> Unit {
 	self.state = GamePreparing
-	getP5Instance(fn(p : @p5js.P5Instance) -> Unit {
-		// 加载子弹贴图
-		// if bullet_image.val.is_empty() {
-		// 	let img = p.loadImage(
-		// 		"assets/Traps/Blocks/Idle.png",
-		// 		Some(fn(_img) { }),
-		// 		Some(fn(_err) { })
-		// 	)
-		// 	bullet_image.val = Some(img)
-		// }
-		// 加载枪械贴图
-		// if gun_image.val.is_empty() {
-		// 	let img = p.loadImage(
-		// 		"src/assets/gun.png",
-		// 		Some(fn(_img) {}),
-		// 		Some(fn(_err) {})
-		// 	)
-		// 	gun_image.val = Some(img)
-		// }
-		// 加载平台贴图
-		if platform_image.val.is_empty() {
-			let img = p.loadImage(
-				"src/assets/platform1.png",
-				Some(fn(_img) {}),
-				Some(fn(_err) {})
-			)
-			platform_image.val = Some(img)
-		}
-		self.state_machine_update(p)
-	}) |> ignore
+	let draw = (p5: @p5js.P5Instance) => {
+		self.state_machine_update(p5)
+	}
+	let preload = (p5: @p5js.P5Instance) => {
+		p5 |> ignore
+		// 预加载图片资源
+	}
+
+	getP5Instance(draw, preload) |> ignore
 }

@@ -31,9 +31,8 @@ pub struct Bullet {
 /// @ltl
 pub impl RenderAble for Bullet with get_render(self: Bullet){
   Some(fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
-    let ppm = PPM
     let ws = fn(len: Double) -> Double {
-      world_to_screen_size(len, ppm)
+      world_to_screen_size(len)
     }
 
     world |> ignore
