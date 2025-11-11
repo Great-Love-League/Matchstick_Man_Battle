@@ -791,6 +791,7 @@ pub fn Game::start_run(self:Self) -> Unit {
 	}
 	let preload = (p5: @p5js.P5Instance) => {
 		p5 |> ignore
+    	register_end_router(self)
 		// 预加载图片资源
 	}
 
