@@ -485,38 +485,41 @@ pub fn register_audio_controls(game: Game) -> Unit {
   println("  0键 - 提高音量")
 }
 
+fn register_end_router(game: Game) -> Unit {
+  game.register_custom_function(
+    GameCustomFunction::new(
+      GameOver,
+      fn(game: Game, p: &@p5js.P5JS) {
+        if !game.navigation_requested {
+          if (p.keyIsDown(@p5js.KeyR)) {
+            game.navigation_requested = true
+            game.navigation_target = None
+            reloadPage()
+          } else if (p.keyIsDown(@p5js.Digit1)) {
+            game.navigation_requested = true
+            game.navigation_target = Some("game-level1.html")
+            navigateTo("game-level1.html")
+          } else if (p.keyIsDown(@p5js.Digit2)) {
+            game.navigation_requested = true
+            game.navigation_target = Some("game-level2.html")
+            navigateTo("game-level2.html")
+          } else if (p.keyIsDown(@p5js.Digit3)) {
+            game.navigation_requested = true
+            game.navigation_target = Some("game-level3.html")
+            navigateTo("game-level3.html")
+          } else if (p.keyIsDown(@p5js.Digit4)) {
+            game.navigation_requested = true
+            game.navigation_target = Some("game-level4.html")
+            navigateTo("game-level4.html")
+          }
+        }
+      }
+    )
+  )
+}
+
 fn main {
-	
-	let game = create_game(background = BackgroundImage::new(Some("./src/assets/background1.png")))
-	
-	
-	// load_map(game,5)|> ignore
-	
-  // box2d_init(game)
-	
-  // load_custom_functions(game)
 
-  // register_control(game)
-  
-  // register_auto_aim(game)
-
-  // register_hp_show(game)
-
-  // register_show_mouse_screen_coords(game)
-
-  // register_animation(game)
-
-  // register_animation(game)
-	
-	// register_blood_spray_animation(game,500.0,500.0, 1.0, 1.0)
-	// register_smoke_animation(game,500.0,500.0)
-  
-  // // 注册音频控制
-  // register_audio_controls(game)
-
-  // // 播放背景音乐
-  // game.audio.play_bgm(AudioEventType::BgmMenu)
-	
 	{
 		let game = create_game(background = BackgroundImage::new(Some("./src/assets/background1.png")))
 		load_map(game,5)|> ignore
