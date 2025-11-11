@@ -1,6 +1,16 @@
 pub suberror ParticleControlConfigError String
 pub suberror GameStateError String
 
+extern "js" fn navigateTo(url: String) -> Unit =
+	#| (url) => {
+	#|   window.location.href = url;
+	#| }
+
+extern "js" fn reloadPage() -> Unit =
+	#| () => {
+	#|   window.location.reload();
+	#| }
+
 ///| 全局变量：存储子弹贴图
 // let bullet_image : Ref[@p5js.P5Image?] = { val: None }
 // let gun_image : Ref[@p5js.P5Image?] = { val: None }
@@ -48,6 +58,10 @@ pub(all) struct Game {
 
 	// background
 	background : &RenderAble
+
+	// navigation guard: 防止在 GameOver 时每帧重复触发导航/刷新，导致递归或多次调用
+	mut navigation_requested : Bool
+	mut navigation_target : String?
 	
 }
 
@@ -436,23 +450,23 @@ fn Game::game_over(self:Self, p5: &@p5js.P5JS) -> Unit {
 	p5.textSizeSet(80.0)
 	p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
 	p5.textAlign("center", Some("center"))
-	p5.text("游戏结束", Width / 2.0, Height / 2.0 - 80.0, None, None)
+	p5.text("游戏结束", Width / 2.0, Height / 2.0 - 80.0, Some(Width), Some(Height))
 	
 	// 显示获胜者
 	if winner_index >= 0 {
 		p5.textSizeSet(60.0)
 		p5.fillColorPara(255.0, Some(215.0), Some(0.0), Some(255.0))  // 金色
-		p5.text("玩家 \{winner_index} 获胜!", Width / 2.0, Height / 2.0, None, None)
+		p5.text("玩家 \{winner_index} 获胜!", Width / 2.0, Height / 2.0, Some(Width), Some(Height))
 	} else {
 		p5.textSizeSet(60.0)
 		p5.fillColorPara(200.0, Some(200.0), Some(200.0), Some(255.0))
-		p5.text("平局", Width / 2.0, Height / 2.0, None, None)
+		p5.text("平局", Width / 2.0, Height / 2.0, Some(Width), Some(Height))
 	}
 	
 	// 显示提示文字
 	p5.textSizeSet(30.0)
 	p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
-	p5.text("刷新页面重新开始", Width / 2.0, Height / 2.0 + 80.0, None, None)
+	p5.text("按 1-4 载入对应关卡，R 刷新", Width / 2.0, Height / 2.0 + 80.0, Some(Width), Some(Height))
 
 	self.state = GameOver
 }
@@ -527,6 +541,7 @@ fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : 
 		}
 	}
 	if(p.keyIsDown(control_config.faint_key)){
+		particle.torso.applyForce(@box2d.b2Vec2(0.0, -100.0), particle.torso.getCenterPosition())
 		return
 	}
 	if(p.keyIsDown((control_config.left_key))){
@@ -621,7 +636,9 @@ pub fn create_game(
 		auto_aim_configs : Array::new(),
 		animation_list : Array::new(),
 		audio,
-		background : background
+		background : background,
+		navigation_requested: false,
+		navigation_target: None
 	}
 	
 	game
@@ -792,14 +809,46 @@ pub fn Game::start_run(self:Self) -> Unit {
 		// 	gun_image.val = Some(img)
 		// }
 		// 加载平台贴图
-		if platform_image.val.is_empty() {
-			let img = p.loadImage(
-				"src/assets/platform1.png",
-				Some(fn(_img) {}),
-				Some(fn(_err) {})
-			)
-			platform_image.val = Some(img)
+		// if platform_image.val.is_empty() {
+		// 	let img = p.loadImage(
+		// 		"src/assets/platform1.png",
+		// 		Some(fn(_img) {}),
+		// 		Some(fn(_err) {})
+		// 	)
+		// 	platform_image.val = Some(img)
+		// }
+		if(self.state == GameOver) {
+			// 先渲染 GameOver 画面
+			self.game_over(p)
+
+			// 仅在未请求过导航时响应按键，避免每帧重复触发或递归调用
+			if !self.navigation_requested {
+				if (p.keyIsDown(@p5js.KeyR)) {
+					self.navigation_requested = true
+					self.navigation_target = None
+					reloadPage()
+				} else if (p.keyIsDown(@p5js.Digit1)) {
+					self.navigation_requested = true
+					self.navigation_target = Some("game-level1.html")
+					navigateTo("game-level1.html")
+				} else if (p.keyIsDown(@p5js.Digit2)) {
+					self.navigation_requested = true
+					self.navigation_target = Some("game-level2.html")
+					navigateTo("game-level2.html")
+				} else if (p.keyIsDown(@p5js.Digit3)) {
+					self.navigation_requested = true
+					self.navigation_target = Some("game-level3.html")
+					navigateTo("game-level3.html")
+				} else if (p.keyIsDown(@p5js.Digit4)) {
+					self.navigation_requested = true
+					self.navigation_target = Some("game-level4.html")
+					navigateTo("game-level4.html")
+				}
+			}
 		}
-		self.state_machine_update(p)
+		else{
+			self.state_machine_update(p)
+		}
+
 	}) |> ignore
 }
