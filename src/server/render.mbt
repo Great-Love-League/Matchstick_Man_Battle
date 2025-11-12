@@ -60,6 +60,7 @@ pub fn draw_image_at(
 /// @param img - 可选的图片（如果为 Some 则用图片渲染）
 /// @param image_size - 图片大小（像素）
 /// @param use_velocity_angle - 是否使用速度方向作为旋转角度（适用于子弹等）
+
 pub fn drawBody(
   p: &@p5js.P5JS,
   body: @box2d.B2Body,
@@ -84,10 +85,127 @@ pub fn drawBody(
         @cmath.atan2(vel.getY(), vel.getX())
       } else {
         // 静止：使用 body 的旋转角度（适用于平台）
-        body.getRotation()
+        ((body.getRotation() % Pi) + Pi) % Pi - 1.57079632679
       }
       
+			println("Drawing body at (\{sx}, \{sy}) with angle \{angle} radians")
+			
       draw_image_at(p, img, sx, sy, image_width, image_height, angle, offset_x, offset_y)
+    }
+    None => {
+      // 没有图片：渲染默认形状
+      for shape in body.getShapeList() {
+        p.fillColorPara(127.0, Some(127.0), Some(127.0), Some(200.0))
+        match shape.getType() {
+          PolygonShape => drawPolygon(p, shape.toPolygonShape())
+          BoxShape => drawPolygon(p, shape.toPolygonShape())
+          CircleShape => drawCircle(p, shape.toCircleShape())
+          UnknownShape => println("Unknown Shape")
+        }
+      }
+    }
+  }
+}
+
+pub fn drawStaticBody(
+  p: &@p5js.P5JS,
+  body: @box2d.B2Body,
+  img: @p5js.P5Image?,
+  image_width: Double,
+  image_height: Double,
+  offset_x: Double,
+  offset_y: Double
+) -> Unit {
+  let pos = body.getCenterPosition()
+  let (sx, sy) = world_to_screen(pos.getX(), pos.getY())
+  
+  match img {
+    Some(img) => {
+      // 对于静态物体（速度接近0），使用 body 的旋转角度
+      // 对于动态物体（有速度），使用速度方向作为角度
+      let vel = body.getLinearVelocity()
+      let speed_squared = vel.getX() * vel.getX() + vel.getY() * vel.getY()
+      
+      let angle = if speed_squared > 1 {
+        // 有速度：使用速度方向（适用于子弹）
+        @cmath.atan2(vel.getY(), vel.getX())
+      } else {
+        // 静止：使用 body 的旋转角度（适用于平台）
+        ((body.getRotation() % Pi) + Pi) % Pi - 1.57079632679
+      }
+      
+			println("Drawing body at (\{sx}, \{sy}) with angle \{angle} radians")
+			
+      draw_image_at(p, img, sx, sy, image_width, image_height, angle, offset_x, offset_y)
+    }
+    None => {
+      // 没有图片：渲染默认形状
+      for shape in body.getShapeList() {
+        p.fillColorPara(127.0, Some(127.0), Some(127.0), Some(200.0))
+        match shape.getType() {
+          PolygonShape => drawPolygon(p, shape.toPolygonShape())
+          BoxShape => drawPolygon(p, shape.toPolygonShape())
+          CircleShape => drawCircle(p, shape.toCircleShape())
+          UnknownShape => println("Unknown Shape")
+        }
+      }
+    }
+  }
+}
+
+pub fn drawDynamicBody(
+  p: &@p5js.P5JS,
+  body: @box2d.B2Body,
+  img: @p5js.P5Image?,
+  image_width: Double,
+  image_height: Double,
+  offset_x: Double,
+  offset_y: Double,
+  override_angle?: Double? = None,
+  reverse?: Bool = false
+) -> Unit {
+  let pos = body.getCenterPosition()
+  let (sx, sy) = world_to_screen(pos.getX(), pos.getY())
+  
+  match img {
+    Some(img) => {
+  // 对于静态物体（速度接近0），使用 body 的旋转角度
+  // 对于动态物体（有速度），使用速度方向作为角度
+      // 如果传入了 override_angle 则使用之（用于像武器那样按逻辑角度渲染），否则使用刚体的旋转角
+      let angle = match override_angle {
+        Some(a) => a
+        _ => body.getRotation()
+      }
+      
+  // println("Drawing body at (\{sx}, \{sy}) with angle \{angle} radians")
+  // println("drawDynamicBody: reverse=\{reverse}, image_size=\{image_width}x\{image_height}, offset=\{offset_x},\{offset_y}")
+
+  // 自动判断是否需要翻转：如果显式 reverse 为 true，或物体朝向为左侧（cos(angle) < 0）
+  	let need_flip = if reverse == true { true } else {false}
+  // println("drawDynamicBody: need_flip=\{need_flip}")
+
+  // 如果 reverse 为 true 就水平翻转图片, 并且渲染偏移量取反
+  // 不在 draw_image_at 修改，直接在这里局部变换绘制
+      p.push()
+      p.translate(sx, sy, None)
+      p.rotate(angle, None)
+      p.imageMode("center")
+      if need_flip == true {
+        // 使用局部 scale 翻转坐标系，然后按原 offset 绘制图片
+        // scale 的签名在绑定里是 (Double, Double?, Double?)，用 Some(...) 传可选的第二参数
+        p.scale(-1.0, Some(1.0), None)
+        p.image(img, offset_x, offset_y, Some(image_width), Some(image_height))
+      } else {
+        p.image(img, offset_x, offset_y, Some(image_width), Some(image_height))
+      }
+
+      // 绘制调试线以验证偏移方向（红色表示 -offset，蓝色表示 +offset）
+      p.noFill()
+      p.strokeComponents(255.0, 0.0, 0.0, Some(255.0))
+      p.line(0.0, 0.0, -offset_x, offset_y)
+      p.strokeComponents(0.0, 0.0, 255.0, Some(255.0))
+      p.line(0.0, 0.0, offset_x, offset_y)
+      p.pop()
     }
     None => {
       // 没有图片：渲染默认形状
@@ -450,7 +568,7 @@ pub impl RenderAble for BackgroundImage with get_render(self: BackgroundImage) {
       None => {
         // 如果图片加载失败，则使用默认背景色
         p.background(255.0, Some(204.0), Some(0.0), None)
-        println("Background加载失败，使用默认背景")
+        // println("Background加载失败，使用默认背景")
       }
     }
   }
