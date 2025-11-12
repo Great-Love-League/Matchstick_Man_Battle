@@ -54,6 +54,7 @@ pub struct Gun{
 	// 武器类型
 	gun_type : GunType
 	mut angle : Double
+	mut direction : Double
 	
 	// 投掷状态
 	mut is_thrown : Bool           // 是否已被投掷
@@ -358,7 +359,7 @@ pub impl WeaponCreate for Gun with create(game, owner_id,url:String?){
 	// 创建一个简单的box形状作为武器（0.5x1米）
 	let weapon_box_def = @box2d.b2BoxDef()
 	weapon_box_def.setExtents(@box2d.b2Vec2(0.2, 0.5))
-	weapon_box_def.setDensity(0.5)
+	weapon_box_def.setDensity(1.0)
 	weapon_box_def.setFriction(0.3)
 	weapon_box_def.setRestitution(0.5)
 	weapon_box_def.setGroupIndex(owner_collision_group)  // 设置正确的碰撞组
@@ -384,7 +385,7 @@ pub impl WeaponCreate for Gun with create(game, owner_id,url:String?){
 		gun_type: Pistol,
 		img: ImageLoader::new(url),
 		angle: 0.0,
-		
+		direction: 1,
 		// 投掷状态
 		is_thrown: false,
 		throw_damage: 0.0,
@@ -401,12 +402,14 @@ pub impl RenderAble for Gun with get_render(self: Gun){
 		fn (world: &@box2d.World, p: &@p5js.P5JS) -> Unit {
 			world |> ignore
 
-			drawBody(p, self.body, 
+			drawDynamicBody(p, self.body, 
 				self.img.get_image(p), 
 				self.img.get_image_size_x(), 
 				self.img.get_image_size_y(), 
 				self.img.get_image_offset_x(), 
-				self.img.get_image_offset_y())
+				self.img.get_image_offset_y(),
+				override_angle=Some(self.angle)
+			)
 			return
 			}
 	)
@@ -458,14 +461,11 @@ pub impl WeaponControl for Gun with attack(self,game){
 		
 		Shotgun => {
 			// 播放霰弹枪音效
-			game.audio.play_sound(ShotgunShot)
-			
-			// 霰弹枪：明显下坠，强烈后坐力
 			game.shoot_shotgun(
-				self.owner_id, 
-				direction, 
-				5,     // 5发子弹
-				0.52,  // 30度扩散
+				self.owner_id,
+				direction,
+				5,
+				0.52,
 				gravity_compensation=0.85,  // 85%补偿，明显下坠
 				recoil_horizontal=4.0,      // 强烈水平后坐力
 				recoil_vertical=0.6         // 明显向上抬升
@@ -540,6 +540,9 @@ pub impl WeaponControl for Gun with attack_at_angle(self, game, angle){
 	
 	maintain_rotation_test(self.body, angle, kp=2.0, kd=2.0)
 	self.angle = angle
+	
+	
+	
 	// 根据枪械类型选择射击方式及参数
 	match self.gun_type {
 		Pistol => {
@@ -717,7 +720,7 @@ pub fn Game::create_shotgun(self : Self, owner_id : Int, url: String?) -> Unit {
 	
 	let weapon_box_def = @box2d.b2BoxDef()
 	weapon_box_def.setExtents(@box2d.b2Vec2(0.2, 0.5))
-	weapon_box_def.setDensity(0.5)
+	weapon_box_def.setDensity(1.0)
 	weapon_box_def.setFriction(0.3)
 	weapon_box_def.setRestitution(0.5)
 	weapon_box_def.setGroupIndex(owner_collision_group)
@@ -740,7 +743,7 @@ pub fn Game::create_shotgun(self : Self, owner_id : Int, url: String?) -> Unit {
 		gun_type: Shotgun,
 		img: ImageLoader::new(url),
 		angle: 0.0,
-		
+		direction: 1,
 		// 投掷状态
 		is_thrown: false,
 		throw_damage: 0.0,
@@ -768,7 +771,7 @@ pub fn Game::create_sniper(self : Self, owner_id : Int, url: String?) -> Unit {
 	
 	let weapon_box_def = @box2d.b2BoxDef()
 	weapon_box_def.setExtents(@box2d.b2Vec2(0.2, 0.5))
-	weapon_box_def.setDensity(0.5)
+	weapon_box_def.setDensity(1.0)
 	weapon_box_def.setFriction(0.3)
 	weapon_box_def.setRestitution(0.5)
 	weapon_box_def.setGroupIndex(owner_collision_group)
@@ -791,7 +794,7 @@ pub fn Game::create_sniper(self : Self, owner_id : Int, url: String?) -> Unit {
 		gun_type: Sniper,
 		img: ImageLoader::new(url),
 		angle: 0.0,
-		
+		direction: 1,
 		// 投掷状态
 		is_thrown: false,
 		throw_damage: 0.0,
@@ -819,7 +822,7 @@ pub fn Game::create_laser_rifle(self : Self, owner_id : Int, url: String?) -> Un
 	
 	let weapon_box_def = @box2d.b2BoxDef()
 	weapon_box_def.setExtents(@box2d.b2Vec2(0.2, 0.5))
-	weapon_box_def.setDensity(0.5)
+	weapon_box_def.setDensity(1.0)
 	weapon_box_def.setFriction(0.3)
 	weapon_box_def.setRestitution(0.5)
 	weapon_box_def.setGroupIndex(owner_collision_group)
@@ -842,7 +845,7 @@ pub fn Game::create_laser_rifle(self : Self, owner_id : Int, url: String?) -> Un
 		gun_type: LaserRifle,
 		img: ImageLoader::new(url),
 		angle: 0.0,
-		
+		direction: 1,
 		// 投掷状态
 		is_thrown: false,
 		throw_damage: 0.0,
