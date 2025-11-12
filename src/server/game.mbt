@@ -544,9 +544,86 @@ fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : 
 		}
 	}
 	
+	// 自动拾取附近的武器（每半秒检测一次）
+	if self.frame_count % 30 == 0 {  // 每半秒最多拾取一次
+		// 检查玩家是否已有武器
+		let has_weapon = {
+			let mut found = false
+			for gun in self.weapon.gun_list {
+				if gun.owner_id == particle_index && not(gun.is_thrown) {
+					found = true
+					break
+				}
+			}
+			found
+		}
+		
+		// 如果玩家没有武器，尝试拾取附近的武器
+		if not(has_weapon) {
+			let player_pos = particle.torso.getCenterPosition()
+			let player_x = player_pos.getX()
+			let player_y = player_pos.getY()
+			
+			for gun_idx = 0; gun_idx < self.weapon.gun_list.length(); gun_idx = gun_idx + 1 {
+				let gun = self.weapon.gun_list[gun_idx]
+				if gun.is_thrown && gun.ammo > 0 {
+					let gun_pos = gun.body.getCenterPosition()
+					let dx = gun_pos.getX() - player_x
+					let dy = gun_pos.getY() - player_y
+					let distance = @cmath.sqrt(dx * dx + dy * dy)
+					
+					// 检查武器速度（只能拾取慢速或静止的武器）
+					let velocity = gun.body.getLinearVelocity()
+					let speed = @cmath.sqrt(velocity.getX() * velocity.getX() + velocity.getY() * velocity.getY())
+					
+					// 如果距离小于2.0且速度较慢，自动拾取武器
+					if distance < 2.0 && speed < 5.0 {
+						println("玩家 \{particle_index} 自动拾取了武器 \{gun_idx}，剩余子弹: \{gun.ammo}")
+						
+						// 销毁武器的自由body
+						self.world.destroyBody(gun.body)
+						
+						// 重新创建绑定到玩家的武器body
+						let gun_body_def = @box2d.b2BodyDef()
+						gun_body_def.setPosition(player_pos)
+						gun_body_def.setRotation(0.0)
+						gun_body_def.setLinearDamping(0.0)
+						gun_body_def.setAngularDamping(0.0)
+						
+						let gun_box_def = @box2d.b2BoxDef()
+						gun_box_def.setExtents(@box2d.b2Vec2(0.5, 0.15))
+						gun_box_def.setDensity(0.5)
+						gun_box_def.setFriction(0.1)
+						gun_box_def.setRestitution(0.1)
+						gun_box_def.setGroupIndex(-(particle_index + 1000))  // 玩家的碰撞组
+						gun_body_def.addShape(gun_box_def.getBase())
+						
+						let new_body = self.world.createBody(gun_body_def)
+						gun.body = new_body
+						gun.is_thrown = false
+						gun.owner_id = particle_index  // 更新武器所有者为拾取者
+						
+						// 播放拾取音效
+						self.audio.play_sound(BulletHit)
+						break  // 拾取后退出循环
+					}
+				}
+			}
+		}
+	}
+	
 	if p.keyIsDown(control_config.shoot_key) {
 		for gun in self.weapon.gun_list {
 			if gun.owner_id == particle_index {
+				// 检查武器是否已被投掷或没有子弹
+				if gun.is_thrown {
+					break  // 已投掷的武器不能射击
+				}
+				if gun.ammo <= 0 {
+					println("武器没有子弹了！")
+					break
+				}
+				
 				// 检查是否启用自动瞄准
 				match self.get_auto_aim_config(particle_index) {
 					Some(config) => {
@@ -829,7 +906,7 @@ pub fn Game::throw_weapon(self : Self, gun : Gun, angle : Double) -> Unit {
 	gun.body = new_body
 	
 	// 计算投掷速度（初速度足以秒杀）
-	let throw_speed = 100.0  // 极高的初速度
+	let throw_speed = 300.0  // 极高的初速度，足以快速击中目标
 	let vx = throw_speed * @cmath.cos(angle)
 	let vy = throw_speed * @cmath.sin(angle)
 	
@@ -838,16 +915,27 @@ pub fn Game::throw_weapon(self : Self, gun : Gun, angle : Double) -> Unit {
 	gun.body.setAngularVelocity(10.0)  // 添加旋转效果
 	
 	// 设置投掷伤害（基于速度）
-	gun.throw_damage = 100.0  // 初始伤害足以秒杀
+	gun.throw_damage = 300.0  // 初始伤害足以秒杀
 	
 	println("武器已投掷，初速度: \{throw_speed}, 角度: \{angle}, 伤害: \{gun.throw_damage}")
 }
 
 ///| 更新投掷武器系统
 /// 检测投掷武器与玩家的碰撞，造成伤害
+/// 处理武器销毁
 fn Game::update_thrown_weapons(self : Self) -> Unit {
-	for gun in self.weapon.gun_list {
+	let weapons_to_remove = Array::new()  // 记录需要移除的武器索引
+	
+	for gun_idx = 0; gun_idx < self.weapon.gun_list.length(); gun_idx = gun_idx + 1 {
+		let gun = self.weapon.gun_list[gun_idx]
 		if not(gun.is_thrown) {
+			continue
+		}
+		
+		// 检查子弹数量，如果为0则标记为待销毁
+		if gun.ammo <= 0 {
+			println("武器 \{gun_idx} 没有子弹了，将被销毁")
+			weapons_to_remove.push(gun_idx)
 			continue
 		}
 		
@@ -900,6 +988,15 @@ fn Game::update_thrown_weapons(self : Self) -> Unit {
 				gun.body.setAngularVelocity(gun.body.getAngularVelocity() * 0.5)
 			}
 		}
+	}
+	
+	// 从后向前删除武器，避免索引错乱
+	for i = weapons_to_remove.length() - 1; i >= 0; i = i - 1 {
+		let gun_idx = weapons_to_remove[i]
+		let gun = self.weapon.gun_list[gun_idx]
+		self.world.destroyBody(gun.body)
+		let _ = self.weapon.gun_list.remove(gun_idx)
+		println("武器 \{gun_idx} 已被销毁")
 	}
 }
 

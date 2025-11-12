@@ -38,7 +38,7 @@ pub struct Sword{
 }
 pub struct Gun{
 	id : Int
-	owner_id : Int
+	mut owner_id : Int  // 可变，以支持武器拾取
 	mut body : @box2d.B2Body
 	
 	// 子弹配置
@@ -413,6 +413,17 @@ pub impl RenderAble for Gun with get_render(self: Gun){
 }
 
 pub impl WeaponControl for Gun with attack(self,game){
+	// 禁止已被投掷的武器或无弹药时射击（集中检查，防止外部直接调用绕过）
+	if self.is_thrown {
+		// 已经被投掷，不能射击
+		println("无法射击：武器已被投掷 (gun id: \{self.id})")
+		return
+	}
+	if self.ammo <= 0 {
+		println("无法射击：武器没有子弹了 (gun id: \{self.id})")
+		return
+	}
+
 	// 检查冷却
 	if game.frame_count - self.last_fire_frame < self.fire_rate {
 		return  // 还在冷却中
@@ -441,7 +452,8 @@ pub impl WeaponControl for Gun with attack(self,game){
 				recoil_horizontal=3,       // 轻微水平后坐力
 				recoil_vertical=0.3          // 轻微向上抬升
 			)
-			println("手枪射击，持有者: #\{self.owner_id}")
+			self.ammo -= 1  // 消耗1发子弹
+			println("手枪射击，持有者: #\{self.owner_id}，剩余子弹: \{self.ammo}")
 		}
 		
 		Shotgun => {
@@ -458,7 +470,8 @@ pub impl WeaponControl for Gun with attack(self,game){
 				recoil_horizontal=4.0,      // 强烈水平后坐力
 				recoil_vertical=0.6         // 明显向上抬升
 			)
-			println("霰弹枪射击，持有者: #\{self.owner_id}")
+			self.ammo -= 5  // 消耗5发子弹
+			println("霰弹枪射击，持有者: #\{self.owner_id}，剩余子弹: \{self.ammo}")
 		}
 		
 		Sniper => {
@@ -477,7 +490,8 @@ pub impl WeaponControl for Gun with attack(self,game){
 				recoil_horizontal=30.0,       // 高水平后坐力
 				recoil_vertical=0.5          // 中等向上抬升
 			)
-			println("狙击枪射击，持有者: #\{self.owner_id}")
+			self.ammo -= 1  // 消耗1发子弹
+			println("狙击枪射击，持有者: #\{self.owner_id}，剩余子弹: \{self.ammo}")
 		}
 		
 		LaserRifle => {
@@ -496,7 +510,8 @@ pub impl WeaponControl for Gun with attack(self,game){
 				recoil_horizontal=0.0,       // 无后坐力 ✨
 				recoil_vertical=0.0          // 无向上抬升 ✨
 			)
-			println("激光枪射击，持有者: #\{self.owner_id}")
+			self.ammo -= 1  // 消耗1发子弹
+			println("激光枪射击，持有者: #\{self.owner_id}，剩余子弹: \{self.ammo}")
 		}
 	}
 	
@@ -507,6 +522,17 @@ pub impl WeaponControl for Gun with attack(self,game){
 ///|
 /// Gun的角度攻击实现（支持鼠标控制）
 pub impl WeaponControl for Gun with attack_at_angle(self, game, angle){
+	// 禁止已被投掷的武器或无弹药时射击（集中检查，防止外部直接调用绕过）
+	if self.is_thrown {
+		// 已经被投掷，不能射击
+		println("无法射击：武器已被投掷 (gun id: \{self.id})")
+		return
+	}
+	if self.ammo <= 0 {
+		println("无法射击：武器没有子弹了 (gun id: \{self.id})")
+		return
+	}
+
 	// 检查冷却
 	if game.frame_count - self.last_fire_frame < self.fire_rate {
 		return  // 还在冷却中
@@ -532,6 +558,7 @@ pub impl WeaponControl for Gun with attack_at_angle(self, game, angle){
 				recoil_horizontal=3.0,      // 轻微水平后坐力
 				recoil_vertical=0.3         // 轻微向上抬升
 			)
+			self.ammo -= 1  // 消耗1发子弹
 		}
 		
 		Shotgun => {
@@ -559,6 +586,7 @@ pub impl WeaponControl for Gun with attack_at_angle(self, game, angle){
 					recoil_vertical=0.6         // 明显向上抬升
 				)
 			}
+			self.ammo -= 5  // 消耗5发子弹
 		}
 		
 		Sniper => {
@@ -577,6 +605,7 @@ pub impl WeaponControl for Gun with attack_at_angle(self, game, angle){
 				recoil_horizontal=30.0,     // 高水平后坐力
 				recoil_vertical=0.5         // 中等向上抬升
 			)
+			self.ammo -= 1  // 消耗1发子弹
 		}
 		
 		LaserRifle => {
@@ -595,6 +624,7 @@ pub impl WeaponControl for Gun with attack_at_angle(self, game, angle){
 				recoil_horizontal=0.0,       // 无后坐力 ✨
 				recoil_vertical=0.0          // 无向上抬升 ✨
 			)
+			self.ammo -= 1  // 消耗1发子弹
 		}
 	}
 	
@@ -713,7 +743,8 @@ pub fn Game::create_shotgun(self : Self, owner_id : Int, url: String?) -> Unit {
 		
 		// 投掷状态
 		is_thrown: false,
-		throw_damage: 0.0
+		throw_damage: 0.0,
+		ammo: 30  // 霰弹枪30发（每次射击消耗5发）
 	}
 	gun.img.set_image_offset(21.0, 1.0)
 	gun.img.set_image_size(100.0, 100.0)
@@ -763,7 +794,8 @@ pub fn Game::create_sniper(self : Self, owner_id : Int, url: String?) -> Unit {
 		
 		// 投掷状态
 		is_thrown: false,
-		throw_damage: 0.0
+		throw_damage: 0.0,
+		ammo: 20  // 狙击枪20发子弹
 	}
 	gun.img.set_image_offset(20.0, -2.0)
 	gun.img.set_image_size(100.0, 100.0)
@@ -813,7 +845,8 @@ pub fn Game::create_laser_rifle(self : Self, owner_id : Int, url: String?) -> Un
 		
 		// 投掷状态
 		is_thrown: false,
-		throw_damage: 0.0
+		throw_damage: 0.0,
+		ammo: 100  // 激光枪100发子弹
 	}
 	gun.img.set_image_offset(7.0, -5.0)
 	gun.img.set_image_size(70.0, 70.0)
