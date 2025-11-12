@@ -86,13 +86,13 @@ pub fn AudioManager::init_audio_configs(self : Self) -> Unit {
   self.register_audio(PistolShot, "assets/Audio/Weapons/pistol_shot.mp3", SoundEffect, 0.6, false)
   self.register_audio(ShotgunShot, "assets/Audio/Weapons/shotgun_shot.mp3", SoundEffect, 0.7, false)
   self.register_audio(SniperShot, "assets/Audio/Weapons/sniper_shot.mp3", SoundEffect, 0.8, false)
-  self.register_audio(LaserShot, "assets/Audio/Weapons/laser_shot.wav", SoundEffect, 0.5, false)
+  self.register_audio(LaserShot, "assets/Audio/Weapons/laser_shot.mp3", SoundEffect, 0.5, false)
   self.register_audio(SwordSwing, "assets/Audio/Weapons/sword_swing.wav", SoundEffect, 0.4, false)
   
   // 击中音效配置
   self.register_audio(BulletHit, "assets/Audio/Effects/bullet_hit.wav", SoundEffect, 0.5, false)
   self.register_audio(KillEnemy, "assets/Audio/Effects/kill_enemy.wav", SoundEffect, 0.7, false)
-  self.register_audio(PlayerDeath, "assets/Audio/Effects/player_death.wav", SoundEffect, 0.8, false)
+  self.register_audio(PlayerDeath, "assets/Audio/Effects/player_death.mp3", SoundEffect, 0.8, false)
   
   // 游戏事件音效
   self.register_audio(LevelStart, "assets/Audio/Effects/level_start.mp3", SoundEffect, 0.6, false)
