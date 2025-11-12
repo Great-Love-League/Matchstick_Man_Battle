@@ -180,31 +180,54 @@ pub fn drawDynamicBody(
   // println("Drawing body at (\{sx}, \{sy}) with angle \{angle} radians")
   // println("drawDynamicBody: reverse=\{reverse}, image_size=\{image_width}x\{image_height}, offset=\{offset_x},\{offset_y}")
 
-  // 自动判断是否需要翻转：如果显式 reverse 为 true，或物体朝向为左侧（cos(angle) < 0）
-  	let need_flip = if reverse == true { true } else {false}
-  // println("drawDynamicBody: need_flip=\{need_flip}")
+  
 
   // 如果 reverse 为 true 就水平翻转图片, 并且渲染偏移量取反
   // 不在 draw_image_at 修改，直接在这里局部变换绘制
       p.push()
       p.translate(sx, sy, None)
-      p.rotate(angle, None)
       p.imageMode("center")
-      if need_flip == true {
-        // 使用局部 scale 翻转坐标系，然后按原 offset 绘制图片
-        // scale 的签名在绑定里是 (Double, Double?, Double?)，用 Some(...) 传可选的第二参数
-        p.scale(-1.0, Some(1.0), None)
-        p.image(img, offset_x, offset_y, Some(image_width), Some(image_height))
-      } else {
-        p.image(img, offset_x, offset_y, Some(image_width), Some(image_height))
-      }
 
-      // 绘制调试线以验证偏移方向（红色表示 -offset，蓝色表示 +offset）
-      p.noFill()
-      p.strokeComponents(255.0, 0.0, 0.0, Some(255.0))
-      p.line(0.0, 0.0, -offset_x, offset_y)
-      p.strokeComponents(0.0, 0.0, 255.0, Some(255.0))
-      p.line(0.0, 0.0, offset_x, offset_y)
+      // 绘制角度转换：外部 angle 是以 x 轴向右为 0，逆时针为正。
+      // p5 的 rotate 在 canvas 坐标系（y 向下）与数学角度方向相反，所以使用 -angle。
+      let mut draw_angle = -angle
+
+      // world 偏移，用于绘制 debug 线（将局部偏移逆时针旋转到世界坐标）
+      let ca = @cmath.cos(angle)
+      let sa = @cmath.sin(angle)
+      // 注意：使用 R(-angle) 来把局部坐标变换到屏幕坐标系
+      let world_off_x = offset_x * ca + offset_y * sa
+      let world_off_y = -offset_x * sa + offset_y * ca
+
+  // 只根据 angle 判断是否镜像：先把 angle 归一化到 [0, 2PI)，
+  // 然后当归一化角度在 [PI, 2PI) 时认为朝左并翻转（按你的要求）
+  // 按你的要求：如果显式 reverse 则翻转；否则直接用原始 angle 判断，
+  // 当 angle 在 [-PI, PI] 时视为向右（不翻转），当 angle > PI 或 angle < -PI 时视为向左（翻转）
+  println("drawDynamicBody: raw angle=\{angle}")
+  let need_flip = if reverse == true { true } else { angle > Pi/2 || angle < -Pi/2 }
+	
+	if(need_flip){
+		draw_angle += Pi
+	}
+  if need_flip == true {
+        // 先旋转到目标方向，再镜像 X 轴；镜像后本地 x 轴指向相反方向，因此对绘制偏移 x 取反
+        p.rotate(draw_angle, None)
+        p.scale(-1.0, Some(1.0), None)
+        p.image(img, -offset_x, offset_y, Some(image_width), Some(image_height))
+
+        // 调试：画出期望的世界偏移方向（红色）
+        p.noFill()
+        p.strokeComponents(255.0, 0.0, 0.0, Some(255.0))
+        p.line(0.0, 0.0, world_off_x, world_off_y)
+      } else {
+        p.rotate(draw_angle, None)
+        p.image(img, offset_x, offset_y, Some(image_width), Some(image_height))
+
+        // 调试：画出期望的世界偏移方向（蓝色）
+        p.noFill()
+        p.strokeComponents(0.0, 0.0, 255.0, Some(255.0))
+        p.line(0.0, 0.0, world_off_x, world_off_y)
+      }
       p.pop()
     }
     None => {
