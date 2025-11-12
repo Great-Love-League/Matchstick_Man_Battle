@@ -130,7 +130,7 @@ fn load_custom_functions(game:@server.Game) -> Unit {
 
 }
 
-struct Bob{
+pub(all) struct Bob{
   base : @box2d.B2BodyDef
   chain : Array[@box2d.B2BodyDef]
   end : @box2d.B2BodyDef
@@ -140,7 +140,7 @@ struct Bob{
   body_list : Array[@box2d.B2Body]
 }
 
-fn Bob::new(chain_num: Int, pose: (Double, Double), base_image_path~: String? = None, chain_image_path~: String?=None, end_image_path~: String? =None) -> Bob {
+pub fn Bob::new(chain_num: Int, pose: (Double, Double), base_image_path~: String? = None, chain_image_path~: String?=None, end_image_path~: String? =None) -> Bob {
 
   let target_x = pose.0
   let target_y = pose.1
@@ -155,7 +155,7 @@ fn Bob::new(chain_num: Int, pose: (Double, Double), base_image_path~: String? = 
       shape.setDensity(0.0)
       shape.setFriction(0.5)
       shape.setRestitution(0.0)
-      shape.setExtents(@box2d.b2Vec2(0,0))
+      shape.setExtents(@box2d.b2Vec2(0.1,0.1))
       body_def.addShape(shape.getBase())
       body_def
     }(),
@@ -193,7 +193,7 @@ fn Bob::new(chain_num: Int, pose: (Double, Double), base_image_path~: String? = 
   }
 }
 
-fn Bob::load_into_game(self: Bob, game: @server.Game) -> Unit {
+pub fn Bob::load_into_game(self: Bob, game: @server.Game) -> Unit {
   let world = game.world
   self.body_list.push(world.createBody(self.base))
   for chain_body_def in self.chain {
@@ -214,7 +214,7 @@ fn Bob::load_into_game(self: Bob, game: @server.Game) -> Unit {
   base_chain_joint_def.setEnableMotor(true)
   base_chain_joint_def.setCollideConnected(false)
 
-  let fist_motor=world.createJoint(base_chain_joint_def.getBase()).toRevoluteJoint()
+  world.createJoint(base_chain_joint_def.getBase()).toRevoluteJoint() |> ignore
 
   for i=0; i<self.chain.length()-1; i=i+1{
     let joint_def = @box2d.b2RevoluteJointDef()
@@ -234,7 +234,7 @@ fn Bob::load_into_game(self: Bob, game: @server.Game) -> Unit {
 
   world.createJoint(chain_end_joint_def.getBase()) |> ignore
 
-  let mut frame_count = 0.0
+  let mut frame_count = 30.0
 
   game.register_custom_function(
     @server.GameCustomFunction::new(
@@ -243,11 +243,21 @@ fn Bob::load_into_game(self: Bob, game: @server.Game) -> Unit {
         game |> ignore
         p5 |> ignore
         // 控制摆锤摆动
-        let time = frame_count / 100.0
+        let time = frame_count / 60.0
         frame_count = frame_count + 1.0
-        let angle = 60.0 * @cmath.sin(2.0 * 3.14159 * 0.5 * time) // 0.5Hz 的摆动频率
+
+        // 一段时间向右摆，另一段时间向左摆，其中施加的力恒定
+        let effort = 50.0 * fn(){
+          let phase = time % 4.0
+          if phase < 2.0 {
+            1.0
+          } else {
+            -1.0
+          }
+        }()
+
         let circle = self.body_list[self.chain.length()+1]
-        circle.applyForce(@box2d.b2Vec2(angle, 0), circle.getCenterPosition())
+        circle.applyForce(@box2d.b2Vec2(effort, 0), circle.getCenterPosition())
       }
     )
   )
@@ -259,7 +269,6 @@ fn Bob::load_into_game(self: Bob, game: @server.Game) -> Unit {
     @server.GameCustomFunction::new(
       @server.GameRunning,
       fn(game: @server.Game, p5: &@p5js.P5JS) {
-        game |> ignore
         p5 |> ignore
         //更新帧计数
         frame_count_collision = frame_count_collision + 1.0
@@ -271,23 +280,47 @@ fn Bob::load_into_game(self: Bob, game: @server.Game) -> Unit {
         }
         let circle = self.body_list[self.chain.length()+1]
         for index,particle in game.particle_list {
-          if game.is_contact(circle, particle.torso, strict=true){
-            // 防止连续多帧碰撞多次扣血
-            if frame_count_collision - previous_contact_frame[index] < 30.0 {
-              continue
+          for part in particle.get_all_bodies() {
+            if game.is_contact(circle, part, strict=true){
+              // 防止连续多帧碰撞多次扣血
+              if frame_count_collision - previous_contact_frame[index] < 30.0 {
+                continue
+              }
+              particle.control.health = particle.control.health - 20
+              previous_contact_frame[index] = frame_count_collision
+              println("玩家被大摆锤撞到，扣20点血，当前血量：\{particle.control.health}")
+              
+              // 触发血雾特效
+              let hit_pos = game.get_contact_point(circle, part)[0]
+              let circle_velocity = circle.getLinearVelocity()
+              add_bob_attack_animation(game, hit_pos, circle_velocity)
             }
-            particle.control.health = particle.control.health - 20
-            previous_contact_frame[index] = frame_count_collision
-            println("玩家被大摆锤撞到，扣1点血，当前血量：#\{particle.control.health}")
           }
         }
       }
     )
   )
+
+  game.register_custom_function(
+    @server.GameCustomFunction::new(
+      @server.GameRunning,
+      fn(game: @server.Game, p5: &@p5js.P5JS) {
+        game |> ignore
+        self.draw(p5)
+      }
+    )
+  )
 }
 
-fn add_bob_attack_animation(game: @server.Game, pos: @box2d.B2Vec2) -> Unit{
-  let world_pos = @server.world_to_screen(pos.getX(), pos.getY())
+fn add_bob_attack_animation(game: @server.Game, pos: @box2d.B2Vec2, velocity: @box2d.B2Vec2) -> Unit{
+  let (x,y) = @server.world_to_screen(pos.getX(), pos.getY())
+  
+  // 计算打击方向（基于速度的反方向产生血雾效果）
+  let vx = -velocity.getX() * 0.3
+  let vy = -velocity.getY() * 0.3
+  
+  // 调用血雾喷射动画
+  @server.register_blood_spray_animation(game, x, y, vx, vy)
 }
 
 fn Bob::draw(self: Bob, p5: &@p5js.P5JS) -> Unit {
@@ -315,41 +348,3 @@ fn Bob::draw(self: Bob, p5: &@p5js.P5JS) -> Unit {
   p5.pop()
 }
 
-fn load_map(game:@server.Game) -> Unit {
-  game.create_particle((-10.0, 12.0)) |> ignore
-  game.create_particle((-5.0, 12.0)) |> ignore
-
-  @server.create_platform(game, (0, 0.5), (23.6, 1), angle = 0.0)|> ignore;
-
-
-  let bob = Bob::new(10,(0, 30))
-  bob.load_into_game(game) |> ignore
-  game.register_custom_function(
-    @server.GameCustomFunction::new(
-      @server.GameRunning,
-      fn(game: @server.Game, p5: &@p5js.P5JS) {
-        bob.draw(p5)
-      }
-    )
-  )
-}
-
-fn main {
-  let game = @server.create_game()
-  load_map(game) |> ignore
-	@server.Gun::create(game,0, Some("src/assets/gun1.png"))
-	@server.Gun::create(game,1, Some("sword"))
-
-  load_custom_functions(game)
-  
-  @server.register_control(game)
-  
-  @server.register_auto_aim(game)
-
-  @server.register_hp_show(game)
-
-  @server.register_show_mouse_screen_coords(game)
-
-  game.start_run()
-
-}
