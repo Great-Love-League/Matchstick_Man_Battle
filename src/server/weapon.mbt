@@ -408,8 +408,7 @@ pub impl RenderAble for Gun with get_render(self: Gun){
 				self.img.get_image_size_y(), 
 				self.img.get_image_offset_x(), 
 				self.img.get_image_offset_y(),
-				override_angle=Some(self.angle),
-				reverse=self.direction < 0.0
+				override_angle=Some(self.angle)
 			)
 			return
 			}
@@ -540,7 +539,7 @@ pub impl WeaponControl for Gun with attack_at_angle(self, game, angle){
 	}
 	
 	maintain_rotation_test(self.body, angle, kp=2.0, kd=2.0)
-	self.angle = angle % (2.0 * 3.14159) - 3.14159
+	self.angle = angle
 	
 	
 	
