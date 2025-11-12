@@ -39,7 +39,7 @@ pub struct Sword{
 pub struct Gun{
 	id : Int
 	owner_id : Int
-	body : @box2d.B2Body
+	mut body : @box2d.B2Body
 	
 	// 子弹配置
 	bullet_damage : Double
@@ -54,6 +54,12 @@ pub struct Gun{
 	// 武器类型
 	gun_type : GunType
 	mut angle : Double
+	
+	// 投掷状态
+	mut is_thrown : Bool           // 是否已被投掷
+	mut throw_damage : Double      // 投掷伤害（基于速度）
+	mut ammo : Int                 // 剩余子弹数量
+	
 	// img
 	img : ImageLoader
 }
@@ -377,7 +383,12 @@ pub impl WeaponCreate for Gun with create(game, owner_id,url:String?){
 
 		gun_type: Pistol,
 		img: ImageLoader::new(url),
-		angle: 0.0
+		angle: 0.0,
+		
+		// 投掷状态
+		is_thrown: false,
+		throw_damage: 0.0,
+		ammo: 50  // 手枪50发子弹
 	}
 	aa.img.set_image_offset(7.0, 1.0)
 	aa.img.set_image_size(35.0, 35.0)
@@ -698,7 +709,11 @@ pub fn Game::create_shotgun(self : Self, owner_id : Int, url: String?) -> Unit {
 		
 		gun_type: Shotgun,
 		img: ImageLoader::new(url),
-		angle: 0.0
+		angle: 0.0,
+		
+		// 投掷状态
+		is_thrown: false,
+		throw_damage: 0.0
 	}
 	gun.img.set_image_offset(21.0, 1.0)
 	gun.img.set_image_size(100.0, 100.0)
@@ -744,7 +759,11 @@ pub fn Game::create_sniper(self : Self, owner_id : Int, url: String?) -> Unit {
 
 		gun_type: Sniper,
 		img: ImageLoader::new(url),
-		angle: 0.0
+		angle: 0.0,
+		
+		// 投掷状态
+		is_thrown: false,
+		throw_damage: 0.0
 	}
 	gun.img.set_image_offset(20.0, -2.0)
 	gun.img.set_image_size(100.0, 100.0)
@@ -790,7 +809,11 @@ pub fn Game::create_laser_rifle(self : Self, owner_id : Int, url: String?) -> Un
 
 		gun_type: LaserRifle,
 		img: ImageLoader::new(url),
-		angle: 0.0
+		angle: 0.0,
+		
+		// 投掷状态
+		is_thrown: false,
+		throw_damage: 0.0
 	}
 	gun.img.set_image_offset(7.0, -5.0)
 	gun.img.set_image_size(70.0, 70.0)
