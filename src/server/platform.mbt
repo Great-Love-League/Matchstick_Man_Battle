@@ -35,7 +35,7 @@ pub impl RenderAble for Platform with get_render(self: Platform){
 			let pixel_width = world_to_screen_size(self.get_width());
 			let pixel_height = world_to_screen_size(self.get_hight());
 
-			drawBody(p, self.body, self.img.get_image(p), pixel_width, pixel_height, 0.0, 0.0)
+			drawStaticBody(p, self.body, self.img.get_image(p), pixel_width, pixel_height, 0.0, 0.0)
 		}
 	)
 }
@@ -63,7 +63,7 @@ pub impl RenderAble for RotatablePlatform with get_render(self: RotatablePlatfor
 			let pixel_width = world_to_screen_size(self.get_width());
 			let pixel_height = world_to_screen_size(self.get_hight());
 
-			drawBody(p, self.body, self.img.get_image(p), pixel_width, pixel_height, 0.0, 0.0)
+			drawStaticBody(p, self.body, self.img.get_image(p), pixel_width, pixel_height, 0.0, 0.0)
 		}
 	)
 }
@@ -93,7 +93,7 @@ pub impl RenderAble for MovablePlatform with get_render(self: MovablePlatform){
 			let pixel_width = world_to_screen_size(self.get_width());
 			let pixel_height = world_to_screen_size(self.get_hight());
 
-			drawBody(p, self.body, self.img.get_image(p), pixel_width, pixel_height, 0.0, 0.0)
+			drawStaticBody(p, self.body, self.img.get_image(p), pixel_width, pixel_height, 0.0, 0.0)
 		}
 	)
 
