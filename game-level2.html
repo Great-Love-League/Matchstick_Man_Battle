@@ -30,8 +30,18 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            background-color: #f0f2f5;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        }
+        
+        /* 主布局：左侧控制面板 + 中间游戏 + 右侧状态面板 */
+        #game-layout {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            max-width: 1800px;
+            width: 100%;
+            padding: 20px;
         }
 
         /* 游戏画布的容器（画框）
@@ -46,45 +56,189 @@
             display: inline-block; /* 随内部 canvas 尺寸伸缩 */
             position: relative;
         }
+        /* 确保容器内所有 canvas 不参与基线排版，避免出现顶部或底部的空白缝隙 */
+        #game-container canvas { display:block; }
 
-        /* HUD（覆盖在画布上） */
+        /* HUD 移到画布外部，位于中央区域顶部 */
         #hud {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            left: 12px;
             display: flex;
             justify-content: space-between;
-            gap: 12px;
+            gap: 16px;
+            margin-bottom: 12px;
             z-index: 50;
-            pointer-events: none; /* 让点击穿透到画布 */
         }
         .player-panel {
-            pointer-events: auto; /* 面板内可交互（如果需要） */
-            background: rgba(0,0,0,0.55);
-            color: #fff;
-            padding: 8px 12px;
-            border-radius: 10px;
+            background: rgba(255,255,255,0.95);
+            color: #333;
+            padding: 12px 16px;
+            border-radius: 12px;
             font-size: 13px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            backdrop-filter: blur(4px);
-            min-width: 220px;
-            box-shadow: 0 6px 18px rgba(0,0,0,0.24);
+            gap: 12px;
+            backdrop-filter: blur(8px);
+            min-width: 240px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            flex: 1;
         }
         .pp-left { justify-content: flex-start; }
         .pp-right { justify-content: flex-end; }
-        .avatar { width:40px; height:40px; border-radius:6px; background:linear-gradient(180deg,#333,#111); overflow:hidden; flex:0 0 40px; }
-        .avatar img { width:100%; height:100%; object-fit:cover; display:block; }
-        .meta { display:flex; flex-direction:column; gap:4px; }
-        .meta .name { font-weight:700; font-size:14px; }
-        .meta .sub { font-size:12px; opacity:0.9; }
+        .avatar { 
+            width: 48px; 
+            height: 48px; 
+            border-radius: 50%; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex: 0 0 48px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .meta { display:flex; flex-direction:column; gap:4px; flex: 1; }
+        .meta .name { font-weight:700; font-size:15px; color: #333; }
+        .meta .sub { font-size:12px; opacity:0.8; }
         .hp { display:flex; align-items:center; gap:8px; }
-        .bar { width:140px; height:12px; background:rgba(255,255,255,0.12); border-radius:6px; overflow:hidden; }
-        .bar .fill { height:100%; background:linear-gradient(90deg,#ff5f6d,#ffc371); width:100%; transition: width 160ms linear; }
-        .hp .value { min-width:48px; text-align:right; font-variant-numeric: tabular-nums; }
-        .stat { font-weight:600; font-size:12px; }
+        .bar { width:140px; height:14px; background:rgba(0,0,0,0.08); border-radius:7px; overflow:hidden; }
+        .bar .fill { height:100%; background:linear-gradient(90deg,#667eea,#764ba2); width:100%; transition: width 160ms linear; }
+        .hp .value { min-width:52px; text-align:right; font-variant-numeric: tabular-nums; font-weight: 600; }
+        .stat { font-weight:600; font-size:13px; color: #555; }
+        
+        /* 侧边面板样式 */
+        .side-panel {
+            background: rgba(255,255,255,0.95);
+            border-radius: 16px;
+            padding: 20px;
+            min-width: 260px;
+            max-width: 300px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            backdrop-filter: blur(10px);
+        }
+        .side-panel h3 {
+            margin: 0 0 16px 0;
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .side-panel section {
+            margin-bottom: 24px;
+        }
+        .side-panel section:last-child {
+            margin-bottom: 0;
+        }
+        .control-item {
+            margin-bottom: 12px;
+        }
+        .control-item label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 6px;
+        }
+        .control-item input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #ddd;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+        .control-item input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .control-item input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .volume-display {
+            font-size: 18px;
+            font-weight: 700;
+            color: #667eea;
+            text-align: center;
+            margin-top: 4px;
+        }
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            font-size: 13px;
+        }
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+        .stat-label {
+            color: #666;
+            font-weight: 500;
+        }
+        .stat-value {
+            color: #333;
+            font-weight: 700;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 8px;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .btn:last-child {
+            margin-bottom: 0;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 12px rgba(102,126,234,0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(102,126,234,0.4);
+        }
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #555;
+        }
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        .btn-danger {
+            background: #ff5f6d;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #ff4757;
+            transform: translateY(-2px);
+        }
+        
+        /* 中央游戏区域 */
+        #game-center {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
         /* Stage wrapper glow and animated gradient border (retro palette) */
         #stage-wrapper { position: relative; display: inline-block; border-radius: 14px; padding: 10px; }
@@ -124,9 +278,15 @@
         .top-controls { text-align: center; margin: 12px 0; position: absolute; top: 12px; width: 100%; left: 0; }
         #back-to-menu { padding:8px 14px; font-size:14px; cursor:pointer; border-radius:6px; background:linear-gradient(90deg,#ff6ec7,#00f0ff); color:#fff; border:none; box-shadow:0 4px 12px rgba(0,0,0,0.25); }
 
-        /* 若页面宽度小于容器，允许横向缩放（基本响应式） */
+        /* 响应式布局：窄屏时侧边面板隐藏或折叠 */
+        @media (max-width: 1400px) {
+            #game-layout { flex-direction: column; align-items: center; }
+            .side-panel { max-width: 100%; width: 100%; margin-bottom: 20px; }
+            #game-center { width: 100%; }
+        }
         @media (max-width: 1000px) {
-            #game-container { width: calc(100vw - 40px); height: calc((100vw - 40px) * 2/3); }
+            #game-container { max-width: calc(100vw - 40px); }
+            .side-panel { display: none; }
         }
     </style>
     <!-- 不在 head 中加载 p5/box2d，改在 body 底部按依赖顺序加载 -->
@@ -137,46 +297,115 @@
         <button id="back-to-menu">返回菜单</button>
     </div>
 
-    <!-- Stage wrapper: 用于放置发光边框与粒子特效 -->
-    <div id="stage-wrapper">
-        <!-- 发光 / 渐变环通过伪元素实现（CSS） -->
-        <!-- 粒子动画层（canvas） -->
-        <canvas id="fx-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;display:block;"></canvas>
-    <div class="scanlines" aria-hidden="true" style="z-index:4;"></div>
-    <div id="fx-flash" aria-hidden="true" style="z-index:6;pointer-events:none;position:absolute;inset:0;opacity:0;transition:opacity 220ms ease;mix-blend-mode:screen;"></div>
+    <!-- 主布局：左侧面板 + 中央游戏 + 右侧面板 -->
+    <div id="game-layout">
+        <!-- 左侧控制面板 -->
+        <aside class="side-panel" id="left-panel">
+            <section>
+                <h3>🎵 音效控制</h3>
+                <div class="control-item">
+                    <label for="volume-slider">音量</label>
+                    <input type="range" id="volume-slider" min="0" max="100" value="50">
+                    <div class="volume-display" id="volume-display">50%</div>
+                </div>
+                <div class="control-item">
+                    <label>
+                        <input type="checkbox" id="mute-toggle" style="margin-right: 6px;">
+                        静音
+                    </label>
+                </div>
+            </section>
+            
+            <section>
+                <h3>⚙️ 游戏设置</h3>
+                <button class="btn btn-secondary" id="btn-instructions">📖 查看说明</button>
+                <button class="btn btn-danger" id="btn-clear">🗑️ 清空记录</button>
+                <button class="btn btn-secondary" id="btn-close">❌ 关闭</button>
+            </section>
+        </aside>
 
-        <!-- 这是我们的“画框”/“容器” -->
-        <div id="game-container">
-        <!-- 若旧代码有 canvas（静态 fallback），我们会把它移动到这里；p5 创建的 canvas 也会被 re-parent 到此容器 -->
-        <canvas id="canvas" style="display:block;" height="32" width="32"></canvas>
-    <!-- HUD：左右分别展示玩家 0 / 玩家 1 的信息（头像、名字、HP、弹药、分数） -->
-        <div id="hud" aria-live="polite">
+        <!-- 中央游戏区域 -->
+        <div id="game-center">
+            <!-- HUD：玩家状态面板（移到画布外部） -->
+            <div id="hud" aria-live="polite">
             <div id="player-0" class="player-panel pp-left" role="region" aria-label="Player 0">
-                <div class="avatar"><img id="p0-avatar" src="" alt="P0"></div>
+                <div class="avatar" id="p0-avatar">👤</div>
                 <div class="meta">
-                    <div class="name" id="p0-name">P0</div>
+                    <div class="name" id="p0-name">玩家 0</div>
                     <div class="sub hp"><div class="bar"><div class="fill" id="p0-hp-fill" style="width:100%"></div></div><div class="value" id="p0-hp-text">100/100</div></div>
                 </div>
                 <div style="margin-left:auto; text-align:right; display:flex; flex-direction:column; gap:6px;">
-                    <div class="stat">Ammo: <span id="p0-ammo">—</span></div>
-                    <div class="stat">Score: <span id="p0-score">—</span></div>
+                    <div class="stat">弹药: <span id="p0-ammo">—</span></div>
+                    <div class="stat">分数: <span id="p0-score">—</span></div>
                 </div>
             </div>
 
             <div id="player-1" class="player-panel pp-right" role="region" aria-label="Player 1">
                 <div style="display:flex; flex-direction:column; gap:6px; text-align:left;">
-                    <div class="stat">Score: <span id="p1-score">—</span></div>
-                    <div class="stat">Ammo: <span id="p1-ammo">—</span></div>
+                    <div class="stat">分数: <span id="p1-score">—</span></div>
+                    <div class="stat">弹药: <span id="p1-ammo">—</span></div>
                 </div>
                 <div style="margin-left:12px; text-align:left;" class="meta">
-                    <div class="name" id="p1-name">P1</div>
+                    <div class="name" id="p1-name">玩家 1</div>
                     <div class="sub hp"><div class="bar"><div class="fill" id="p1-hp-fill" style="width:100%"></div></div><div class="value" id="p1-hp-text">100/100</div></div>
                 </div>
-                <div class="avatar"><img id="p1-avatar" src="" alt="P1"></div>
+                <div class="avatar" id="p1-avatar">🤖</div>
             </div>
         </div>
+
+        <!-- Stage wrapper: 用于放置发光边框与粒子特效 -->
+        <div id="stage-wrapper">
+            <!-- 粒子动画层（canvas） -->
+            <canvas id="fx-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;display:block;"></canvas>
+            <div class="scanlines" aria-hidden="true" style="z-index:4;"></div>
+            <div id="fx-flash" aria-hidden="true" style="z-index:6;pointer-events:none;position:absolute;inset:0;opacity:0;transition:opacity 220ms ease;mix-blend-mode:screen;"></div>
+
+            <!-- 游戏画布容器 -->
+            <div id="game-container">
+                <canvas id="canvas" style="display:block;" height="32" width="32"></canvas>
+            </div>
         </div>
     </div>
+
+    <!-- 右侧状态面板 -->
+    <aside class="side-panel" id="right-panel">
+        <section>
+            <h3>🏆 游戏统计</h3>
+            <div class="stat-item">
+                <span class="stat-label">最高分</span>
+                <span class="stat-value" id="high-score">9</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">最大连击</span>
+                <span class="stat-value" id="max-combo">6</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">总局数</span>
+                <span class="stat-value" id="total-games">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">胜率</span>
+                <span class="stat-value" id="win-rate">0%</span>
+            </div>
+        </section>
+        
+        <section>
+            <h3>📊 当前状态</h3>
+            <div class="stat-item">
+                <span class="stat-label">游戏时长</span>
+                <span class="stat-value" id="game-time">0:00</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">本局击杀</span>
+                <span class="stat-value" id="current-kills">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">连击数</span>
+                <span class="stat-value" id="current-combo">0</span>
+            </div>
+        </section>
+    </aside>
+</div>
 
     <!-- 先加载运行时依赖（CDN），再加载本地构建的游戏脚本 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.4/p5.min.js"></script>
@@ -225,14 +454,37 @@
                 });
             }
 
-            // 根据 canvas 的宽高属性（canvas.width / canvas.height）调整容器尺寸
+            // 选择应作为主显示的 canvas：优先选择 p5 生成的（class 包含 p5Canvas），否则选择面积最大的
+            function pickPrimaryCanvas() {
+                var list = Array.prototype.slice.call(container.querySelectorAll('canvas'));
+                if (list.length === 0) return null;
+                var p5c = list.find(function(c){ return (c.classList && c.classList.contains('p5Canvas')); });
+                var primary = p5c || list.reduce(function(best, c){
+                    var br = c.getBoundingClientRect();
+                    var area = Math.floor((br.width||0) * (br.height||0));
+                    if (!best) return { c: c, area: area };
+                    return (area > best.area) ? { c: c, area: area } : best;
+                }, null);
+                var chosen = p5c || (primary && primary.c) || list[0];
+                // 隐藏其它非主 canvas（如静态占位用的 32x32 fallback）
+                list.forEach(function(c){ if (c !== chosen) { c.style.display = 'none'; } else { c.style.display = 'block'; } });
+                return chosen;
+            }
+
+            // 根据 canvas 的CSS尺寸调整容器尺寸（避免 DPR 造成的 1~几像素误差）
             function fitContainerToCanvas(canvas) {
                 if (!canvas) return;
-                // prefer canvas.width/height which reflect drawing buffer size
-                var w = canvas.width || canvas.clientWidth || canvas.getBoundingClientRect().width;
-                var h = canvas.height || canvas.clientHeight || canvas.getBoundingClientRect().height;
-                if (w) container.style.width = w + 'px';
-                if (h) container.style.height = h + 'px';
+                // 使用 getBoundingClientRect 获取CSS像素下的可见尺寸
+                var rect = canvas.getBoundingClientRect();
+                var w = Math.round(rect.width);
+                var h = Math.round(rect.height);
+                if (!w || !h) {
+                    // 回退方案：使用 clientWidth/Height
+                    w = Math.round(canvas.clientWidth || canvas.width || 0);
+                    h = Math.round(canvas.clientHeight || canvas.height || 0);
+                }
+                if (w > 0) container.style.width = w + 'px';
+                if (h > 0) container.style.height = h + 'px';
             }
 
             // Observe additions to the container: 当 p5 createCanvas 时，canvas 会被 parent 到 container
@@ -241,13 +493,20 @@
                     if (m.type === 'childList' && m.addedNodes.length) {
                         m.addedNodes.forEach(function(node) {
                             if (node.nodeName === 'CANVAS') {
-                                // 确保容器大小匹配新 canvas
-                                fitContainerToCanvas(node);
+                                // 选择主 canvas 并确保容器大小匹配
+                                var main = pickPrimaryCanvas() || node;
+                                // 若存在静态占位 canvas，隐藏它
+                                var fallback = container.querySelector('canvas#canvas');
+                                if (fallback && fallback !== main) fallback.style.display = 'none';
+                                fitContainerToCanvas(main);
 
                                 // 如果浏览器支持 ResizeObserver，监听 canvas 大小变化（例如 p.resizeCanvas）
                                 if (window.ResizeObserver) {
-                                    var ro = new ResizeObserver(function() { fitContainerToCanvas(node); });
-                                    ro.observe(node);
+                                    var ro = new ResizeObserver(function() {
+                                        var m = pickPrimaryCanvas() || main;
+                                        fitContainerToCanvas(m);
+                                    });
+                                    ro.observe(main);
                                 }
                             }
                         });
@@ -259,14 +518,13 @@
             // 也把页面上已存在的 canvas 移入并适配（例如静态 fallback）
             if (document.readyState === 'complete') {
                 moveExistingCanvases();
-                // 如果已存在 canvas，则适配第一个
-                var firstCanvas = container.querySelector('canvas');
-                if (firstCanvas) fitContainerToCanvas(firstCanvas);
+                var main = pickPrimaryCanvas();
+                if (main) fitContainerToCanvas(main);
             } else {
                 window.addEventListener('load', function() {
                     moveExistingCanvases();
-                    var firstCanvas = container.querySelector('canvas');
-                    if (firstCanvas) fitContainerToCanvas(firstCanvas);
+                    var main = pickPrimaryCanvas();
+                    if (main) fitContainerToCanvas(main);
                 });
             }
         })();
@@ -274,7 +532,7 @@
                 // HUD 更新逻辑：定期从 window.__mmb_get_state() 读取（若存在）并更新显示
                 (function() {
                     function safeText(id, v) { var el = document.getElementById(id); if (el) el.textContent = (v===null || v===undefined) ? '—' : v; }
-                    function safeImg(id, url, fallback) { var el = document.getElementById(id); if (!el) return; if (url) el.src = url; else if (fallback) el.src = fallback; else el.removeAttribute('src'); }
+                    function safeIcon(id, icon) { var el = document.getElementById(id); if (el) el.textContent = icon || '👤'; }
                     function safeFill(id, pct, textId) { var f = document.getElementById(id); if (f) f.style.width = (pct) + '%'; if (textId) { var t = document.getElementById(textId); if (t) t.textContent = pct + '/100'; } }
 
                     function updateHUD() {
@@ -304,7 +562,7 @@
                             safeText('p0-name', p0.name || ('P'+(p0.index===undefined?0:p0.index)));
                             safeText('p0-ammo', (p0.ammo===null||p0.ammo===undefined)?'—':p0.ammo);
                             safeText('p0-score', (p0.score===null||p0.score===undefined)?'—':p0.score);
-                            safeImg('p0-avatar', p0.avatar, 'assets/Menu/Buttons/default-avatar.png');
+                            safeIcon('p0-avatar', '👤');
 
                             // update player 1
                             var p1 = state.players[1] || { health:0, name:'P1', ammo:null, score:null, avatar:null };
@@ -313,7 +571,7 @@
                             safeText('p1-name', p1.name || ('P'+(p1.index===undefined?1:p1.index)));
                             safeText('p1-ammo', (p1.ammo===null||p1.ammo===undefined)?'—':p1.ammo);
                             safeText('p1-score', (p1.score===null||p1.score===undefined)?'—':p1.score);
-                            safeImg('p1-avatar', p1.avatar, 'assets/Menu/Buttons/default-avatar.png');
+                            safeIcon('p1-avatar', '🤖');
 
                         } catch (e) {
                             // ignore update errors
@@ -469,6 +727,88 @@
                     window.addEventListener('resize', function(){ resize(); });
                     // ensure initial layout ready
                     setTimeout(function(){ resize(); spawn(36); requestAnimationFrame(step); }, 200);
+                })();
+
+                // 侧边面板控制逻辑
+                (function(){
+                    // 音量控制
+                    var volumeSlider = document.getElementById('volume-slider');
+                    var volumeDisplay = document.getElementById('volume-display');
+                    var muteToggle = document.getElementById('mute-toggle');
+                    
+                    if (volumeSlider && volumeDisplay) {
+                        volumeSlider.addEventListener('input', function(){
+                            volumeDisplay.textContent = this.value + '%';
+                            // TODO: 连接到实际音频控制
+                            if (window.__mmb_setVolume) window.__mmb_setVolume(this.value / 100);
+                        });
+                    }
+                    
+                    if (muteToggle) {
+                        muteToggle.addEventListener('change', function(){
+                            // TODO: 连接到实际静音控制
+                            if (window.__mmb_setMute) window.__mmb_setMute(this.checked);
+                        });
+                    }
+                    
+                    // 按钮事件
+                    var btnInstructions = document.getElementById('btn-instructions');
+                    if (btnInstructions) {
+                        btnInstructions.addEventListener('click', function(){
+                            alert('游戏说明：\\n- WASD 移动\\n- 鼠标瞄准\\n- 左键射击\\n- 击败对手获得分数！');
+                        });
+                    }
+                    
+                    var btnClear = document.getElementById('btn-clear');
+                    if (btnClear) {
+                        btnClear.addEventListener('click', function(){
+                            if (confirm('确定要清空所有游戏记录吗？')) {
+                                localStorage.removeItem('mmb-high-score');
+                                localStorage.removeItem('mmb-max-combo');
+                                localStorage.removeItem('mmb-total-games');
+                                localStorage.removeItem('mmb-wins');
+                                document.getElementById('high-score').textContent = '0';
+                                document.getElementById('max-combo').textContent = '0';
+                                document.getElementById('total-games').textContent = '0';
+                                document.getElementById('win-rate').textContent = '0%';
+                                alert('记录已清空！');
+                            }
+                        });
+                    }
+                    
+                    var btnClose = document.getElementById('btn-close');
+                    if (btnClose) {
+                        btnClose.addEventListener('click', function(){
+                            if (confirm('确定要退出游戏吗？')) {
+                                window.location.href = 'index.html';
+                            }
+                        });
+                    }
+                    
+                    // 加载保存的统计数据
+                    function loadStats() {
+                        var highScore = localStorage.getItem('mmb-high-score') || '9';
+                        var maxCombo = localStorage.getItem('mmb-max-combo') || '6';
+                        var totalGames = parseInt(localStorage.getItem('mmb-total-games') || '0');
+                        var wins = parseInt(localStorage.getItem('mmb-wins') || '0');
+                        var winRate = totalGames > 0 ? Math.round((wins / totalGames) * 100) : 0;
+                        
+                        document.getElementById('high-score').textContent = highScore;
+                        document.getElementById('max-combo').textContent = maxCombo;
+                        document.getElementById('total-games').textContent = totalGames;
+                        document.getElementById('win-rate').textContent = winRate + '%';
+                    }
+                    
+                    // 游戏时长计时器
+                    var gameStartTime = Date.now();
+                    setInterval(function(){
+                        var elapsed = Math.floor((Date.now() - gameStartTime) / 1000);
+                        var minutes = Math.floor(elapsed / 60);
+                        var seconds = elapsed % 60;
+                        document.getElementById('game-time').textContent = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+                    }, 1000);
+                    
+                    loadStats();
                 })();
     </script>
 </body>
