@@ -333,6 +333,15 @@ pub fn Game::check_bullet_environment_collision(self : Self, bullet : Bullet) ->
       return
     }
   }
+
+  // 检查与自定义障碍物的碰撞
+  for barrier in self.custom_barrier {
+    if self.is_contact(barrier, bullet.body, strict=true) {
+      bullet.is_active = false
+      println("子弹 #\{bullet.id} 击中环境（自定义障碍物），回收子弹")
+      return
+    }
+  }
   
   // 检查与世界中其他静态物体的碰撞
   // 通过 Box2D 的接触列表检测

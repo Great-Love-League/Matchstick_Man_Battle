@@ -47,6 +47,9 @@ pub(all) struct Game {
 	mut auto_aim_configs : Array[AutoAimConfig]
 
 	mut animation_list : Array[&Animation]
+
+	// 客制化的环境吸收子弹的实例
+	custom_barrier : Array[@box2d.B2Body]
 	
 	// 音频管理器
 	audio : AudioManager
@@ -745,6 +748,7 @@ pub fn create_game(
 		custom_functions : Array::new(),
 		auto_aim_configs : Array::new(),
 		animation_list : Array::new(),
+		custom_barrier : Array::new(),
 		audio,
 		background : background,
 		navigation_requested: false,
@@ -832,6 +836,23 @@ pub fn Game::is_contact(self:Self,a:@box2d.B2Body, b:@box2d.B2Body, strict~: Boo
 		}
 	}
 	false
+}
+
+pub fn Game::get_contact_point(self:Self,a:@box2d.B2Body, b:@box2d.B2Body)-> Array[@box2d.B2Vec2] {
+	let contact_list=self.world.getContactList()
+	let points = []
+	for contact in contact_list {
+		let bodyA=contact.getShape1().getBody()
+		let bodyB=contact.getShape2().getBody()
+		if (equals(bodyA, a) && equals(bodyB, b)) || (equals(bodyA, b) && equals(bodyB, a)) {
+			for i in contact.getManifolds(){
+				for e in i.getPoints(){
+					points.push(e.getPosition())
+				}
+			}
+		}
+	}
+	points
 }
 
 pub fn Game::who_shape_belongs_to(self:Self, shape:@box2d.B2Shape) -> (Int) {

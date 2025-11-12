@@ -143,7 +143,7 @@ pub struct BloodParticle {
   mut life: Double
 }
 
-fn register_blood_spray_animation(game: Game, x: Double, y: Double, vx: Double, vy: Double) -> Unit {
+pub fn register_blood_spray_animation(game: Game, x: Double, y: Double, vx: Double, vy: Double) -> Unit {
   let frame_counter: Ref[Int] = Ref::new(0)
   let particles: Ref[Array[BloodParticle]] = Ref::new(Array::new())
 

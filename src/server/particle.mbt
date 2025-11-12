@@ -144,7 +144,7 @@ fn Game::create_particle_control(
 		stand_cooldown : 0
 	}
 }
-fn Game::create_particle(
+pub fn Game::create_particle(
 	self:Self,
 	position: (Double, Double)
 )-> Particle {
