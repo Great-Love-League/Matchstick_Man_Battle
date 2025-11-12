@@ -679,7 +679,20 @@ fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : 
 		particle.control.jump_cooldown -= 1
 	}
 	self.particle_jump(particle,0)
-
+	for gun in self.weapon.gun_list {
+		if gun.owner_id == particle_index {
+			gun.direction = particle.control.walk_direction
+			println("\{gun.angle}")
+			if(gun.angle<-1.57){
+				gun.direction = -1.0
+			}
+			else {
+				gun.direction = 1.0
+			}
+			maintain_rotation(gun.body, gun.angle, kp=20.0, kd=2.0)
+			break
+		}
+	}
 }
 pub const Pi : Double = 3.141592653589793
 
