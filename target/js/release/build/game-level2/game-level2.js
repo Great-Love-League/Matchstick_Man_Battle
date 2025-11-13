@@ -965,7 +965,22 @@ Option$Some$42$.prototype.$tag = 1;
 const Great$45$Love$45$League$Stick_Man_Battle$server$$getP5Instance$46$inner = (drawww, width, height) => {
    a = new p5((p)=>{
   p.setup = function() {
-    p.createCanvas(width, height);
+    var __mmb_cnv = p.createCanvas(width, height);
+    try {
+      var __mmb_container = (typeof document !== 'undefined') ? document.getElementById('game-container') : null;
+      if (__mmb_container) {
+        // Prefer p5's parent API when available
+        if (__mmb_cnv && typeof __mmb_cnv.parent === 'function') {
+          try { __mmb_cnv.parent('game-container'); } catch(e) { /* ignore */ }
+        } else {
+          // Fallbacks: check common renderer properties
+          var __mmb_node = (__mmb_cnv && (__mmb_cnv.elt || __mmb_cnv.canvas)) || __mmb_cnv;
+          if (__mmb_node && __mmb_node.parentNode !== __mmb_container) {
+            try { __mmb_container.appendChild(__mmb_node); } catch(e) { /* ignore DOM failures */ }
+          }
+        }
+      }
+    } catch (e) { /* defensive */ }
   }
   p.draw = function() {
     drawww(p);
