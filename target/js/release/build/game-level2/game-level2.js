@@ -15841,6 +15841,10 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$check_bullet_coll
             }
             const _bind = particle.control;
             _bind.health = _bind.health - damage | 0;
+/* __MMB_HIT_SNIPPET start */
+try{ if (typeof window !== undefined && window.__mmb_trigger_hit) { try{ var __mmb_idx = (typeof particle !== undefined && particle && particle.index!==undefined) ? particle.index : (typeof idx !== undefined ? idx : null); var __mmb_hx = (typeof hx !== undefined) ? hx : undefined; var __mmb_hy = (typeof hy !== undefined) ? hy : undefined; var __mmb_dmg = (typeof damage !== undefined) ? damage : 0; try{ window.__mmb_trigger_hit(__mmb_idx, __mmb_hx, __mmb_hy, __mmb_dmg); }catch(e){} }catch(e){} }catch(e){}
+/* __MMB_HIT_SNIPPET end */
+
             // --- AUTO-HOOK: notify frontend FX/HUD about a hit (defensive) ---
             try {
               if (typeof window !== 'undefined' && window.__mmb_trigger_hit) {
@@ -16639,5 +16643,15 @@ function Great$45$Love$45$League$Stick_Man_Battle$game$45$level2$$load_custom_fu
     }
   } catch(e) {}
 
-  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$start_run(game);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$/* __MMB_BOOTSTRAP_SNIPPET start */
+try{ window.__mmb_game = game; }catch(e){}
+try{ window.__mmb_get_state = function(){ try{ var players=[]; if(game && game.particle_list && game.particle_list.length){ for(my =0;<0; ++){} } }catch(e){return {players:[], frame_count:0};} }; }catch(e){}
+/* __MMB_BOOTSTRAP_SNIPPET end */
+
+/* __MMB_BOOTSTRAP_SNIPPET start */
+try{ window.__mmb_game = game; }catch(e){}
+try{ window.__mmb_get_state = function(){ try{ var players = []; if (game && game.particle_list && game.particle_list.length){ for (var i=0;i<game.particle_list.length;i++){ var p = game.particle_list[i]; var ctrl = (p && p.control) ? p.control : { health: 0 }; players.push({ index: (p && p.index)!==undefined ? p.index : i, health: (ctrl.health===undefined?0:ctrl.health), name: p && p.name ? p.name : null, ammo: p && p.ammo ? p.ammo : null, score: p && p.score ? p.score : null }); } } return { players: players, frame_count: (game && game.frame_count)? game.frame_count : 0 }; }catch(e){ return { players: [], frame_count: 0 }; } }; }catch(e){}
+/* __MMB_BOOTSTRAP_SNIPPET end */
+
+.Game$start_run(game);
 })();
