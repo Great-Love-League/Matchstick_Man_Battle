@@ -6,6 +6,9 @@ fn main {
 	@server.Gun::create(game,0, Some("src/assets/gun1.png"))
 	@server.Gun::create(game,1, Some("src/assets/gun1.png"))
 
+  // 播放关卡5背景音乐
+  game.play_level_bgm(5)
+
   @server.register_both_weapon_change(game)
 
   @server.register_mouse_shoot(game, 0)

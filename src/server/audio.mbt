@@ -24,6 +24,8 @@ pub enum AudioEventType {
   BgmLevel1        // 关卡1背景音乐
   BgmLevel2        // 关卡2背景音乐
   BgmLevel3        // 关卡3背景音乐
+  BgmLevel4        // 关卡4背景音乐
+  BgmLevel5        // 关卡5背景音乐
   BgmBoss          // Boss战背景音乐
   BgmMenu          // 菜单背景音乐
 } derive(Eq, Show, Hash)
@@ -104,6 +106,8 @@ pub fn AudioManager::init_audio_configs(self : Self) -> Unit {
   self.register_audio(BgmLevel1, "assets/Audio/BGM/level1.wav", BackgroundMusic, 0.3, true)
   self.register_audio(BgmLevel2, "assets/Audio/BGM/level2.wav", BackgroundMusic, 0.3, true)
   self.register_audio(BgmLevel3, "assets/Audio/BGM/level3.wav", BackgroundMusic, 0.3, true)
+  self.register_audio(BgmLevel4, "assets/Audio/BGM/level4.wav", BackgroundMusic, 0.3, true)
+  self.register_audio(BgmLevel5, "assets/Audio/BGM/level5.wav", BackgroundMusic, 0.3, true)
   self.register_audio(BgmBoss, "assets/Audio/BGM/boss.wav", BackgroundMusic, 0.4, true)
 }
 
