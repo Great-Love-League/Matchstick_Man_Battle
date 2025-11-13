@@ -483,6 +483,8 @@ pub struct ImageLoader{
   mut img : @p5js.P5Image?
   // 表示是否加载失败
   mut is_failed : Bool
+  // 表示是否正在加载中（防止重复触发加载）
+  mut is_loading : Bool
   // 缩放量
   mut x : Double
   mut y : Double
@@ -497,6 +499,7 @@ pub fn ImageLoader::new(path: String?) -> ImageLoader {
     img: None,
     // 表示导入尝试是否失败
     is_failed: false,
+    is_loading: false,
     x: 1.0,
     y: 1.0,
     offset_x: 0.0,
@@ -507,17 +510,24 @@ pub fn ImageLoader::new(path: String?) -> ImageLoader {
 pub fn ImageLoader::try_load_image(self: ImageLoader, p: &@p5js.P5JS) -> Unit {
   match self.image_path {
     Some(path) => {
+      // 如果已经在加载中，跳过重复请求
+      if self.is_loading == true {
+        return
+      }
+      self.is_loading = true
       p.loadImage(
         path,
         Some(fn(img: @p5js.P5Image) -> Unit {
           self.img = Some(img)
           println("Image loaded successfully from path: \{path}")
           self.is_failed = false
+          self.is_loading = false
         }),
         Some(fn(err) -> Unit {
           println("Failed to load image from path: \{path} with error: \{err}")
           self.is_failed = true
           self.img = None
+          self.is_loading = false
         })
       ) |> ignore
     }
@@ -530,7 +540,8 @@ pub fn ImageLoader::try_load_image(self: ImageLoader, p: &@p5js.P5JS) -> Unit {
 
 pub fn ImageLoader::get_image(self: ImageLoader, p: &@p5js.P5JS) -> @p5js.P5Image? {
 
-  if self.is_failed != true && self.img.is_empty() {
+  // 如果既未失败又未加载到图片且未在加载中，则触发一次加载。
+  if self.is_failed != true && self.img.is_empty() && self.is_loading != true {
     self.try_load_image(p)
   }
   return self.img
