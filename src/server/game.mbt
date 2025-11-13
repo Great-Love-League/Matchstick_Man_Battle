@@ -1123,6 +1123,21 @@ pub fn Game::add_animation(self:Self, animation: &Animation) -> Unit {
 	self.animation_list.push(animation)
 }
 
+///| 播放关卡BGM的辅助函数
+pub fn Game::play_level_bgm(self:Self, level: Int) -> Unit {
+	match level {
+		1 => self.audio.play_bgm(AudioEventType::BgmLevel1)
+		2 => self.audio.play_bgm(AudioEventType::BgmLevel2)
+		3 => self.audio.play_bgm(AudioEventType::BgmLevel3)
+		4 => self.audio.play_bgm(AudioEventType::BgmLevel4)
+		5 => self.audio.play_bgm(AudioEventType::BgmLevel5)
+		_ => {
+			println("警告: 未知关卡 \{level}，播放默认菜单音乐")
+			self.audio.play_bgm(AudioEventType::BgmMenu)
+		}
+	}
+}
+
 // 开始游戏运行，不阻塞
 pub fn Game::start_run(self:Self) -> Unit {
 	self.state = GamePreparing
@@ -1142,8 +1157,6 @@ pub fn Game::start_run(self:Self) -> Unit {
 		// 预加载图片资源
 		// 注册音频控制
 		register_audio_controls(self)
-		// 播放背景音乐
-		self.audio.play_bgm(AudioEventType::BgmMenu)
 
 	}
 
