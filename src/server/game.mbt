@@ -447,6 +447,8 @@ fn Game::game_over(self:Self, p5: &@p5js.P5JS) -> Unit {
 			break
 		}
 	}
+
+	p5.push()
 	
 	// 显示半透明背景
 	p5.fillColorPara(0.0, Some(0.0), Some(0.0), Some(180.0))
@@ -473,7 +475,8 @@ fn Game::game_over(self:Self, p5: &@p5js.P5JS) -> Unit {
 	// 显示提示文字
 	p5.textSizeSet(30.0)
 	p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
-	p5.text("按 1-4 载入对应关卡，R 刷新", Width / 2.0, Height / 2.0 + 80.0, Some(Width), Some(Height))
+	p5.text("按 1-5 载入对应关卡，R 刷新", Width / 2.0, Height / 2.0 + 80.0, Some(Width), Some(Height))
+	p5.pop()
 
 	self.state = GameOver
 }
