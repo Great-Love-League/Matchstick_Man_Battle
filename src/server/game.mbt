@@ -459,23 +459,23 @@ fn Game::game_over(self:Self, p5: &@p5js.P5JS) -> Unit {
 	p5.textSizeSet(80.0)
 	p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
 	p5.textAlign("center", Some("center"))
-	p5.text("游戏结束", Width / 2.0, Height / 2.0 - 80.0, Some(Width), Some(Height))
+	p5.text("游戏结束", Width / 2.0, Height / 2.0 - 80.0, None, None)
 	
 	// 显示获胜者
 	if winner_index >= 0 {
 		p5.textSizeSet(60.0)
 		p5.fillColorPara(255.0, Some(215.0), Some(0.0), Some(255.0))  // 金色
-		p5.text("玩家 \{winner_index} 获胜!", Width / 2.0, Height / 2.0, Some(Width), Some(Height))
+		p5.text("玩家 \{winner_index} 获胜!", Width / 2.0, Height / 2.0, None, None)
 	} else {
 		p5.textSizeSet(60.0)
 		p5.fillColorPara(200.0, Some(200.0), Some(200.0), Some(255.0))
-		p5.text("平局", Width / 2.0, Height / 2.0, Some(Width), Some(Height))
+		p5.text("平局", Width / 2.0, Height / 2.0, None, None)
 	}
 	
 	// 显示提示文字
 	p5.textSizeSet(30.0)
 	p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
-	p5.text("按 1-5 载入对应关卡，R 刷新", Width / 2.0, Height / 2.0 + 80.0, Some(Width), Some(Height))
+	p5.text("按 1-5 载入对应关卡，R 刷新", Width / 2.0, Height / 2.0 + 80.0, None, None)
 	p5.pop()
 
 	self.state = GameOver
