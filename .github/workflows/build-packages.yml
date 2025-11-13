@@ -1,0 +1,53 @@
+name: Build desktop packages
+
+on:
+  push:
+    branches: [ main, auto-hook ]
+  workflow_dispatch:
+
+jobs:
+  build-mac:
+    name: Build macOS package
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build (mac)
+        run: npm run dist -- --mac
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: mac-packages
+          path: |
+            dist/*.dmg
+            dist/*.zip
+            dist/*.pkg
+            dist/*.tar.gz
+
+  build-win:
+    name: Build Windows package
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install dependencies
+        run: npm ci
+      - name: Build (win)
+        shell: bash
+        run: npm run dist -- --win
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: win-packages
+          path: |
+            dist/*.exe
+            dist/*.nsis
+            dist/*.zip

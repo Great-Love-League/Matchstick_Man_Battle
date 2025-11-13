@@ -1,25 +1,42 @@
 {
-  "name": "your-app-name",
-  "version": "1.0.0",
-  "productName": "Your App Name",
-  "main": "main.js",
+  "name": "matchstick-man-battle",
+  "version": "0.1.0",
+  "productName": "Matchstick Man Battle",
+  "main": "electron-main.js",
+  "author": "Great-Love-League <team@great-love-league.local>",
+  "description": "Matchstick Man Battle - desktop package",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
+  },
   "devDependencies": {
-    "@electron-forge/cli": "^7.10.2",
-    "@electron-forge/maker-deb": "^7.10.2",
-    "@electron-forge/maker-rpm": "^7.10.2",
-    "@electron-forge/maker-squirrel": "^7.10.2",
-    "@electron-forge/maker-zip": "^7.10.2",
-    "@electron-forge/plugin-auto-unpack-natives": "^7.10.2",
-    "@electron-forge/plugin-fuses": "^7.10.2",
-    "@electron/fuses": "^1.8.0",
-    "electron": "39.0.0"
+    "electron": "^26.0.0",
+    "electron-builder": "^24.6.0"
   },
   "dependencies": {
     "electron-squirrel-startup": "^1.0.1"
   },
-  "scripts": {
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make"
+  "build": {
+    "appId": "com.greatlove.matchstickman",
+    "productName": "Matchstick Man Battle",
+    "files": [
+      "**/*",
+      "!node_modules/*/{test,tests,__tests__}/**",
+      "!**/*.map"
+    ],
+    "directories": {
+      "buildResources": "build"
+    },
+    "linux": {
+      "target": ["AppImage", "deb"]
+    },
+    "mac": {
+      "target": ["dmg", "zip"]
+    },
+    "win": {
+      "target": ["nsis", "zip"]
+    }
   }
 }

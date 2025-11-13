@@ -25,6 +25,7 @@ function Option$Some$0$(param0) {
   this._0 = param0;
 }
 Option$Some$0$.prototype.$tag = 1;
+const Option$None$1$ = { $tag: 0 };
 function Option$Some$1$(param0) {
   this._0 = param0;
 }
@@ -172,6 +173,7 @@ const moonbitlang$core$builtin$$MyInt64$compare_u = (a, b) => {
   return 0;
 };
 const moonbitlang$core$builtin$$JSArray$set_length = (arr, len) => { arr.length = len; };
+const moonbitlang$core$builtin$$JSArray$splice = (arr, idx, cnt) => arr.splice(idx, cnt);
 const Option$None$5$ = { $tag: 0 };
 function Option$Some$5$(param0) {
   this._0 = param0;
@@ -337,6 +339,7 @@ const Demonmasterlqx$box2d_ffi$box2d$$B2PolygonDef$setVertices = (self, vertices
  };
 const Demonmasterlqx$box2d_ffi$box2d$$B2CircleShape$getRadius = self => self.m_radius;
 const Demonmasterlqx$box2d_ffi$box2d$$B2CircleShape$getLocalPosition = self => self.m_localPosition;
+const Demonmasterlqx$box2d_ffi$box2d$$B2PolygonShape$getVertexCount = self => self.m_vertexCount;
 const Demonmasterlqx$box2d_ffi$box2d$$B2PolygonShape$getVertices = self => {
    let vertices = [];
    for (let i = 0; i < self.m_vertexCount; i++) {
@@ -352,6 +355,7 @@ const Demonmasterlqx$box2d_ffi$box2d$$B2RevoluteJointDef$setEnableLimit = (self,
 const Demonmasterlqx$box2d_ffi$box2d$$B2RevoluteJointDef$setEnableMotor = (self, enable) => { self.enableMotor = enable; };
 const Demonmasterlqx$box2d_ffi$box2d$$B2Contact$getShape1 = self => self.GetShape1();
 const Demonmasterlqx$box2d_ffi$box2d$$B2Contact$getShape2 = self => self.GetShape2();
+const Demonmasterlqx$box2d_ffi$box2d$$B2Contact$getManifoldCount = self => self.GetManifoldCount();
 const Demonmasterlqx$box2d_ffi$box2d$$b2BodyDef = () => new b2BodyDef();
 const Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setPosition = (self, position) => { self.position = position };
 const Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setRotation = (self, rotation) => { self.rotation = rotation };
@@ -368,6 +372,7 @@ const Demonmasterlqx$box2d_ffi$box2d$$B2Body$getRotation = self => self.GetRotat
 const Demonmasterlqx$box2d_ffi$box2d$$B2Body$getLinearVelocity = self => self.GetLinearVelocity();
 const Demonmasterlqx$box2d_ffi$box2d$$B2Body$setLinearVelocity = (self, velocity) => { self.SetLinearVelocity(velocity); };
 const Demonmasterlqx$box2d_ffi$box2d$$B2Body$getAngularVelocity = self => self.GetAngularVelocity();
+const Demonmasterlqx$box2d_ffi$box2d$$B2Body$setAngularVelocity = (self, velocity) => { self.SetAngularVelocity(velocity); };
 const Demonmasterlqx$box2d_ffi$box2d$$B2Body$applyForce = (self, force, point) => { self.ApplyForce(force, point); };
 const Demonmasterlqx$box2d_ffi$box2d$$B2Body$applyTorque = (self, torque) => { self.ApplyTorque(torque); };
 const Demonmasterlqx$box2d_ffi$box2d$$B2Body$applyImpulse = (self, impulse, point) => { self.ApplyImpulse(impulse, point); };
@@ -385,6 +390,8 @@ const Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList = self => {
 const Demonmasterlqx$box2d_ffi$box2d$$b2AABB = () => new b2AABB();
 const Demonmasterlqx$box2d_ffi$box2d$$B2AABB$setminVertex = (self, v) => { self.minVertex.Set(v.x, v.y); };
 const Demonmasterlqx$box2d_ffi$box2d$$B2AABB$setmaxVertex = (self, v) => { self.maxVertex.Set(v.x, v.y); };
+const Demonmasterlqx$box2d_ffi$box2d$$B2AABB$getminVertex = self => self.minVertex;
+const Demonmasterlqx$box2d_ffi$box2d$$B2AABB$getmaxVertex = self => self.maxVertex;
 function Result$Err$11$(param0) {
   this._0 = param0;
 }
@@ -704,10 +711,17 @@ const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$textFont_$46$inner = (self,
    const size_val = size ? size._0 : undefined;
    self.textFont(font, size_val);
  };
-const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$text_$46$inner = (self, str, x, y, x2, y2) => {
+const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$text1_$46$inner = (self, str, x, y, x2, y2) => {
    const x2_val = x2 ? x2._0 : undefined;
    const y2_val = y2 ? y2._0 : undefined;
    self.text(str, x, y, x2_val, y2_val);
+ };
+const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$text2_ = (self, str, x, y) => {
+   self.text(str, x, y);
+ };
+const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$text3_$46$inner = (self, str, x, y, x2) => {
+   const x2_val = x2 ? x2._0 : undefined;
+   self.text(str, x, y, x2_val);
  };
 const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$applyMatrix_$46$inner = (self, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) => {
    const args = [a, b, c, d, e, f];
@@ -724,13 +738,18 @@ const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$applyMatrix_$46$inner = (se
    self.applyMatrix(...args);
  };
 const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$resetMatrix_ = (self) => self.resetMatrix();
-const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$rotate_$46$inner = (self, angle, axis) => {
+const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$rotate1_$46$inner = (self, angle, axis) => {
    if (axis) {
      self.rotate(angle, axis._0);
    } else {
      self.rotate(angle);
    }
  };
+const Option$None$40$ = { $tag: 0 };
+function Option$Some$40$(param0) {
+  this._0 = param0;
+}
+Option$Some$40$.prototype.$tag = 1;
 const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$rotateX_ = (self, angle) => self.rotateX(angle);
 const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$rotateY_ = (self, angle) => self.rotateY(angle);
 const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$rotateZ_ = (self, angle) => self.rotateZ(angle);
@@ -745,17 +764,24 @@ const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$scale_$46$inner = (self, s,
  };
 const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$shearX_ = (self, angle) => self.shearX(angle);
 const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$shearY_ = (self, angle) => self.shearY(angle);
-const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$translate_$46$inner = (self, x, y, z) => {
+const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$translate1_$46$inner = (self, x, y, z) => {
    if (z) {
      self.translate(x, y, z._0);
    } else {
      self.translate(x, y);
    }
  };
+const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$translate2_ = (self, x, y) => {
+     self.translate(x, y);
+   };
 const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$beginContour_ = (self) => self.beginContour();
 const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$endContour_ = (self) => self.endContour();
-const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$beginShape_ = (self, mode) => self.beginShape(mode);
-const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$endShape_ = (self, mode, count) => self.endShape(mode, count);
+const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$beginShape1_ = (self, mode) => self.beginShape(mode);
+const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$beginShape2_ = (self) => self.beginShape();
+const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$endShape1_ = (self, mode, count) => self.endShape(mode, count);
+const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$endShape2_ = (self, mode) => self.endShape(mode);
+const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$endShape3_ = (self, count) => self.endShape(count);
+const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$endShape4_ = (self) => self.endShape();
 const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$bezierVertex_ = (self, x2, y2, x3, y3, x4, y4) => self.bezierVertex(x2, y2, x3, y3, x4, y4);
 const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$curveVertex_ = (self, x, y) => self.curveVertex(x, y);
 const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$vertex_$46$inner = (self, x, y, z, u, v) => self.vertex(x, y, z, u, v);
@@ -829,16 +855,16 @@ const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$setMouseWheel_ = (self, cal
 const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$cancelMouseWheel_ = (self) => self.mouseWheel = null;
 const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$requestPointerLock_ = (self) => self.requestPointerLock();
 const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$exitPointerLock_ = (self) => self.exitPointerLock();
-const Option$None$40$ = { $tag: 0 };
-function Option$Some$40$(param0) {
-  this._0 = param0;
-}
-Option$Some$40$.prototype.$tag = 1;
 const Option$None$41$ = { $tag: 0 };
 function Option$Some$41$(param0) {
   this._0 = param0;
 }
 Option$Some$41$.prototype.$tag = 1;
+const Option$None$42$ = { $tag: 0 };
+function Option$Some$42$(param0) {
+  this._0 = param0;
+}
+Option$Some$42$.prototype.$tag = 1;
 const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$noStroke_ = (self) => self.noStroke();
 const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$background_$46$inner = (self, v1, v2, v3, a) => {
    const v2_val = v2 ? v2._0 : undefined;
@@ -906,10 +932,25 @@ const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$image_$46$inner = (self, im
    self.image(img, x, y, width_val, height_val);
  };
 const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$imageMode_ = (self, mode) => self.imageMode(mode);
-const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$loadImage_ = (self, path, callback, errorCallback) => {
+const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$loadImage1_ = (self, path, callback, errorCallback) => {
    const img = self.loadImage(path, callback, errorCallback);
    return img;
  };
+const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$loadImage2_ = (self, path) => {
+   const img = self.loadImage(path);
+   return img;
+ };
+const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$loadImage3_ = (self, path, callback) => {
+   const img = self.loadImage(path, callback);
+   return img;
+ };
+const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$push_ = (self) => self.push();
+const Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$pop_ = (self) => self.pop();
+const Option$None$43$ = { $tag: 0 };
+function Option$Some$43$(param0) {
+  this._0 = param0;
+}
+Option$Some$43$.prototype.$tag = 1;
 const Great$45$Love$45$League$Stick_Man_Battle$server$$js_play_audio = (path, volume, shouldLoop) => {
    // 全局音频管理器
    if (!window.audioManager) {
@@ -958,49 +999,24 @@ const Great$45$Love$45$League$Stick_Man_Battle$server$$js_play_audio = (path, vo
    }
  };
 const Great$45$Love$45$League$Stick_Man_Battle$server$$equals = (a,b)=>{return a===b};
-function Option$Some$42$(param0) {
-  this._0 = param0;
-}
-Option$Some$42$.prototype.$tag = 1;
-const Great$45$Love$45$League$Stick_Man_Battle$server$$getP5Instance$46$inner = (drawww, width, height) => {
-   a = new p5((p)=>{
-  p.setup = function() {
-    var __mmb_cnv = p.createCanvas(width, height);
-    try {
-      var __mmb_container = (typeof document !== 'undefined') ? document.getElementById('game-container') : null;
-      if (__mmb_container) {
-        // Prefer p5's parent API when available
-        if (__mmb_cnv && typeof __mmb_cnv.parent === 'function') {
-          try { __mmb_cnv.parent('game-container'); } catch(e) { /* ignore */ }
-        } else {
-          // Fallbacks: check common renderer properties
-          var __mmb_node = (__mmb_cnv && (__mmb_cnv.elt || __mmb_cnv.canvas)) || __mmb_cnv;
-          if (__mmb_node && __mmb_node.parentNode !== __mmb_container) {
-            try { __mmb_container.appendChild(__mmb_node); } catch(e) { /* ignore DOM failures */ }
-          }
-        }
-      }
-    } catch (e) { /* defensive */ }
-  }
-  p.draw = function() {
-    drawww(p);
-  }
-})
-return a
-};
-function Result$Err$43$(param0) {
-  this._0 = param0;
-}
-Result$Err$43$.prototype.$tag = 0;
-function Result$Ok$43$(param0) {
-  this._0 = param0;
-}
-Result$Ok$43$.prototype.$tag = 1;
-const Option$None$44$ = { $tag: 0 };
 function Option$Some$44$(param0) {
   this._0 = param0;
 }
 Option$Some$44$.prototype.$tag = 1;
+const Great$45$Love$45$League$Stick_Man_Battle$server$$getP5Instance$46$inner = (drawww, prelaod, width, height) => {
+   a = new p5((p)=>{
+  p.setup = function() {
+    p.createCanvas(width, height);
+  }
+  p.draw = function() {
+    drawww(p);
+  }
+  p.preload = function() {
+    prelaod(p);
+  }
+})
+return a
+};
 function Result$Err$45$(param0) {
   this._0 = param0;
 }
@@ -1009,6 +1025,41 @@ function Result$Ok$45$(param0) {
   this._0 = param0;
 }
 Result$Ok$45$.prototype.$tag = 1;
+const Option$None$46$ = { $tag: 0 };
+function Option$Some$46$(param0) {
+  this._0 = param0;
+}
+Option$Some$46$.prototype.$tag = 1;
+const Great$45$Love$45$League$Stick_Man_Battle$server$$js_stop_audio = (path) => {
+   // 停止所有匹配路径的音频
+   document.querySelectorAll('audio').forEach(audio => {
+     if (audio.src.includes(path)) {
+       audio.pause();
+       audio.currentTime = 0;
+     }
+   });
+   
+   // 从待播放列表中移除
+   if (window.audioManager) {
+     window.audioManager.pendingAudios = window.audioManager.pendingAudios.filter(
+       item => !item.path.includes(path)
+     );
+   }
+ };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$navigateTo = (url) => {
+   window.location.href = url;
+ };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$reloadPage = () => {
+   window.location.reload();
+ };
+function Result$Err$47$(param0) {
+  this._0 = param0;
+}
+Result$Err$47$.prototype.$tag = 0;
+function Result$Ok$47$(param0) {
+  this._0 = param0;
+}
+Result$Ok$47$.prototype.$tag = 1;
 function Error$$to_string(_e) {
   switch (_e.$tag) {
     case 3: {
@@ -1031,8 +1082,8 @@ function Error$$to_string(_e) {
     }
   }
 }
-const moonbitlang$core$json$$as_bool$46$constr$47$1260 = true;
-const moonbitlang$core$json$$as_bool$46$constr$47$1261 = false;
+const moonbitlang$core$json$$as_bool$46$constr$47$1289 = true;
+const moonbitlang$core$json$$as_bool$46$constr$47$1290 = false;
 const moonbitlang$core$strconv$$range_err_str = "value out of range";
 const moonbitlang$core$strconv$$syntax_err_str = "invalid syntax";
 const moonbitlang$core$strconv$$min_19digit_int = $1000000000000000000L;
@@ -1046,219 +1097,351 @@ const moonbitlang$core$strconv$$max_exponent_fast_path = $22L;
 const moonbitlang$core$strconv$$table = [1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000, 10000000000, 100000000000, 1e+12, 1e+13, 1e+14, 1e+15, 1e+16, 1e+17, 1e+18, 1e+19, 1e+20, 1e+21, 1e+22, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 const moonbitlang$core$strconv$$max_exponent_disguised_fast_path = $37L;
 const moonbitlang$core$strconv$$min_exponent_fast_path = $_22L;
-const moonbitlang$core$strconv$$checked_mul$46$constr$47$1663 = $0L;
+const moonbitlang$core$strconv$$checked_mul$46$constr$47$1692 = $0L;
 const moonbitlang$core$uint64$$max_value = $_1L;
 const Kaida$45$Amethyst$math$$pi_over_2 = [1.57079625129699707, 7.54978941586159635e-08, 5.39030252995776477e-15, 3.28200341580791294e-22, 1.27065575308067607e-29, 1.22933308981111329e-36, 2.7337005381646456e-44, 2.16741683877804819e-51];
 const Kaida$45$Amethyst$math$$two_over_pi = [10680707, 7228996, 1387004, 2578385, 16069853, 12639074, 9804092, 4427841, 16666979, 11263675, 12935607, 2387514, 4345298, 14681673, 3074569, 13734428, 16653803, 1880361, 10960616, 8533493, 3062596, 8710556, 7349940, 6258241, 3772886, 3769171, 3798172, 8675211, 12450088, 3874808, 9961438, 366607, 15675153, 9132554, 7151469, 3571407, 2607881, 12013382, 4155038, 6285869, 7677882, 13102053, 15825725, 473591, 9065106, 15363067, 6271263, 9264392, 5636912, 4652155, 7056368, 13614112, 10155062, 1944035, 9527646, 15080200, 6658437, 6231200, 6832269, 16767104, 5075751, 3212806, 1398474, 7579849, 6349435, 12618859];
 const Kaida$45$Amethyst$math$$npio2_hw = [1073291771, 1074340347, 1074977148, 1075388923, 1075800698, 1076025724, 1076231611, 1076437499, 1076643386, 1076849274, 1076971356, 1077074300, 1077177244, 1077280187, 1077383131, 1077486075, 1077589019, 1077691962, 1077794906, 1077897850, 1077968460, 1078019932, 1078071404, 1078122876, 1078174348, 1078225820, 1078277292, 1078328763, 1078380235, 1078431707, 1078483179, 1078534651];
-const Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_world_def_from_json$46$tuple$47$2685 = { _0: -10000, _1: -10000 };
-const Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_world_def_from_json$46$tuple$47$2686 = { _0: 10000, _1: 10000 };
-const Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_world_def_from_json$46$tuple$47$2687 = { _0: Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_world_def_from_json$46$tuple$47$2685, _1: Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_world_def_from_json$46$tuple$47$2686 };
+const Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_world_def_from_json$46$tuple$47$2736 = { _0: -10000, _1: -10000 };
+const Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_world_def_from_json$46$tuple$47$2737 = { _0: 10000, _1: 10000 };
+const Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_world_def_from_json$46$tuple$47$2738 = { _0: Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_world_def_from_json$46$tuple$47$2736, _1: Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_world_def_from_json$46$tuple$47$2737 };
 const Great$45$Love$45$League$Stick_Man_Battle$server$$gun_body = " {\n       \"id\": \"body_1760795953628_lylo5ag1a\",\n       \"body_def\": {\n         \"type\": \"dynamic\",\n         \"position\": [\n           12.904793874424993,\n           14.748299439064441\n         ],\n         \"angle\": 0,\n         \"linear_velocity\": [\n           0,\n           0\n         ],\n         \"angular_velocity\": 0,\n         \"linear_damping\": 0,\n         \"angular_damping\": 0,\n         \"allow_sleep\": true,\n         \"awake\": true,\n         \"fixed_rotation\": false,\n         \"bullet\": false,\n         \"gravity_scale\": 1\n       },\n       \"fixtures\": [\n         {\n           \"shape\": {\n             \"type\": \"box\",\n             \"params\": {\n               \"width\": 0.5,\n               \"height\": 1\n             }\n           },\n           \"fixture_def\": {\n             \"density\": 0.01,\n             \"friction\": 0.3,\n             \"restitution\": 0.5,\n             \"is_sensor\": false,\n             \"filter_category_bits\": 1,\n             \"filter_mask_bits\": 65535,\n             \"filter_group_index\": -1\n           }\n         }\n       ],\n       \"visual_properties\": {},\n       \"user_data\": {}\n     }";
-const Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3378 = { _0: 0.25, _1: 1 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3379 = { _0: 0.2, _1: 0.25 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3380 = { _0: 0.15, _1: 0.5 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3381 = { _0: 0.15, _1: 0.5 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3382 = { _0: 0.15, _1: 0.55 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3383 = { _0: 0.15, _1: 0.55 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3384 = { _0: 0.15, _1: 0.52 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3385 = { _0: 0.15, _1: 0.52 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3386 = { _0: 0.15, _1: 0.52 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3387 = { _0: 0.15, _1: 0.52 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3412 = { _0: -10, _1: 12 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3413 = { _0: -5, _1: 12 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3414 = { _0: -24.5, _1: 25 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3415 = { _0: 1, _1: 25 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3416 = { _0: 24.5, _1: 25 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3417 = { _0: 1, _1: 25 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3418 = { _0: 0, _1: 49.5 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3419 = { _0: 23.6, _1: 1 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3420 = { _0: 0, _1: 0.5 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3421 = { _0: 23.6, _1: 1 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3422 = { _0: 5, _1: 1 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3423 = { _0: -15, _1: 10 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3424 = { _0: 15, _1: 40 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3425 = { _0: -15, _1: 10 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3426 = { _0: 5, _1: 1 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3427 = { _0: 15, _1: 10 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3428 = { _0: -15, _1: 40 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3429 = { _0: 0, _1: 25 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3430 = { _0: 0, _1: 10 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3431 = { _0: 5, _1: 1 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3432 = { _0: 0, _1: 40 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3433 = { _0: 5, _1: 1 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3434 = { _0: -17, _1: 25 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3435 = { _0: 6, _1: 1 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3436 = { _0: 17, _1: 25 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3437 = { _0: 6, _1: 1 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3438 = { _0: -24.5, _1: 25 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3439 = { _0: 1, _1: 25 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3440 = { _0: 24.5, _1: 25 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3441 = { _0: 1, _1: 25 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3442 = { _0: 0, _1: 49.5 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3443 = { _0: 23.6, _1: 1 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3444 = { _0: 0, _1: 0.5 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3445 = { _0: 23.6, _1: 1 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3446 = { _0: 6, _1: 1 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3447 = { _0: -16, _1: 10 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3448 = { _0: 16, _1: 10 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3449 = { _0: -16, _1: 10 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3450 = { _0: 6, _1: 1 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3451 = { _0: -16, _1: 20 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3452 = { _0: 16, _1: 20 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3453 = { _0: -8, _1: 20 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3454 = { _0: 6, _1: 1 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3455 = { _0: -16, _1: 30 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3456 = { _0: 16, _1: 30 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3457 = { _0: 0, _1: 30 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3458 = { _0: 6, _1: 1 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3459 = { _0: -16, _1: 40 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3460 = { _0: 16, _1: 40 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3461 = { _0: 8, _1: 40 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3462 = { _0: 6, _1: 1 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3463 = { _0: 16, _1: 5 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3464 = { _0: -16, _1: 5 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3465 = { _0: 16, _1: 5 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3466 = { _0: 6, _1: 1 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3467 = { _0: 16, _1: 15 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3468 = { _0: -16, _1: 15 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3469 = { _0: 8, _1: 15 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3470 = { _0: 6, _1: 1 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3471 = { _0: 16, _1: 25 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3472 = { _0: -16, _1: 25 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3473 = { _0: 0, _1: 25 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3474 = { _0: 6, _1: 1 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3475 = { _0: 16, _1: 35 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3476 = { _0: -16, _1: 35 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3477 = { _0: -8, _1: 35 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3478 = { _0: 0, _1: 0.5 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3479 = { _0: 10, _1: 1 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3480 = { _0: -20, _1: 8 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3481 = { _0: 8, _1: 0.8 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3482 = { _0: 15, _1: 10 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3483 = { _0: 8, _1: 0.8 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3484 = { _0: -5, _1: 16 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3485 = { _0: 8, _1: 0.8 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3486 = { _0: 22, _1: 19 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3487 = { _0: 8, _1: 0.8 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3488 = { _0: -18, _1: 28 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3489 = { _0: 8, _1: 0.8 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3490 = { _0: 8, _1: 33 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3491 = { _0: 8, _1: 0.8 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3492 = { _0: -10, _1: 41 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3493 = { _0: 8, _1: 0.8 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3494 = { _0: 19, _1: 45 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3495 = { _0: 8, _1: 0.8 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3496 = { _0: -24.5, _1: 25 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3497 = { _0: 1, _1: 25 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3498 = { _0: 24.5, _1: 25 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3499 = { _0: 1, _1: 25 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3500 = { _0: 0, _1: 49.5 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3501 = { _0: 23.6, _1: 1 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3502 = { _0: 0, _1: 0.5 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3503 = { _0: 23.6, _1: 1 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3504 = { _0: 0, _1: 25 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3505 = { _0: 20, _1: 0.8 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$drawPolygon$46$constr$47$3617 = "close";
-const Great$45$Love$45$League$Stick_Man_Battle$server$$shoot_shotgun$46$inner$46$constr$47$3753 = 6;
-const Great$45$Love$45$League$Stick_Man_Battle$server$$shoot_shotgun$46$inner$46$constr$47$3754 = new Option$Some$0$(60);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$shoot_shotgun$46$inner$46$constr$47$3755 = 0;
-const Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$3876 = new Option$Some$0$(0);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$3877 = new Option$Some$0$(0);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$3878 = new Option$Some$0$(255);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$3916 = new Option$Some$0$(255);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$3917 = new Option$Some$0$(255);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$3918 = new Option$Some$0$(255);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$draw_game$46$constr$47$3931 = new Option$Some$0$(255);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$clear_screen$46$constr$47$3979 = new Option$Some$0$(204);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$clear_screen$46$constr$47$3980 = new Option$Some$0$(0);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4093 = new Option$Some$0$(255);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4094 = new Option$Some$0$(255);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4095 = new Option$Some$0$(15);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4096 = new Option$Some$0$(235);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4097 = new Option$Some$0$(255);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4098 = new Option$Some$0$(235);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4099 = new Option$Some$0$(255);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4100 = new Option$Some$0$(255);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4101 = new Option$Some$0$(255);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$create_world$46$tuple$47$4147 = { _0: 0, _1: -9.8 };
-const Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4252 = 0;
-const Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4253 = 3;
-const Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4254 = 22;
-const Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4255 = 18;
-const Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4256 = 25;
-const Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4257 = 19;
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4286 = 0;
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4287 = new Option$Some$1$(Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4286);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4288 = 3;
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4289 = new Option$Some$1$(Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4288);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4290 = 22;
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4291 = new Option$Some$1$(Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4290);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4292 = 18;
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4293 = new Option$Some$1$(Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4292);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4294 = 25;
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4295 = new Option$Some$1$(Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4294);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4296 = 19;
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4297 = new Option$Some$1$(Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4296);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4298 = false;
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4299 = 66;
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4300 = new Option$Some$1$(Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4299);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4301 = 67;
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4302 = new Option$Some$1$(Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4301);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4303 = 64;
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4304 = new Option$Some$1$(Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4303);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4305 = 65;
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4306 = new Option$Some$1$(Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4305);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4307 = 89;
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4308 = new Option$Some$1$(Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4307);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4309 = 88;
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4310 = new Option$Some$1$(Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4309);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4311 = false;
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4340 = new Option$Some$0$(200);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4341 = new Option$Some$0$(180);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4342 = new Option$Some$0$(90);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4343 = new Option$Some$0$(8);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4344 = new Option$Some$0$(12);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4345 = new Option$Some$0$(200);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4346 = new Option$Some$0$(255);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4347 = new Option$Some$0$(0);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4348 = new Option$Some$0$(0);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4349 = new Option$Some$0$(180);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4350 = new Option$Some$0$(255);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4351 = new Option$Some$0$(255);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4352 = new Option$Some$0$(255);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4353 = new Option$Some$0$(0);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4354 = new Option$Some$0$(0);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4355 = new Option$Some$0$(180);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4356 = new Option$Some$0$(255);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4357 = new Option$Some$0$(255);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4358 = new Option$Some$0$(255);
-new Option$Some$0$(80);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$start_screen_active = { val: false };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3439 = { _0: 0.25, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3440 = { _0: 0.2, _1: 0.25 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3441 = { _0: 0.15, _1: 0.55 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3442 = { _0: 0.15, _1: 0.55 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3443 = { _0: 0.15, _1: 0.55 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3444 = { _0: 0.15, _1: 0.55 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3445 = { _0: 0.15, _1: 0.52 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3446 = { _0: 0.15, _1: 0.52 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3447 = { _0: 0.15, _1: 0.52 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3448 = { _0: 0.15, _1: 0.52 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3473 = { _0: -15, _1: 15 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3474 = { _0: 0, _1: 30 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3475 = { _0: -24.5, _1: 25 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3476 = { _0: 1, _1: 25 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3477 = "./src/game-level1/images/plane1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3478 = { _0: 24.5, _1: 25 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3479 = { _0: 1, _1: 25 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3480 = "./src/game-level1/images/plane1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3481 = { _0: 0, _1: 49.5 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3482 = { _0: 23.6, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3483 = "./src/game-level1/images/plane1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3484 = { _0: 0, _1: 0.5 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3485 = { _0: 23.6, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3486 = "./src/game-level1/images/plane1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3487 = { _0: 5, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3488 = { _0: -15, _1: 10 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3489 = { _0: 15, _1: 40 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3490 = { _0: -15, _1: 10 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3491 = "./src/game-level1/images/plane1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3492 = { _0: 5, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3493 = { _0: 15, _1: 10 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3494 = { _0: -15, _1: 40 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3495 = { _0: 0, _1: 25 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3496 = "./src/game-level1/images/plane1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3497 = { _0: 0, _1: 10 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3498 = { _0: 5, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3499 = "./src/game-level1/images/plane1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3500 = { _0: 0, _1: 40 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3501 = { _0: 5, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3502 = "./src/game-level1/images/plane1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3503 = { _0: -17, _1: 25 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3504 = { _0: 6, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3505 = "./src/game-level1/images/plane1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3506 = { _0: 17, _1: 25 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3507 = { _0: 6, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3508 = "./src/game-level1/images/plane1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3509 = { _0: -15, _1: 15 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3510 = { _0: 10, _1: 45 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3511 = { _0: -24.5, _1: 25 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3512 = { _0: 1, _1: 25 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3513 = "./src/game-level2/images/plane3.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3514 = { _0: 24.5, _1: 25 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3515 = { _0: 1, _1: 25 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3516 = "./src/game-level2/images/plane3.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3517 = { _0: 0, _1: 49.5 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3518 = { _0: 23.6, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3519 = "./src/game-level2/images/plane2.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3520 = { _0: 0, _1: 0.5 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3521 = { _0: 23.6, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3522 = "./src/game-level2/images/plane2.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3523 = { _0: 6, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3524 = { _0: -16, _1: 10 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3525 = { _0: 16, _1: 10 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3526 = { _0: -16, _1: 10 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3527 = "./src/game-level2/images/plane1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3528 = { _0: 6, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3529 = { _0: -16, _1: 20 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3530 = { _0: 16, _1: 20 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3531 = { _0: -8, _1: 20 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3532 = "./src/game-level2/images/plane1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3533 = { _0: 6, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3534 = { _0: -16, _1: 30 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3535 = { _0: 16, _1: 30 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3536 = { _0: 0, _1: 30 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3537 = "./src/game-level2/images/plane1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3538 = { _0: 6, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3539 = { _0: -16, _1: 40 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3540 = { _0: 16, _1: 40 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3541 = { _0: 8, _1: 40 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3542 = "./src/game-level2/images/plane1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3543 = { _0: 6, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3544 = { _0: 16, _1: 5 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3545 = { _0: -16, _1: 5 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3546 = { _0: 16, _1: 5 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3547 = "./src/game-level2/images/plane1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3548 = { _0: 6, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3549 = { _0: 16, _1: 15 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3550 = { _0: -16, _1: 15 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3551 = { _0: 8, _1: 15 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3552 = "./src/game-level2/images/plane1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3553 = { _0: 6, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3554 = { _0: 16, _1: 25 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3555 = { _0: -16, _1: 25 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3556 = { _0: 0, _1: 25 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3557 = "./src/game-level2/images/plane1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3558 = { _0: 6, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3559 = { _0: 16, _1: 35 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3560 = { _0: -16, _1: 35 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3561 = { _0: -8, _1: 35 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3562 = "./src/game-level2/images/plane1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3563 = { _0: -15, _1: 15 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3564 = { _0: 10, _1: 45 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3565 = { _0: 0, _1: 0.5 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3566 = { _0: 10, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3567 = "./src/game-level3/images/plane2.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3568 = { _0: -20, _1: 8 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3569 = { _0: 8, _1: 0.8 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3570 = "./src/game-level3/images/plane2.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3571 = { _0: 15, _1: 10 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3572 = { _0: 8, _1: 0.8 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3573 = "./src/game-level3/images/plane2.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3574 = { _0: -5, _1: 16 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3575 = { _0: 8, _1: 0.8 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3576 = "./src/game-level3/images/plane2.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3577 = { _0: 22, _1: 19 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3578 = { _0: 8, _1: 0.8 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3579 = "./src/game-level3/images/plane2.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3580 = { _0: -18, _1: 28 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3581 = { _0: 8, _1: 0.8 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3582 = "./src/game-level3/images/plane2.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3583 = { _0: 8, _1: 33 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3584 = { _0: 8, _1: 0.8 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3585 = "./src/game-level3/images/plane2.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3586 = { _0: -10, _1: 41 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3587 = { _0: 8, _1: 0.8 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3588 = "./src/game-level3/images/plane2.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3589 = { _0: 19, _1: 45 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3590 = { _0: 8, _1: 0.8 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3591 = "./src/game-level3/images/plane2.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3592 = { _0: -15, _1: 15 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3593 = { _0: 10, _1: 45 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3594 = { _0: -24.5, _1: 25 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3595 = { _0: 1, _1: 25 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3596 = "./src/game-level4/images/plane1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3597 = { _0: 24.5, _1: 25 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3598 = { _0: 1, _1: 25 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3599 = "./src/game-level4/images/plane1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3600 = { _0: 0, _1: 49.5 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3601 = { _0: 23.6, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3602 = "./src/game-level4/images/plane2.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3603 = { _0: 0, _1: 0.5 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3604 = { _0: 23.6, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3605 = "./src/game-level4/images/plane2.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3606 = { _0: 0, _1: 25 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3607 = { _0: 20, _1: 0.8 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3608 = "./src/game-level4/images/plane1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3609 = { _0: -15, _1: 15 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3610 = { _0: 15, _1: 44 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3611 = { _0: -24.5, _1: 25 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3612 = { _0: 1, _1: 25 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3613 = "./src/game-level5/images/plane2.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3614 = { _0: 24.5, _1: 25 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3615 = { _0: 1, _1: 25 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3616 = "./src/game-level5/images/plane2.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3617 = { _0: 0, _1: 49.5 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3618 = { _0: 23.6, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3619 = "./src/game-level5/images/plane2.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3620 = { _0: 0, _1: 0.5 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3621 = { _0: 23.6, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3622 = "./src/game-level5/images/plane2.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3623 = { _0: 0, _1: 25 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3624 = { _0: 10, _1: 0.8 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3625 = "./src/game-level5/images/plane2.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3626 = { _0: 5, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3627 = { _0: -18, _1: 5 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3628 = { _0: -18, _1: 10 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3629 = { _0: -18, _1: 5 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3630 = "./src/game-level5/images/plane1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3631 = { _0: 5, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3632 = { _0: 18, _1: 5 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3633 = { _0: 18, _1: 10 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3634 = { _0: 18, _1: 5 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3635 = "./src/game-level5/images/plane1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3636 = { _0: 5, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3637 = { _0: -18, _1: 40 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3638 = { _0: -18, _1: 45 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3639 = { _0: -18, _1: 40 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3640 = "./src/game-level5/images/plane1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3641 = { _0: 5, _1: 1 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3642 = { _0: 18, _1: 40 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3643 = { _0: 18, _1: 45 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3644 = { _0: 18, _1: 40 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3645 = "./src/game-level5/images/plane1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$drawPolygon$46$constr$47$3747 = "close";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$drawDynamicBody$46$inner$46$constr$47$3809 = new Option$Some$0$(1);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$drawDynamicBody$46$inner$46$constr$47$3810 = new Option$Some$0$(127);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$drawDynamicBody$46$inner$46$constr$47$3811 = new Option$Some$0$(127);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$drawDynamicBody$46$inner$46$constr$47$3812 = new Option$Some$0$(200);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$shoot_shotgun$46$inner$46$constr$47$3935 = 40;
+const Great$45$Love$45$League$Stick_Man_Battle$server$$shoot_shotgun$46$inner$46$constr$47$3936 = new Option$Some$0$(30);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$shoot_shotgun$46$inner$46$constr$47$3937 = 0;
+const Great$45$Love$45$League$Stick_Man_Battle$server$$drawStaticBody$46$inner$46$constr$47$4105 = new Option$Some$0$(127);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$drawStaticBody$46$inner$46$constr$47$4106 = new Option$Some$0$(127);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$drawStaticBody$46$inner$46$constr$47$4107 = new Option$Some$0$(200);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$4146 = new Option$Some$0$(0);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$4147 = new Option$Some$0$(0);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$4148 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$4186 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$4187 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$4188 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$draw_game$46$constr$47$4201 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$clear_screen$46$constr$47$4249 = new Option$Some$0$(204);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$clear_screen$46$constr$47$4250 = new Option$Some$0$(0);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$4263 = new Option$Some$0$(1000);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$4264 = new Option$Some$0$(1000);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$4265 = new Option$Some$0$(204);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$4266 = new Option$Some$0$(0);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4403 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4404 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4405 = new Option$Some$0$(15);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4406 = new Option$Some$0$(235);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4407 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4408 = new Option$Some$0$(235);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4409 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4410 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4411 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$create_world$46$tuple$47$4457 = { _0: 0, _1: -9.8 };
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_weapon_exchange$46$constr$47$4478 = "src/assets/gun1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_weapon_exchange$46$constr$47$4479 = "src/assets/gun2.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_weapon_exchange$46$constr$47$4480 = "src/assets/gun3.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_weapon_exchange$46$constr$47$4481 = "src/assets/gun4.png";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4579 = 0;
+const Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4580 = 3;
+const Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4581 = 22;
+const Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4582 = 18;
+const Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4583 = 25;
+const Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4584 = 19;
+const Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4585 = 5;
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4617 = 0;
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4618 = new Option$Some$1$(Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4617);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4619 = 3;
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4620 = new Option$Some$1$(Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4619);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4621 = 22;
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4622 = new Option$Some$1$(Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4621);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4623 = 18;
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4624 = new Option$Some$1$(Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4623);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4625 = 25;
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4626 = new Option$Some$1$(Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4625);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4627 = 19;
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4628 = new Option$Some$1$(Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4627);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4629 = false;
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4630 = 66;
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4631 = new Option$Some$1$(Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4630);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4632 = 67;
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4633 = new Option$Some$1$(Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4632);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4634 = 64;
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4635 = new Option$Some$1$(Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4634);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4636 = 65;
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4637 = new Option$Some$1$(Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4636);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4638 = 89;
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4639 = new Option$Some$1$(Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4638);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4640 = 88;
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4641 = new Option$Some$1$(Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4640);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4642 = false;
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4671 = new Option$Some$0$(200);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4672 = new Option$Some$0$(180);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4673 = new Option$Some$0$(90);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4674 = new Option$Some$0$(8);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4675 = new Option$Some$0$(12);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4676 = new Option$Some$0$(200);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4677 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4678 = new Option$Some$0$(0);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4679 = new Option$Some$0$(0);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4680 = new Option$Some$0$(180);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4681 = new Option$Some$0$(1000);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4682 = new Option$Some$0$(1000);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4683 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4684 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4685 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4686 = new Option$Some$0$(1000);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4687 = new Option$Some$0$(1000);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4688 = new Option$Some$0$(0);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4689 = new Option$Some$0$(0);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4690 = new Option$Some$0$(180);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4691 = new Option$Some$0$(1000);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4692 = new Option$Some$0$(1000);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4693 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4694 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4695 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4696 = new Option$Some$0$(1000);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4697 = new Option$Some$0$(1000);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_end_router$46$constr$47$4750 = "game-level1.html";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_end_router$46$constr$47$4751 = "game-level2.html";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_end_router$46$constr$47$4752 = "game-level3.html";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_end_router$46$constr$47$4753 = "game-level4.html";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_end_router$46$constr$47$4754 = "game-level5.html";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_stop_router$46$constr$47$4758 = "game-level1.html";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_stop_router$46$constr$47$4759 = "game-level2.html";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_stop_router$46$constr$47$4760 = "game-level3.html";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_stop_router$46$constr$47$4761 = "game-level4.html";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_stop_router$46$constr$47$4762 = "game-level5.html";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4821 = new Option$Some$0$(0);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4822 = new Option$Some$0$(0);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4823 = new Option$Some$0$(180);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4824 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4825 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4826 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4827 = "center";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4828 = new Option$Some$0$(215);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4829 = new Option$Some$0$(0);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4830 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4831 = new Option$Some$0$(200);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4832 = new Option$Some$0$(200);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4833 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4834 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4835 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4836 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4842 = new Option$Some$0$(0);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4843 = new Option$Some$0$(0);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4844 = new Option$Some$0$(150);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4845 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4846 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4847 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4848 = "center";
+const Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4849 = new Option$Some$0$(200);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4850 = new Option$Some$0$(200);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4851 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4852 = new Option$Some$0$(150);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4853 = new Option$Some$0$(150);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4854 = new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_animation$46$constr$47$4971 = new Option$Some$0$(0);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_animation$46$constr$47$4972 = new Option$Some$0$(0);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_animation$46$constr$47$4973 = new Option$Some$0$(20);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_animation$46$constr$47$4974 = new Option$Some$0$(20);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_animation$46$constr$47$4975 = new Option$Some$0$(60);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_animation$46$constr$47$4976 = new Option$Some$0$(60);
+new Option$Some$0$(0);
+new Option$Some$0$(0);
+new Option$Some$0$(150);
 new Option$Some$0$(255);
 new Option$Some$0$(255);
-new Option$Some$0$(200);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_animation$46$constr$47$4460 = new Option$Some$0$(0);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_animation$46$constr$47$4461 = new Option$Some$0$(0);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_animation$46$constr$47$4462 = new Option$Some$0$(20);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_animation$46$constr$47$4463 = new Option$Some$0$(20);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_animation$46$constr$47$4464 = new Option$Some$0$(60);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_animation$46$constr$47$4465 = new Option$Some$0$(60);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4511 = new Option$Some$0$(0);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4512 = new Option$Some$0$(0);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4513 = new Option$Some$0$(180);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4514 = new Option$Some$0$(255);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4515 = new Option$Some$0$(255);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4516 = new Option$Some$0$(255);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4517 = "center";
-const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4518 = new Option$Some$0$(215);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4519 = new Option$Some$0$(0);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4520 = new Option$Some$0$(255);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4521 = new Option$Some$0$(200);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4522 = new Option$Some$0$(200);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4523 = new Option$Some$0$(255);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4524 = new Option$Some$0$(255);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4525 = new Option$Some$0$(255);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4526 = new Option$Some$0$(255);
+new Option$Some$0$(255);
+const Great$45$Love$45$League$Stick_Man_Battle$game$45$level2$$_main$46$constr$47$5300 = "./src/game-level2/images/background.png";
+const Great$45$Love$45$League$Stick_Man_Battle$game$45$level2$$_main$46$constr$47$5301 = "src/assets/gun1.png";
+const Great$45$Love$45$League$Stick_Man_Battle$game$45$level2$$_main$46$constr$47$5302 = "src/assets/gun1.png";
 const moonbitlang$core$builtin$$seed = moonbitlang$core$builtin$$random_seed();
 const moonbitlang$x$json5$$non_ascii_whitespace = [{ _0: 160, _1: 160 }, { _0: 5760, _1: 5760 }, { _0: 8192, _1: 8202 }, { _0: 8232, _1: 8233 }, { _0: 8239, _1: 8239 }, { _0: 8287, _1: 8287 }, { _0: 12288, _1: 12288 }, { _0: 65279, _1: 65279 }];
 const moonbitlang$core$double$$neg_infinity = moonbitlang$core$int64$$Int64$reinterpret_as_double($_4503599627370496L);
@@ -1267,19 +1450,18 @@ const moonbitlang$core$double$$infinity = moonbitlang$core$int64$$Int64$reinterp
 const moonbitlang$core$strconv$$max_mantissa_fast_path = moonbitlang$core$builtin$$Shl$shl$3$($2L, 52);
 const moonbitlang$x$json5$$non_ascii_id_start = [{ _0: 170, _1: 170 }, { _0: 181, _1: 181 }, { _0: 186, _1: 186 }, { _0: 192, _1: 214 }, { _0: 216, _1: 246 }, { _0: 248, _1: 705 }, { _0: 710, _1: 721 }, { _0: 736, _1: 740 }, { _0: 748, _1: 748 }, { _0: 750, _1: 750 }, { _0: 880, _1: 884 }, { _0: 886, _1: 887 }, { _0: 890, _1: 893 }, { _0: 895, _1: 895 }, { _0: 902, _1: 902 }, { _0: 904, _1: 906 }, { _0: 908, _1: 908 }, { _0: 910, _1: 929 }, { _0: 931, _1: 1013 }, { _0: 1015, _1: 1153 }, { _0: 1162, _1: 1327 }, { _0: 1329, _1: 1366 }, { _0: 1369, _1: 1369 }, { _0: 1377, _1: 1415 }, { _0: 1488, _1: 1514 }, { _0: 1520, _1: 1522 }, { _0: 1568, _1: 1610 }, { _0: 1646, _1: 1647 }, { _0: 1649, _1: 1747 }, { _0: 1749, _1: 1749 }, { _0: 1765, _1: 1766 }, { _0: 1774, _1: 1775 }, { _0: 1786, _1: 1788 }, { _0: 1791, _1: 1791 }, { _0: 1808, _1: 1808 }, { _0: 1810, _1: 1839 }, { _0: 1869, _1: 1957 }, { _0: 1969, _1: 1969 }, { _0: 1994, _1: 2026 }, { _0: 2036, _1: 2037 }, { _0: 2042, _1: 2042 }, { _0: 2048, _1: 2069 }, { _0: 2074, _1: 2074 }, { _0: 2084, _1: 2084 }, { _0: 2088, _1: 2088 }, { _0: 2112, _1: 2136 }, { _0: 2144, _1: 2154 }, { _0: 2208, _1: 2228 }, { _0: 2230, _1: 2237 }, { _0: 2308, _1: 2361 }, { _0: 2365, _1: 2365 }, { _0: 2384, _1: 2384 }, { _0: 2392, _1: 2401 }, { _0: 2417, _1: 2432 }, { _0: 2437, _1: 2444 }, { _0: 2447, _1: 2448 }, { _0: 2451, _1: 2472 }, { _0: 2474, _1: 2480 }, { _0: 2482, _1: 2482 }, { _0: 2486, _1: 2489 }, { _0: 2493, _1: 2493 }, { _0: 2510, _1: 2510 }, { _0: 2524, _1: 2525 }, { _0: 2527, _1: 2529 }, { _0: 2544, _1: 2545 }, { _0: 2556, _1: 2556 }, { _0: 2565, _1: 2570 }, { _0: 2575, _1: 2576 }, { _0: 2579, _1: 2600 }, { _0: 2602, _1: 2608 }, { _0: 2610, _1: 2611 }, { _0: 2613, _1: 2614 }, { _0: 2616, _1: 2617 }, { _0: 2649, _1: 2652 }, { _0: 2654, _1: 2654 }, { _0: 2674, _1: 2676 }, { _0: 2693, _1: 2701 }, { _0: 2703, _1: 2705 }, { _0: 2707, _1: 2728 }, { _0: 2730, _1: 2736 }, { _0: 2738, _1: 2739 }, { _0: 2741, _1: 2745 }, { _0: 2749, _1: 2749 }, { _0: 2768, _1: 2768 }, { _0: 2784, _1: 2785 }, { _0: 2809, _1: 2809 }, { _0: 2821, _1: 2828 }, { _0: 2831, _1: 2832 }, { _0: 2835, _1: 2856 }, { _0: 2858, _1: 2864 }, { _0: 2866, _1: 2867 }, { _0: 2869, _1: 2873 }, { _0: 2877, _1: 2877 }, { _0: 2908, _1: 2909 }, { _0: 2911, _1: 2913 }, { _0: 2929, _1: 2929 }, { _0: 2947, _1: 2947 }, { _0: 2949, _1: 2954 }, { _0: 2958, _1: 2960 }, { _0: 2962, _1: 2965 }, { _0: 2969, _1: 2970 }, { _0: 2972, _1: 2972 }, { _0: 2974, _1: 2975 }, { _0: 2979, _1: 2980 }, { _0: 2984, _1: 2986 }, { _0: 2990, _1: 3001 }, { _0: 3024, _1: 3024 }, { _0: 3077, _1: 3084 }, { _0: 3086, _1: 3088 }, { _0: 3090, _1: 3112 }, { _0: 3114, _1: 3129 }, { _0: 3133, _1: 3133 }, { _0: 3160, _1: 3162 }, { _0: 3168, _1: 3169 }, { _0: 3200, _1: 3200 }, { _0: 3205, _1: 3212 }, { _0: 3214, _1: 3216 }, { _0: 3218, _1: 3240 }, { _0: 3242, _1: 3251 }, { _0: 3253, _1: 3257 }, { _0: 3261, _1: 3261 }, { _0: 3294, _1: 3294 }, { _0: 3296, _1: 3297 }, { _0: 3313, _1: 3314 }, { _0: 3333, _1: 3340 }, { _0: 3342, _1: 3344 }, { _0: 3346, _1: 3386 }, { _0: 3389, _1: 3389 }, { _0: 3406, _1: 3406 }, { _0: 3412, _1: 3414 }, { _0: 3423, _1: 3425 }, { _0: 3450, _1: 3455 }, { _0: 3461, _1: 3478 }, { _0: 3482, _1: 3505 }, { _0: 3507, _1: 3515 }, { _0: 3517, _1: 3517 }, { _0: 3520, _1: 3526 }, { _0: 3585, _1: 3632 }, { _0: 3634, _1: 3635 }, { _0: 3648, _1: 3654 }, { _0: 3713, _1: 3714 }, { _0: 3716, _1: 3716 }, { _0: 3719, _1: 3720 }, { _0: 3722, _1: 3722 }, { _0: 3725, _1: 3725 }, { _0: 3732, _1: 3735 }, { _0: 3737, _1: 3743 }, { _0: 3745, _1: 3747 }, { _0: 3749, _1: 3749 }, { _0: 3751, _1: 3751 }, { _0: 3754, _1: 3755 }, { _0: 3757, _1: 3760 }, { _0: 3762, _1: 3763 }, { _0: 3773, _1: 3773 }, { _0: 3776, _1: 3780 }, { _0: 3782, _1: 3782 }, { _0: 3804, _1: 3807 }, { _0: 3840, _1: 3840 }, { _0: 3904, _1: 3911 }, { _0: 3913, _1: 3948 }, { _0: 3976, _1: 3980 }, { _0: 4096, _1: 4138 }, { _0: 4159, _1: 4159 }, { _0: 4176, _1: 4181 }, { _0: 4186, _1: 4189 }, { _0: 4193, _1: 4193 }, { _0: 4197, _1: 4198 }, { _0: 4206, _1: 4208 }, { _0: 4213, _1: 4225 }, { _0: 4238, _1: 4238 }, { _0: 4256, _1: 4293 }, { _0: 4295, _1: 4295 }, { _0: 4301, _1: 4301 }, { _0: 4304, _1: 4346 }, { _0: 4348, _1: 4680 }, { _0: 4682, _1: 4685 }, { _0: 4688, _1: 4694 }, { _0: 4696, _1: 4696 }, { _0: 4698, _1: 4701 }, { _0: 4704, _1: 4744 }, { _0: 4746, _1: 4749 }, { _0: 4752, _1: 4784 }, { _0: 4786, _1: 4789 }, { _0: 4792, _1: 4798 }, { _0: 4800, _1: 4800 }, { _0: 4802, _1: 4805 }, { _0: 4808, _1: 4822 }, { _0: 4824, _1: 4880 }, { _0: 4882, _1: 4885 }, { _0: 4888, _1: 4954 }, { _0: 4992, _1: 5007 }, { _0: 5024, _1: 5109 }, { _0: 5112, _1: 5117 }, { _0: 5121, _1: 5740 }, { _0: 5743, _1: 5759 }, { _0: 5761, _1: 5786 }, { _0: 5792, _1: 5866 }, { _0: 5870, _1: 5880 }, { _0: 5888, _1: 5900 }, { _0: 5902, _1: 5905 }, { _0: 5920, _1: 5937 }, { _0: 5952, _1: 5969 }, { _0: 5984, _1: 5996 }, { _0: 5998, _1: 6000 }, { _0: 6016, _1: 6067 }, { _0: 6103, _1: 6103 }, { _0: 6108, _1: 6108 }, { _0: 6176, _1: 6263 }, { _0: 6272, _1: 6276 }, { _0: 6279, _1: 6312 }, { _0: 6314, _1: 6314 }, { _0: 6320, _1: 6389 }, { _0: 6400, _1: 6430 }, { _0: 6480, _1: 6509 }, { _0: 6512, _1: 6516 }, { _0: 6528, _1: 6571 }, { _0: 6576, _1: 6601 }, { _0: 6656, _1: 6678 }, { _0: 6688, _1: 6740 }, { _0: 6823, _1: 6823 }, { _0: 6917, _1: 6963 }, { _0: 6981, _1: 6987 }, { _0: 7043, _1: 7072 }, { _0: 7086, _1: 7087 }, { _0: 7098, _1: 7141 }, { _0: 7168, _1: 7203 }, { _0: 7245, _1: 7247 }, { _0: 7258, _1: 7293 }, { _0: 7296, _1: 7304 }, { _0: 7401, _1: 7404 }, { _0: 7406, _1: 7409 }, { _0: 7413, _1: 7414 }, { _0: 7424, _1: 7615 }, { _0: 7680, _1: 7957 }, { _0: 7960, _1: 7965 }, { _0: 7968, _1: 8005 }, { _0: 8008, _1: 8013 }, { _0: 8016, _1: 8023 }, { _0: 8025, _1: 8025 }, { _0: 8027, _1: 8027 }, { _0: 8029, _1: 8029 }, { _0: 8031, _1: 8061 }, { _0: 8064, _1: 8116 }, { _0: 8118, _1: 8124 }, { _0: 8126, _1: 8126 }, { _0: 8130, _1: 8132 }, { _0: 8134, _1: 8140 }, { _0: 8144, _1: 8147 }, { _0: 8150, _1: 8155 }, { _0: 8160, _1: 8172 }, { _0: 8178, _1: 8180 }, { _0: 8182, _1: 8188 }, { _0: 8305, _1: 8305 }, { _0: 8319, _1: 8319 }, { _0: 8336, _1: 8348 }, { _0: 8450, _1: 8450 }, { _0: 8455, _1: 8455 }, { _0: 8458, _1: 8467 }, { _0: 8469, _1: 8469 }, { _0: 8473, _1: 8477 }, { _0: 8484, _1: 8484 }, { _0: 8486, _1: 8486 }, { _0: 8488, _1: 8488 }, { _0: 8490, _1: 8493 }, { _0: 8495, _1: 8505 }, { _0: 8508, _1: 8511 }, { _0: 8517, _1: 8521 }, { _0: 8526, _1: 8526 }, { _0: 8544, _1: 8584 }, { _0: 11264, _1: 11310 }, { _0: 11312, _1: 11358 }, { _0: 11360, _1: 11492 }, { _0: 11499, _1: 11502 }, { _0: 11506, _1: 11507 }, { _0: 11520, _1: 11557 }, { _0: 11559, _1: 11559 }, { _0: 11565, _1: 11565 }, { _0: 11568, _1: 11623 }, { _0: 11631, _1: 11631 }, { _0: 11648, _1: 11670 }, { _0: 11680, _1: 11686 }, { _0: 11688, _1: 11694 }, { _0: 11696, _1: 11702 }, { _0: 11704, _1: 11710 }, { _0: 11712, _1: 11718 }, { _0: 11720, _1: 11726 }, { _0: 11728, _1: 11734 }, { _0: 11736, _1: 11742 }, { _0: 11823, _1: 11823 }, { _0: 12293, _1: 12295 }, { _0: 12321, _1: 12329 }, { _0: 12337, _1: 12341 }, { _0: 12344, _1: 12348 }, { _0: 12353, _1: 12438 }, { _0: 12445, _1: 12447 }, { _0: 12449, _1: 12538 }, { _0: 12540, _1: 12543 }, { _0: 12549, _1: 12590 }, { _0: 12593, _1: 12686 }, { _0: 12704, _1: 12730 }, { _0: 12784, _1: 12799 }, { _0: 13312, _1: 19893 }, { _0: 19968, _1: 40938 }, { _0: 40960, _1: 42124 }, { _0: 42192, _1: 42237 }, { _0: 42240, _1: 42508 }, { _0: 42512, _1: 42527 }, { _0: 42538, _1: 42539 }, { _0: 42560, _1: 42606 }, { _0: 42623, _1: 42653 }, { _0: 42656, _1: 42735 }, { _0: 42775, _1: 42783 }, { _0: 42786, _1: 42888 }, { _0: 42891, _1: 42926 }, { _0: 42928, _1: 42935 }, { _0: 42999, _1: 43009 }, { _0: 43011, _1: 43013 }, { _0: 43015, _1: 43018 }, { _0: 43020, _1: 43042 }, { _0: 43072, _1: 43123 }, { _0: 43138, _1: 43187 }, { _0: 43250, _1: 43255 }, { _0: 43259, _1: 43259 }, { _0: 43261, _1: 43261 }, { _0: 43274, _1: 43301 }, { _0: 43312, _1: 43334 }, { _0: 43360, _1: 43388 }, { _0: 43396, _1: 43442 }, { _0: 43471, _1: 43471 }, { _0: 43488, _1: 43492 }, { _0: 43494, _1: 43503 }, { _0: 43514, _1: 43518 }, { _0: 43520, _1: 43560 }, { _0: 43584, _1: 43586 }, { _0: 43588, _1: 43595 }, { _0: 43616, _1: 43638 }, { _0: 43642, _1: 43642 }, { _0: 43646, _1: 43695 }, { _0: 43697, _1: 43697 }, { _0: 43701, _1: 43702 }, { _0: 43705, _1: 43709 }, { _0: 43712, _1: 43712 }, { _0: 43714, _1: 43714 }, { _0: 43739, _1: 43741 }, { _0: 43744, _1: 43754 }, { _0: 43762, _1: 43764 }, { _0: 43777, _1: 43782 }, { _0: 43785, _1: 43790 }, { _0: 43793, _1: 43798 }, { _0: 43808, _1: 43814 }, { _0: 43816, _1: 43822 }, { _0: 43824, _1: 43866 }, { _0: 43868, _1: 43877 }, { _0: 43888, _1: 44002 }, { _0: 44032, _1: 55203 }, { _0: 55216, _1: 55238 }, { _0: 55243, _1: 55291 }, { _0: 63744, _1: 64109 }, { _0: 64112, _1: 64217 }, { _0: 64256, _1: 64262 }, { _0: 64275, _1: 64279 }, { _0: 64285, _1: 64285 }, { _0: 64287, _1: 64296 }, { _0: 64298, _1: 64310 }, { _0: 64312, _1: 64316 }, { _0: 64318, _1: 64318 }, { _0: 64320, _1: 64321 }, { _0: 64323, _1: 64324 }, { _0: 64326, _1: 64433 }, { _0: 64467, _1: 64829 }, { _0: 64848, _1: 64911 }, { _0: 64914, _1: 64967 }, { _0: 65008, _1: 65019 }, { _0: 65136, _1: 65140 }, { _0: 65142, _1: 65276 }, { _0: 65313, _1: 65338 }, { _0: 65345, _1: 65370 }, { _0: 65382, _1: 65470 }, { _0: 65474, _1: 65479 }, { _0: 65482, _1: 65487 }, { _0: 65490, _1: 65495 }, { _0: 65498, _1: 65500 }, { _0: 65536, _1: 65547 }, { _0: 65549, _1: 65574 }, { _0: 65576, _1: 65594 }, { _0: 65596, _1: 65597 }, { _0: 65599, _1: 65613 }, { _0: 65616, _1: 65629 }, { _0: 65664, _1: 65786 }, { _0: 65856, _1: 65908 }, { _0: 66176, _1: 66204 }, { _0: 66208, _1: 66256 }, { _0: 66304, _1: 66335 }, { _0: 66349, _1: 66378 }, { _0: 66384, _1: 66421 }, { _0: 66432, _1: 66461 }, { _0: 66464, _1: 66499 }, { _0: 66504, _1: 66511 }, { _0: 66513, _1: 66517 }, { _0: 66560, _1: 66717 }, { _0: 66736, _1: 66771 }, { _0: 66776, _1: 66811 }, { _0: 66816, _1: 66855 }, { _0: 66864, _1: 66915 }, { _0: 67072, _1: 67382 }, { _0: 67392, _1: 67413 }, { _0: 67424, _1: 67431 }, { _0: 67584, _1: 67589 }, { _0: 67592, _1: 67592 }, { _0: 67594, _1: 67637 }, { _0: 67639, _1: 67640 }, { _0: 67644, _1: 67644 }, { _0: 67647, _1: 67669 }, { _0: 67680, _1: 67702 }, { _0: 67712, _1: 67742 }, { _0: 67808, _1: 67826 }, { _0: 67828, _1: 67829 }, { _0: 67840, _1: 67861 }, { _0: 67872, _1: 67897 }, { _0: 67968, _1: 68023 }, { _0: 68030, _1: 68031 }, { _0: 68096, _1: 68096 }, { _0: 68112, _1: 68115 }, { _0: 68117, _1: 68119 }, { _0: 68121, _1: 68147 }, { _0: 68192, _1: 68220 }, { _0: 68224, _1: 68252 }, { _0: 68288, _1: 68295 }, { _0: 68297, _1: 68324 }, { _0: 68352, _1: 68405 }, { _0: 68416, _1: 68437 }, { _0: 68448, _1: 68466 }, { _0: 68480, _1: 68497 }, { _0: 68608, _1: 68680 }, { _0: 68736, _1: 68786 }, { _0: 68800, _1: 68850 }, { _0: 69635, _1: 69687 }, { _0: 69763, _1: 69807 }, { _0: 69840, _1: 69864 }, { _0: 69891, _1: 69926 }, { _0: 69968, _1: 70002 }, { _0: 70006, _1: 70006 }, { _0: 70019, _1: 70066 }, { _0: 70081, _1: 70084 }, { _0: 70106, _1: 70106 }, { _0: 70108, _1: 70108 }, { _0: 70144, _1: 70161 }, { _0: 70163, _1: 70187 }, { _0: 70272, _1: 70278 }, { _0: 70280, _1: 70280 }, { _0: 70282, _1: 70285 }, { _0: 70287, _1: 70301 }, { _0: 70303, _1: 70312 }, { _0: 70320, _1: 70366 }, { _0: 70405, _1: 70412 }, { _0: 70415, _1: 70416 }, { _0: 70419, _1: 70440 }, { _0: 70442, _1: 70448 }, { _0: 70450, _1: 70451 }, { _0: 70453, _1: 70457 }, { _0: 70461, _1: 70461 }, { _0: 70480, _1: 70480 }, { _0: 70493, _1: 70497 }, { _0: 70656, _1: 70708 }, { _0: 70727, _1: 70730 }, { _0: 70784, _1: 70831 }, { _0: 70852, _1: 70853 }, { _0: 70855, _1: 70855 }, { _0: 71040, _1: 71086 }, { _0: 71128, _1: 71131 }, { _0: 71168, _1: 71215 }, { _0: 71236, _1: 71236 }, { _0: 71296, _1: 71338 }, { _0: 71424, _1: 71449 }, { _0: 71840, _1: 71903 }, { _0: 71935, _1: 71935 }, { _0: 72192, _1: 72192 }, { _0: 72203, _1: 72242 }, { _0: 72250, _1: 72250 }, { _0: 72272, _1: 72272 }, { _0: 72284, _1: 72323 }, { _0: 72326, _1: 72329 }, { _0: 72384, _1: 72440 }, { _0: 72704, _1: 72712 }, { _0: 72714, _1: 72750 }, { _0: 72768, _1: 72768 }, { _0: 72818, _1: 72847 }, { _0: 72960, _1: 72966 }, { _0: 72968, _1: 72969 }, { _0: 72971, _1: 73008 }, { _0: 73030, _1: 73030 }, { _0: 73728, _1: 74649 }, { _0: 74752, _1: 74862 }, { _0: 74880, _1: 75075 }, { _0: 77824, _1: 78894 }, { _0: 82944, _1: 83526 }, { _0: 92160, _1: 92728 }, { _0: 92736, _1: 92766 }, { _0: 92880, _1: 92909 }, { _0: 92928, _1: 92975 }, { _0: 92992, _1: 92995 }, { _0: 93027, _1: 93047 }, { _0: 93053, _1: 93071 }, { _0: 93952, _1: 94020 }, { _0: 94032, _1: 94032 }, { _0: 94099, _1: 94111 }, { _0: 94176, _1: 94177 }, { _0: 94208, _1: 100332 }, { _0: 100352, _1: 101106 }, { _0: 110592, _1: 110878 }, { _0: 110960, _1: 111355 }, { _0: 113664, _1: 113770 }, { _0: 113776, _1: 113788 }, { _0: 113792, _1: 113800 }, { _0: 113808, _1: 113817 }, { _0: 119808, _1: 119892 }, { _0: 119894, _1: 119964 }, { _0: 119966, _1: 119967 }, { _0: 119970, _1: 119970 }, { _0: 119973, _1: 119974 }, { _0: 119977, _1: 119980 }, { _0: 119982, _1: 119993 }, { _0: 119995, _1: 119995 }, { _0: 119997, _1: 120003 }, { _0: 120005, _1: 120069 }, { _0: 120071, _1: 120074 }, { _0: 120077, _1: 120084 }, { _0: 120086, _1: 120092 }, { _0: 120094, _1: 120121 }, { _0: 120123, _1: 120126 }, { _0: 120128, _1: 120132 }, { _0: 120134, _1: 120134 }, { _0: 120138, _1: 120144 }, { _0: 120146, _1: 120485 }, { _0: 120488, _1: 120512 }, { _0: 120514, _1: 120538 }, { _0: 120540, _1: 120570 }, { _0: 120572, _1: 120596 }, { _0: 120598, _1: 120628 }, { _0: 120630, _1: 120654 }, { _0: 120656, _1: 120686 }, { _0: 120688, _1: 120712 }, { _0: 120714, _1: 120744 }, { _0: 120746, _1: 120770 }, { _0: 120772, _1: 120779 }, { _0: 124928, _1: 125124 }, { _0: 125184, _1: 125251 }, { _0: 126464, _1: 126467 }, { _0: 126469, _1: 126495 }, { _0: 126497, _1: 126498 }, { _0: 126500, _1: 126500 }, { _0: 126503, _1: 126503 }, { _0: 126505, _1: 126514 }, { _0: 126516, _1: 126519 }, { _0: 126521, _1: 126521 }, { _0: 126523, _1: 126523 }, { _0: 126530, _1: 126530 }, { _0: 126535, _1: 126535 }, { _0: 126537, _1: 126537 }, { _0: 126539, _1: 126539 }, { _0: 126541, _1: 126543 }, { _0: 126545, _1: 126546 }, { _0: 126548, _1: 126548 }, { _0: 126551, _1: 126551 }, { _0: 126553, _1: 126553 }, { _0: 126555, _1: 126555 }, { _0: 126557, _1: 126557 }, { _0: 126559, _1: 126559 }, { _0: 126561, _1: 126562 }, { _0: 126564, _1: 126564 }, { _0: 126567, _1: 126570 }, { _0: 126572, _1: 126578 }, { _0: 126580, _1: 126583 }, { _0: 126585, _1: 126588 }, { _0: 126590, _1: 126590 }, { _0: 126592, _1: 126601 }, { _0: 126603, _1: 126619 }, { _0: 126625, _1: 126627 }, { _0: 126629, _1: 126633 }, { _0: 126635, _1: 126651 }, { _0: 131072, _1: 173782 }, { _0: 173824, _1: 177972 }, { _0: 177984, _1: 178205 }, { _0: 178208, _1: 183969 }, { _0: 183984, _1: 191456 }, { _0: 194560, _1: 195101 }];
 const moonbitlang$x$json5$$non_ascii_id_continue = [{ _0: 170, _1: 170 }, { _0: 181, _1: 181 }, { _0: 186, _1: 186 }, { _0: 192, _1: 214 }, { _0: 216, _1: 246 }, { _0: 248, _1: 705 }, { _0: 710, _1: 721 }, { _0: 736, _1: 740 }, { _0: 748, _1: 748 }, { _0: 750, _1: 750 }, { _0: 768, _1: 884 }, { _0: 886, _1: 887 }, { _0: 890, _1: 893 }, { _0: 895, _1: 895 }, { _0: 902, _1: 902 }, { _0: 904, _1: 906 }, { _0: 908, _1: 908 }, { _0: 910, _1: 929 }, { _0: 931, _1: 1013 }, { _0: 1015, _1: 1153 }, { _0: 1155, _1: 1159 }, { _0: 1162, _1: 1327 }, { _0: 1329, _1: 1366 }, { _0: 1369, _1: 1369 }, { _0: 1377, _1: 1415 }, { _0: 1425, _1: 1469 }, { _0: 1471, _1: 1471 }, { _0: 1473, _1: 1474 }, { _0: 1476, _1: 1477 }, { _0: 1479, _1: 1479 }, { _0: 1488, _1: 1514 }, { _0: 1520, _1: 1522 }, { _0: 1552, _1: 1562 }, { _0: 1568, _1: 1641 }, { _0: 1646, _1: 1747 }, { _0: 1749, _1: 1756 }, { _0: 1759, _1: 1768 }, { _0: 1770, _1: 1788 }, { _0: 1791, _1: 1791 }, { _0: 1808, _1: 1866 }, { _0: 1869, _1: 1969 }, { _0: 1984, _1: 2037 }, { _0: 2042, _1: 2042 }, { _0: 2048, _1: 2093 }, { _0: 2112, _1: 2139 }, { _0: 2144, _1: 2154 }, { _0: 2208, _1: 2228 }, { _0: 2230, _1: 2237 }, { _0: 2260, _1: 2273 }, { _0: 2275, _1: 2403 }, { _0: 2406, _1: 2415 }, { _0: 2417, _1: 2435 }, { _0: 2437, _1: 2444 }, { _0: 2447, _1: 2448 }, { _0: 2451, _1: 2472 }, { _0: 2474, _1: 2480 }, { _0: 2482, _1: 2482 }, { _0: 2486, _1: 2489 }, { _0: 2492, _1: 2500 }, { _0: 2503, _1: 2504 }, { _0: 2507, _1: 2510 }, { _0: 2519, _1: 2519 }, { _0: 2524, _1: 2525 }, { _0: 2527, _1: 2531 }, { _0: 2534, _1: 2545 }, { _0: 2556, _1: 2556 }, { _0: 2561, _1: 2563 }, { _0: 2565, _1: 2570 }, { _0: 2575, _1: 2576 }, { _0: 2579, _1: 2600 }, { _0: 2602, _1: 2608 }, { _0: 2610, _1: 2611 }, { _0: 2613, _1: 2614 }, { _0: 2616, _1: 2617 }, { _0: 2620, _1: 2620 }, { _0: 2622, _1: 2626 }, { _0: 2631, _1: 2632 }, { _0: 2635, _1: 2637 }, { _0: 2641, _1: 2641 }, { _0: 2649, _1: 2652 }, { _0: 2654, _1: 2654 }, { _0: 2662, _1: 2677 }, { _0: 2689, _1: 2691 }, { _0: 2693, _1: 2701 }, { _0: 2703, _1: 2705 }, { _0: 2707, _1: 2728 }, { _0: 2730, _1: 2736 }, { _0: 2738, _1: 2739 }, { _0: 2741, _1: 2745 }, { _0: 2748, _1: 2757 }, { _0: 2759, _1: 2761 }, { _0: 2763, _1: 2765 }, { _0: 2768, _1: 2768 }, { _0: 2784, _1: 2787 }, { _0: 2790, _1: 2799 }, { _0: 2809, _1: 2815 }, { _0: 2817, _1: 2819 }, { _0: 2821, _1: 2828 }, { _0: 2831, _1: 2832 }, { _0: 2835, _1: 2856 }, { _0: 2858, _1: 2864 }, { _0: 2866, _1: 2867 }, { _0: 2869, _1: 2873 }, { _0: 2876, _1: 2884 }, { _0: 2887, _1: 2888 }, { _0: 2891, _1: 2893 }, { _0: 2902, _1: 2903 }, { _0: 2908, _1: 2909 }, { _0: 2911, _1: 2915 }, { _0: 2918, _1: 2927 }, { _0: 2929, _1: 2929 }, { _0: 2946, _1: 2947 }, { _0: 2949, _1: 2954 }, { _0: 2958, _1: 2960 }, { _0: 2962, _1: 2965 }, { _0: 2969, _1: 2970 }, { _0: 2972, _1: 2972 }, { _0: 2974, _1: 2975 }, { _0: 2979, _1: 2980 }, { _0: 2984, _1: 2986 }, { _0: 2990, _1: 3001 }, { _0: 3006, _1: 3010 }, { _0: 3014, _1: 3016 }, { _0: 3018, _1: 3021 }, { _0: 3024, _1: 3024 }, { _0: 3031, _1: 3031 }, { _0: 3046, _1: 3055 }, { _0: 3072, _1: 3075 }, { _0: 3077, _1: 3084 }, { _0: 3086, _1: 3088 }, { _0: 3090, _1: 3112 }, { _0: 3114, _1: 3129 }, { _0: 3133, _1: 3140 }, { _0: 3142, _1: 3144 }, { _0: 3146, _1: 3149 }, { _0: 3157, _1: 3158 }, { _0: 3160, _1: 3162 }, { _0: 3168, _1: 3171 }, { _0: 3174, _1: 3183 }, { _0: 3200, _1: 3203 }, { _0: 3205, _1: 3212 }, { _0: 3214, _1: 3216 }, { _0: 3218, _1: 3240 }, { _0: 3242, _1: 3251 }, { _0: 3253, _1: 3257 }, { _0: 3260, _1: 3268 }, { _0: 3270, _1: 3272 }, { _0: 3274, _1: 3277 }, { _0: 3285, _1: 3286 }, { _0: 3294, _1: 3294 }, { _0: 3296, _1: 3299 }, { _0: 3302, _1: 3311 }, { _0: 3313, _1: 3314 }, { _0: 3328, _1: 3331 }, { _0: 3333, _1: 3340 }, { _0: 3342, _1: 3344 }, { _0: 3346, _1: 3396 }, { _0: 3398, _1: 3400 }, { _0: 3402, _1: 3406 }, { _0: 3412, _1: 3415 }, { _0: 3423, _1: 3427 }, { _0: 3430, _1: 3439 }, { _0: 3450, _1: 3455 }, { _0: 3458, _1: 3459 }, { _0: 3461, _1: 3478 }, { _0: 3482, _1: 3505 }, { _0: 3507, _1: 3515 }, { _0: 3517, _1: 3517 }, { _0: 3520, _1: 3526 }, { _0: 3530, _1: 3530 }, { _0: 3535, _1: 3540 }, { _0: 3542, _1: 3542 }, { _0: 3544, _1: 3551 }, { _0: 3558, _1: 3567 }, { _0: 3570, _1: 3571 }, { _0: 3585, _1: 3642 }, { _0: 3648, _1: 3662 }, { _0: 3664, _1: 3673 }, { _0: 3713, _1: 3714 }, { _0: 3716, _1: 3716 }, { _0: 3719, _1: 3720 }, { _0: 3722, _1: 3722 }, { _0: 3725, _1: 3725 }, { _0: 3732, _1: 3735 }, { _0: 3737, _1: 3743 }, { _0: 3745, _1: 3747 }, { _0: 3749, _1: 3749 }, { _0: 3751, _1: 3751 }, { _0: 3754, _1: 3755 }, { _0: 3757, _1: 3769 }, { _0: 3771, _1: 3773 }, { _0: 3776, _1: 3780 }, { _0: 3782, _1: 3782 }, { _0: 3784, _1: 3789 }, { _0: 3792, _1: 3801 }, { _0: 3804, _1: 3807 }, { _0: 3840, _1: 3840 }, { _0: 3864, _1: 3865 }, { _0: 3872, _1: 3881 }, { _0: 3893, _1: 3893 }, { _0: 3895, _1: 3895 }, { _0: 3897, _1: 3897 }, { _0: 3902, _1: 3911 }, { _0: 3913, _1: 3948 }, { _0: 3953, _1: 3972 }, { _0: 3974, _1: 3991 }, { _0: 3993, _1: 4028 }, { _0: 4038, _1: 4038 }, { _0: 4096, _1: 4169 }, { _0: 4176, _1: 4253 }, { _0: 4256, _1: 4293 }, { _0: 4295, _1: 4295 }, { _0: 4301, _1: 4301 }, { _0: 4304, _1: 4346 }, { _0: 4348, _1: 4680 }, { _0: 4682, _1: 4685 }, { _0: 4688, _1: 4694 }, { _0: 4696, _1: 4696 }, { _0: 4698, _1: 4701 }, { _0: 4704, _1: 4744 }, { _0: 4746, _1: 4749 }, { _0: 4752, _1: 4784 }, { _0: 4786, _1: 4789 }, { _0: 4792, _1: 4798 }, { _0: 4800, _1: 4800 }, { _0: 4802, _1: 4805 }, { _0: 4808, _1: 4822 }, { _0: 4824, _1: 4880 }, { _0: 4882, _1: 4885 }, { _0: 4888, _1: 4954 }, { _0: 4957, _1: 4959 }, { _0: 4992, _1: 5007 }, { _0: 5024, _1: 5109 }, { _0: 5112, _1: 5117 }, { _0: 5121, _1: 5740 }, { _0: 5743, _1: 5759 }, { _0: 5761, _1: 5786 }, { _0: 5792, _1: 5866 }, { _0: 5870, _1: 5880 }, { _0: 5888, _1: 5900 }, { _0: 5902, _1: 5908 }, { _0: 5920, _1: 5940 }, { _0: 5952, _1: 5971 }, { _0: 5984, _1: 5996 }, { _0: 5998, _1: 6000 }, { _0: 6002, _1: 6003 }, { _0: 6016, _1: 6099 }, { _0: 6103, _1: 6103 }, { _0: 6108, _1: 6109 }, { _0: 6112, _1: 6121 }, { _0: 6155, _1: 6157 }, { _0: 6160, _1: 6169 }, { _0: 6176, _1: 6263 }, { _0: 6272, _1: 6314 }, { _0: 6320, _1: 6389 }, { _0: 6400, _1: 6430 }, { _0: 6432, _1: 6443 }, { _0: 6448, _1: 6459 }, { _0: 6470, _1: 6509 }, { _0: 6512, _1: 6516 }, { _0: 6528, _1: 6571 }, { _0: 6576, _1: 6601 }, { _0: 6608, _1: 6617 }, { _0: 6656, _1: 6683 }, { _0: 6688, _1: 6750 }, { _0: 6752, _1: 6780 }, { _0: 6783, _1: 6793 }, { _0: 6800, _1: 6809 }, { _0: 6823, _1: 6823 }, { _0: 6832, _1: 6845 }, { _0: 6912, _1: 6987 }, { _0: 6992, _1: 7001 }, { _0: 7019, _1: 7027 }, { _0: 7040, _1: 7155 }, { _0: 7168, _1: 7223 }, { _0: 7232, _1: 7241 }, { _0: 7245, _1: 7293 }, { _0: 7296, _1: 7304 }, { _0: 7376, _1: 7378 }, { _0: 7380, _1: 7417 }, { _0: 7424, _1: 7673 }, { _0: 7675, _1: 7957 }, { _0: 7960, _1: 7965 }, { _0: 7968, _1: 8005 }, { _0: 8008, _1: 8013 }, { _0: 8016, _1: 8023 }, { _0: 8025, _1: 8025 }, { _0: 8027, _1: 8027 }, { _0: 8029, _1: 8029 }, { _0: 8031, _1: 8061 }, { _0: 8064, _1: 8116 }, { _0: 8118, _1: 8124 }, { _0: 8126, _1: 8126 }, { _0: 8130, _1: 8132 }, { _0: 8134, _1: 8140 }, { _0: 8144, _1: 8147 }, { _0: 8150, _1: 8155 }, { _0: 8160, _1: 8172 }, { _0: 8178, _1: 8180 }, { _0: 8182, _1: 8188 }, { _0: 8204, _1: 8205 }, { _0: 8255, _1: 8256 }, { _0: 8276, _1: 8276 }, { _0: 8305, _1: 8305 }, { _0: 8319, _1: 8319 }, { _0: 8336, _1: 8348 }, { _0: 8400, _1: 8412 }, { _0: 8417, _1: 8417 }, { _0: 8421, _1: 8432 }, { _0: 8450, _1: 8450 }, { _0: 8455, _1: 8455 }, { _0: 8458, _1: 8467 }, { _0: 8469, _1: 8469 }, { _0: 8473, _1: 8477 }, { _0: 8484, _1: 8484 }, { _0: 8486, _1: 8486 }, { _0: 8488, _1: 8488 }, { _0: 8490, _1: 8493 }, { _0: 8495, _1: 8505 }, { _0: 8508, _1: 8511 }, { _0: 8517, _1: 8521 }, { _0: 8526, _1: 8526 }, { _0: 8544, _1: 8584 }, { _0: 11264, _1: 11310 }, { _0: 11312, _1: 11358 }, { _0: 11360, _1: 11492 }, { _0: 11499, _1: 11507 }, { _0: 11520, _1: 11557 }, { _0: 11559, _1: 11559 }, { _0: 11565, _1: 11565 }, { _0: 11568, _1: 11623 }, { _0: 11631, _1: 11631 }, { _0: 11647, _1: 11670 }, { _0: 11680, _1: 11686 }, { _0: 11688, _1: 11694 }, { _0: 11696, _1: 11702 }, { _0: 11704, _1: 11710 }, { _0: 11712, _1: 11718 }, { _0: 11720, _1: 11726 }, { _0: 11728, _1: 11734 }, { _0: 11736, _1: 11742 }, { _0: 11744, _1: 11775 }, { _0: 11823, _1: 11823 }, { _0: 12293, _1: 12295 }, { _0: 12321, _1: 12335 }, { _0: 12337, _1: 12341 }, { _0: 12344, _1: 12348 }, { _0: 12353, _1: 12438 }, { _0: 12441, _1: 12442 }, { _0: 12445, _1: 12447 }, { _0: 12449, _1: 12538 }, { _0: 12540, _1: 12543 }, { _0: 12549, _1: 12590 }, { _0: 12593, _1: 12686 }, { _0: 12704, _1: 12730 }, { _0: 12784, _1: 12799 }, { _0: 13312, _1: 19893 }, { _0: 19968, _1: 40938 }, { _0: 40960, _1: 42124 }, { _0: 42192, _1: 42237 }, { _0: 42240, _1: 42508 }, { _0: 42512, _1: 42539 }, { _0: 42560, _1: 42607 }, { _0: 42612, _1: 42621 }, { _0: 42623, _1: 42737 }, { _0: 42775, _1: 42783 }, { _0: 42786, _1: 42888 }, { _0: 42891, _1: 42926 }, { _0: 42928, _1: 42935 }, { _0: 42999, _1: 43047 }, { _0: 43072, _1: 43123 }, { _0: 43136, _1: 43205 }, { _0: 43216, _1: 43225 }, { _0: 43232, _1: 43255 }, { _0: 43259, _1: 43259 }, { _0: 43261, _1: 43261 }, { _0: 43264, _1: 43309 }, { _0: 43312, _1: 43347 }, { _0: 43360, _1: 43388 }, { _0: 43392, _1: 43456 }, { _0: 43471, _1: 43481 }, { _0: 43488, _1: 43518 }, { _0: 43520, _1: 43574 }, { _0: 43584, _1: 43597 }, { _0: 43600, _1: 43609 }, { _0: 43616, _1: 43638 }, { _0: 43642, _1: 43714 }, { _0: 43739, _1: 43741 }, { _0: 43744, _1: 43759 }, { _0: 43762, _1: 43766 }, { _0: 43777, _1: 43782 }, { _0: 43785, _1: 43790 }, { _0: 43793, _1: 43798 }, { _0: 43808, _1: 43814 }, { _0: 43816, _1: 43822 }, { _0: 43824, _1: 43866 }, { _0: 43868, _1: 43877 }, { _0: 43888, _1: 44010 }, { _0: 44012, _1: 44013 }, { _0: 44016, _1: 44025 }, { _0: 44032, _1: 55203 }, { _0: 55216, _1: 55238 }, { _0: 55243, _1: 55291 }, { _0: 63744, _1: 64109 }, { _0: 64112, _1: 64217 }, { _0: 64256, _1: 64262 }, { _0: 64275, _1: 64279 }, { _0: 64285, _1: 64296 }, { _0: 64298, _1: 64310 }, { _0: 64312, _1: 64316 }, { _0: 64318, _1: 64318 }, { _0: 64320, _1: 64321 }, { _0: 64323, _1: 64324 }, { _0: 64326, _1: 64433 }, { _0: 64467, _1: 64829 }, { _0: 64848, _1: 64911 }, { _0: 64914, _1: 64967 }, { _0: 65008, _1: 65019 }, { _0: 65024, _1: 65039 }, { _0: 65056, _1: 65071 }, { _0: 65075, _1: 65076 }, { _0: 65101, _1: 65103 }, { _0: 65136, _1: 65140 }, { _0: 65142, _1: 65276 }, { _0: 65296, _1: 65305 }, { _0: 65313, _1: 65338 }, { _0: 65343, _1: 65343 }, { _0: 65345, _1: 65370 }, { _0: 65382, _1: 65470 }, { _0: 65474, _1: 65479 }, { _0: 65482, _1: 65487 }, { _0: 65490, _1: 65495 }, { _0: 65498, _1: 65500 }, { _0: 65536, _1: 65547 }, { _0: 65549, _1: 65574 }, { _0: 65576, _1: 65594 }, { _0: 65596, _1: 65597 }, { _0: 65599, _1: 65613 }, { _0: 65616, _1: 65629 }, { _0: 65664, _1: 65786 }, { _0: 65856, _1: 65908 }, { _0: 66045, _1: 66045 }, { _0: 66176, _1: 66204 }, { _0: 66208, _1: 66256 }, { _0: 66272, _1: 66272 }, { _0: 66304, _1: 66335 }, { _0: 66349, _1: 66378 }, { _0: 66384, _1: 66426 }, { _0: 66432, _1: 66461 }, { _0: 66464, _1: 66499 }, { _0: 66504, _1: 66511 }, { _0: 66513, _1: 66517 }, { _0: 66560, _1: 66717 }, { _0: 66720, _1: 66729 }, { _0: 66736, _1: 66771 }, { _0: 66776, _1: 66811 }, { _0: 66816, _1: 66855 }, { _0: 66864, _1: 66915 }, { _0: 67072, _1: 67382 }, { _0: 67392, _1: 67413 }, { _0: 67424, _1: 67431 }, { _0: 67584, _1: 67589 }, { _0: 67592, _1: 67592 }, { _0: 67594, _1: 67637 }, { _0: 67639, _1: 67640 }, { _0: 67644, _1: 67644 }, { _0: 67647, _1: 67669 }, { _0: 67680, _1: 67702 }, { _0: 67712, _1: 67742 }, { _0: 67808, _1: 67826 }, { _0: 67828, _1: 67829 }, { _0: 67840, _1: 67861 }, { _0: 67872, _1: 67897 }, { _0: 67968, _1: 68023 }, { _0: 68030, _1: 68031 }, { _0: 68096, _1: 68099 }, { _0: 68101, _1: 68102 }, { _0: 68108, _1: 68115 }, { _0: 68117, _1: 68119 }, { _0: 68121, _1: 68147 }, { _0: 68152, _1: 68154 }, { _0: 68159, _1: 68159 }, { _0: 68192, _1: 68220 }, { _0: 68224, _1: 68252 }, { _0: 68288, _1: 68295 }, { _0: 68297, _1: 68326 }, { _0: 68352, _1: 68405 }, { _0: 68416, _1: 68437 }, { _0: 68448, _1: 68466 }, { _0: 68480, _1: 68497 }, { _0: 68608, _1: 68680 }, { _0: 68736, _1: 68786 }, { _0: 68800, _1: 68850 }, { _0: 69632, _1: 69702 }, { _0: 69734, _1: 69743 }, { _0: 69759, _1: 69818 }, { _0: 69840, _1: 69864 }, { _0: 69872, _1: 69881 }, { _0: 69888, _1: 69940 }, { _0: 69942, _1: 69951 }, { _0: 69968, _1: 70003 }, { _0: 70006, _1: 70006 }, { _0: 70016, _1: 70084 }, { _0: 70090, _1: 70092 }, { _0: 70096, _1: 70106 }, { _0: 70108, _1: 70108 }, { _0: 70144, _1: 70161 }, { _0: 70163, _1: 70199 }, { _0: 70206, _1: 70206 }, { _0: 70272, _1: 70278 }, { _0: 70280, _1: 70280 }, { _0: 70282, _1: 70285 }, { _0: 70287, _1: 70301 }, { _0: 70303, _1: 70312 }, { _0: 70320, _1: 70378 }, { _0: 70384, _1: 70393 }, { _0: 70400, _1: 70403 }, { _0: 70405, _1: 70412 }, { _0: 70415, _1: 70416 }, { _0: 70419, _1: 70440 }, { _0: 70442, _1: 70448 }, { _0: 70450, _1: 70451 }, { _0: 70453, _1: 70457 }, { _0: 70460, _1: 70468 }, { _0: 70471, _1: 70472 }, { _0: 70475, _1: 70477 }, { _0: 70480, _1: 70480 }, { _0: 70487, _1: 70487 }, { _0: 70493, _1: 70499 }, { _0: 70502, _1: 70508 }, { _0: 70512, _1: 70516 }, { _0: 70656, _1: 70730 }, { _0: 70736, _1: 70745 }, { _0: 70784, _1: 70853 }, { _0: 70855, _1: 70855 }, { _0: 70864, _1: 70873 }, { _0: 71040, _1: 71093 }, { _0: 71096, _1: 71104 }, { _0: 71128, _1: 71133 }, { _0: 71168, _1: 71232 }, { _0: 71236, _1: 71236 }, { _0: 71248, _1: 71257 }, { _0: 71296, _1: 71351 }, { _0: 71360, _1: 71369 }, { _0: 71424, _1: 71449 }, { _0: 71453, _1: 71467 }, { _0: 71472, _1: 71481 }, { _0: 71840, _1: 71913 }, { _0: 71935, _1: 71935 }, { _0: 72192, _1: 72254 }, { _0: 72263, _1: 72263 }, { _0: 72272, _1: 72323 }, { _0: 72326, _1: 72345 }, { _0: 72384, _1: 72440 }, { _0: 72704, _1: 72712 }, { _0: 72714, _1: 72758 }, { _0: 72760, _1: 72768 }, { _0: 72784, _1: 72793 }, { _0: 72818, _1: 72847 }, { _0: 72850, _1: 72871 }, { _0: 72873, _1: 72886 }, { _0: 72960, _1: 72966 }, { _0: 72968, _1: 72969 }, { _0: 72971, _1: 73014 }, { _0: 73018, _1: 73018 }, { _0: 73020, _1: 73021 }, { _0: 73023, _1: 73031 }, { _0: 73040, _1: 73049 }, { _0: 73728, _1: 74649 }, { _0: 74752, _1: 74862 }, { _0: 74880, _1: 75075 }, { _0: 77824, _1: 78894 }, { _0: 82944, _1: 83526 }, { _0: 92160, _1: 92728 }, { _0: 92736, _1: 92766 }, { _0: 92768, _1: 92777 }, { _0: 92880, _1: 92909 }, { _0: 92912, _1: 92916 }, { _0: 92928, _1: 92982 }, { _0: 92992, _1: 92995 }, { _0: 93008, _1: 93017 }, { _0: 93027, _1: 93047 }, { _0: 93053, _1: 93071 }, { _0: 93952, _1: 94020 }, { _0: 94032, _1: 94078 }, { _0: 94095, _1: 94111 }, { _0: 94176, _1: 94177 }, { _0: 94208, _1: 100332 }, { _0: 100352, _1: 101106 }, { _0: 110592, _1: 110878 }, { _0: 110960, _1: 111355 }, { _0: 113664, _1: 113770 }, { _0: 113776, _1: 113788 }, { _0: 113792, _1: 113800 }, { _0: 113808, _1: 113817 }, { _0: 113821, _1: 113822 }, { _0: 119141, _1: 119145 }, { _0: 119149, _1: 119154 }, { _0: 119163, _1: 119170 }, { _0: 119173, _1: 119179 }, { _0: 119210, _1: 119213 }, { _0: 119362, _1: 119364 }, { _0: 119808, _1: 119892 }, { _0: 119894, _1: 119964 }, { _0: 119966, _1: 119967 }, { _0: 119970, _1: 119970 }, { _0: 119973, _1: 119974 }, { _0: 119977, _1: 119980 }, { _0: 119982, _1: 119993 }, { _0: 119995, _1: 119995 }, { _0: 119997, _1: 120003 }, { _0: 120005, _1: 120069 }, { _0: 120071, _1: 120074 }, { _0: 120077, _1: 120084 }, { _0: 120086, _1: 120092 }, { _0: 120094, _1: 120121 }, { _0: 120123, _1: 120126 }, { _0: 120128, _1: 120132 }, { _0: 120134, _1: 120134 }, { _0: 120138, _1: 120144 }, { _0: 120146, _1: 120485 }, { _0: 120488, _1: 120512 }, { _0: 120514, _1: 120538 }, { _0: 120540, _1: 120570 }, { _0: 120572, _1: 120596 }, { _0: 120598, _1: 120628 }, { _0: 120630, _1: 120654 }, { _0: 120656, _1: 120686 }, { _0: 120688, _1: 120712 }, { _0: 120714, _1: 120744 }, { _0: 120746, _1: 120770 }, { _0: 120772, _1: 120779 }, { _0: 120782, _1: 120831 }, { _0: 121344, _1: 121398 }, { _0: 121403, _1: 121452 }, { _0: 121461, _1: 121461 }, { _0: 121476, _1: 121476 }, { _0: 121499, _1: 121503 }, { _0: 121505, _1: 121519 }, { _0: 122880, _1: 122886 }, { _0: 122888, _1: 122904 }, { _0: 122907, _1: 122913 }, { _0: 122915, _1: 122916 }, { _0: 122918, _1: 122922 }, { _0: 124928, _1: 125124 }, { _0: 125136, _1: 125142 }, { _0: 125184, _1: 125258 }, { _0: 125264, _1: 125273 }, { _0: 126464, _1: 126467 }, { _0: 126469, _1: 126495 }, { _0: 126497, _1: 126498 }, { _0: 126500, _1: 126500 }, { _0: 126503, _1: 126503 }, { _0: 126505, _1: 126514 }, { _0: 126516, _1: 126519 }, { _0: 126521, _1: 126521 }, { _0: 126523, _1: 126523 }, { _0: 126530, _1: 126530 }, { _0: 126535, _1: 126535 }, { _0: 126537, _1: 126537 }, { _0: 126539, _1: 126539 }, { _0: 126541, _1: 126543 }, { _0: 126545, _1: 126546 }, { _0: 126548, _1: 126548 }, { _0: 126551, _1: 126551 }, { _0: 126553, _1: 126553 }, { _0: 126555, _1: 126555 }, { _0: 126557, _1: 126557 }, { _0: 126559, _1: 126559 }, { _0: 126561, _1: 126562 }, { _0: 126564, _1: 126564 }, { _0: 126567, _1: 126570 }, { _0: 126572, _1: 126578 }, { _0: 126580, _1: 126583 }, { _0: 126585, _1: 126588 }, { _0: 126590, _1: 126590 }, { _0: 126592, _1: 126601 }, { _0: 126603, _1: 126619 }, { _0: 126625, _1: 126627 }, { _0: 126629, _1: 126633 }, { _0: 126635, _1: 126651 }, { _0: 131072, _1: 173782 }, { _0: 173824, _1: 177972 }, { _0: 177984, _1: 178205 }, { _0: 178208, _1: 183969 }, { _0: 183984, _1: 191456 }, { _0: 194560, _1: 195101 }, { _0: 917760, _1: 917999 }];
-Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(0.36000000000000032, 0.950000000000000178);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$gun_body_shift = Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(0, 0);
 const moonbitlang$core$double$$min_value = moonbitlang$core$int64$$Int64$reinterpret_as_double($_4503599627370497L);
 const moonbitlang$core$double$$max_value = moonbitlang$core$int64$$Int64$reinterpret_as_double($9218868437227405311L);
-const Great$45$Love$45$League$Stick_Man_Battle$server$$r = moonbitlang$core$ref$$Ref$new$4$(moonbitlang$core$random$$Rand$new(undefined));
+const Great$45$Love$45$League$Stick_Man_Battle$server$$gun_body_shift = Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(0, 0);
+const Great$45$Love$45$League$Stick_Man_Battle$server$$start_simulated_keys = { val: moonbitlang$core$array$$Array$new$46$inner$4$(0) };
+({ val: moonbitlang$core$array$$Array$new$46$inner$5$(0) });
+({ val: moonbitlang$core$random$$Rand$new(undefined) });
+const Great$45$Love$45$League$Stick_Man_Battle$server$$r = moonbitlang$core$ref$$Ref$new$6$(moonbitlang$core$random$$Rand$new(undefined));
 function moonbitlang$core$abort$$abort$5$(msg) {
   return $panic();
 }
-function moonbitlang$core$abort$$abort$6$(msg) {
-  return $panic();
-}
 function moonbitlang$core$abort$$abort$7$(msg) {
-  $panic();
+  return $panic();
 }
 function moonbitlang$core$abort$$abort$8$(msg) {
   return $panic();
@@ -1290,16 +1472,29 @@ function moonbitlang$core$abort$$abort$9$(msg) {
 function moonbitlang$core$abort$$abort$10$(msg) {
   return $panic();
 }
-function moonbitlang$core$builtin$$Show$to_string$11$(self) {
+function moonbitlang$core$abort$$abort$11$(msg) {
+  $panic();
+}
+function moonbitlang$core$abort$$abort$12$(msg) {
+  return $panic();
+}
+function moonbitlang$core$option$$Option$is_empty$13$(self) {
+  if (self.$tag === 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
+function moonbitlang$core$builtin$$Show$to_string$14$(self) {
   return String.fromCodePoint(self);
 }
 function moonbitlang$core$double$$Double$floor(_tmp) {
   return Math.floor(_tmp);
 }
-function moonbitlang$core$builtin$$Mod$mod$12$(self, other) {
+function moonbitlang$core$builtin$$Mod$mod$15$(self, other) {
   return moonbitlang$core$double$$Double$mod_ffi(self, other);
 }
-function moonbitlang$core$builtin$$Show$output$12$(self, logger) {
+function moonbitlang$core$builtin$$Show$output$15$(self, logger) {
   logger.method_0(logger.self, String(self));
 }
 function moonbitlang$core$bytes$$BytesView$at(self, index) {
@@ -1309,7 +1504,7 @@ function moonbitlang$core$bytes$$BytesView$at(self, index) {
     $bound_check(_tmp, _tmp$2);
     return _tmp[_tmp$2];
   } else {
-    return moonbitlang$core$abort$$abort$9$(`index out of bounds: the len is from 0 to ${moonbitlang$core$builtin$$Show$to_string$5$(self.len)} but the index is ${moonbitlang$core$builtin$$Show$to_string$5$(index)}`);
+    return moonbitlang$core$abort$$abort$10$(`index out of bounds: the len is from 0 to ${moonbitlang$core$builtin$$Show$to_string$5$(self.len)} but the index is ${moonbitlang$core$builtin$$Show$to_string$5$(index)}`);
   }
 }
 function moonbitlang$core$bytes$$Bytes$sub$46$inner(self, start, end) {
@@ -1334,23 +1529,23 @@ function moonbitlang$core$bytes$$BytesView$to_uint_le(self) {
   const _p$4 = moonbitlang$core$bytes$$BytesView$at(self, 3);
   return (_tmp$2 >>> 0) + (_p$4 << 24 >>> 0) | 0;
 }
-function moonbitlang$core$builtin$$Logger$write_object$13$(self, obj) {
-  moonbitlang$core$builtin$$Show$output$13$(obj, self);
-}
-function moonbitlang$core$builtin$$Logger$write_object$6$(self, obj) {
-  moonbitlang$core$builtin$$Show$output$6$(obj, self);
-}
-function moonbitlang$core$builtin$$Logger$write_object$12$(self, obj) {
-  moonbitlang$core$builtin$$Show$output$12$(obj, self);
-}
-function moonbitlang$core$builtin$$Logger$write_object$14$(self, obj) {
-  moonbitlang$core$builtin$$Show$output$15$(obj, self);
-}
 function moonbitlang$core$builtin$$Logger$write_object$16$(self, obj) {
   moonbitlang$core$builtin$$Show$output$16$(obj, self);
 }
+function moonbitlang$core$builtin$$Logger$write_object$9$(self, obj) {
+  moonbitlang$core$builtin$$Show$output$9$(obj, self);
+}
+function moonbitlang$core$builtin$$Logger$write_object$15$(self, obj) {
+  moonbitlang$core$builtin$$Show$output$15$(obj, self);
+}
 function moonbitlang$core$builtin$$Logger$write_object$17$(self, obj) {
   moonbitlang$core$builtin$$Show$output$18$(obj, self);
+}
+function moonbitlang$core$builtin$$Logger$write_object$19$(self, obj) {
+  moonbitlang$core$builtin$$Show$output$19$(obj, self);
+}
+function moonbitlang$core$builtin$$Logger$write_object$20$(self, obj) {
+  moonbitlang$core$builtin$$Show$output$21$(obj, self);
 }
 function moonbitlang$core$builtin$$op_ge$3$(self_, other) {
   return moonbitlang$core$builtin$$Compare$compare$3$(self_, other) >= 0;
@@ -1358,16 +1553,16 @@ function moonbitlang$core$builtin$$op_ge$3$(self_, other) {
 function moonbitlang$core$builtin$$op_le$3$(self_, other) {
   return moonbitlang$core$builtin$$Compare$compare$3$(self_, other) <= 0;
 }
-function moonbitlang$core$builtin$$op_le$19$(self_, other) {
-  return moonbitlang$core$builtin$$Compare$compare$19$(self_, other) <= 0;
+function moonbitlang$core$builtin$$op_le$22$(self_, other) {
+  return moonbitlang$core$builtin$$Compare$compare$22$(self_, other) <= 0;
 }
 function moonbitlang$core$builtin$$op_lt$3$(self_, other) {
   return moonbitlang$core$builtin$$Compare$compare$3$(self_, other) < 0;
 }
-function moonbitlang$core$builtin$$op_lt$19$(self_, other) {
-  return moonbitlang$core$builtin$$Compare$compare$19$(self_, other) < 0;
+function moonbitlang$core$builtin$$op_lt$22$(self_, other) {
+  return moonbitlang$core$builtin$$Compare$compare$22$(self_, other) < 0;
 }
-function moonbitlang$core$array$$FixedArray$unsafe_blit$20$(dst, dst_offset, src, src_offset, len) {
+function moonbitlang$core$array$$FixedArray$unsafe_blit$23$(dst, dst_offset, src, src_offset, len) {
   if (dst === src && dst_offset < src_offset) {
     let _tmp = 0;
     while (true) {
@@ -1405,15 +1600,15 @@ function moonbitlang$core$array$$FixedArray$unsafe_blit$20$(dst, dst_offset, src
 function moonbitlang$core$builtin$$StringBuilder$new$46$inner(size_hint) {
   return { val: "" };
 }
-function moonbitlang$core$builtin$$Logger$write_char$21$(self, ch) {
+function moonbitlang$core$builtin$$Logger$write_char$24$(self, ch) {
   const _bind = self;
   _bind.val = `${_bind.val}${String.fromCodePoint(ch)}`;
 }
 function moonbitlang$core$builtin$$op_gt$3$(self_, other) {
   return moonbitlang$core$builtin$$Compare$compare$3$(self_, other) > 0;
 }
-function moonbitlang$core$builtin$$op_gt$19$(self_, other) {
-  return moonbitlang$core$builtin$$Compare$compare$19$(self_, other) > 0;
+function moonbitlang$core$builtin$$op_gt$22$(self_, other) {
+  return moonbitlang$core$builtin$$Compare$compare$22$(self_, other) > 0;
 }
 function moonbitlang$core$builtin$$code_point_of_surrogate_pair(leading, trailing) {
   return (((Math.imul(leading - 55296 | 0, 1024) | 0) + trailing | 0) - 56320 | 0) + 65536 | 0;
@@ -1428,61 +1623,10 @@ function moonbitlang$core$string$$String$unsafe_char_at(self, index) {
     return c1;
   }
 }
-function moonbitlang$core$array$$Array$at$22$(self, index) {
-  const len = self.length;
-  if (index >= 0 && index < len) {
-    $bound_check(self, index);
-    return self[index];
-  } else {
-    return $panic();
-  }
-}
-function moonbitlang$core$array$$Array$at$23$(self, index) {
-  const len = self.length;
-  if (index >= 0 && index < len) {
-    $bound_check(self, index);
-    return self[index];
-  } else {
-    return $panic();
-  }
-}
-function moonbitlang$core$array$$Array$at$12$(self, index) {
-  const len = self.length;
-  if (index >= 0 && index < len) {
-    $bound_check(self, index);
-    return self[index];
-  } else {
-    return $panic();
-  }
+function moonbitlang$core$builtin$$op_notequal$25$(x, y) {
+  return !moonbitlang$core$builtin$$Eq$equal$25$(x, y);
 }
 function moonbitlang$core$array$$Array$at$5$(self, index) {
-  const len = self.length;
-  if (index >= 0 && index < len) {
-    $bound_check(self, index);
-    return self[index];
-  } else {
-    return $panic();
-  }
-}
-function moonbitlang$core$array$$Array$at$17$(self, index) {
-  const len = self.length;
-  if (index >= 0 && index < len) {
-    $bound_check(self, index);
-    return self[index];
-  } else {
-    return $panic();
-  }
-}
-function moonbitlang$core$array$$Array$at$24$(self, index) {
-  const len = self.length;
-  if (index >= 0 && index < len) {
-    $bound_check(self, index);
-    return self[index];
-  } else {
-    return $panic();
-  }
-}
-function moonbitlang$core$array$$Array$at$25$(self, index) {
   const len = self.length;
   if (index >= 0 && index < len) {
     $bound_check(self, index);
@@ -1509,6 +1653,24 @@ function moonbitlang$core$array$$Array$at$27$(self, index) {
     return $panic();
   }
 }
+function moonbitlang$core$array$$Array$at$15$(self, index) {
+  const len = self.length;
+  if (index >= 0 && index < len) {
+    $bound_check(self, index);
+    return self[index];
+  } else {
+    return $panic();
+  }
+}
+function moonbitlang$core$array$$Array$at$7$(self, index) {
+  const len = self.length;
+  if (index >= 0 && index < len) {
+    $bound_check(self, index);
+    return self[index];
+  } else {
+    return $panic();
+  }
+}
 function moonbitlang$core$array$$Array$at$28$(self, index) {
   const len = self.length;
   if (index >= 0 && index < len) {
@@ -1527,24 +1689,78 @@ function moonbitlang$core$array$$Array$at$29$(self, index) {
     return $panic();
   }
 }
-function moonbitlang$core$builtin$$Logger$write_string$21$(self, str) {
+function moonbitlang$core$array$$Array$at$20$(self, index) {
+  const len = self.length;
+  if (index >= 0 && index < len) {
+    $bound_check(self, index);
+    return self[index];
+  } else {
+    return $panic();
+  }
+}
+function moonbitlang$core$array$$Array$at$4$(self, index) {
+  const len = self.length;
+  if (index >= 0 && index < len) {
+    $bound_check(self, index);
+    return self[index];
+  } else {
+    return $panic();
+  }
+}
+function moonbitlang$core$array$$Array$at$30$(self, index) {
+  const len = self.length;
+  if (index >= 0 && index < len) {
+    $bound_check(self, index);
+    return self[index];
+  } else {
+    return $panic();
+  }
+}
+function moonbitlang$core$array$$Array$at$31$(self, index) {
+  const len = self.length;
+  if (index >= 0 && index < len) {
+    $bound_check(self, index);
+    return self[index];
+  } else {
+    return $panic();
+  }
+}
+function moonbitlang$core$array$$Array$at$32$(self, index) {
+  const len = self.length;
+  if (index >= 0 && index < len) {
+    $bound_check(self, index);
+    return self[index];
+  } else {
+    return $panic();
+  }
+}
+function moonbitlang$core$array$$Array$at$33$(self, index) {
+  const len = self.length;
+  if (index >= 0 && index < len) {
+    $bound_check(self, index);
+    return self[index];
+  } else {
+    return $panic();
+  }
+}
+function moonbitlang$core$builtin$$Logger$write_string$24$(self, str) {
   const _bind = self;
   _bind.val = `${_bind.val}${str}`;
 }
-function moonbitlang$core$builtin$$Show$output$18$(self, logger) {
+function moonbitlang$core$builtin$$Show$output$21$(self, logger) {
   const _a = self._0;
   const _b = self._1;
   logger.method_0(logger.self, "(");
-  moonbitlang$core$builtin$$Logger$write_object$12$(logger, _a);
+  moonbitlang$core$builtin$$Logger$write_object$15$(logger, _a);
   logger.method_0(logger.self, ", ");
-  moonbitlang$core$builtin$$Logger$write_object$12$(logger, _b);
+  moonbitlang$core$builtin$$Logger$write_object$15$(logger, _b);
   logger.method_0(logger.self, ")");
 }
-function moonbitlang$core$builtin$$Hasher$combine$30$(self, value) {
-  moonbitlang$core$builtin$$Hash$hash_combine$30$(value, self);
+function moonbitlang$core$builtin$$Hasher$combine$34$(self, value) {
+  moonbitlang$core$builtin$$Hash$hash_combine$34$(value, self);
 }
-function moonbitlang$core$builtin$$Hasher$combine$13$(self, value) {
-  moonbitlang$core$builtin$$Hash$hash_combine$13$(value, self);
+function moonbitlang$core$builtin$$Hasher$combine$16$(self, value) {
+  moonbitlang$core$builtin$$Hash$hash_combine$16$(value, self);
 }
 function moonbitlang$core$builtin$$Hasher$avalanche(self) {
   let acc = self.acc;
@@ -1571,59 +1787,59 @@ function moonbitlang$core$builtin$$Hasher$new(seed$46$opt) {
   }
   return moonbitlang$core$builtin$$Hasher$new$46$inner(seed);
 }
-function moonbitlang$core$builtin$$Hash$hash$31$(self) {
+function moonbitlang$core$builtin$$Hash$hash$35$(self) {
   const _self = moonbitlang$core$builtin$$Hasher$new(undefined);
-  moonbitlang$core$builtin$$Hasher$combine$30$(_self, self);
+  moonbitlang$core$builtin$$Hasher$combine$34$(_self, self);
   return moonbitlang$core$builtin$$Hasher$finalize(_self);
 }
-function moonbitlang$core$builtin$$Hash$hash$32$(self) {
+function moonbitlang$core$builtin$$Hash$hash$36$(self) {
   const _self = moonbitlang$core$builtin$$Hasher$new(undefined);
-  moonbitlang$core$builtin$$Hasher$combine$13$(_self, self);
+  moonbitlang$core$builtin$$Hasher$combine$16$(_self, self);
   return moonbitlang$core$builtin$$Hasher$finalize(_self);
-}
-function moonbitlang$core$builtin$$Show$to_string$33$(self) {
-  const logger = moonbitlang$core$builtin$$StringBuilder$new$46$inner(0);
-  moonbitlang$core$builtin$$Show$output$12$(self, { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$21$, method_1: moonbitlang$core$builtin$$Logger$write_substring$21$, method_2: moonbitlang$core$builtin$$Logger$write_char$21$ });
-  return logger.val;
-}
-function moonbitlang$core$builtin$$Show$to_string$31$(self) {
-  const logger = moonbitlang$core$builtin$$StringBuilder$new$46$inner(0);
-  moonbitlang$core$builtin$$Show$output$30$(self, { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$21$, method_1: moonbitlang$core$builtin$$Logger$write_substring$21$, method_2: moonbitlang$core$builtin$$Logger$write_char$21$ });
-  return logger.val;
-}
-function moonbitlang$core$builtin$$Show$to_string$1$(self) {
-  const logger = moonbitlang$core$builtin$$StringBuilder$new$46$inner(0);
-  moonbitlang$core$builtin$$Show$output$34$(self, { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$21$, method_1: moonbitlang$core$builtin$$Logger$write_substring$21$, method_2: moonbitlang$core$builtin$$Logger$write_char$21$ });
-  return logger.val;
 }
 function moonbitlang$core$builtin$$Show$to_string$35$(self) {
   const logger = moonbitlang$core$builtin$$StringBuilder$new$46$inner(0);
-  moonbitlang$core$builtin$$Show$output$36$(self, { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$21$, method_1: moonbitlang$core$builtin$$Logger$write_substring$21$, method_2: moonbitlang$core$builtin$$Logger$write_char$21$ });
+  moonbitlang$core$builtin$$Show$output$34$(self, { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$24$, method_1: moonbitlang$core$builtin$$Logger$write_substring$24$, method_2: moonbitlang$core$builtin$$Logger$write_char$24$ });
   return logger.val;
 }
 function moonbitlang$core$builtin$$Show$to_string$37$(self) {
   const logger = moonbitlang$core$builtin$$StringBuilder$new$46$inner(0);
-  moonbitlang$core$builtin$$Show$output$38$(self, { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$21$, method_1: moonbitlang$core$builtin$$Logger$write_substring$21$, method_2: moonbitlang$core$builtin$$Logger$write_char$21$ });
+  moonbitlang$core$builtin$$Show$output$15$(self, { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$24$, method_1: moonbitlang$core$builtin$$Logger$write_substring$24$, method_2: moonbitlang$core$builtin$$Logger$write_char$24$ });
+  return logger.val;
+}
+function moonbitlang$core$builtin$$Show$to_string$1$(self) {
+  const logger = moonbitlang$core$builtin$$StringBuilder$new$46$inner(0);
+  moonbitlang$core$builtin$$Show$output$38$(self, { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$24$, method_1: moonbitlang$core$builtin$$Logger$write_substring$24$, method_2: moonbitlang$core$builtin$$Logger$write_char$24$ });
   return logger.val;
 }
 function moonbitlang$core$builtin$$Show$to_string$39$(self) {
   const logger = moonbitlang$core$builtin$$StringBuilder$new$46$inner(0);
-  moonbitlang$core$builtin$$Show$output$6$(self, { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$21$, method_1: moonbitlang$core$builtin$$Logger$write_substring$21$, method_2: moonbitlang$core$builtin$$Logger$write_char$21$ });
+  moonbitlang$core$builtin$$Show$output$40$(self, { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$24$, method_1: moonbitlang$core$builtin$$Logger$write_substring$24$, method_2: moonbitlang$core$builtin$$Logger$write_char$24$ });
   return logger.val;
 }
-function moonbitlang$core$builtin$$Show$to_string$40$(self) {
+function moonbitlang$core$builtin$$Show$to_string$41$(self) {
   const logger = moonbitlang$core$builtin$$StringBuilder$new$46$inner(0);
-  moonbitlang$core$builtin$$Show$output$41$(self, { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$21$, method_1: moonbitlang$core$builtin$$Logger$write_substring$21$, method_2: moonbitlang$core$builtin$$Logger$write_char$21$ });
+  moonbitlang$core$builtin$$Show$output$42$(self, { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$24$, method_1: moonbitlang$core$builtin$$Logger$write_substring$24$, method_2: moonbitlang$core$builtin$$Logger$write_char$24$ });
   return logger.val;
 }
-function moonbitlang$core$builtin$$Show$to_string$42$(self) {
+function moonbitlang$core$builtin$$Show$to_string$43$(self) {
   const logger = moonbitlang$core$builtin$$StringBuilder$new$46$inner(0);
-  moonbitlang$core$builtin$$Show$output$43$(self, { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$21$, method_1: moonbitlang$core$builtin$$Logger$write_substring$21$, method_2: moonbitlang$core$builtin$$Logger$write_char$21$ });
+  moonbitlang$core$builtin$$Show$output$9$(self, { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$24$, method_1: moonbitlang$core$builtin$$Logger$write_substring$24$, method_2: moonbitlang$core$builtin$$Logger$write_char$24$ });
   return logger.val;
 }
 function moonbitlang$core$builtin$$Show$to_string$44$(self) {
   const logger = moonbitlang$core$builtin$$StringBuilder$new$46$inner(0);
-  const _p = { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$21$, method_1: moonbitlang$core$builtin$$Logger$write_substring$21$, method_2: moonbitlang$core$builtin$$Logger$write_char$21$ };
+  moonbitlang$core$builtin$$Show$output$45$(self, { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$24$, method_1: moonbitlang$core$builtin$$Logger$write_substring$24$, method_2: moonbitlang$core$builtin$$Logger$write_char$24$ });
+  return logger.val;
+}
+function moonbitlang$core$builtin$$Show$to_string$46$(self) {
+  const logger = moonbitlang$core$builtin$$StringBuilder$new$46$inner(0);
+  moonbitlang$core$builtin$$Show$output$47$(self, { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$24$, method_1: moonbitlang$core$builtin$$Logger$write_substring$24$, method_2: moonbitlang$core$builtin$$Logger$write_char$24$ });
+  return logger.val;
+}
+function moonbitlang$core$builtin$$Show$to_string$48$(self) {
+  const logger = moonbitlang$core$builtin$$StringBuilder$new$46$inner(0);
+  const _p = { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$24$, method_1: moonbitlang$core$builtin$$Logger$write_substring$24$, method_2: moonbitlang$core$builtin$$Logger$write_char$24$ };
   if (self) {
     _p.method_0(_p.self, "true");
   } else {
@@ -1631,32 +1847,32 @@ function moonbitlang$core$builtin$$Show$to_string$44$(self) {
   }
   return logger.val;
 }
-function moonbitlang$core$builtin$$Show$to_string$45$(self) {
+function moonbitlang$core$builtin$$Show$to_string$49$(self) {
   const logger = moonbitlang$core$builtin$$StringBuilder$new$46$inner(0);
-  moonbitlang$core$builtin$$Show$output$46$(self, { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$21$, method_1: moonbitlang$core$builtin$$Logger$write_substring$21$, method_2: moonbitlang$core$builtin$$Logger$write_char$21$ });
+  moonbitlang$core$builtin$$Show$output$50$(self, { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$24$, method_1: moonbitlang$core$builtin$$Logger$write_substring$24$, method_2: moonbitlang$core$builtin$$Logger$write_char$24$ });
   return logger.val;
 }
-function moonbitlang$core$builtin$$Show$to_string$47$(self) {
+function moonbitlang$core$builtin$$Show$to_string$51$(self) {
   const logger = moonbitlang$core$builtin$$StringBuilder$new$46$inner(0);
-  const _p = { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$21$, method_1: moonbitlang$core$builtin$$Logger$write_substring$21$, method_2: moonbitlang$core$builtin$$Logger$write_char$21$ };
+  const _p = { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$24$, method_1: moonbitlang$core$builtin$$Logger$write_substring$24$, method_2: moonbitlang$core$builtin$$Logger$write_char$24$ };
   _p.method_0(_p.self, "Revolute");
   return logger.val;
 }
 function moonbitlang$core$builtin$$Show$to_string$0$(self) {
   const logger = moonbitlang$core$builtin$$StringBuilder$new$46$inner(0);
-  moonbitlang$core$builtin$$Show$output$48$(self, { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$21$, method_1: moonbitlang$core$builtin$$Logger$write_substring$21$, method_2: moonbitlang$core$builtin$$Logger$write_char$21$ });
+  moonbitlang$core$builtin$$Show$output$52$(self, { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$24$, method_1: moonbitlang$core$builtin$$Logger$write_substring$24$, method_2: moonbitlang$core$builtin$$Logger$write_char$24$ });
   return logger.val;
 }
 function moonbitlang$core$builtin$$Show$to_string$2$(self) {
   const logger = moonbitlang$core$builtin$$StringBuilder$new$46$inner(0);
-  moonbitlang$core$builtin$$Show$output$49$(self, { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$21$, method_1: moonbitlang$core$builtin$$Logger$write_substring$21$, method_2: moonbitlang$core$builtin$$Logger$write_char$21$ });
+  moonbitlang$core$builtin$$Show$output$53$(self, { self: logger, method_0: moonbitlang$core$builtin$$Logger$write_string$24$, method_1: moonbitlang$core$builtin$$Logger$write_substring$24$, method_2: moonbitlang$core$builtin$$Logger$write_char$24$ });
   return logger.val;
 }
-function moonbitlang$core$builtin$$Logger$write_iter$46$inner$6$(self, iter, prefix, suffix, sep, trailing) {
+function moonbitlang$core$builtin$$Logger$write_iter$46$inner$9$(self, iter, prefix, suffix, sep, trailing) {
   self.method_0(self.self, prefix);
   if (trailing) {
     iter((x) => {
-      moonbitlang$core$builtin$$Logger$write_object$6$(self, x);
+      moonbitlang$core$builtin$$Logger$write_object$9$(self, x);
       self.method_0(self.self, sep);
       return 1;
     });
@@ -1668,17 +1884,17 @@ function moonbitlang$core$builtin$$Logger$write_iter$46$inner$6$(self, iter, pre
       } else {
         self.method_0(self.self, sep);
       }
-      moonbitlang$core$builtin$$Logger$write_object$6$(self, x);
+      moonbitlang$core$builtin$$Logger$write_object$9$(self, x);
       return 1;
     });
   }
   self.method_0(self.self, suffix);
 }
-function moonbitlang$core$builtin$$Logger$write_iter$46$inner$16$(self, iter, prefix, suffix, sep, trailing) {
+function moonbitlang$core$builtin$$Logger$write_iter$46$inner$19$(self, iter, prefix, suffix, sep, trailing) {
   self.method_0(self.self, prefix);
   if (trailing) {
     iter((x) => {
-      moonbitlang$core$builtin$$Logger$write_object$16$(self, x);
+      moonbitlang$core$builtin$$Logger$write_object$19$(self, x);
       self.method_0(self.self, sep);
       return 1;
     });
@@ -1690,17 +1906,17 @@ function moonbitlang$core$builtin$$Logger$write_iter$46$inner$16$(self, iter, pr
       } else {
         self.method_0(self.self, sep);
       }
-      moonbitlang$core$builtin$$Logger$write_object$16$(self, x);
+      moonbitlang$core$builtin$$Logger$write_object$19$(self, x);
       return 1;
     });
   }
   self.method_0(self.self, suffix);
 }
-function moonbitlang$core$builtin$$Logger$write_iter$46$inner$17$(self, iter, prefix, suffix, sep, trailing) {
+function moonbitlang$core$builtin$$Logger$write_iter$46$inner$20$(self, iter, prefix, suffix, sep, trailing) {
   self.method_0(self.self, prefix);
   if (trailing) {
     iter((x) => {
-      moonbitlang$core$builtin$$Logger$write_object$17$(self, x);
+      moonbitlang$core$builtin$$Logger$write_object$20$(self, x);
       self.method_0(self.self, sep);
       return 1;
     });
@@ -1712,7 +1928,7 @@ function moonbitlang$core$builtin$$Logger$write_iter$46$inner$17$(self, iter, pr
       } else {
         self.method_0(self.self, sep);
       }
-      moonbitlang$core$builtin$$Logger$write_object$17$(self, x);
+      moonbitlang$core$builtin$$Logger$write_object$20$(self, x);
       return 1;
     });
   }
@@ -1752,7 +1968,7 @@ function moonbitlang$core$int$$Int$output_size_hint$46$inner(radix) {
 }
 function moonbitlang$core$int$$Int$to_string$46$inner(self, radix) {
   const buf = moonbitlang$core$builtin$$StringBuilder$new$46$inner(moonbitlang$core$int$$Int$output_size_hint$46$inner(radix));
-  moonbitlang$core$int$$Int$output$46$inner(self, { self: buf, method_0: moonbitlang$core$builtin$$Logger$write_string$21$, method_1: moonbitlang$core$builtin$$Logger$write_substring$21$, method_2: moonbitlang$core$builtin$$Logger$write_char$21$ }, radix);
+  moonbitlang$core$int$$Int$output$46$inner(self, { self: buf, method_0: moonbitlang$core$builtin$$Logger$write_string$24$, method_1: moonbitlang$core$builtin$$Logger$write_substring$24$, method_2: moonbitlang$core$builtin$$Logger$write_char$24$ }, radix);
   return buf.val;
 }
 function moonbitlang$core$builtin$$Show$to_string$5$(self) {
@@ -1779,7 +1995,7 @@ function moonbitlang$core$string$$String$substring$46$inner(self, start, end) {
   }
   return start >= 0 && (start <= end$2 && end$2 <= len) ? self.substring(start, end$2) : $panic();
 }
-function moonbitlang$core$builtin$$Logger$write_substring$21$(self, str, start, len) {
+function moonbitlang$core$builtin$$Logger$write_substring$24$(self, str, start, len) {
   const _bind = self;
   _bind.val = `${_bind.val}${moonbitlang$core$string$$String$substring$46$inner(str, start, start + len | 0)}`;
 }
@@ -1799,9 +2015,9 @@ function moonbitlang$core$builtin$$to_hex$46$to_hex_digit$124$1943(i) {
 function moonbitlang$core$byte$$Byte$to_hex(b) {
   const _self = moonbitlang$core$builtin$$StringBuilder$new$46$inner(0);
   const _p = 16;
-  moonbitlang$core$builtin$$Logger$write_char$21$(_self, moonbitlang$core$builtin$$to_hex$46$to_hex_digit$124$1943((b / _p | 0) & 255));
+  moonbitlang$core$builtin$$Logger$write_char$24$(_self, moonbitlang$core$builtin$$to_hex$46$to_hex_digit$124$1943((b / _p | 0) & 255));
   const _p$2 = 16;
-  moonbitlang$core$builtin$$Logger$write_char$21$(_self, moonbitlang$core$builtin$$to_hex$46$to_hex_digit$124$1943((b % _p$2 | 0) & 255));
+  moonbitlang$core$builtin$$Logger$write_char$24$(_self, moonbitlang$core$builtin$$to_hex$46$to_hex_digit$124$1943((b % _p$2 | 0) & 255));
   const _p$3 = _self;
   return _p$3.val;
 }
@@ -1815,7 +2031,7 @@ function moonbitlang$core$builtin$$output$46$flush_segment$124$1933(_env, seg, i
     return;
   }
 }
-function moonbitlang$core$builtin$$Show$output$13$(self, logger) {
+function moonbitlang$core$builtin$$Show$output$16$(self, logger) {
   logger.method_2(logger.self, 34);
   const _env = { _0: logger, _1: self };
   const len = self.length;
@@ -1893,7 +2109,7 @@ function moonbitlang$core$builtin$$Show$output$13$(self, logger) {
   }
   logger.method_2(logger.self, 34);
 }
-function moonbitlang$core$builtin$$Show$output$50$(self, logger) {
+function moonbitlang$core$builtin$$Show$output$54$(self, logger) {
   if (self === undefined) {
     logger.method_0(logger.self, "None");
     return;
@@ -1901,12 +2117,12 @@ function moonbitlang$core$builtin$$Show$output$50$(self, logger) {
     const _Some = self;
     const _arg = _Some;
     logger.method_0(logger.self, "Some(");
-    moonbitlang$core$builtin$$Logger$write_object$13$(logger, _arg);
+    moonbitlang$core$builtin$$Logger$write_object$16$(logger, _arg);
     logger.method_0(logger.self, ")");
     return;
   }
 }
-function moonbitlang$core$array$$Array$iter$6$(self) {
+function moonbitlang$core$array$$Array$iter$9$(self) {
   const _p = (yield_) => {
     const _len = self.length;
     let _tmp = 0;
@@ -1928,7 +2144,7 @@ function moonbitlang$core$array$$Array$iter$6$(self) {
   };
   return _p;
 }
-function moonbitlang$core$array$$Array$iter$16$(self) {
+function moonbitlang$core$array$$Array$iter$19$(self) {
   const _p = (yield_) => {
     const _len = self.length;
     let _tmp = 0;
@@ -1950,7 +2166,7 @@ function moonbitlang$core$array$$Array$iter$16$(self) {
   };
   return _p;
 }
-function moonbitlang$core$array$$Array$iter$17$(self) {
+function moonbitlang$core$array$$Array$iter$20$(self) {
   const _p = (yield_) => {
     const _len = self.length;
     let _tmp = 0;
@@ -1972,16 +2188,16 @@ function moonbitlang$core$array$$Array$iter$17$(self) {
   };
   return _p;
 }
-function moonbitlang$core$builtin$$Show$output$51$(self, logger) {
-  moonbitlang$core$builtin$$Logger$write_iter$46$inner$6$(logger, moonbitlang$core$array$$Array$iter$6$(self), "[", "]", ", ", false);
+function moonbitlang$core$builtin$$Show$output$55$(self, logger) {
+  moonbitlang$core$builtin$$Logger$write_iter$46$inner$9$(logger, moonbitlang$core$array$$Array$iter$9$(self), "[", "]", ", ", false);
 }
-function moonbitlang$core$builtin$$Show$output$41$(self, logger) {
-  moonbitlang$core$builtin$$Logger$write_iter$46$inner$16$(logger, moonbitlang$core$array$$Array$iter$16$(self), "[", "]", ", ", false);
+function moonbitlang$core$builtin$$Show$output$45$(self, logger) {
+  moonbitlang$core$builtin$$Logger$write_iter$46$inner$19$(logger, moonbitlang$core$array$$Array$iter$19$(self), "[", "]", ", ", false);
 }
-function moonbitlang$core$builtin$$Show$output$15$(self, logger) {
-  moonbitlang$core$builtin$$Logger$write_iter$46$inner$17$(logger, moonbitlang$core$array$$Array$iter$17$(self), "[", "]", ", ", false);
+function moonbitlang$core$builtin$$Show$output$18$(self, logger) {
+  moonbitlang$core$builtin$$Logger$write_iter$46$inner$20$(logger, moonbitlang$core$array$$Array$iter$20$(self), "[", "]", ", ", false);
 }
-function moonbitlang$core$builtin$$Eq$equal$50$(self, other) {
+function moonbitlang$core$builtin$$Eq$equal$54$(self, other) {
   if (self === undefined) {
     return other === undefined;
   } else {
@@ -1996,7 +2212,7 @@ function moonbitlang$core$builtin$$Eq$equal$50$(self, other) {
     }
   }
 }
-function moonbitlang$core$builtin$$Eq$equal$52$(self, other) {
+function moonbitlang$core$builtin$$Eq$equal$56$(self, other) {
   if (self === undefined) {
     return other === undefined;
   } else {
@@ -2011,7 +2227,7 @@ function moonbitlang$core$builtin$$Eq$equal$52$(self, other) {
     }
   }
 }
-function moonbitlang$core$builtin$$Eq$equal$53$(self, other) {
+function moonbitlang$core$builtin$$Eq$equal$57$(self, other) {
   if (self === undefined) {
     return other === undefined;
   } else {
@@ -2022,7 +2238,7 @@ function moonbitlang$core$builtin$$Eq$equal$53$(self, other) {
     } else {
       const _Some$2 = other;
       const _y = _Some$2;
-      return moonbitlang$core$builtin$$Eq$equal$54$(_x, _y);
+      return moonbitlang$core$builtin$$Eq$equal$58$(_x, _y);
     }
   }
 }
@@ -2039,7 +2255,7 @@ function moonbitlang$core$int$$Int$next_power_of_two(self) {
     return $panic();
   }
 }
-function moonbitlang$core$builtin$$Map$new$46$inner$55$(capacity) {
+function moonbitlang$core$builtin$$Map$new$46$inner$59$(capacity) {
   const capacity$2 = moonbitlang$core$int$$Int$next_power_of_two(capacity);
   const _bind = capacity$2 - 1 | 0;
   const _bind$2 = (Math.imul(capacity$2, 13) | 0) / 16 | 0;
@@ -2047,7 +2263,7 @@ function moonbitlang$core$builtin$$Map$new$46$inner$55$(capacity) {
   const _bind$4 = undefined;
   return { entries: _bind$3, size: 0, capacity: capacity$2, capacity_mask: _bind, grow_at: _bind$2, head: _bind$4, tail: -1 };
 }
-function moonbitlang$core$builtin$$Map$new$46$inner$56$(capacity) {
+function moonbitlang$core$builtin$$Map$new$46$inner$60$(capacity) {
   const capacity$2 = moonbitlang$core$int$$Int$next_power_of_two(capacity);
   const _bind = capacity$2 - 1 | 0;
   const _bind$2 = (Math.imul(capacity$2, 13) | 0) / 16 | 0;
@@ -2055,7 +2271,7 @@ function moonbitlang$core$builtin$$Map$new$46$inner$56$(capacity) {
   const _bind$4 = undefined;
   return { entries: _bind$3, size: 0, capacity: capacity$2, capacity_mask: _bind, grow_at: _bind$2, head: _bind$4, tail: -1 };
 }
-function moonbitlang$core$builtin$$Map$new$46$inner$57$(capacity) {
+function moonbitlang$core$builtin$$Map$new$46$inner$61$(capacity) {
   const capacity$2 = moonbitlang$core$int$$Int$next_power_of_two(capacity);
   const _bind = capacity$2 - 1 | 0;
   const _bind$2 = (Math.imul(capacity$2, 13) | 0) / 16 | 0;
@@ -2063,7 +2279,7 @@ function moonbitlang$core$builtin$$Map$new$46$inner$57$(capacity) {
   const _bind$4 = undefined;
   return { entries: _bind$3, size: 0, capacity: capacity$2, capacity_mask: _bind, grow_at: _bind$2, head: _bind$4, tail: -1 };
 }
-function moonbitlang$core$builtin$$Map$new$46$inner$58$(capacity) {
+function moonbitlang$core$builtin$$Map$new$46$inner$62$(capacity) {
   const capacity$2 = moonbitlang$core$int$$Int$next_power_of_two(capacity);
   const _bind = capacity$2 - 1 | 0;
   const _bind$2 = (Math.imul(capacity$2, 13) | 0) / 16 | 0;
@@ -2071,7 +2287,7 @@ function moonbitlang$core$builtin$$Map$new$46$inner$58$(capacity) {
   const _bind$4 = undefined;
   return { entries: _bind$3, size: 0, capacity: capacity$2, capacity_mask: _bind, grow_at: _bind$2, head: _bind$4, tail: -1 };
 }
-function moonbitlang$core$builtin$$Map$add_entry_to_tail$55$(self, idx, entry) {
+function moonbitlang$core$builtin$$Map$add_entry_to_tail$59$(self, idx, entry) {
   const _bind = self.tail;
   if (_bind === -1) {
     self.head = entry;
@@ -2094,7 +2310,7 @@ function moonbitlang$core$builtin$$Map$add_entry_to_tail$55$(self, idx, entry) {
   _tmp[idx] = entry;
   self.size = self.size + 1 | 0;
 }
-function moonbitlang$core$builtin$$Map$add_entry_to_tail$56$(self, idx, entry) {
+function moonbitlang$core$builtin$$Map$add_entry_to_tail$60$(self, idx, entry) {
   const _bind = self.tail;
   if (_bind === -1) {
     self.head = entry;
@@ -2117,7 +2333,7 @@ function moonbitlang$core$builtin$$Map$add_entry_to_tail$56$(self, idx, entry) {
   _tmp[idx] = entry;
   self.size = self.size + 1 | 0;
 }
-function moonbitlang$core$builtin$$Map$add_entry_to_tail$57$(self, idx, entry) {
+function moonbitlang$core$builtin$$Map$add_entry_to_tail$61$(self, idx, entry) {
   const _bind = self.tail;
   if (_bind === -1) {
     self.head = entry;
@@ -2140,7 +2356,7 @@ function moonbitlang$core$builtin$$Map$add_entry_to_tail$57$(self, idx, entry) {
   _tmp[idx] = entry;
   self.size = self.size + 1 | 0;
 }
-function moonbitlang$core$builtin$$Map$add_entry_to_tail$58$(self, idx, entry) {
+function moonbitlang$core$builtin$$Map$add_entry_to_tail$62$(self, idx, entry) {
   const _bind = self.tail;
   if (_bind === -1) {
     self.head = entry;
@@ -2163,7 +2379,7 @@ function moonbitlang$core$builtin$$Map$add_entry_to_tail$58$(self, idx, entry) {
   _tmp[idx] = entry;
   self.size = self.size + 1 | 0;
 }
-function moonbitlang$core$builtin$$Map$set_entry$55$(self, entry, new_idx) {
+function moonbitlang$core$builtin$$Map$set_entry$59$(self, entry, new_idx) {
   const _tmp = self.entries;
   $bound_check(_tmp, new_idx);
   _tmp[new_idx] = entry;
@@ -2178,7 +2394,7 @@ function moonbitlang$core$builtin$$Map$set_entry$55$(self, entry, new_idx) {
     return;
   }
 }
-function moonbitlang$core$builtin$$Map$set_entry$56$(self, entry, new_idx) {
+function moonbitlang$core$builtin$$Map$set_entry$60$(self, entry, new_idx) {
   const _tmp = self.entries;
   $bound_check(_tmp, new_idx);
   _tmp[new_idx] = entry;
@@ -2193,7 +2409,7 @@ function moonbitlang$core$builtin$$Map$set_entry$56$(self, entry, new_idx) {
     return;
   }
 }
-function moonbitlang$core$builtin$$Map$set_entry$57$(self, entry, new_idx) {
+function moonbitlang$core$builtin$$Map$set_entry$61$(self, entry, new_idx) {
   const _tmp = self.entries;
   $bound_check(_tmp, new_idx);
   _tmp[new_idx] = entry;
@@ -2208,7 +2424,7 @@ function moonbitlang$core$builtin$$Map$set_entry$57$(self, entry, new_idx) {
     return;
   }
 }
-function moonbitlang$core$builtin$$Map$set_entry$58$(self, entry, new_idx) {
+function moonbitlang$core$builtin$$Map$set_entry$62$(self, entry, new_idx) {
   const _tmp = self.entries;
   $bound_check(_tmp, new_idx);
   _tmp[new_idx] = entry;
@@ -2223,7 +2439,7 @@ function moonbitlang$core$builtin$$Map$set_entry$58$(self, entry, new_idx) {
     return;
   }
 }
-function moonbitlang$core$builtin$$Map$push_away$55$(self, idx, entry) {
+function moonbitlang$core$builtin$$Map$push_away$59$(self, idx, entry) {
   let _tmp = entry.psl + 1 | 0;
   let _tmp$2 = idx + 1 & self.capacity_mask;
   let _tmp$3 = entry;
@@ -2236,14 +2452,14 @@ function moonbitlang$core$builtin$$Map$push_away$55$(self, idx, entry) {
     const _bind = _tmp$4[idx$2];
     if (_bind === undefined) {
       entry$2.psl = psl;
-      moonbitlang$core$builtin$$Map$set_entry$55$(self, entry$2, idx$2);
+      moonbitlang$core$builtin$$Map$set_entry$59$(self, entry$2, idx$2);
       break;
     } else {
       const _Some = _bind;
       const _curr_entry = _Some;
       if (psl > _curr_entry.psl) {
         entry$2.psl = psl;
-        moonbitlang$core$builtin$$Map$set_entry$55$(self, entry$2, idx$2);
+        moonbitlang$core$builtin$$Map$set_entry$59$(self, entry$2, idx$2);
         _tmp = _curr_entry.psl + 1 | 0;
         _tmp$2 = idx$2 + 1 & self.capacity_mask;
         _tmp$3 = _curr_entry;
@@ -2256,7 +2472,7 @@ function moonbitlang$core$builtin$$Map$push_away$55$(self, idx, entry) {
     }
   }
 }
-function moonbitlang$core$builtin$$Map$push_away$56$(self, idx, entry) {
+function moonbitlang$core$builtin$$Map$push_away$60$(self, idx, entry) {
   let _tmp = entry.psl + 1 | 0;
   let _tmp$2 = idx + 1 & self.capacity_mask;
   let _tmp$3 = entry;
@@ -2269,14 +2485,14 @@ function moonbitlang$core$builtin$$Map$push_away$56$(self, idx, entry) {
     const _bind = _tmp$4[idx$2];
     if (_bind === undefined) {
       entry$2.psl = psl;
-      moonbitlang$core$builtin$$Map$set_entry$56$(self, entry$2, idx$2);
+      moonbitlang$core$builtin$$Map$set_entry$60$(self, entry$2, idx$2);
       break;
     } else {
       const _Some = _bind;
       const _curr_entry = _Some;
       if (psl > _curr_entry.psl) {
         entry$2.psl = psl;
-        moonbitlang$core$builtin$$Map$set_entry$56$(self, entry$2, idx$2);
+        moonbitlang$core$builtin$$Map$set_entry$60$(self, entry$2, idx$2);
         _tmp = _curr_entry.psl + 1 | 0;
         _tmp$2 = idx$2 + 1 & self.capacity_mask;
         _tmp$3 = _curr_entry;
@@ -2289,7 +2505,7 @@ function moonbitlang$core$builtin$$Map$push_away$56$(self, idx, entry) {
     }
   }
 }
-function moonbitlang$core$builtin$$Map$push_away$57$(self, idx, entry) {
+function moonbitlang$core$builtin$$Map$push_away$61$(self, idx, entry) {
   let _tmp = entry.psl + 1 | 0;
   let _tmp$2 = idx + 1 & self.capacity_mask;
   let _tmp$3 = entry;
@@ -2302,14 +2518,14 @@ function moonbitlang$core$builtin$$Map$push_away$57$(self, idx, entry) {
     const _bind = _tmp$4[idx$2];
     if (_bind === undefined) {
       entry$2.psl = psl;
-      moonbitlang$core$builtin$$Map$set_entry$57$(self, entry$2, idx$2);
+      moonbitlang$core$builtin$$Map$set_entry$61$(self, entry$2, idx$2);
       break;
     } else {
       const _Some = _bind;
       const _curr_entry = _Some;
       if (psl > _curr_entry.psl) {
         entry$2.psl = psl;
-        moonbitlang$core$builtin$$Map$set_entry$57$(self, entry$2, idx$2);
+        moonbitlang$core$builtin$$Map$set_entry$61$(self, entry$2, idx$2);
         _tmp = _curr_entry.psl + 1 | 0;
         _tmp$2 = idx$2 + 1 & self.capacity_mask;
         _tmp$3 = _curr_entry;
@@ -2322,7 +2538,7 @@ function moonbitlang$core$builtin$$Map$push_away$57$(self, idx, entry) {
     }
   }
 }
-function moonbitlang$core$builtin$$Map$push_away$58$(self, idx, entry) {
+function moonbitlang$core$builtin$$Map$push_away$62$(self, idx, entry) {
   let _tmp = entry.psl + 1 | 0;
   let _tmp$2 = idx + 1 & self.capacity_mask;
   let _tmp$3 = entry;
@@ -2335,14 +2551,14 @@ function moonbitlang$core$builtin$$Map$push_away$58$(self, idx, entry) {
     const _bind = _tmp$4[idx$2];
     if (_bind === undefined) {
       entry$2.psl = psl;
-      moonbitlang$core$builtin$$Map$set_entry$58$(self, entry$2, idx$2);
+      moonbitlang$core$builtin$$Map$set_entry$62$(self, entry$2, idx$2);
       break;
     } else {
       const _Some = _bind;
       const _curr_entry = _Some;
       if (psl > _curr_entry.psl) {
         entry$2.psl = psl;
-        moonbitlang$core$builtin$$Map$set_entry$58$(self, entry$2, idx$2);
+        moonbitlang$core$builtin$$Map$set_entry$62$(self, entry$2, idx$2);
         _tmp = _curr_entry.psl + 1 | 0;
         _tmp$2 = idx$2 + 1 & self.capacity_mask;
         _tmp$3 = _curr_entry;
@@ -2355,9 +2571,9 @@ function moonbitlang$core$builtin$$Map$push_away$58$(self, idx, entry) {
     }
   }
 }
-function moonbitlang$core$builtin$$Map$set_with_hash$55$(self, key, value, hash) {
+function moonbitlang$core$builtin$$Map$set_with_hash$59$(self, key, value, hash) {
   if (self.size >= self.grow_at) {
-    moonbitlang$core$builtin$$Map$grow$55$(self);
+    moonbitlang$core$builtin$$Map$grow$59$(self);
   }
   let _bind;
   let _tmp = 0;
@@ -2374,12 +2590,12 @@ function moonbitlang$core$builtin$$Map$set_with_hash$55$(self, key, value, hash)
     } else {
       const _Some = _bind$2;
       const _curr_entry = _Some;
-      if (_curr_entry.hash === hash && moonbitlang$core$builtin$$Eq$equal$30$(_curr_entry.key, key)) {
+      if (_curr_entry.hash === hash && moonbitlang$core$builtin$$Eq$equal$34$(_curr_entry.key, key)) {
         _curr_entry.value = value;
         return undefined;
       }
       if (psl > _curr_entry.psl) {
-        moonbitlang$core$builtin$$Map$push_away$55$(self, idx, _curr_entry);
+        moonbitlang$core$builtin$$Map$push_away$59$(self, idx, _curr_entry);
         _bind = { _0: idx, _1: psl };
         break;
       }
@@ -2393,51 +2609,11 @@ function moonbitlang$core$builtin$$Map$set_with_hash$55$(self, key, value, hash)
   const _bind$2 = self.tail;
   const _bind$3 = undefined;
   const entry = { prev: _bind$2, next: _bind$3, psl: _psl, hash: hash, key: key, value: value };
-  moonbitlang$core$builtin$$Map$add_entry_to_tail$55$(self, _idx, entry);
+  moonbitlang$core$builtin$$Map$add_entry_to_tail$59$(self, _idx, entry);
 }
-function moonbitlang$core$builtin$$Map$set_with_hash$56$(self, key, value, hash) {
+function moonbitlang$core$builtin$$Map$set_with_hash$60$(self, key, value, hash) {
   if (self.size >= self.grow_at) {
-    moonbitlang$core$builtin$$Map$grow$56$(self);
-  }
-  let _bind;
-  let _tmp = 0;
-  let _tmp$2 = hash & self.capacity_mask;
-  while (true) {
-    const psl = _tmp;
-    const idx = _tmp$2;
-    const _tmp$3 = self.entries;
-    $bound_check(_tmp$3, idx);
-    const _bind$2 = _tmp$3[idx];
-    if (_bind$2 === undefined) {
-      _bind = { _0: idx, _1: psl };
-      break;
-    } else {
-      const _Some = _bind$2;
-      const _curr_entry = _Some;
-      if (_curr_entry.hash === hash && _curr_entry.key === key) {
-        _curr_entry.value = value;
-        return undefined;
-      }
-      if (psl > _curr_entry.psl) {
-        moonbitlang$core$builtin$$Map$push_away$56$(self, idx, _curr_entry);
-        _bind = { _0: idx, _1: psl };
-        break;
-      }
-      _tmp = psl + 1 | 0;
-      _tmp$2 = idx + 1 & self.capacity_mask;
-      continue;
-    }
-  }
-  const _idx = _bind._0;
-  const _psl = _bind._1;
-  const _bind$2 = self.tail;
-  const _bind$3 = undefined;
-  const entry = { prev: _bind$2, next: _bind$3, psl: _psl, hash: hash, key: key, value: value };
-  moonbitlang$core$builtin$$Map$add_entry_to_tail$56$(self, _idx, entry);
-}
-function moonbitlang$core$builtin$$Map$set_with_hash$57$(self, key, value, hash) {
-  if (self.size >= self.grow_at) {
-    moonbitlang$core$builtin$$Map$grow$57$(self);
+    moonbitlang$core$builtin$$Map$grow$60$(self);
   }
   let _bind;
   let _tmp = 0;
@@ -2459,7 +2635,7 @@ function moonbitlang$core$builtin$$Map$set_with_hash$57$(self, key, value, hash)
         return undefined;
       }
       if (psl > _curr_entry.psl) {
-        moonbitlang$core$builtin$$Map$push_away$57$(self, idx, _curr_entry);
+        moonbitlang$core$builtin$$Map$push_away$60$(self, idx, _curr_entry);
         _bind = { _0: idx, _1: psl };
         break;
       }
@@ -2473,11 +2649,11 @@ function moonbitlang$core$builtin$$Map$set_with_hash$57$(self, key, value, hash)
   const _bind$2 = self.tail;
   const _bind$3 = undefined;
   const entry = { prev: _bind$2, next: _bind$3, psl: _psl, hash: hash, key: key, value: value };
-  moonbitlang$core$builtin$$Map$add_entry_to_tail$57$(self, _idx, entry);
+  moonbitlang$core$builtin$$Map$add_entry_to_tail$60$(self, _idx, entry);
 }
-function moonbitlang$core$builtin$$Map$set_with_hash$58$(self, key, value, hash) {
+function moonbitlang$core$builtin$$Map$set_with_hash$61$(self, key, value, hash) {
   if (self.size >= self.grow_at) {
-    moonbitlang$core$builtin$$Map$grow$58$(self);
+    moonbitlang$core$builtin$$Map$grow$61$(self);
   }
   let _bind;
   let _tmp = 0;
@@ -2499,7 +2675,7 @@ function moonbitlang$core$builtin$$Map$set_with_hash$58$(self, key, value, hash)
         return undefined;
       }
       if (psl > _curr_entry.psl) {
-        moonbitlang$core$builtin$$Map$push_away$58$(self, idx, _curr_entry);
+        moonbitlang$core$builtin$$Map$push_away$61$(self, idx, _curr_entry);
         _bind = { _0: idx, _1: psl };
         break;
       }
@@ -2513,9 +2689,49 @@ function moonbitlang$core$builtin$$Map$set_with_hash$58$(self, key, value, hash)
   const _bind$2 = self.tail;
   const _bind$3 = undefined;
   const entry = { prev: _bind$2, next: _bind$3, psl: _psl, hash: hash, key: key, value: value };
-  moonbitlang$core$builtin$$Map$add_entry_to_tail$58$(self, _idx, entry);
+  moonbitlang$core$builtin$$Map$add_entry_to_tail$61$(self, _idx, entry);
 }
-function moonbitlang$core$builtin$$Map$grow$55$(self) {
+function moonbitlang$core$builtin$$Map$set_with_hash$62$(self, key, value, hash) {
+  if (self.size >= self.grow_at) {
+    moonbitlang$core$builtin$$Map$grow$62$(self);
+  }
+  let _bind;
+  let _tmp = 0;
+  let _tmp$2 = hash & self.capacity_mask;
+  while (true) {
+    const psl = _tmp;
+    const idx = _tmp$2;
+    const _tmp$3 = self.entries;
+    $bound_check(_tmp$3, idx);
+    const _bind$2 = _tmp$3[idx];
+    if (_bind$2 === undefined) {
+      _bind = { _0: idx, _1: psl };
+      break;
+    } else {
+      const _Some = _bind$2;
+      const _curr_entry = _Some;
+      if (_curr_entry.hash === hash && _curr_entry.key === key) {
+        _curr_entry.value = value;
+        return undefined;
+      }
+      if (psl > _curr_entry.psl) {
+        moonbitlang$core$builtin$$Map$push_away$62$(self, idx, _curr_entry);
+        _bind = { _0: idx, _1: psl };
+        break;
+      }
+      _tmp = psl + 1 | 0;
+      _tmp$2 = idx + 1 & self.capacity_mask;
+      continue;
+    }
+  }
+  const _idx = _bind._0;
+  const _psl = _bind._1;
+  const _bind$2 = self.tail;
+  const _bind$3 = undefined;
+  const entry = { prev: _bind$2, next: _bind$3, psl: _psl, hash: hash, key: key, value: value };
+  moonbitlang$core$builtin$$Map$add_entry_to_tail$62$(self, _idx, entry);
+}
+function moonbitlang$core$builtin$$Map$grow$59$(self) {
   const old_head = self.head;
   const new_capacity = self.capacity << 1;
   self.entries = $make_array_len_and_init(new_capacity, undefined);
@@ -2538,13 +2754,13 @@ function moonbitlang$core$builtin$$Map$grow$55$(self) {
       const _key = _x.key;
       const _value = _x.value;
       const _hash = _x.hash;
-      moonbitlang$core$builtin$$Map$set_with_hash$55$(self, _key, _value, _hash);
+      moonbitlang$core$builtin$$Map$set_with_hash$59$(self, _key, _value, _hash);
       _tmp = _next;
       continue;
     }
   }
 }
-function moonbitlang$core$builtin$$Map$grow$56$(self) {
+function moonbitlang$core$builtin$$Map$grow$60$(self) {
   const old_head = self.head;
   const new_capacity = self.capacity << 1;
   self.entries = $make_array_len_and_init(new_capacity, undefined);
@@ -2567,13 +2783,13 @@ function moonbitlang$core$builtin$$Map$grow$56$(self) {
       const _key = _x.key;
       const _value = _x.value;
       const _hash = _x.hash;
-      moonbitlang$core$builtin$$Map$set_with_hash$56$(self, _key, _value, _hash);
+      moonbitlang$core$builtin$$Map$set_with_hash$60$(self, _key, _value, _hash);
       _tmp = _next;
       continue;
     }
   }
 }
-function moonbitlang$core$builtin$$Map$grow$57$(self) {
+function moonbitlang$core$builtin$$Map$grow$61$(self) {
   const old_head = self.head;
   const new_capacity = self.capacity << 1;
   self.entries = $make_array_len_and_init(new_capacity, undefined);
@@ -2596,13 +2812,13 @@ function moonbitlang$core$builtin$$Map$grow$57$(self) {
       const _key = _x.key;
       const _value = _x.value;
       const _hash = _x.hash;
-      moonbitlang$core$builtin$$Map$set_with_hash$57$(self, _key, _value, _hash);
+      moonbitlang$core$builtin$$Map$set_with_hash$61$(self, _key, _value, _hash);
       _tmp = _next;
       continue;
     }
   }
 }
-function moonbitlang$core$builtin$$Map$grow$58$(self) {
+function moonbitlang$core$builtin$$Map$grow$62$(self) {
   const old_head = self.head;
   const new_capacity = self.capacity << 1;
   self.entries = $make_array_len_and_init(new_capacity, undefined);
@@ -2625,39 +2841,39 @@ function moonbitlang$core$builtin$$Map$grow$58$(self) {
       const _key = _x.key;
       const _value = _x.value;
       const _hash = _x.hash;
-      moonbitlang$core$builtin$$Map$set_with_hash$58$(self, _key, _value, _hash);
+      moonbitlang$core$builtin$$Map$set_with_hash$62$(self, _key, _value, _hash);
       _tmp = _next;
       continue;
     }
   }
 }
-function moonbitlang$core$builtin$$Map$set$55$(self, key, value) {
-  moonbitlang$core$builtin$$Map$set_with_hash$55$(self, key, value, moonbitlang$core$builtin$$Hash$hash$31$(key));
+function moonbitlang$core$builtin$$Map$set$59$(self, key, value) {
+  moonbitlang$core$builtin$$Map$set_with_hash$59$(self, key, value, moonbitlang$core$builtin$$Hash$hash$35$(key));
 }
-function moonbitlang$core$builtin$$Map$set$56$(self, key, value) {
-  moonbitlang$core$builtin$$Map$set_with_hash$56$(self, key, value, moonbitlang$core$builtin$$Hash$hash$32$(key));
+function moonbitlang$core$builtin$$Map$set$60$(self, key, value) {
+  moonbitlang$core$builtin$$Map$set_with_hash$60$(self, key, value, moonbitlang$core$builtin$$Hash$hash$36$(key));
 }
-function moonbitlang$core$builtin$$Map$set$57$(self, key, value) {
-  moonbitlang$core$builtin$$Map$set_with_hash$57$(self, key, value, moonbitlang$core$builtin$$Hash$hash$32$(key));
+function moonbitlang$core$builtin$$Map$set$61$(self, key, value) {
+  moonbitlang$core$builtin$$Map$set_with_hash$61$(self, key, value, moonbitlang$core$builtin$$Hash$hash$36$(key));
 }
-function moonbitlang$core$builtin$$Map$set$58$(self, key, value) {
-  moonbitlang$core$builtin$$Map$set_with_hash$58$(self, key, value, moonbitlang$core$builtin$$Hash$hash$32$(key));
+function moonbitlang$core$builtin$$Map$set$62$(self, key, value) {
+  moonbitlang$core$builtin$$Map$set_with_hash$62$(self, key, value, moonbitlang$core$builtin$$Hash$hash$36$(key));
 }
-function moonbitlang$core$builtin$$Map$from_array$56$(arr) {
+function moonbitlang$core$builtin$$Map$from_array$60$(arr) {
   const length = arr.length;
   let capacity = moonbitlang$core$int$$Int$next_power_of_two(length);
   const _p = capacity;
   if (length > ((Math.imul(_p, 13) | 0) / 16 | 0)) {
     capacity = Math.imul(capacity, 2) | 0;
   }
-  const m = moonbitlang$core$builtin$$Map$new$46$inner$56$(capacity);
+  const m = moonbitlang$core$builtin$$Map$new$46$inner$60$(capacity);
   const _p$2 = arr.length;
   let _tmp = 0;
   while (true) {
     const _p$3 = _tmp;
     if (_p$3 < _p$2) {
       const _p$4 = arr[_p$3];
-      moonbitlang$core$builtin$$Map$set$56$(m, _p$4._0, _p$4._1);
+      moonbitlang$core$builtin$$Map$set$60$(m, _p$4._0, _p$4._1);
       _tmp = _p$3 + 1 | 0;
       continue;
     } else {
@@ -2666,21 +2882,21 @@ function moonbitlang$core$builtin$$Map$from_array$56$(arr) {
   }
   return m;
 }
-function moonbitlang$core$builtin$$Map$from_array$57$(arr) {
+function moonbitlang$core$builtin$$Map$from_array$61$(arr) {
   const length = arr.length;
   let capacity = moonbitlang$core$int$$Int$next_power_of_two(length);
   const _p = capacity;
   if (length > ((Math.imul(_p, 13) | 0) / 16 | 0)) {
     capacity = Math.imul(capacity, 2) | 0;
   }
-  const m = moonbitlang$core$builtin$$Map$new$46$inner$57$(capacity);
+  const m = moonbitlang$core$builtin$$Map$new$46$inner$61$(capacity);
   const _p$2 = arr.length;
   let _tmp = 0;
   while (true) {
     const _p$3 = _tmp;
     if (_p$3 < _p$2) {
       const _p$4 = arr[_p$3];
-      moonbitlang$core$builtin$$Map$set$57$(m, _p$4._0, _p$4._1);
+      moonbitlang$core$builtin$$Map$set$61$(m, _p$4._0, _p$4._1);
       _tmp = _p$3 + 1 | 0;
       continue;
     } else {
@@ -2689,8 +2905,8 @@ function moonbitlang$core$builtin$$Map$from_array$57$(arr) {
   }
   return m;
 }
-function moonbitlang$core$builtin$$Map$get$55$(self, key) {
-  const hash = moonbitlang$core$builtin$$Hash$hash$31$(key);
+function moonbitlang$core$builtin$$Map$get$59$(self, key) {
+  const hash = moonbitlang$core$builtin$$Hash$hash$35$(key);
   let _tmp = 0;
   let _tmp$2 = hash & self.capacity_mask;
   while (true) {
@@ -2704,7 +2920,7 @@ function moonbitlang$core$builtin$$Map$get$55$(self, key) {
     } else {
       const _Some = _bind;
       const _entry = _Some;
-      if (_entry.hash === hash && moonbitlang$core$builtin$$Eq$equal$30$(_entry.key, key)) {
+      if (_entry.hash === hash && moonbitlang$core$builtin$$Eq$equal$34$(_entry.key, key)) {
         return _entry.value;
       }
       if (i > _entry.psl) {
@@ -2716,8 +2932,8 @@ function moonbitlang$core$builtin$$Map$get$55$(self, key) {
     }
   }
 }
-function moonbitlang$core$builtin$$Map$get$58$(self, key) {
-  const hash = moonbitlang$core$builtin$$Hash$hash$32$(key);
+function moonbitlang$core$builtin$$Map$get$62$(self, key) {
+  const hash = moonbitlang$core$builtin$$Hash$hash$36$(key);
   let _tmp = 0;
   let _tmp$2 = hash & self.capacity_mask;
   while (true) {
@@ -2743,8 +2959,8 @@ function moonbitlang$core$builtin$$Map$get$58$(self, key) {
     }
   }
 }
-function moonbitlang$core$builtin$$Map$at$56$(self, key) {
-  const hash = moonbitlang$core$builtin$$Hash$hash$32$(key);
+function moonbitlang$core$builtin$$Map$at$60$(self, key) {
+  const hash = moonbitlang$core$builtin$$Hash$hash$36$(key);
   let _tmp = 0;
   let _tmp$2 = hash & self.capacity_mask;
   while (true) {
@@ -2772,7 +2988,7 @@ function moonbitlang$core$builtin$$Map$at$56$(self, key) {
     continue;
   }
 }
-function moonbitlang$core$builtin$$Show$output$59$(self, logger) {
+function moonbitlang$core$builtin$$Show$output$63$(self, logger) {
   logger.method_0(logger.self, "{");
   let _tmp = 0;
   let _tmp$2 = self.head;
@@ -2791,9 +3007,9 @@ function moonbitlang$core$builtin$$Show$output$59$(self, logger) {
       if (_param_0 > 0) {
         logger.method_0(logger.self, ", ");
       }
-      moonbitlang$core$builtin$$Logger$write_object$13$(logger, _key);
+      moonbitlang$core$builtin$$Logger$write_object$16$(logger, _key);
       logger.method_0(logger.self, ": ");
-      moonbitlang$core$builtin$$Logger$write_object$6$(logger, _value);
+      moonbitlang$core$builtin$$Logger$write_object$9$(logger, _value);
       _tmp = _param_0 + 1 | 0;
       _tmp$2 = _next;
       continue;
@@ -2815,34 +3031,25 @@ function moonbitlang$core$double$$Double$convert_uint64(value) {
 function moonbitlang$core$int64$$Int64$reinterpret_as_double(self) {
   return moonbitlang$core$builtin$$MyInt64$reinterpret_as_double(self);
 }
-function moonbitlang$core$array$$Array$push$60$(self, value) {
-  moonbitlang$core$builtin$$JSArray$push(self, value);
-}
-function moonbitlang$core$array$$Array$push$61$(self, value) {
-  moonbitlang$core$builtin$$JSArray$push(self, value);
-}
-function moonbitlang$core$array$$Array$push$62$(self, value) {
-  moonbitlang$core$builtin$$JSArray$push(self, value);
-}
-function moonbitlang$core$array$$Array$push$63$(self, value) {
-  moonbitlang$core$builtin$$JSArray$push(self, value);
-}
-function moonbitlang$core$array$$Array$push$22$(self, value) {
-  moonbitlang$core$builtin$$JSArray$push(self, value);
-}
-function moonbitlang$core$array$$Array$push$26$(self, value) {
+function moonbitlang$core$array$$Array$push$5$(self, value) {
   moonbitlang$core$builtin$$JSArray$push(self, value);
 }
 function moonbitlang$core$array$$Array$push$64$(self, value) {
   moonbitlang$core$builtin$$JSArray$push(self, value);
 }
+function moonbitlang$core$array$$Array$push$27$(self, value) {
+  moonbitlang$core$builtin$$JSArray$push(self, value);
+}
 function moonbitlang$core$array$$Array$push$65$(self, value) {
   moonbitlang$core$builtin$$JSArray$push(self, value);
 }
-function moonbitlang$core$array$$Array$push$23$(self, value) {
+function moonbitlang$core$array$$Array$push$7$(self, value) {
   moonbitlang$core$builtin$$JSArray$push(self, value);
 }
-function moonbitlang$core$array$$Array$push$25$(self, value) {
+function moonbitlang$core$array$$Array$push$26$(self, value) {
+  moonbitlang$core$builtin$$JSArray$push(self, value);
+}
+function moonbitlang$core$array$$Array$push$30$(self, value) {
   moonbitlang$core$builtin$$JSArray$push(self, value);
 }
 function moonbitlang$core$array$$Array$push$66$(self, value) {
@@ -2854,25 +3061,37 @@ function moonbitlang$core$array$$Array$push$67$(self, value) {
 function moonbitlang$core$array$$Array$push$68$(self, value) {
   moonbitlang$core$builtin$$JSArray$push(self, value);
 }
-function moonbitlang$core$array$$Array$push$17$(self, value) {
-  moonbitlang$core$builtin$$JSArray$push(self, value);
-}
 function moonbitlang$core$array$$Array$push$69$(self, value) {
   moonbitlang$core$builtin$$JSArray$push(self, value);
 }
-function moonbitlang$core$array$$Array$push$24$(self, value) {
+function moonbitlang$core$array$$Array$push$28$(self, value) {
   moonbitlang$core$builtin$$JSArray$push(self, value);
 }
-function moonbitlang$core$array$$Array$push$5$(self, value) {
+function moonbitlang$core$array$$Array$push$29$(self, value) {
   moonbitlang$core$builtin$$JSArray$push(self, value);
 }
 function moonbitlang$core$array$$Array$push$70$(self, value) {
   moonbitlang$core$builtin$$JSArray$push(self, value);
 }
-function moonbitlang$core$array$$Array$push$6$(self, value) {
+function moonbitlang$core$array$$Array$push$20$(self, value) {
   moonbitlang$core$builtin$$JSArray$push(self, value);
 }
-function moonbitlang$core$array$$Array$push$11$(self, value) {
+function moonbitlang$core$array$$Array$push$71$(self, value) {
+  moonbitlang$core$builtin$$JSArray$push(self, value);
+}
+function moonbitlang$core$array$$Array$push$72$(self, value) {
+  moonbitlang$core$builtin$$JSArray$push(self, value);
+}
+function moonbitlang$core$array$$Array$push$73$(self, value) {
+  moonbitlang$core$builtin$$JSArray$push(self, value);
+}
+function moonbitlang$core$array$$Array$push$74$(self, value) {
+  moonbitlang$core$builtin$$JSArray$push(self, value);
+}
+function moonbitlang$core$array$$Array$push$9$(self, value) {
+  moonbitlang$core$builtin$$JSArray$push(self, value);
+}
+function moonbitlang$core$array$$Array$push$14$(self, value) {
   moonbitlang$core$builtin$$JSArray$push(self, value);
 }
 function moonbitlang$core$uint64$$UInt64$to_byte(self) {
@@ -2881,7 +3100,7 @@ function moonbitlang$core$uint64$$UInt64$to_byte(self) {
 function moonbitlang$core$byte$$Byte$to_int64(self) {
   return moonbitlang$core$int$$Int$to_int64(self);
 }
-function moonbitlang$core$builtin$$Neg$neg$71$(self) {
+function moonbitlang$core$builtin$$Neg$neg$75$(self) {
   return self.lo === 0 ? { hi: ~self.hi + 1 | 0, lo: 0 } : { hi: ~self.hi, lo: ~self.lo + 1 | 0 };
 }
 function moonbitlang$core$builtin$$MyInt64$add_hi_lo(self, bhi, blo) {
@@ -2895,13 +3114,13 @@ function moonbitlang$core$builtin$$MyInt64$add_hi_lo(self, bhi, blo) {
   const hi = (_ahi + bhi | 0) + c | 0;
   return { hi: hi, lo: lo };
 }
-function moonbitlang$core$builtin$$Add$add$71$(self, other) {
+function moonbitlang$core$builtin$$Add$add$75$(self, other) {
   return moonbitlang$core$builtin$$MyInt64$add_hi_lo(self, other.hi, other.lo);
 }
-function moonbitlang$core$builtin$$Sub$sub$71$(self, other) {
+function moonbitlang$core$builtin$$Sub$sub$75$(self, other) {
   return other.lo === 0 ? { hi: self.hi - other.hi | 0, lo: self.lo } : moonbitlang$core$builtin$$MyInt64$add_hi_lo(self, ~other.hi, ~other.lo + 1 | 0);
 }
-function moonbitlang$core$builtin$$Mul$mul$71$(self, other) {
+function moonbitlang$core$builtin$$Mul$mul$75$(self, other) {
   const _ahi = self.hi;
   const _alo = self.lo;
   const _bhi = other.hi;
@@ -2940,7 +3159,7 @@ function moonbitlang$core$builtin$$Mul$mul$71$(self, other) {
   const c48$5 = c48$4 & 65535;
   return { hi: c48$5 << 16 | c32$8, lo: c16$5 << 16 | c00$2 };
 }
-function moonbitlang$core$builtin$$Div$div$71$(self, other) {
+function moonbitlang$core$builtin$$Div$div$75$(self, other) {
   if (!(other.hi === 0 && other.lo === 0)) {
     const exports = moonbitlang$core$builtin$$get_int64_wasm_helper();
     const _ahi = self.hi;
@@ -3004,52 +3223,52 @@ function moonbitlang$core$builtin$$MyInt64$asr(self, shift) {
   const shift$2 = shift & 63;
   return shift$2 === 0 ? self : shift$2 < 32 ? { hi: self.hi >> shift$2, lo: self.lo >>> shift$2 | self.hi << (32 - shift$2 | 0) } : { hi: self.hi >> 31, lo: self.hi >> (shift$2 - 32 | 0) };
 }
-function moonbitlang$core$builtin$$Neg$neg$19$(self) {
-  return moonbitlang$core$builtin$$Neg$neg$71$(self);
+function moonbitlang$core$builtin$$Neg$neg$22$(self) {
+  return moonbitlang$core$builtin$$Neg$neg$75$(self);
 }
-function moonbitlang$core$builtin$$Add$add$19$(self, other) {
-  return moonbitlang$core$builtin$$Add$add$71$(self, other);
+function moonbitlang$core$builtin$$Add$add$22$(self, other) {
+  return moonbitlang$core$builtin$$Add$add$75$(self, other);
 }
-function moonbitlang$core$builtin$$Sub$sub$19$(self, other) {
-  return moonbitlang$core$builtin$$Sub$sub$71$(self, other);
+function moonbitlang$core$builtin$$Sub$sub$22$(self, other) {
+  return moonbitlang$core$builtin$$Sub$sub$75$(self, other);
 }
-function moonbitlang$core$builtin$$Mul$mul$19$(self, other) {
-  return moonbitlang$core$builtin$$Mul$mul$71$(self, other);
+function moonbitlang$core$builtin$$Mul$mul$22$(self, other) {
+  return moonbitlang$core$builtin$$Mul$mul$75$(self, other);
 }
-function moonbitlang$core$builtin$$Div$div$19$(self, other) {
-  return moonbitlang$core$builtin$$Div$div$71$(self, other);
+function moonbitlang$core$builtin$$Div$div$22$(self, other) {
+  return moonbitlang$core$builtin$$Div$div$75$(self, other);
 }
-function moonbitlang$core$builtin$$BitAnd$land$19$(self, other) {
+function moonbitlang$core$builtin$$BitAnd$land$22$(self, other) {
   return moonbitlang$core$builtin$$MyInt64$land(self, other);
 }
-function moonbitlang$core$builtin$$BitOr$lor$19$(self, other) {
+function moonbitlang$core$builtin$$BitOr$lor$22$(self, other) {
   return moonbitlang$core$builtin$$MyInt64$lor(self, other);
 }
-function moonbitlang$core$builtin$$Shr$shr$19$(self, other) {
+function moonbitlang$core$builtin$$Shr$shr$22$(self, other) {
   return moonbitlang$core$builtin$$MyInt64$asr(self, other);
 }
-function moonbitlang$core$builtin$$Shl$shl$19$(self, other) {
+function moonbitlang$core$builtin$$Shl$shl$22$(self, other) {
   return moonbitlang$core$builtin$$MyInt64$lsl(self, other);
 }
-function moonbitlang$core$builtin$$Eq$equal$19$(self, other) {
+function moonbitlang$core$builtin$$Eq$equal$22$(self, other) {
   const _p = self;
   const _p$2 = other;
   return _p.hi === _p$2.hi && _p.lo === _p$2.lo;
 }
-function moonbitlang$core$builtin$$Compare$compare$19$(self, other) {
+function moonbitlang$core$builtin$$Compare$compare$22$(self, other) {
   return moonbitlang$core$builtin$$MyInt64$compare(self, other);
 }
 function moonbitlang$core$uint64$$UInt64$reinterpret_as_double(self) {
   return moonbitlang$core$builtin$$MyInt64$reinterpret_as_double(self);
 }
 function moonbitlang$core$builtin$$Add$add$3$(self, other) {
-  return moonbitlang$core$builtin$$Add$add$71$(self, other);
+  return moonbitlang$core$builtin$$Add$add$75$(self, other);
 }
 function moonbitlang$core$builtin$$Sub$sub$3$(self, other) {
-  return moonbitlang$core$builtin$$Sub$sub$71$(self, other);
+  return moonbitlang$core$builtin$$Sub$sub$75$(self, other);
 }
 function moonbitlang$core$builtin$$Mul$mul$3$(self, other) {
-  return moonbitlang$core$builtin$$Mul$mul$71$(self, other);
+  return moonbitlang$core$builtin$$Mul$mul$75$(self, other);
 }
 function moonbitlang$core$builtin$$Div$div$3$(self, other) {
   return moonbitlang$core$builtin$$MyInt64$div_u(self, other);
@@ -3108,92 +3327,105 @@ function moonbitlang$core$builtin$$Hasher$combine_string(self, value) {
     }
   }
 }
-function moonbitlang$core$builtin$$Hash$hash_combine$13$(self, hasher) {
+function moonbitlang$core$builtin$$Hash$hash_combine$16$(self, hasher) {
   moonbitlang$core$builtin$$Hasher$combine_string(hasher, self);
 }
-function moonbitlang$core$array$$FixedArray$blit_to$46$inner$20$(self, dst, len, src_offset, dst_offset) {
+function moonbitlang$core$array$$FixedArray$blit_to$46$inner$23$(self, dst, len, src_offset, dst_offset) {
   if (dst_offset >= 0 && (src_offset >= 0 && ((dst_offset + len | 0) <= dst.length && (src_offset + len | 0) <= self.length))) {
-    moonbitlang$core$array$$FixedArray$unsafe_blit$20$(dst, dst_offset, self, src_offset, len);
+    moonbitlang$core$array$$FixedArray$unsafe_blit$23$(dst, dst_offset, self, src_offset, len);
     return;
   } else {
-    moonbitlang$core$abort$$abort$7$(`bounds check failed: dst_offset = ${moonbitlang$core$builtin$$Show$to_string$5$(dst_offset)}, src_offset = ${moonbitlang$core$builtin$$Show$to_string$5$(src_offset)}, len = ${moonbitlang$core$builtin$$Show$to_string$5$(len)}, dst.length = ${moonbitlang$core$builtin$$Show$to_string$5$(dst.length)}, self.length = ${moonbitlang$core$builtin$$Show$to_string$5$(self.length)}`);
+    moonbitlang$core$abort$$abort$11$(`bounds check failed: dst_offset = ${moonbitlang$core$builtin$$Show$to_string$5$(dst_offset)}, src_offset = ${moonbitlang$core$builtin$$Show$to_string$5$(src_offset)}, len = ${moonbitlang$core$builtin$$Show$to_string$5$(len)}, dst.length = ${moonbitlang$core$builtin$$Show$to_string$5$(dst.length)}, self.length = ${moonbitlang$core$builtin$$Show$to_string$5$(self.length)}`);
     return;
   }
 }
 function moonbitlang$core$double$$Double$to_int(self) {
   return self !== self ? 0 : self >= 2147483647 ? 2147483647 : self <= -2147483648 ? -2147483648 : self | 0;
 }
-function moonbitlang$core$builtin$$println$13$(input) {
+function moonbitlang$core$builtin$$println$16$(input) {
   console.log(input);
 }
-function moonbitlang$core$array$$Array$new$46$inner$60$(capacity) {
-  return [];
-}
-function moonbitlang$core$array$$Array$new$46$inner$61$(capacity) {
-  return [];
-}
-function moonbitlang$core$array$$Array$new$46$inner$62$(capacity) {
-  return [];
-}
-function moonbitlang$core$array$$Array$new$46$inner$22$(capacity) {
-  return [];
-}
-function moonbitlang$core$array$$Array$new$46$inner$26$(capacity) {
-  return [];
-}
-function moonbitlang$core$array$$Array$new$46$inner$28$(capacity) {
-  return [];
-}
-function moonbitlang$core$array$$Array$new$46$inner$69$(capacity) {
-  return [];
-}
-function moonbitlang$core$array$$Array$new$46$inner$66$(capacity) {
-  return [];
-}
-function moonbitlang$core$array$$Array$new$46$inner$65$(capacity) {
-  return [];
-}
-function moonbitlang$core$array$$Array$new$46$inner$64$(capacity) {
-  return [];
-}
-function moonbitlang$core$array$$Array$new$46$inner$23$(capacity) {
-  return [];
-}
-function moonbitlang$core$array$$Array$new$46$inner$25$(capacity) {
-  return [];
-}
-function moonbitlang$core$array$$Array$new$46$inner$67$(capacity) {
-  return [];
-}
-function moonbitlang$core$array$$Array$new$46$inner$72$(capacity) {
-  return [];
-}
-function moonbitlang$core$array$$Array$new$46$inner$63$(capacity) {
-  return [];
-}
-function moonbitlang$core$array$$Array$new$46$inner$68$(capacity) {
-  return [];
-}
-function moonbitlang$core$array$$Array$new$46$inner$17$(capacity) {
-  return [];
-}
-function moonbitlang$core$array$$Array$new$46$inner$24$(capacity) {
+function moonbitlang$core$array$$Array$new$46$inner$4$(capacity) {
   return [];
 }
 function moonbitlang$core$array$$Array$new$46$inner$5$(capacity) {
   return [];
 }
+function moonbitlang$core$array$$Array$new$46$inner$65$(capacity) {
+  return [];
+}
+function moonbitlang$core$array$$Array$new$46$inner$26$(capacity) {
+  return [];
+}
+function moonbitlang$core$array$$Array$new$46$inner$30$(capacity) {
+  return [];
+}
+function moonbitlang$core$array$$Array$new$46$inner$32$(capacity) {
+  return [];
+}
+function moonbitlang$core$array$$Array$new$46$inner$69$(capacity) {
+  return [];
+}
+function moonbitlang$core$array$$Array$new$46$inner$67$(capacity) {
+  return [];
+}
+function moonbitlang$core$array$$Array$new$46$inner$66$(capacity) {
+  return [];
+}
+function moonbitlang$core$array$$Array$new$46$inner$64$(capacity) {
+  return [];
+}
+function moonbitlang$core$array$$Array$new$46$inner$27$(capacity) {
+  return [];
+}
+function moonbitlang$core$array$$Array$new$46$inner$29$(capacity) {
+  return [];
+}
+function moonbitlang$core$array$$Array$new$46$inner$71$(capacity) {
+  return [];
+}
+function moonbitlang$core$array$$Array$new$46$inner$68$(capacity) {
+  return [];
+}
+function moonbitlang$core$array$$Array$new$46$inner$76$(capacity) {
+  return [];
+}
+function moonbitlang$core$array$$Array$new$46$inner$7$(capacity) {
+  return [];
+}
+function moonbitlang$core$array$$Array$new$46$inner$28$(capacity) {
+  return [];
+}
 function moonbitlang$core$array$$Array$new$46$inner$70$(capacity) {
   return [];
 }
-function moonbitlang$core$array$$Array$unsafe_truncate_to_length$60$(self, new_len) {
+function moonbitlang$core$array$$Array$new$46$inner$20$(capacity) {
+  return [];
+}
+function moonbitlang$core$array$$Array$new$46$inner$72$(capacity) {
+  return [];
+}
+function moonbitlang$core$array$$Array$new$46$inner$73$(capacity) {
+  return [];
+}
+function moonbitlang$core$array$$Array$new$46$inner$74$(capacity) {
+  return [];
+}
+function moonbitlang$core$array$$Array$unsafe_truncate_to_length$72$(self, new_len) {
   moonbitlang$core$builtin$$JSArray$set_length(self, new_len);
 }
-function moonbitlang$core$array$$Array$unsafe_truncate_to_length$61$(self, new_len) {
+function moonbitlang$core$array$$Array$unsafe_truncate_to_length$73$(self, new_len) {
   moonbitlang$core$builtin$$JSArray$set_length(self, new_len);
 }
-function moonbitlang$core$array$$Array$unsafe_truncate_to_length$63$(self, new_len) {
-  moonbitlang$core$builtin$$JSArray$set_length(self, new_len);
+function moonbitlang$core$array$$Array$remove$7$(self, index) {
+  if (index >= 0 && index < self.length) {
+    $bound_check(self, index);
+    const value = self[index];
+    moonbitlang$core$builtin$$JSArray$splice(self, index, 1);
+    return value;
+  } else {
+    return moonbitlang$core$abort$$abort$7$(`index out of bounds: the len is from 0 to ${moonbitlang$core$builtin$$Show$to_string$5$(self.length)} but the index is ${moonbitlang$core$builtin$$Show$to_string$5$(index)}`);
+  }
 }
 function moonbitlang$core$array$$Array$make$5$(len, elem) {
   const arr = new Array(len);
@@ -3210,7 +3442,7 @@ function moonbitlang$core$array$$Array$make$5$(len, elem) {
   }
   return arr;
 }
-function moonbitlang$core$array$$Array$make$12$(len, elem) {
+function moonbitlang$core$array$$Array$make$15$(len, elem) {
   const arr = new Array(len);
   let _tmp = 0;
   while (true) {
@@ -3225,28 +3457,6 @@ function moonbitlang$core$array$$Array$make$12$(len, elem) {
   }
   return arr;
 }
-function moonbitlang$core$array$$Array$set$23$(self, index, value) {
-  const len = self.length;
-  if (index >= 0 && index < len) {
-    $bound_check(self, index);
-    self[index] = value;
-    return;
-  } else {
-    $panic();
-    return;
-  }
-}
-function moonbitlang$core$array$$Array$set$12$(self, index, value) {
-  const len = self.length;
-  if (index >= 0 && index < len) {
-    $bound_check(self, index);
-    self[index] = value;
-    return;
-  } else {
-    $panic();
-    return;
-  }
-}
 function moonbitlang$core$array$$Array$set$5$(self, index, value) {
   const len = self.length;
   if (index >= 0 && index < len) {
@@ -3258,23 +3468,42 @@ function moonbitlang$core$array$$Array$set$5$(self, index, value) {
     return;
   }
 }
-function moonbitlang$core$array$$Array$clear$60$(self) {
-  moonbitlang$core$array$$Array$unsafe_truncate_to_length$60$(self, 0);
+function moonbitlang$core$array$$Array$set$27$(self, index, value) {
+  const len = self.length;
+  if (index >= 0 && index < len) {
+    $bound_check(self, index);
+    self[index] = value;
+    return;
+  } else {
+    $panic();
+    return;
+  }
 }
-function moonbitlang$core$array$$Array$clear$61$(self) {
-  moonbitlang$core$array$$Array$unsafe_truncate_to_length$61$(self, 0);
+function moonbitlang$core$array$$Array$set$15$(self, index, value) {
+  const len = self.length;
+  if (index >= 0 && index < len) {
+    $bound_check(self, index);
+    self[index] = value;
+    return;
+  } else {
+    $panic();
+    return;
+  }
 }
-function moonbitlang$core$array$$Array$clear$63$(self) {
-  moonbitlang$core$array$$Array$unsafe_truncate_to_length$63$(self, 0);
+function moonbitlang$core$array$$Array$clear$72$(self) {
+  moonbitlang$core$array$$Array$unsafe_truncate_to_length$72$(self, 0);
 }
-function moonbitlang$core$array$$Array$contains$73$(self, value) {
+function moonbitlang$core$array$$Array$clear$73$(self) {
+  moonbitlang$core$array$$Array$unsafe_truncate_to_length$73$(self, 0);
+}
+function moonbitlang$core$array$$Array$contains$58$(self, value) {
   const _len = self.length;
   let _tmp = 0;
   while (true) {
     const _i = _tmp;
     if (_i < _len) {
       const v = self[_i];
-      if (moonbitlang$core$builtin$$Eq$equal$73$(v, value)) {
+      if (moonbitlang$core$builtin$$Eq$equal$58$(v, value)) {
         return true;
       }
       _tmp = _i + 1 | 0;
@@ -3284,7 +3513,24 @@ function moonbitlang$core$array$$Array$contains$73$(self, value) {
     }
   }
 }
-function moonbitlang$core$builtin$$Show$output$6$(self, logger) {
+function moonbitlang$core$array$$Array$contains$77$(self, value) {
+  const _len = self.length;
+  let _tmp = 0;
+  while (true) {
+    const _i = _tmp;
+    if (_i < _len) {
+      const v = self[_i];
+      if (moonbitlang$core$builtin$$Eq$equal$77$(v, value)) {
+        return true;
+      }
+      _tmp = _i + 1 | 0;
+      continue;
+    } else {
+      return false;
+    }
+  }
+}
+function moonbitlang$core$builtin$$Show$output$9$(self, logger) {
   switch (self.$tag) {
     case 0: {
       logger.method_0(logger.self, "Null");
@@ -3303,11 +3549,11 @@ function moonbitlang$core$builtin$$Show$output$6$(self, logger) {
       const _n = _Number._0;
       const _repr = _Number._1;
       logger.method_0(logger.self, "Number(");
-      moonbitlang$core$builtin$$Show$output$12$(_n, logger);
+      moonbitlang$core$builtin$$Show$output$15$(_n, logger);
       if (_repr === undefined) {
       } else {
         logger.method_0(logger.self, ", repr=");
-        moonbitlang$core$builtin$$Show$output$50$(_repr, logger);
+        moonbitlang$core$builtin$$Show$output$54$(_repr, logger);
       }
       logger.method_0(logger.self, ")");
       return;
@@ -3316,7 +3562,7 @@ function moonbitlang$core$builtin$$Show$output$6$(self, logger) {
       const _String = self;
       const _s = _String._0;
       logger.method_0(logger.self, "String(");
-      moonbitlang$core$builtin$$Show$output$13$(_s, logger);
+      moonbitlang$core$builtin$$Show$output$16$(_s, logger);
       logger.method_0(logger.self, ")");
       return;
     }
@@ -3324,7 +3570,7 @@ function moonbitlang$core$builtin$$Show$output$6$(self, logger) {
       const _Array = self;
       const _a = _Array._0;
       logger.method_0(logger.self, "Array(");
-      moonbitlang$core$builtin$$Show$output$51$(_a, logger);
+      moonbitlang$core$builtin$$Show$output$55$(_a, logger);
       logger.method_0(logger.self, ")");
       return;
     }
@@ -3332,7 +3578,7 @@ function moonbitlang$core$builtin$$Show$output$6$(self, logger) {
       const _Object = self;
       const _o = _Object._0;
       logger.method_0(logger.self, "Object(");
-      moonbitlang$core$builtin$$Show$output$59$(_o, logger);
+      moonbitlang$core$builtin$$Show$output$63$(_o, logger);
       logger.method_0(logger.self, ")");
       return;
     }
@@ -3341,10 +3587,10 @@ function moonbitlang$core$builtin$$Show$output$6$(self, logger) {
 function moonbitlang$core$json$$Json$as_bool(self) {
   switch (self.$tag) {
     case 1: {
-      return moonbitlang$core$json$$as_bool$46$constr$47$1260;
+      return moonbitlang$core$json$$as_bool$46$constr$47$1289;
     }
     case 2: {
-      return moonbitlang$core$json$$as_bool$46$constr$47$1261;
+      return moonbitlang$core$json$$as_bool$46$constr$47$1290;
     }
     default: {
       return -1;
@@ -3360,19 +3606,19 @@ function moonbitlang$core$json$$Json$as_array(self) {
     return Option$None$5$;
   }
 }
-function moonbitlang$core$strconv$$range_err$7$() {
+function moonbitlang$core$strconv$$range_err$11$() {
   return new Result$Err$6$(new Error$moonbitlang$47$core$47$strconv$46$StrConvError$46$StrConvError(moonbitlang$core$strconv$$range_err_str));
 }
-function moonbitlang$core$strconv$$syntax_err$12$() {
+function moonbitlang$core$strconv$$syntax_err$15$() {
   return new Result$Err$7$(new Error$moonbitlang$47$core$47$strconv$46$StrConvError$46$StrConvError(moonbitlang$core$strconv$$syntax_err_str));
 }
-function moonbitlang$core$strconv$$syntax_err$74$() {
+function moonbitlang$core$strconv$$syntax_err$78$() {
   return new Result$Err$8$(new Error$moonbitlang$47$core$47$strconv$46$StrConvError$46$StrConvError(moonbitlang$core$strconv$$syntax_err_str));
 }
-function moonbitlang$core$strconv$$syntax_err$75$() {
+function moonbitlang$core$strconv$$syntax_err$79$() {
   return new Result$Err$9$(new Error$moonbitlang$47$core$47$strconv$46$StrConvError$46$StrConvError(moonbitlang$core$strconv$$syntax_err_str));
 }
-function moonbitlang$core$strconv$$syntax_err$76$() {
+function moonbitlang$core$strconv$$syntax_err$80$() {
   return new Result$Err$10$(new Error$moonbitlang$47$core$47$strconv$46$StrConvError$46$StrConvError(moonbitlang$core$strconv$$syntax_err_str));
 }
 function moonbitlang$core$strconv$$check_underscore(str) {
@@ -3768,7 +4014,7 @@ function moonbitlang$core$strconv$$parse_decimal_from_view(str) {
             _tmp = _x$2;
             continue;
           } else {
-            const _bind$2 = moonbitlang$core$strconv$$syntax_err$75$();
+            const _bind$2 = moonbitlang$core$strconv$$syntax_err$79$();
             if (_bind$2.$tag === 1) {
               const _ok = _bind$2;
               rest$2 = _ok._0;
@@ -3974,7 +4220,7 @@ function moonbitlang$core$strconv$$parse_decimal_from_view(str) {
           }
           break _L$4;
         }
-        const _bind = moonbitlang$core$strconv$$syntax_err$75$();
+        const _bind = moonbitlang$core$strconv$$syntax_err$79$();
         if (_bind.$tag === 1) {
           const _ok = _bind;
           rest$3 = _ok._0;
@@ -3987,10 +4233,10 @@ function moonbitlang$core$strconv$$parse_decimal_from_view(str) {
       moonbitlang$core$strconv$$Decimal$trim(d);
       return new Result$Ok$10$(d);
     } else {
-      return moonbitlang$core$strconv$$syntax_err$76$();
+      return moonbitlang$core$strconv$$syntax_err$80$();
     }
   } else {
-    return moonbitlang$core$strconv$$syntax_err$76$();
+    return moonbitlang$core$strconv$$syntax_err$80$();
   }
 }
 function moonbitlang$core$strconv$$parse_decimal_priv(str) {
@@ -4838,9 +5084,9 @@ function moonbitlang$core$strconv$$parse_inf_nan(rest) {
       }
       return _pos ? new Result$Ok$7$(moonbitlang$core$double$$infinity) : new Result$Ok$7$(moonbitlang$core$double$$neg_infinity);
     }
-    return moonbitlang$core$strconv$$syntax_err$12$();
+    return moonbitlang$core$strconv$$syntax_err$15$();
   }
-  return moonbitlang$core$strconv$$syntax_err$12$();
+  return moonbitlang$core$strconv$$syntax_err$15$();
 }
 function $moonbitlang$core$strconv$$moonbitlang$core$string$$StringView$fold_digits$3$(self, init, f) {
   let ret = init;
@@ -4877,7 +5123,7 @@ function $moonbitlang$core$strconv$$moonbitlang$core$string$$StringView$fold_dig
   }
   return { _0: str, _1: ret, _2: len };
 }
-function $moonbitlang$core$strconv$$moonbitlang$core$string$$StringView$fold_digits$19$(self, init, f) {
+function $moonbitlang$core$strconv$$moonbitlang$core$string$$StringView$fold_digits$22$(self, init, f) {
   let ret = init;
   let len = 0;
   let str = self;
@@ -4970,10 +5216,10 @@ function moonbitlang$core$strconv$$parse_scientific(s) {
     if (moonbitlang$core$string$$String$char_length_ge$46$inner(_bind.str, 1, _bind.start, _bind.end)) {
       const _x = moonbitlang$core$string$$String$unsafe_char_at(_bind.str, moonbitlang$core$string$$String$offset_of_nth_char$46$inner(_bind.str, 0, _bind.start, _bind.end));
       if (_x >= 48 && _x <= 57) {
-        const _bind$2 = $moonbitlang$core$strconv$$moonbitlang$core$string$$StringView$fold_digits$19$(s$2, moonbitlang$core$strconv$$parse_scientific$46$exp_num$124$306, (digit, exp_num) => moonbitlang$core$builtin$$op_lt$19$(exp_num, $65536L) ? moonbitlang$core$builtin$$Add$add$19$(moonbitlang$core$builtin$$Mul$mul$19$($10L, exp_num), moonbitlang$core$int$$Int$to_int64(digit)) : exp_num);
+        const _bind$2 = $moonbitlang$core$strconv$$moonbitlang$core$string$$StringView$fold_digits$22$(s$2, moonbitlang$core$strconv$$parse_scientific$46$exp_num$124$306, (digit, exp_num) => moonbitlang$core$builtin$$op_lt$22$(exp_num, $65536L) ? moonbitlang$core$builtin$$Add$add$22$(moonbitlang$core$builtin$$Mul$mul$22$($10L, exp_num), moonbitlang$core$int$$Int$to_int64(digit)) : exp_num);
         const _s = _bind$2._0;
         const _exp_num = _bind$2._1;
-        return neg_exp ? { _0: _s, _1: moonbitlang$core$builtin$$Neg$neg$19$(_exp_num) } : { _0: _s, _1: _exp_num };
+        return neg_exp ? { _0: _s, _1: moonbitlang$core$builtin$$Neg$neg$22$(_exp_num) } : { _0: _s, _1: _exp_num };
       } else {
         break _L$2;
       }
@@ -5130,7 +5376,7 @@ function moonbitlang$core$strconv$$parse_number(s) {
       s$2 = _new_s;
       mantissa = _new_mantissa;
       n_after_dot = _consumed_digit;
-      exponent = moonbitlang$core$builtin$$Neg$neg$19$(moonbitlang$core$int$$Int$to_int64(n_after_dot));
+      exponent = moonbitlang$core$builtin$$Neg$neg$22$(moonbitlang$core$int$$Int$to_int64(n_after_dot));
     }
   }
   n_digits = n_digits + n_after_dot | 0;
@@ -5189,7 +5435,7 @@ function moonbitlang$core$strconv$$parse_number(s) {
     const _new_s = _bind$5._0;
     const _exp_number = _bind$5._1;
     s$2 = _new_s;
-    exponent = moonbitlang$core$builtin$$Add$add$19$(exponent, _exp_number);
+    exponent = moonbitlang$core$builtin$$Add$add$22$(exponent, _exp_number);
   }
   const _bind$4 = s$2;
   if (moonbitlang$core$string$$String$char_length_eq$46$inner(_bind$4.str, 0, _bind$4.start, _bind$4.end)) {
@@ -5288,20 +5534,20 @@ function moonbitlang$core$strconv$$parse_number(s) {
         }
       }
       exponent = moonbitlang$core$int$$Int$to_int64(_tmp$4);
-      exponent = moonbitlang$core$builtin$$Add$add$19$(exponent, moonbitlang$core$strconv$$parse_number$46$exp_number$124$287);
+      exponent = moonbitlang$core$builtin$$Add$add$22$(exponent, moonbitlang$core$strconv$$parse_number$46$exp_number$124$287);
     }
     return new Result$Ok$8$({ exponent: exponent, mantissa: mantissa$2, negative: _negative, many_digits: many_digits });
   } else {
-    return moonbitlang$core$strconv$$syntax_err$74$();
+    return moonbitlang$core$strconv$$syntax_err$78$();
   }
 }
 function moonbitlang$core$strconv$$assemble_bits(mantissa, exponent, negative) {
   const biased_exp = exponent - moonbitlang$core$strconv$$double_info.bias | 0;
-  let bits = moonbitlang$core$builtin$$BitAnd$land$19$(mantissa, moonbitlang$core$builtin$$Sub$sub$19$(moonbitlang$core$builtin$$Shl$shl$19$($1L, moonbitlang$core$strconv$$double_info.mantissa_bits), $1L));
+  let bits = moonbitlang$core$builtin$$BitAnd$land$22$(mantissa, moonbitlang$core$builtin$$Sub$sub$22$(moonbitlang$core$builtin$$Shl$shl$22$($1L, moonbitlang$core$strconv$$double_info.mantissa_bits), $1L));
   const exp_bits = moonbitlang$core$int$$Int$to_int64(biased_exp & ((1 << moonbitlang$core$strconv$$double_info.exponent_bits) - 1 | 0));
-  bits = moonbitlang$core$builtin$$BitOr$lor$19$(bits, moonbitlang$core$builtin$$Shl$shl$19$(exp_bits, moonbitlang$core$strconv$$double_info.mantissa_bits));
+  bits = moonbitlang$core$builtin$$BitOr$lor$22$(bits, moonbitlang$core$builtin$$Shl$shl$22$(exp_bits, moonbitlang$core$strconv$$double_info.mantissa_bits));
   if (negative) {
-    bits = moonbitlang$core$builtin$$BitOr$lor$19$(bits, moonbitlang$core$builtin$$Shl$shl$19$(moonbitlang$core$builtin$$Shl$shl$19$($1L, moonbitlang$core$strconv$$double_info.mantissa_bits), moonbitlang$core$strconv$$double_info.exponent_bits));
+    bits = moonbitlang$core$builtin$$BitOr$lor$22$(bits, moonbitlang$core$builtin$$Shl$shl$22$(moonbitlang$core$builtin$$Shl$shl$22$($1L, moonbitlang$core$strconv$$double_info.mantissa_bits), moonbitlang$core$strconv$$double_info.exponent_bits));
   }
   return bits;
 }
@@ -5344,11 +5590,11 @@ function moonbitlang$core$strconv$$Decimal$rounded_integer(self) {
   let i = 0;
   while (true) {
     if (i < self.decimal_point && i < self.digits_num) {
-      const _tmp = moonbitlang$core$builtin$$Mul$mul$19$(n, $10L);
+      const _tmp = moonbitlang$core$builtin$$Mul$mul$22$(n, $10L);
       const _tmp$2 = self.digits;
       const _tmp$3 = i;
       $bound_check(_tmp$2, _tmp$3);
-      n = moonbitlang$core$builtin$$Add$add$19$(_tmp, moonbitlang$core$byte$$Byte$to_int64(_tmp$2[_tmp$3]));
+      n = moonbitlang$core$builtin$$Add$add$22$(_tmp, moonbitlang$core$byte$$Byte$to_int64(_tmp$2[_tmp$3]));
       i = i + 1 | 0;
       continue;
     } else {
@@ -5357,7 +5603,7 @@ function moonbitlang$core$strconv$$Decimal$rounded_integer(self) {
   }
   while (true) {
     if (i < self.decimal_point) {
-      n = moonbitlang$core$builtin$$Mul$mul$19$(n, $10L);
+      n = moonbitlang$core$builtin$$Mul$mul$22$(n, $10L);
       i = i + 1 | 0;
       continue;
     } else {
@@ -5365,13 +5611,13 @@ function moonbitlang$core$strconv$$Decimal$rounded_integer(self) {
     }
   }
   if (moonbitlang$core$strconv$$Decimal$should_round_up(self, self.decimal_point)) {
-    n = moonbitlang$core$builtin$$Add$add$19$(n, $1L);
+    n = moonbitlang$core$builtin$$Add$add$22$(n, $1L);
   }
   return n;
 }
 function moonbitlang$core$strconv$$Decimal$new_digits(self, s) {
-  const new_digits = moonbitlang$core$array$$Array$at$29$(moonbitlang$core$strconv$$left_shift_cheats, s)._0;
-  const cheat_num = moonbitlang$core$array$$Array$at$29$(moonbitlang$core$strconv$$left_shift_cheats, s)._1;
+  const new_digits = moonbitlang$core$array$$Array$at$33$(moonbitlang$core$strconv$$left_shift_cheats, s)._0;
+  const cheat_num = moonbitlang$core$array$$Array$at$33$(moonbitlang$core$strconv$$left_shift_cheats, s)._1;
   let less = false;
   const _end73 = cheat_num.length;
   let _tmp = 0;
@@ -5411,9 +5657,9 @@ function moonbitlang$core$strconv$$Decimal$left_shift(self, s) {
       const _tmp$2 = read_index;
       $bound_check(_tmp, _tmp$2);
       const d = moonbitlang$core$byte$$Byte$to_int64(_tmp[_tmp$2]);
-      acc = moonbitlang$core$builtin$$Add$add$19$(acc, moonbitlang$core$builtin$$Shl$shl$19$(d, s));
-      const quo = moonbitlang$core$builtin$$Div$div$19$(acc, $10L);
-      const rem = moonbitlang$core$int64$$Int64$to_int(moonbitlang$core$builtin$$Sub$sub$19$(acc, moonbitlang$core$builtin$$Mul$mul$19$(quo, $10L)));
+      acc = moonbitlang$core$builtin$$Add$add$22$(acc, moonbitlang$core$builtin$$Shl$shl$22$(d, s));
+      const quo = moonbitlang$core$builtin$$Div$div$22$(acc, $10L);
+      const rem = moonbitlang$core$int64$$Int64$to_int(moonbitlang$core$builtin$$Sub$sub$22$(acc, moonbitlang$core$builtin$$Mul$mul$22$(quo, $10L)));
       write_index = write_index - 1 | 0;
       if (write_index < self.digits.length) {
         const _tmp$3 = self.digits;
@@ -5433,9 +5679,9 @@ function moonbitlang$core$strconv$$Decimal$left_shift(self, s) {
     }
   }
   while (true) {
-    if (moonbitlang$core$builtin$$op_gt$19$(acc, $0L)) {
-      const quo = moonbitlang$core$builtin$$Div$div$19$(acc, $10L);
-      const rem = moonbitlang$core$int64$$Int64$to_int(moonbitlang$core$builtin$$Sub$sub$19$(acc, moonbitlang$core$builtin$$Mul$mul$19$($10L, quo)));
+    if (moonbitlang$core$builtin$$op_gt$22$(acc, $0L)) {
+      const quo = moonbitlang$core$builtin$$Div$div$22$(acc, $10L);
+      const rem = moonbitlang$core$int64$$Int64$to_int(moonbitlang$core$builtin$$Sub$sub$22$(acc, moonbitlang$core$builtin$$Mul$mul$22$($10L, quo)));
       write_index = write_index - 1 | 0;
       if (write_index < self.digits.length) {
         const _tmp = self.digits;
@@ -5578,7 +5824,7 @@ function moonbitlang$core$strconv$$Decimal$to_double_priv(self) {
     return new Result$Ok$7$(moonbitlang$core$int64$$Int64$reinterpret_as_double(bits));
   }
   if (self.decimal_point > 310) {
-    const _bind = moonbitlang$core$strconv$$range_err$7$();
+    const _bind = moonbitlang$core$strconv$$range_err$11$();
     if (_bind.$tag === 1) {
       const _ok = _bind;
       _ok._0;
@@ -5637,7 +5883,7 @@ function moonbitlang$core$strconv$$Decimal$to_double_priv(self) {
     exponent = exponent + n | 0;
   }
   if ((exponent - moonbitlang$core$strconv$$double_info.bias | 0) >= ((1 << moonbitlang$core$strconv$$double_info.exponent_bits) - 1 | 0)) {
-    const _bind = moonbitlang$core$strconv$$range_err$7$();
+    const _bind = moonbitlang$core$strconv$$range_err$11$();
     if (_bind.$tag === 1) {
       const _ok = _bind;
       _ok._0;
@@ -5647,11 +5893,11 @@ function moonbitlang$core$strconv$$Decimal$to_double_priv(self) {
   }
   moonbitlang$core$strconv$$Decimal$shift_priv(self, moonbitlang$core$strconv$$double_info.mantissa_bits + 1 | 0);
   mantissa = moonbitlang$core$strconv$$Decimal$rounded_integer(self);
-  if (moonbitlang$core$builtin$$Eq$equal$19$(mantissa, moonbitlang$core$builtin$$Shl$shl$19$($2L, moonbitlang$core$strconv$$double_info.mantissa_bits))) {
-    mantissa = moonbitlang$core$builtin$$Shr$shr$19$(mantissa, 1);
+  if (moonbitlang$core$builtin$$Eq$equal$22$(mantissa, moonbitlang$core$builtin$$Shl$shl$22$($2L, moonbitlang$core$strconv$$double_info.mantissa_bits))) {
+    mantissa = moonbitlang$core$builtin$$Shr$shr$22$(mantissa, 1);
     exponent = exponent + 1 | 0;
     if ((exponent - moonbitlang$core$strconv$$double_info.bias | 0) >= ((1 << moonbitlang$core$strconv$$double_info.exponent_bits) - 1 | 0)) {
-      const _bind = moonbitlang$core$strconv$$range_err$7$();
+      const _bind = moonbitlang$core$strconv$$range_err$11$();
       if (_bind.$tag === 1) {
         const _ok = _bind;
         _ok._0;
@@ -5660,7 +5906,7 @@ function moonbitlang$core$strconv$$Decimal$to_double_priv(self) {
       }
     }
   }
-  if (moonbitlang$core$builtin$$Eq$equal$19$(moonbitlang$core$builtin$$BitAnd$land$19$(mantissa, moonbitlang$core$builtin$$Shl$shl$19$($1L, moonbitlang$core$strconv$$double_info.mantissa_bits)), $0L)) {
+  if (moonbitlang$core$builtin$$Eq$equal$22$(moonbitlang$core$builtin$$BitAnd$land$22$(mantissa, moonbitlang$core$builtin$$Shl$shl$22$($1L, moonbitlang$core$strconv$$double_info.mantissa_bits)), $0L)) {
     exponent = moonbitlang$core$strconv$$double_info.bias;
   }
   const bits = moonbitlang$core$strconv$$assemble_bits(mantissa, exponent, self.negative);
@@ -5668,7 +5914,7 @@ function moonbitlang$core$strconv$$Decimal$to_double_priv(self) {
 }
 function moonbitlang$core$strconv$$checked_mul(a, b) {
   if (moonbitlang$core$builtin$$Eq$equal$3$(a, $0L) || moonbitlang$core$builtin$$Eq$equal$3$(b, $0L)) {
-    return moonbitlang$core$strconv$$checked_mul$46$constr$47$1663;
+    return moonbitlang$core$strconv$$checked_mul$46$constr$47$1692;
   }
   if (moonbitlang$core$builtin$$Eq$equal$3$(a, $1L)) {
     return b;
@@ -5686,14 +5932,14 @@ function moonbitlang$core$strconv$$checked_mul(a, b) {
   return moonbitlang$core$builtin$$Mul$mul$3$(a, b);
 }
 function moonbitlang$core$strconv$$Number$is_fast_path(self) {
-  return moonbitlang$core$builtin$$op_le$19$(moonbitlang$core$strconv$$min_exponent_fast_path, self.exponent) && (moonbitlang$core$builtin$$op_le$19$(self.exponent, moonbitlang$core$strconv$$max_exponent_disguised_fast_path) && (moonbitlang$core$builtin$$op_le$3$(self.mantissa, moonbitlang$core$strconv$$max_mantissa_fast_path) && !self.many_digits));
+  return moonbitlang$core$builtin$$op_le$22$(moonbitlang$core$strconv$$min_exponent_fast_path, self.exponent) && (moonbitlang$core$builtin$$op_le$22$(self.exponent, moonbitlang$core$strconv$$max_exponent_disguised_fast_path) && (moonbitlang$core$builtin$$op_le$3$(self.mantissa, moonbitlang$core$strconv$$max_mantissa_fast_path) && !self.many_digits));
 }
 function moonbitlang$core$strconv$$Number$try_fast_path(self) {
   if (moonbitlang$core$strconv$$Number$is_fast_path(self)) {
     let value;
-    if (moonbitlang$core$builtin$$op_le$19$(self.exponent, moonbitlang$core$strconv$$max_exponent_fast_path)) {
+    if (moonbitlang$core$builtin$$op_le$22$(self.exponent, moonbitlang$core$strconv$$max_exponent_fast_path)) {
       const value$2 = moonbitlang$core$double$$Double$convert_uint64(self.mantissa);
-      if (moonbitlang$core$builtin$$op_lt$19$(self.exponent, $0L)) {
+      if (moonbitlang$core$builtin$$op_lt$22$(self.exponent, $0L)) {
         const _p = -moonbitlang$core$int64$$Int64$to_int(self.exponent) | 0;
         const _tmp = _p & 31;
         $bound_check(moonbitlang$core$strconv$$table, _tmp);
@@ -5705,7 +5951,7 @@ function moonbitlang$core$strconv$$Number$try_fast_path(self) {
         value = value$2 * moonbitlang$core$strconv$$table[_tmp];
       }
     } else {
-      const shift = moonbitlang$core$builtin$$Sub$sub$19$(self.exponent, moonbitlang$core$strconv$$max_exponent_fast_path);
+      const shift = moonbitlang$core$builtin$$Sub$sub$22$(self.exponent, moonbitlang$core$strconv$$max_exponent_fast_path);
       const _tmp = self.mantissa;
       const _tmp$2 = moonbitlang$core$int64$$Int64$to_int(shift);
       $bound_check(moonbitlang$core$strconv$$int_pow10, _tmp$2);
@@ -5768,18 +6014,18 @@ function moonbitlang$core$strconv$$parse_double(str) {
         }
       }
     } else {
-      return moonbitlang$core$strconv$$syntax_err$12$();
+      return moonbitlang$core$strconv$$syntax_err$15$();
     }
   } else {
-    return moonbitlang$core$strconv$$syntax_err$12$();
+    return moonbitlang$core$strconv$$syntax_err$15$();
   }
 }
-function moonbitlang$core$builtin$$Show$output$49$(self, logger) {
+function moonbitlang$core$builtin$$Show$output$53$(self, logger) {
   const _StrConvError = self;
   const _err = _StrConvError._0;
   logger.method_0(logger.self, _err);
 }
-function moonbitlang$core$builtin$$Show$output$38$(self, logger) {
+function moonbitlang$core$builtin$$Show$output$42$(self, logger) {
   logger.method_0(logger.self, Error$$to_string(self));
 }
 function moonbitlang$core$string$$String$offset_of_nth_char_backward(self, n, start_offset, end_offset) {
@@ -5823,7 +6069,7 @@ function moonbitlang$core$string$$String$offset_of_nth_char_forward(self, n, sta
     }
     return char_count < n || utf16_offset >= end_offset ? undefined : utf16_offset;
   } else {
-    return moonbitlang$core$abort$$abort$10$("Invalid start index");
+    return moonbitlang$core$abort$$abort$12$("Invalid start index");
   }
 }
 function moonbitlang$core$string$$String$offset_of_nth_char$46$inner(self, i, start_offset, end_offset) {
@@ -5859,7 +6105,7 @@ function moonbitlang$core$string$$String$char_length_eq$46$inner(self, len, star
           _tmp$2 = count + 1 | 0;
           continue;
         } else {
-          moonbitlang$core$abort$$abort$7$("invalid surrogate pair");
+          moonbitlang$core$abort$$abort$11$("invalid surrogate pair");
         }
       }
       _tmp = index + 1 | 0;
@@ -5893,7 +6139,7 @@ function moonbitlang$core$string$$String$char_length_ge$46$inner(self, len, star
           _tmp$2 = count + 1 | 0;
           continue;
         } else {
-          moonbitlang$core$abort$$abort$7$("invalid surrogate pair");
+          moonbitlang$core$abort$$abort$11$("invalid surrogate pair");
         }
       }
       _tmp = index + 1 | 0;
@@ -5912,7 +6158,7 @@ function moonbitlang$core$string$$String$from_array(chars) {
     const _i = _tmp;
     if (_i < _len) {
       const c = chars[_i];
-      moonbitlang$core$builtin$$Logger$write_char$21$(buf, c);
+      moonbitlang$core$builtin$$Logger$write_char$24$(buf, c);
       _tmp = _i + 1 | 0;
       continue;
     } else {
@@ -5924,7 +6170,7 @@ function moonbitlang$core$string$$String$from_array(chars) {
 function moonbitlang$core$string$$StringView$is_empty(self) {
   return (self.end - self.start | 0) === 0;
 }
-function moonbitlang$core$array$$FixedArray$makei$77$(length, value) {
+function moonbitlang$core$array$$FixedArray$makei$81$(length, value) {
   if (length <= 0) {
     return [];
   } else {
@@ -5944,19 +6190,22 @@ function moonbitlang$core$array$$FixedArray$makei$77$(length, value) {
     return array;
   }
 }
-function moonbitlang$core$ref$$Ref$new$78$(x) {
+function moonbitlang$core$ref$$Ref$new$82$(x) {
   return { val: x };
 }
-function moonbitlang$core$ref$$Ref$new$79$(x) {
+function moonbitlang$core$ref$$Ref$new$5$(x) {
   return { val: x };
 }
-function moonbitlang$core$ref$$Ref$new$4$(x) {
+function moonbitlang$core$ref$$Ref$new$83$(x) {
   return { val: x };
 }
-function moonbitlang$core$ref$$Ref$new$80$(x) {
+function moonbitlang$core$ref$$Ref$new$84$(x) {
   return { val: x };
 }
-function moonbitlang$core$random$$Source$next$81$(self) {
+function moonbitlang$core$ref$$Ref$new$6$(x) {
+  return { val: x };
+}
+function moonbitlang$core$random$$Source$next$85$(self) {
   while (true) {
     const _bind = moonbitlang$core$random$internal$random_source$$ChaCha8$next(self);
     if (_bind === undefined) {
@@ -5970,7 +6219,7 @@ function moonbitlang$core$random$$Source$next$81$(self) {
   }
 }
 function moonbitlang$core$random$$chacha8$46$inner(seed) {
-  return { self: moonbitlang$core$random$internal$random_source$$ChaCha8$new(seed), method_0: moonbitlang$core$random$$Source$next$81$ };
+  return { self: moonbitlang$core$random$internal$random_source$$ChaCha8$new(seed), method_0: moonbitlang$core$random$$Source$next$85$ };
 }
 function moonbitlang$core$random$$Rand$new(generator) {
   if (generator === undefined) {
@@ -6332,7 +6581,7 @@ function moonbitlang$core$random$internal$random_source$$chacha_block(seed, buf,
   }
 }
 function moonbitlang$core$random$internal$random_source$$ChaCha8$new(seed) {
-  const seed$2 = moonbitlang$core$array$$FixedArray$makei$77$(8, (i) => moonbitlang$core$bytes$$BytesView$to_uint_le(moonbitlang$core$bytes$$Bytes$sub$46$inner(seed, Math.imul(i, 4) | 0, (Math.imul(i, 4) | 0) + 4 | 0)));
+  const seed$2 = moonbitlang$core$array$$FixedArray$makei$81$(8, (i) => moonbitlang$core$bytes$$BytesView$to_uint_le(moonbitlang$core$bytes$$Bytes$sub$46$inner(seed, Math.imul(i, 4) | 0, (Math.imul(i, 4) | 0) + 4 | 0)));
   const buffer = $make_array_len_and_init(64, 0);
   moonbitlang$core$random$internal$random_source$$chacha_block(seed$2, buffer, 0);
   const _bind = 32;
@@ -6358,7 +6607,7 @@ function moonbitlang$core$random$internal$random_source$$ChaCha8$next(self) {
 function moonbitlang$core$random$internal$random_source$$ChaCha8$refill(self) {
   self.counter = (self.counter >>> 0) + (4 >>> 0) | 0;
   if (self.counter === 16) {
-    moonbitlang$core$array$$FixedArray$blit_to$46$inner$20$(self.buffer, self.seed, 8, 56, 0);
+    moonbitlang$core$array$$FixedArray$blit_to$46$inner$23$(self.buffer, self.seed, 8, 56, 0);
     self.counter = 0;
   }
   moonbitlang$core$random$internal$random_source$$chacha_block(self.seed, self.buffer, self.counter);
@@ -6475,9 +6724,9 @@ function Kaida$45$Amethyst$math$$__kernel_rem_pio2(x, y, e0, nx, prec) {
   let ih = 0;
   let z = 0;
   let fw = 0;
-  const f = moonbitlang$core$array$$Array$make$12$(20, 0);
-  const fq = moonbitlang$core$array$$Array$make$12$(20, 0);
-  const q = moonbitlang$core$array$$Array$make$12$(20, 0);
+  const f = moonbitlang$core$array$$Array$make$15$(20, 0);
+  const fq = moonbitlang$core$array$$Array$make$15$(20, 0);
+  const q = moonbitlang$core$array$$Array$make$15$(20, 0);
   jk = moonbitlang$core$array$$Array$at$5$(init_jk, prec);
   jp = jk;
   jx = nx - 1 | 0;
@@ -6491,7 +6740,7 @@ function Kaida$45$Amethyst$math$$__kernel_rem_pio2(x, y, e0, nx, prec) {
   i = 0;
   while (true) {
     if (i <= m) {
-      moonbitlang$core$array$$Array$set$12$(f, i, j < 0 ? 0 : moonbitlang$core$array$$Array$at$5$(Kaida$45$Amethyst$math$$two_over_pi, j) + 0);
+      moonbitlang$core$array$$Array$set$15$(f, i, j < 0 ? 0 : moonbitlang$core$array$$Array$at$5$(Kaida$45$Amethyst$math$$two_over_pi, j) + 0);
       i = i + 1 | 0;
       j = j + 1 | 0;
       continue;
@@ -6506,14 +6755,14 @@ function Kaida$45$Amethyst$math$$__kernel_rem_pio2(x, y, e0, nx, prec) {
       fw = 0;
       while (true) {
         if (j <= jx) {
-          fw = fw + moonbitlang$core$array$$Array$at$12$(x, j) * moonbitlang$core$array$$Array$at$12$(f, (jx + i | 0) - j | 0);
+          fw = fw + moonbitlang$core$array$$Array$at$15$(x, j) * moonbitlang$core$array$$Array$at$15$(f, (jx + i | 0) - j | 0);
           j = j + 1 | 0;
           continue;
         } else {
           break;
         }
       }
-      moonbitlang$core$array$$Array$set$12$(q, i, fw);
+      moonbitlang$core$array$$Array$set$15$(q, i, fw);
       i = i + 1 | 0;
       continue;
     } else {
@@ -6527,12 +6776,12 @@ function Kaida$45$Amethyst$math$$__kernel_rem_pio2(x, y, e0, nx, prec) {
       recompute = false;
       i = 0;
       j = jz;
-      z = moonbitlang$core$array$$Array$at$12$(q, jz);
+      z = moonbitlang$core$array$$Array$at$15$(q, jz);
       while (true) {
         if (j > 0) {
           fw = moonbitlang$core$double$$Double$floor(5.9604644775390625e-08 * z);
           moonbitlang$core$array$$Array$set$5$(iq, i, moonbitlang$core$double$$Double$to_int(z - 16777216 * fw));
-          z = moonbitlang$core$array$$Array$at$12$(q, j - 1 | 0) + fw;
+          z = moonbitlang$core$array$$Array$at$15$(q, j - 1 | 0) + fw;
           i = i + 1 | 0;
           j = j - 1 | 0;
           continue;
@@ -6626,19 +6875,19 @@ function Kaida$45$Amethyst$math$$__kernel_rem_pio2(x, y, e0, nx, prec) {
           i = jz + 1 | 0;
           while (true) {
             if (i <= (jz + k | 0)) {
-              moonbitlang$core$array$$Array$set$12$(f, jx + i | 0, moonbitlang$core$array$$Array$at$5$(Kaida$45$Amethyst$math$$two_over_pi, jv + i | 0) + 0);
+              moonbitlang$core$array$$Array$set$15$(f, jx + i | 0, moonbitlang$core$array$$Array$at$5$(Kaida$45$Amethyst$math$$two_over_pi, jv + i | 0) + 0);
               j = 0;
               fw = 0;
               while (true) {
                 if (j <= jx) {
-                  fw = fw + moonbitlang$core$array$$Array$at$12$(x, j) * moonbitlang$core$array$$Array$at$12$(f, (jx + i | 0) - j | 0);
+                  fw = fw + moonbitlang$core$array$$Array$at$15$(x, j) * moonbitlang$core$array$$Array$at$15$(f, (jx + i | 0) - j | 0);
                   j = j + 1 | 0;
                   continue;
                 } else {
                   break;
                 }
               }
-              moonbitlang$core$array$$Array$set$12$(q, i, fw);
+              moonbitlang$core$array$$Array$set$15$(q, i, fw);
               i = i + 1 | 0;
               continue;
             } else {
@@ -6678,7 +6927,7 @@ function Kaida$45$Amethyst$math$$__kernel_rem_pio2(x, y, e0, nx, prec) {
       i = jz;
       while (true) {
         if (i >= 0) {
-          moonbitlang$core$array$$Array$set$12$(q, i, fw * (moonbitlang$core$array$$Array$at$5$(iq, i) + 0));
+          moonbitlang$core$array$$Array$set$15$(q, i, fw * (moonbitlang$core$array$$Array$at$5$(iq, i) + 0));
           fw = fw * 5.9604644775390625e-08;
           i = i - 1 | 0;
           continue;
@@ -6693,14 +6942,14 @@ function Kaida$45$Amethyst$math$$__kernel_rem_pio2(x, y, e0, nx, prec) {
           k = 0;
           while (true) {
             if (k <= jp && k <= (jz - i | 0)) {
-              fw = fw + moonbitlang$core$array$$Array$at$12$(Kaida$45$Amethyst$math$$pi_over_2, k) * moonbitlang$core$array$$Array$at$12$(q, i + k | 0);
+              fw = fw + moonbitlang$core$array$$Array$at$15$(Kaida$45$Amethyst$math$$pi_over_2, k) * moonbitlang$core$array$$Array$at$15$(q, i + k | 0);
               k = k + 1 | 0;
               continue;
             } else {
               break;
             }
           }
-          moonbitlang$core$array$$Array$set$12$(fq, jz - i | 0, fw);
+          moonbitlang$core$array$$Array$set$15$(fq, jz - i | 0, fw);
           i = i - 1 | 0;
           continue;
         } else {
@@ -6715,14 +6964,14 @@ function Kaida$45$Amethyst$math$$__kernel_rem_pio2(x, y, e0, nx, prec) {
               i = jz;
               while (true) {
                 if (i >= 0) {
-                  fw = fw + moonbitlang$core$array$$Array$at$12$(fq, i);
+                  fw = fw + moonbitlang$core$array$$Array$at$15$(fq, i);
                   i = i - 1 | 0;
                   continue;
                 } else {
                   break;
                 }
               }
-              moonbitlang$core$array$$Array$set$12$(y, 0, ih === 0 ? fw : -fw);
+              moonbitlang$core$array$$Array$set$15$(y, 0, ih === 0 ? fw : -fw);
               break;
             }
             case 1: {
@@ -6735,10 +6984,10 @@ function Kaida$45$Amethyst$math$$__kernel_rem_pio2(x, y, e0, nx, prec) {
               i = jz;
               while (true) {
                 if (i > 0) {
-                  fw = moonbitlang$core$array$$Array$at$12$(fq, i - 1 | 0) + moonbitlang$core$array$$Array$at$12$(fq, i);
+                  fw = moonbitlang$core$array$$Array$at$15$(fq, i - 1 | 0) + moonbitlang$core$array$$Array$at$15$(fq, i);
                   const _index_4 = i;
-                  moonbitlang$core$array$$Array$set$12$(fq, _index_4, moonbitlang$core$array$$Array$at$12$(fq, _index_4) + (moonbitlang$core$array$$Array$at$12$(fq, i - 1 | 0) - fw));
-                  moonbitlang$core$array$$Array$set$12$(fq, i - 1 | 0, fw);
+                  moonbitlang$core$array$$Array$set$15$(fq, _index_4, moonbitlang$core$array$$Array$at$15$(fq, _index_4) + (moonbitlang$core$array$$Array$at$15$(fq, i - 1 | 0) - fw));
+                  moonbitlang$core$array$$Array$set$15$(fq, i - 1 | 0, fw);
                   i = i - 1 | 0;
                   continue;
                 } else {
@@ -6748,10 +6997,10 @@ function Kaida$45$Amethyst$math$$__kernel_rem_pio2(x, y, e0, nx, prec) {
               i = jz;
               while (true) {
                 if (i > 1) {
-                  fw = moonbitlang$core$array$$Array$at$12$(fq, i - 1 | 0) + moonbitlang$core$array$$Array$at$12$(fq, i);
+                  fw = moonbitlang$core$array$$Array$at$15$(fq, i - 1 | 0) + moonbitlang$core$array$$Array$at$15$(fq, i);
                   const _index_6 = i;
-                  moonbitlang$core$array$$Array$set$12$(fq, _index_6, moonbitlang$core$array$$Array$at$12$(fq, _index_6) + (moonbitlang$core$array$$Array$at$12$(fq, i - 1 | 0) - fw));
-                  moonbitlang$core$array$$Array$set$12$(fq, i - 1 | 0, fw);
+                  moonbitlang$core$array$$Array$set$15$(fq, _index_6, moonbitlang$core$array$$Array$at$15$(fq, _index_6) + (moonbitlang$core$array$$Array$at$15$(fq, i - 1 | 0) - fw));
+                  moonbitlang$core$array$$Array$set$15$(fq, i - 1 | 0, fw);
                   i = i - 1 | 0;
                   continue;
                 } else {
@@ -6762,7 +7011,7 @@ function Kaida$45$Amethyst$math$$__kernel_rem_pio2(x, y, e0, nx, prec) {
               i = jz;
               while (true) {
                 if (i >= 2) {
-                  fw = fw + moonbitlang$core$array$$Array$at$12$(fq, i);
+                  fw = fw + moonbitlang$core$array$$Array$at$15$(fq, i);
                   i = i - 1 | 0;
                   continue;
                 } else {
@@ -6770,13 +7019,13 @@ function Kaida$45$Amethyst$math$$__kernel_rem_pio2(x, y, e0, nx, prec) {
                 }
               }
               if (ih === 0) {
-                moonbitlang$core$array$$Array$set$12$(y, 0, moonbitlang$core$array$$Array$at$12$(fq, 0));
-                moonbitlang$core$array$$Array$set$12$(y, 1, moonbitlang$core$array$$Array$at$12$(fq, 1));
-                moonbitlang$core$array$$Array$set$12$(y, 2, fw);
+                moonbitlang$core$array$$Array$set$15$(y, 0, moonbitlang$core$array$$Array$at$15$(fq, 0));
+                moonbitlang$core$array$$Array$set$15$(y, 1, moonbitlang$core$array$$Array$at$15$(fq, 1));
+                moonbitlang$core$array$$Array$set$15$(y, 2, fw);
               } else {
-                moonbitlang$core$array$$Array$set$12$(y, 0, -moonbitlang$core$array$$Array$at$12$(fq, 0));
-                moonbitlang$core$array$$Array$set$12$(y, 1, -moonbitlang$core$array$$Array$at$12$(fq, 1));
-                moonbitlang$core$array$$Array$set$12$(y, 2, -fw);
+                moonbitlang$core$array$$Array$set$15$(y, 0, -moonbitlang$core$array$$Array$at$15$(fq, 0));
+                moonbitlang$core$array$$Array$set$15$(y, 1, -moonbitlang$core$array$$Array$at$15$(fq, 1));
+                moonbitlang$core$array$$Array$set$15$(y, 2, -fw);
               }
               break;
             }
@@ -6787,26 +7036,26 @@ function Kaida$45$Amethyst$math$$__kernel_rem_pio2(x, y, e0, nx, prec) {
         i = jz;
         while (true) {
           if (i >= 0) {
-            fw = fw + moonbitlang$core$array$$Array$at$12$(fq, i);
+            fw = fw + moonbitlang$core$array$$Array$at$15$(fq, i);
             i = i - 1 | 0;
             continue;
           } else {
             break;
           }
         }
-        moonbitlang$core$array$$Array$set$12$(y, 0, ih === 0 ? fw : -fw);
-        fw = moonbitlang$core$array$$Array$at$12$(fq, 0) - fw;
+        moonbitlang$core$array$$Array$set$15$(y, 0, ih === 0 ? fw : -fw);
+        fw = moonbitlang$core$array$$Array$at$15$(fq, 0) - fw;
         i = 1;
         while (true) {
           if (i <= jz) {
-            fw = fw + moonbitlang$core$array$$Array$at$12$(fq, i);
+            fw = fw + moonbitlang$core$array$$Array$at$15$(fq, i);
             i = i + 1 | 0;
             continue;
           } else {
             break;
           }
         }
-        moonbitlang$core$array$$Array$set$12$(y, 1, ih === 0 ? fw : -fw);
+        moonbitlang$core$array$$Array$set$15$(y, 1, ih === 0 ? fw : -fw);
       }
       continue;
     } else {
@@ -6820,31 +7069,31 @@ function Kaida$45$Amethyst$math$$rem_pio2(x, y) {
   const ix = hx & 2147483647;
   let z = 0;
   if (ix <= 1072243195) {
-    moonbitlang$core$array$$Array$set$12$(y, 0, x);
-    moonbitlang$core$array$$Array$set$12$(y, 1, 0);
+    moonbitlang$core$array$$Array$set$15$(y, 0, x);
+    moonbitlang$core$array$$Array$set$15$(y, 1, 0);
     return 0;
   }
   if (ix < 1073928572) {
     if (hx > 0) {
       z = x - 1.57079632673412561;
       if (ix !== 1073291771) {
-        moonbitlang$core$array$$Array$set$12$(y, 0, z - 6.07710050650619225e-11);
-        moonbitlang$core$array$$Array$set$12$(y, 1, z - moonbitlang$core$array$$Array$at$12$(y, 0) - 6.07710050650619225e-11);
+        moonbitlang$core$array$$Array$set$15$(y, 0, z - 6.07710050650619225e-11);
+        moonbitlang$core$array$$Array$set$15$(y, 1, z - moonbitlang$core$array$$Array$at$15$(y, 0) - 6.07710050650619225e-11);
       } else {
         z = z - 6.07710050630396598e-11;
-        moonbitlang$core$array$$Array$set$12$(y, 0, z - 2.02226624879595063e-21);
-        moonbitlang$core$array$$Array$set$12$(y, 1, z - moonbitlang$core$array$$Array$at$12$(y, 0) - 2.02226624879595063e-21);
+        moonbitlang$core$array$$Array$set$15$(y, 0, z - 2.02226624879595063e-21);
+        moonbitlang$core$array$$Array$set$15$(y, 1, z - moonbitlang$core$array$$Array$at$15$(y, 0) - 2.02226624879595063e-21);
       }
       return 1;
     } else {
       z = x + 1.57079632673412561;
       if (ix !== 1073291771) {
-        moonbitlang$core$array$$Array$set$12$(y, 0, z + 6.07710050650619225e-11);
-        moonbitlang$core$array$$Array$set$12$(y, 1, z - moonbitlang$core$array$$Array$at$12$(y, 0) + 6.07710050650619225e-11);
+        moonbitlang$core$array$$Array$set$15$(y, 0, z + 6.07710050650619225e-11);
+        moonbitlang$core$array$$Array$set$15$(y, 1, z - moonbitlang$core$array$$Array$at$15$(y, 0) + 6.07710050650619225e-11);
       } else {
         const z$2 = z + 6.07710050630396598e-11;
-        moonbitlang$core$array$$Array$set$12$(y, 0, z$2 + 2.02226624879595063e-21);
-        moonbitlang$core$array$$Array$set$12$(y, 1, z$2 - moonbitlang$core$array$$Array$at$12$(y, 0) + 2.02226624879595063e-21);
+        moonbitlang$core$array$$Array$set$15$(y, 0, z$2 + 2.02226624879595063e-21);
+        moonbitlang$core$array$$Array$set$15$(y, 1, z$2 - moonbitlang$core$array$$Array$at$15$(y, 0) + 2.02226624879595063e-21);
       }
       return -1;
     }
@@ -6856,39 +7105,39 @@ function Kaida$45$Amethyst$math$$rem_pio2(x, y) {
     let r = t - fn_ * 1.57079632673412561;
     let w = fn_ * 6.07710050650619225e-11;
     if (n < 32 && ix !== moonbitlang$core$array$$Array$at$5$(Kaida$45$Amethyst$math$$npio2_hw, n - 1 | 0)) {
-      moonbitlang$core$array$$Array$set$12$(y, 0, r - w);
+      moonbitlang$core$array$$Array$set$15$(y, 0, r - w);
     } else {
       const j = ix >> 20;
-      moonbitlang$core$array$$Array$set$12$(y, 0, r - w);
-      const i = j - (Kaida$45$Amethyst$math$$__hi(moonbitlang$core$array$$Array$at$12$(y, 0)) >>> 20 & 2047) | 0;
+      moonbitlang$core$array$$Array$set$15$(y, 0, r - w);
+      const i = j - (Kaida$45$Amethyst$math$$__hi(moonbitlang$core$array$$Array$at$15$(y, 0)) >>> 20 & 2047) | 0;
       if (i > 16) {
         const t$2 = r;
         w = fn_ * 6.07710050630396598e-11;
         r = t$2 - w;
         w = fn_ * 2.02226624879595063e-21 - (t$2 - r - w);
-        moonbitlang$core$array$$Array$set$12$(y, 0, r - w);
-        const i$2 = j - (Kaida$45$Amethyst$math$$__hi(moonbitlang$core$array$$Array$at$12$(y, 0)) >>> 20 & 2047) | 0;
+        moonbitlang$core$array$$Array$set$15$(y, 0, r - w);
+        const i$2 = j - (Kaida$45$Amethyst$math$$__hi(moonbitlang$core$array$$Array$at$15$(y, 0)) >>> 20 & 2047) | 0;
         if (i$2 > 49) {
           const t$3 = r;
           w = fn_ * 2.02226624871116646e-21;
           r = t$3 - w;
           w = fn_ * 8.4784276603689e-32 - (t$3 - r - w);
-          moonbitlang$core$array$$Array$set$12$(y, 0, r - w);
+          moonbitlang$core$array$$Array$set$15$(y, 0, r - w);
         }
       }
     }
-    moonbitlang$core$array$$Array$set$12$(y, 1, r - moonbitlang$core$array$$Array$at$12$(y, 0) - w);
+    moonbitlang$core$array$$Array$set$15$(y, 1, r - moonbitlang$core$array$$Array$at$15$(y, 0) - w);
     if (hx > 0) {
       return n;
     } else {
-      moonbitlang$core$array$$Array$set$12$(y, 0, -moonbitlang$core$array$$Array$at$12$(y, 0));
-      moonbitlang$core$array$$Array$set$12$(y, 1, -moonbitlang$core$array$$Array$at$12$(y, 1));
+      moonbitlang$core$array$$Array$set$15$(y, 0, -moonbitlang$core$array$$Array$at$15$(y, 0));
+      moonbitlang$core$array$$Array$set$15$(y, 1, -moonbitlang$core$array$$Array$at$15$(y, 1));
       return -n | 0;
     }
   }
   if (ix >= 2146435072) {
-    moonbitlang$core$array$$Array$set$12$(y, 0, x - x);
-    moonbitlang$core$array$$Array$set$12$(y, 1, moonbitlang$core$array$$Array$at$12$(y, 0));
+    moonbitlang$core$array$$Array$set$15$(y, 0, x - x);
+    moonbitlang$core$array$$Array$set$15$(y, 1, moonbitlang$core$array$$Array$at$15$(y, 0));
     return 0;
   }
   z = Kaida$45$Amethyst$math$$__combineW(Kaida$45$Amethyst$math$$__hi(z), Kaida$45$Amethyst$math$$__low(x));
@@ -6899,18 +7148,18 @@ function Kaida$45$Amethyst$math$$rem_pio2(x, y) {
   while (true) {
     const i = _tmp;
     if (i < 2) {
-      moonbitlang$core$array$$Array$set$12$(tx, i, moonbitlang$core$double$$Double$to_int(z) + 0);
-      z = (z - moonbitlang$core$array$$Array$at$12$(tx, i)) * 16777216;
+      moonbitlang$core$array$$Array$set$15$(tx, i, moonbitlang$core$double$$Double$to_int(z) + 0);
+      z = (z - moonbitlang$core$array$$Array$at$15$(tx, i)) * 16777216;
       _tmp = i + 1 | 0;
       continue;
     } else {
       break;
     }
   }
-  moonbitlang$core$array$$Array$set$12$(tx, 2, z);
+  moonbitlang$core$array$$Array$set$15$(tx, 2, z);
   let nx = 3;
   while (true) {
-    if (moonbitlang$core$array$$Array$at$12$(tx, nx - 1 | 0) === 0) {
+    if (moonbitlang$core$array$$Array$at$15$(tx, nx - 1 | 0) === 0) {
       nx = nx - 1 | 0;
       continue;
     } else {
@@ -6921,8 +7170,8 @@ function Kaida$45$Amethyst$math$$rem_pio2(x, y) {
   if (hx > 0) {
     return n;
   } else {
-    moonbitlang$core$array$$Array$set$12$(y, 0, -moonbitlang$core$array$$Array$at$12$(y, 0));
-    moonbitlang$core$array$$Array$set$12$(y, 1, -moonbitlang$core$array$$Array$at$12$(y, 1));
+    moonbitlang$core$array$$Array$set$15$(y, 0, -moonbitlang$core$array$$Array$at$15$(y, 0));
+    moonbitlang$core$array$$Array$set$15$(y, 1, -moonbitlang$core$array$$Array$at$15$(y, 1));
     return -n | 0;
   }
 }
@@ -6938,16 +7187,16 @@ function Kaida$45$Amethyst$math$$sin(x) {
     const _bind = n & 3;
     switch (_bind) {
       case 0: {
-        return Kaida$45$Amethyst$math$$__kernel_sin(moonbitlang$core$array$$Array$at$12$(y, 0), moonbitlang$core$array$$Array$at$12$(y, 1), 1);
+        return Kaida$45$Amethyst$math$$__kernel_sin(moonbitlang$core$array$$Array$at$15$(y, 0), moonbitlang$core$array$$Array$at$15$(y, 1), 1);
       }
       case 1: {
-        return Kaida$45$Amethyst$math$$__kernel_cos(moonbitlang$core$array$$Array$at$12$(y, 0), moonbitlang$core$array$$Array$at$12$(y, 1));
+        return Kaida$45$Amethyst$math$$__kernel_cos(moonbitlang$core$array$$Array$at$15$(y, 0), moonbitlang$core$array$$Array$at$15$(y, 1));
       }
       case 2: {
-        return -Kaida$45$Amethyst$math$$__kernel_sin(moonbitlang$core$array$$Array$at$12$(y, 0), moonbitlang$core$array$$Array$at$12$(y, 1), 1);
+        return -Kaida$45$Amethyst$math$$__kernel_sin(moonbitlang$core$array$$Array$at$15$(y, 0), moonbitlang$core$array$$Array$at$15$(y, 1), 1);
       }
       default: {
-        return -Kaida$45$Amethyst$math$$__kernel_cos(moonbitlang$core$array$$Array$at$12$(y, 0), moonbitlang$core$array$$Array$at$12$(y, 1));
+        return -Kaida$45$Amethyst$math$$__kernel_cos(moonbitlang$core$array$$Array$at$15$(y, 0), moonbitlang$core$array$$Array$at$15$(y, 1));
       }
     }
   }
@@ -6964,16 +7213,16 @@ function Kaida$45$Amethyst$math$$cos(x) {
     const _bind = n & 3;
     switch (_bind) {
       case 0: {
-        return Kaida$45$Amethyst$math$$__kernel_cos(moonbitlang$core$array$$Array$at$12$(y, 0), moonbitlang$core$array$$Array$at$12$(y, 1));
+        return Kaida$45$Amethyst$math$$__kernel_cos(moonbitlang$core$array$$Array$at$15$(y, 0), moonbitlang$core$array$$Array$at$15$(y, 1));
       }
       case 1: {
-        return -Kaida$45$Amethyst$math$$__kernel_sin(moonbitlang$core$array$$Array$at$12$(y, 0), moonbitlang$core$array$$Array$at$12$(y, 1), 1);
+        return -Kaida$45$Amethyst$math$$__kernel_sin(moonbitlang$core$array$$Array$at$15$(y, 0), moonbitlang$core$array$$Array$at$15$(y, 1), 1);
       }
       case 2: {
-        return -Kaida$45$Amethyst$math$$__kernel_cos(moonbitlang$core$array$$Array$at$12$(y, 0), moonbitlang$core$array$$Array$at$12$(y, 1));
+        return -Kaida$45$Amethyst$math$$__kernel_cos(moonbitlang$core$array$$Array$at$15$(y, 0), moonbitlang$core$array$$Array$at$15$(y, 1));
       }
       default: {
-        return Kaida$45$Amethyst$math$$__kernel_sin(moonbitlang$core$array$$Array$at$12$(y, 0), moonbitlang$core$array$$Array$at$12$(y, 1), 1);
+        return Kaida$45$Amethyst$math$$__kernel_sin(moonbitlang$core$array$$Array$at$15$(y, 0), moonbitlang$core$array$$Array$at$15$(y, 1), 1);
       }
     }
   }
@@ -6993,9 +7242,9 @@ function Kaida$45$Amethyst$math$$atan(x) {
   const x_is_neg = x$2 < 0;
   if (ix >= 1141899264) {
     if (x$2 > 0) {
-      return moonbitlang$core$array$$Array$at$12$(atan_hi, 3) + moonbitlang$core$array$$Array$at$12$(atan_lo, 3);
+      return moonbitlang$core$array$$Array$at$15$(atan_hi, 3) + moonbitlang$core$array$$Array$at$15$(atan_lo, 3);
     } else {
-      return -moonbitlang$core$array$$Array$at$12$(atan_hi, 3) - moonbitlang$core$array$$Array$at$12$(atan_lo, 3);
+      return -moonbitlang$core$array$$Array$at$15$(atan_hi, 3) - moonbitlang$core$array$$Array$at$15$(atan_lo, 3);
     }
   }
   if (ix < 1071382528) {
@@ -7027,12 +7276,12 @@ function Kaida$45$Amethyst$math$$atan(x) {
   }
   z = x$2 * x$2;
   w = z * z;
-  const s1 = z * (moonbitlang$core$array$$Array$at$12$(a_t, 0) + w * (moonbitlang$core$array$$Array$at$12$(a_t, 2) + w * (moonbitlang$core$array$$Array$at$12$(a_t, 4) + w * (moonbitlang$core$array$$Array$at$12$(a_t, 6) + w * (moonbitlang$core$array$$Array$at$12$(a_t, 8) + w * moonbitlang$core$array$$Array$at$12$(a_t, 10))))));
-  const s2 = w * (moonbitlang$core$array$$Array$at$12$(a_t, 1) + w * (moonbitlang$core$array$$Array$at$12$(a_t, 3) + w * (moonbitlang$core$array$$Array$at$12$(a_t, 5) + w * (moonbitlang$core$array$$Array$at$12$(a_t, 7) + w * moonbitlang$core$array$$Array$at$12$(a_t, 9)))));
+  const s1 = z * (moonbitlang$core$array$$Array$at$15$(a_t, 0) + w * (moonbitlang$core$array$$Array$at$15$(a_t, 2) + w * (moonbitlang$core$array$$Array$at$15$(a_t, 4) + w * (moonbitlang$core$array$$Array$at$15$(a_t, 6) + w * (moonbitlang$core$array$$Array$at$15$(a_t, 8) + w * moonbitlang$core$array$$Array$at$15$(a_t, 10))))));
+  const s2 = w * (moonbitlang$core$array$$Array$at$15$(a_t, 1) + w * (moonbitlang$core$array$$Array$at$15$(a_t, 3) + w * (moonbitlang$core$array$$Array$at$15$(a_t, 5) + w * (moonbitlang$core$array$$Array$at$15$(a_t, 7) + w * moonbitlang$core$array$$Array$at$15$(a_t, 9)))));
   if (id < 0) {
     return x$2 - x$2 * (s1 + s2);
   } else {
-    z = moonbitlang$core$array$$Array$at$12$(atan_hi, id) - (x$2 * (s1 + s2) - moonbitlang$core$array$$Array$at$12$(atan_lo, id) - x$2);
+    z = moonbitlang$core$array$$Array$at$15$(atan_hi, id) - (x$2 * (s1 + s2) - moonbitlang$core$array$$Array$at$15$(atan_lo, id) - x$2);
     return x_is_neg ? -z : z;
   }
 }
@@ -7123,295 +7372,327 @@ function Kaida$45$Amethyst$math$$atan2(y, x) {
     }
   }
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$getBase$82$(self) {
+function moonbitlang$core$builtin$$Eq$equal$25$(_x_684, _x_685) {
+  switch (_x_684) {
+    case 0: {
+      if (_x_685 === 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    case 1: {
+      if (_x_685 === 1) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    case 2: {
+      if (_x_685 === 2) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    default: {
+      if (_x_685 === 3) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+}
+function Demonmasterlqx$box2d_ffi$box2d$$World$getBase$86$(self) {
   return self;
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$setListener$83$(self, listener) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$setListener$87$(self, listener) {
   Demonmasterlqx$box2d_ffi$box2d$$B2World_$setListener_(self.world, listener);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$setListener$84$(self, listener) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$setListener$88$(self, listener) {
   Demonmasterlqx$box2d_ffi$box2d$$B2World_$setListener_(self, listener);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$setFilter$83$(self, filter) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$setFilter$87$(self, filter) {
   Demonmasterlqx$box2d_ffi$box2d$$B2World_$setFilter_(self.world, filter);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$setFilter$84$(self, filter) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$setFilter$88$(self, filter) {
   Demonmasterlqx$box2d_ffi$box2d$$B2World_$setFilter_(self, filter);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$createBody$83$(self, def) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$createBody$87$(self, def) {
   return Demonmasterlqx$box2d_ffi$box2d$$B2World_$createBody_(self.world, def);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$createBody$84$(self, def) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$createBody$88$(self, def) {
   return Demonmasterlqx$box2d_ffi$box2d$$B2World_$createBody_(self, def);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$destroyBody$83$(self, body) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$destroyBody$87$(self, body) {
   Demonmasterlqx$box2d_ffi$box2d$$B2World_$destroyBody_(self.world, body);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$destroyBody$84$(self, body) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$destroyBody$88$(self, body) {
   Demonmasterlqx$box2d_ffi$box2d$$B2World_$destroyBody_(self, body);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$clearBodyList$83$(self) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$clearBodyList$87$(self) {
   Demonmasterlqx$box2d_ffi$box2d$$B2World_$clearBodyList_(self.world);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$clearBodyList$84$(self) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$clearBodyList$88$(self) {
   Demonmasterlqx$box2d_ffi$box2d$$B2World_$clearBodyList_(self);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$createJoint$83$(self, def) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$createJoint$87$(self, def) {
   return Demonmasterlqx$box2d_ffi$box2d$$B2World_$createJoint_(self.world, def);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$createJoint$84$(self, def) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$createJoint$88$(self, def) {
   return Demonmasterlqx$box2d_ffi$box2d$$B2World_$createJoint_(self, def);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$destroyJoint$83$(self, joint) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$destroyJoint$87$(self, joint) {
   Demonmasterlqx$box2d_ffi$box2d$$B2World_$destroyJoint_(self.world, joint);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$destroyJoint$84$(self, joint) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$destroyJoint$88$(self, joint) {
   Demonmasterlqx$box2d_ffi$box2d$$B2World_$destroyJoint_(self, joint);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$getGroundBody$83$(self) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$getGroundBody$87$(self) {
   return Demonmasterlqx$box2d_ffi$box2d$$B2World_$getGroundBody_(self.world);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$getGroundBody$84$(self) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$getGroundBody$88$(self) {
   return Demonmasterlqx$box2d_ffi$box2d$$B2World_$getGroundBody_(self);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$step$83$(self, dt, iterations) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$step$87$(self, dt, iterations) {
   Demonmasterlqx$box2d_ffi$box2d$$B2World_$step_(self.world, dt, iterations);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$step$84$(self, dt, iterations) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$step$88$(self, dt, iterations) {
   Demonmasterlqx$box2d_ffi$box2d$$B2World_$step_(self, dt, iterations);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$query$83$(self, aabb, shapes, maxCount) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$query$87$(self, aabb, shapes, maxCount) {
   return Demonmasterlqx$box2d_ffi$box2d$$B2World_$query_(self.world, aabb, shapes, maxCount);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$query$84$(self, aabb, shapes, maxCount) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$query$88$(self, aabb, shapes, maxCount) {
   return Demonmasterlqx$box2d_ffi$box2d$$B2World_$query_(self, aabb, shapes, maxCount);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$getBodyList$83$(self) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$getBodyList$87$(self) {
   return Demonmasterlqx$box2d_ffi$box2d$$B2World_$getBodyList_(self.world);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$getBodyList$84$(self) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$getBodyList$88$(self) {
   return Demonmasterlqx$box2d_ffi$box2d$$B2World_$getBodyList_(self);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$getJointList$83$(self) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$getJointList$87$(self) {
   return Demonmasterlqx$box2d_ffi$box2d$$B2World_$getJointList_(self.world);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$getJointList$84$(self) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$getJointList$88$(self) {
   return Demonmasterlqx$box2d_ffi$box2d$$B2World_$getJointList_(self);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$getContactList$83$(self) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$getContactList$87$(self) {
   return Demonmasterlqx$box2d_ffi$box2d$$B2World_$getContactList_(self.world);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$getContactList$84$(self) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$getContactList$88$(self) {
   return Demonmasterlqx$box2d_ffi$box2d$$B2World_$getContactList_(self);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$World$getBase$85$(self) {
+function Demonmasterlqx$box2d_ffi$box2d$$World$getBase$89$(self) {
   return self.world;
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(self) {
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(self) {
   return Demonmasterlqx$box2d_ffi$box2d$$B2BoxDef$getBase_(self);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$87$(self) {
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$91$(self) {
   return Demonmasterlqx$box2d_ffi$box2d$$B2CircleDef$getBase_(self);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$88$(self) {
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$92$(self) {
   return Demonmasterlqx$box2d_ffi$box2d$$B2PolygonDef$getBase_(self);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$computeMass$89$(self, massData) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$computeMass_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(self), massData);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$computeMass$93$(self, massData) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$computeMass_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(self), massData);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$computeMass$90$(self, massData) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$computeMass_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$87$(self), massData);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$computeMass$94$(self, massData) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$computeMass_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$91$(self), massData);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$computeMass$91$(self, massData) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$computeMass_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$88$(self), massData);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$computeMass$95$(self, massData) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$computeMass_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$92$(self), massData);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalPosition$89$(self, localPosition) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setLocalPosition_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(self), localPosition);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalPosition$93$(self, localPosition) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setLocalPosition_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(self), localPosition);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalPosition$90$(self, localPosition) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setLocalPosition_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$87$(self), localPosition);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalPosition$94$(self, localPosition) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setLocalPosition_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$91$(self), localPosition);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalPosition$91$(self, localPosition) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setLocalPosition_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$88$(self), localPosition);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalPosition$95$(self, localPosition) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setLocalPosition_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$92$(self), localPosition);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getLocalPosition$89$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getLocalPosition_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getLocalPosition$93$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getLocalPosition_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getLocalPosition$90$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getLocalPosition_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$87$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getLocalPosition$94$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getLocalPosition_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$91$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getLocalPosition$91$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getLocalPosition_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$88$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getLocalPosition$95$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getLocalPosition_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$92$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalRotation$89$(self, localRotation) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setLocalRotation_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(self), localRotation);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalRotation$93$(self, localRotation) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setLocalRotation_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(self), localRotation);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalRotation$90$(self, localRotation) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setLocalRotation_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$87$(self), localRotation);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalRotation$94$(self, localRotation) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setLocalRotation_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$91$(self), localRotation);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalRotation$91$(self, localRotation) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setLocalRotation_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$88$(self), localRotation);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalRotation$95$(self, localRotation) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setLocalRotation_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$92$(self), localRotation);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getLocalRotation$89$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getLocalRotation_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getLocalRotation$93$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getLocalRotation_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getLocalRotation$90$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getLocalRotation_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$87$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getLocalRotation$94$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getLocalRotation_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$91$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getLocalRotation$91$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getLocalRotation_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$88$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getLocalRotation$95$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getLocalRotation_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$92$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$89$(self, friction) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setFriction_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(self), friction);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$93$(self, friction) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setFriction_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(self), friction);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$90$(self, friction) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setFriction_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$87$(self), friction);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$94$(self, friction) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setFriction_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$91$(self), friction);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$91$(self, friction) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setFriction_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$88$(self), friction);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$95$(self, friction) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setFriction_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$92$(self), friction);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getFriction$89$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getFriction_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getFriction$93$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getFriction_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getFriction$90$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getFriction_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$87$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getFriction$94$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getFriction_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$91$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getFriction$91$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getFriction_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$88$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getFriction$95$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getFriction_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$92$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setRestitution$89$(self, restitution) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setRestitution_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(self), restitution);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setRestitution$93$(self, restitution) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setRestitution_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(self), restitution);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setRestitution$90$(self, restitution) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setRestitution_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$87$(self), restitution);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setRestitution$94$(self, restitution) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setRestitution_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$91$(self), restitution);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setRestitution$91$(self, restitution) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setRestitution_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$88$(self), restitution);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setRestitution$95$(self, restitution) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setRestitution_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$92$(self), restitution);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getRestitution$89$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getRestitution_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getRestitution$93$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getRestitution_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getRestitution$90$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getRestitution_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$87$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getRestitution$94$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getRestitution_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$91$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getRestitution$91$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getRestitution_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$88$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getRestitution$95$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getRestitution_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$92$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$89$(self, density) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setDensity_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(self), density);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$93$(self, density) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setDensity_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(self), density);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$90$(self, density) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setDensity_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$87$(self), density);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$94$(self, density) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setDensity_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$91$(self), density);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$91$(self, density) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setDensity_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$88$(self), density);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$95$(self, density) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setDensity_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$92$(self), density);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getDensity$89$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getDensity_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getDensity$93$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getDensity_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getDensity$90$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getDensity_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$87$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getDensity$94$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getDensity_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$91$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getDensity$91$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getDensity_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$88$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getDensity$95$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getDensity_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$92$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setCategoryBits$89$(self, categoryBits) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setCategoryBits_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(self), categoryBits);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setCategoryBits$93$(self, categoryBits) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setCategoryBits_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(self), categoryBits);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setCategoryBits$90$(self, categoryBits) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setCategoryBits_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$87$(self), categoryBits);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setCategoryBits$94$(self, categoryBits) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setCategoryBits_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$91$(self), categoryBits);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setCategoryBits$91$(self, categoryBits) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setCategoryBits_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$88$(self), categoryBits);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setCategoryBits$95$(self, categoryBits) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setCategoryBits_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$92$(self), categoryBits);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getCategoryBits$89$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getCategoryBits_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getCategoryBits$93$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getCategoryBits_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getCategoryBits$90$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getCategoryBits_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$87$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getCategoryBits$94$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getCategoryBits_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$91$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getCategoryBits$91$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getCategoryBits_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$88$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getCategoryBits$95$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getCategoryBits_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$92$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setMaskBits$89$(self, maskBits) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setMaskBits_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(self), maskBits);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setMaskBits$93$(self, maskBits) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setMaskBits_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(self), maskBits);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setMaskBits$90$(self, maskBits) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setMaskBits_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$87$(self), maskBits);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setMaskBits$94$(self, maskBits) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setMaskBits_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$91$(self), maskBits);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setMaskBits$91$(self, maskBits) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setMaskBits_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$88$(self), maskBits);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setMaskBits$95$(self, maskBits) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setMaskBits_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$92$(self), maskBits);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getMaskBits$89$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getMaskBits_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getMaskBits$93$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getMaskBits_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getMaskBits$90$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getMaskBits_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$87$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getMaskBits$94$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getMaskBits_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$91$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getMaskBits$91$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getMaskBits_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$88$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getMaskBits$95$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getMaskBits_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$92$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$89$(self, groupIndex) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setGroupIndex_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(self), groupIndex);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$93$(self, groupIndex) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setGroupIndex_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(self), groupIndex);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$90$(self, groupIndex) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setGroupIndex_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$87$(self), groupIndex);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$94$(self, groupIndex) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setGroupIndex_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$91$(self), groupIndex);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$91$(self, groupIndex) {
-  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setGroupIndex_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$88$(self), groupIndex);
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$95$(self, groupIndex) {
+  Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$setGroupIndex_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$92$(self), groupIndex);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getGroupIndex$89$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getGroupIndex_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getGroupIndex$93$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getGroupIndex_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getGroupIndex$90$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getGroupIndex_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$87$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getGroupIndex$94$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getGroupIndex_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$91$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getGroupIndex$91$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getGroupIndex_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$88$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getGroupIndex$95$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2ShapeDef$getGroupIndex_(Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$92$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$Shape$getBase$92$(self) {
+function Demonmasterlqx$box2d_ffi$box2d$$Shape$getBase$96$(self) {
   return Demonmasterlqx$box2d_ffi$box2d$$B2CircleShape$getBase_(self);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$Shape$getBase$93$(self) {
+function Demonmasterlqx$box2d_ffi$box2d$$Shape$getBase$97$(self) {
   return Demonmasterlqx$box2d_ffi$box2d$$B2PolygonShape$getBase_(self);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$Shape$getType$94$(self) {
+function Demonmasterlqx$box2d_ffi$box2d$$Shape$getType$98$(self) {
   const typenum = Demonmasterlqx$box2d_ffi$box2d$$B2Shape$getType_(self);
   return typenum === -1 ? 0 : typenum === 0 ? 1 : typenum === 1 ? 2 : typenum === 2 ? 3 : 0;
 }
-function Demonmasterlqx$box2d_ffi$box2d$$Shape$getBody$95$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2Shape$getBody_(Demonmasterlqx$box2d_ffi$box2d$$Shape$getBase$93$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$Shape$getBody$99$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2Shape$getBody_(Demonmasterlqx$box2d_ffi$box2d$$Shape$getBase$97$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$Shape$getBody$96$(self) {
-  return Demonmasterlqx$box2d_ffi$box2d$$B2Shape$getBody_(Demonmasterlqx$box2d_ffi$box2d$$Shape$getBase$92$(self));
+function Demonmasterlqx$box2d_ffi$box2d$$Shape$getBody$100$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2Shape$getBody_(Demonmasterlqx$box2d_ffi$box2d$$Shape$getBase$96$(self));
 }
-function Demonmasterlqx$box2d_ffi$box2d$$Shape$getBody$94$(self) {
+function Demonmasterlqx$box2d_ffi$box2d$$Shape$getBody$98$(self) {
   return Demonmasterlqx$box2d_ffi$box2d$$B2Shape$getBody_(self);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$JointDef$setBody1$97$(self, body) {
-  const base = Demonmasterlqx$box2d_ffi$box2d$$JointDefBase$getBase$98$(self);
+function Demonmasterlqx$box2d_ffi$box2d$$JointDef$setBody1$101$(self, body) {
+  const base = Demonmasterlqx$box2d_ffi$box2d$$JointDefBase$getBase$102$(self);
   Demonmasterlqx$box2d_ffi$box2d$$B2JointDef$setBody1_(base, body);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$JointDef$setBody2$97$(self, body) {
-  const base = Demonmasterlqx$box2d_ffi$box2d$$JointDefBase$getBase$98$(self);
+function Demonmasterlqx$box2d_ffi$box2d$$JointDef$setBody2$101$(self, body) {
+  const base = Demonmasterlqx$box2d_ffi$box2d$$JointDefBase$getBase$102$(self);
   Demonmasterlqx$box2d_ffi$box2d$$B2JointDef$setBody2_(base, body);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$JointDef$setCollideConnected$97$(self, flag) {
-  const base = Demonmasterlqx$box2d_ffi$box2d$$JointDefBase$getBase$98$(self);
+function Demonmasterlqx$box2d_ffi$box2d$$JointDef$setCollideConnected$101$(self, flag) {
+  const base = Demonmasterlqx$box2d_ffi$box2d$$JointDefBase$getBase$102$(self);
   Demonmasterlqx$box2d_ffi$box2d$$B2JointDef$setCollideConnected_(base, flag);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$JointDefBase$getBase$98$(self) {
+function Demonmasterlqx$box2d_ffi$box2d$$JointDefBase$getBase$102$(self) {
   return Demonmasterlqx$box2d_ffi$box2d$$B2RevoluteJointDef$getBase_(self);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$Joint$getBody1$99$(self) {
-  const base = Demonmasterlqx$box2d_ffi$box2d$$JointBase$getBase$100$(self);
+function Demonmasterlqx$box2d_ffi$box2d$$Joint$getBody1$103$(self) {
+  const base = Demonmasterlqx$box2d_ffi$box2d$$JointBase$getBase$104$(self);
   return Demonmasterlqx$box2d_ffi$box2d$$B2Joint$getBody1_(base);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$Joint$getBody2$99$(self) {
-  const base = Demonmasterlqx$box2d_ffi$box2d$$JointBase$getBase$100$(self);
+function Demonmasterlqx$box2d_ffi$box2d$$Joint$getBody2$103$(self) {
+  const base = Demonmasterlqx$box2d_ffi$box2d$$JointBase$getBase$104$(self);
   return Demonmasterlqx$box2d_ffi$box2d$$B2Joint$getBody2_(base);
 }
-function Demonmasterlqx$box2d_ffi$box2d$$JointBase$getBase$100$(self) {
+function Demonmasterlqx$box2d_ffi$box2d$$JointBase$getBase$104$(self) {
   return Demonmasterlqx$box2d_ffi$box2d$$B2RevoluteJoint$getBase_(self);
 }
 function moonbitlang$x$json5$$offset_to_position(input, offset) {
@@ -7437,41 +7718,41 @@ function moonbitlang$x$json5$$offset_to_position(input, offset) {
   }
   return { line: line, column: column };
 }
-function moonbitlang$x$json5$$parse_error$6$(data) {
+function moonbitlang$x$json5$$parse_error$9$(data) {
   return new Result$Err$11$(new Error$moonbitlang$47$x$47$json5$46$ParseError$46$ParseError(data));
 }
-function moonbitlang$x$json5$$parse_error$7$(data) {
+function moonbitlang$x$json5$$parse_error$11$(data) {
   return new Result$Err$12$(new Error$moonbitlang$47$x$47$json5$46$ParseError$46$ParseError(data));
 }
-function moonbitlang$x$json5$$parse_error$12$(data) {
+function moonbitlang$x$json5$$parse_error$15$(data) {
   return new Result$Err$13$(new Error$moonbitlang$47$x$47$json5$46$ParseError$46$ParseError(data));
 }
-function moonbitlang$x$json5$$parse_error$101$(data) {
+function moonbitlang$x$json5$$parse_error$105$(data) {
   return new Result$Err$14$(new Error$moonbitlang$47$x$47$json5$46$ParseError$46$ParseError(data));
 }
-function moonbitlang$x$json5$$invalid_char$46$inner$6$(ctx, shift) {
+function moonbitlang$x$json5$$invalid_char$46$inner$9$(ctx, shift) {
   const offset = ctx.offset + shift | 0;
   const _tmp = ctx.input;
   $bound_check(_tmp, offset);
-  return moonbitlang$x$json5$$parse_error$6$(new $64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidChar(moonbitlang$x$json5$$offset_to_position(ctx.input, offset), _tmp.charCodeAt(offset)));
+  return moonbitlang$x$json5$$parse_error$9$(new $64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidChar(moonbitlang$x$json5$$offset_to_position(ctx.input, offset), _tmp.charCodeAt(offset)));
 }
-function moonbitlang$x$json5$$invalid_char$46$inner$7$(ctx, shift) {
+function moonbitlang$x$json5$$invalid_char$46$inner$11$(ctx, shift) {
   const offset = ctx.offset + shift | 0;
   const _tmp = ctx.input;
   $bound_check(_tmp, offset);
-  return moonbitlang$x$json5$$parse_error$7$(new $64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidChar(moonbitlang$x$json5$$offset_to_position(ctx.input, offset), _tmp.charCodeAt(offset)));
+  return moonbitlang$x$json5$$parse_error$11$(new $64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidChar(moonbitlang$x$json5$$offset_to_position(ctx.input, offset), _tmp.charCodeAt(offset)));
 }
-function moonbitlang$x$json5$$invalid_char$46$inner$12$(ctx, shift) {
+function moonbitlang$x$json5$$invalid_char$46$inner$15$(ctx, shift) {
   const offset = ctx.offset + shift | 0;
   const _tmp = ctx.input;
   $bound_check(_tmp, offset);
-  return moonbitlang$x$json5$$parse_error$12$(new $64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidChar(moonbitlang$x$json5$$offset_to_position(ctx.input, offset), _tmp.charCodeAt(offset)));
+  return moonbitlang$x$json5$$parse_error$15$(new $64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidChar(moonbitlang$x$json5$$offset_to_position(ctx.input, offset), _tmp.charCodeAt(offset)));
 }
-function moonbitlang$x$json5$$invalid_char$46$inner$101$(ctx, shift) {
+function moonbitlang$x$json5$$invalid_char$46$inner$105$(ctx, shift) {
   const offset = ctx.offset + shift | 0;
   const _tmp = ctx.input;
   $bound_check(_tmp, offset);
-  return moonbitlang$x$json5$$parse_error$101$(new $64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidChar(moonbitlang$x$json5$$offset_to_position(ctx.input, offset), _tmp.charCodeAt(offset)));
+  return moonbitlang$x$json5$$parse_error$105$(new $64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidChar(moonbitlang$x$json5$$offset_to_position(ctx.input, offset), _tmp.charCodeAt(offset)));
 }
 function moonbitlang$x$json5$$hex_digit_to_int(c) {
   return c >= 65 ? ((c & ~32) - 65 | 0) + 10 | 0 : c - 48 | 0;
@@ -7486,7 +7767,7 @@ function moonbitlang$x$json5$$ParseError$to_string(self) {
       const _line = _x$2.line;
       const _column = _x$2.column;
       const _c = _InvalidChar._1;
-      return `Invalid character ${moonbitlang$core$builtin$$Show$to_string$11$(_c)} at line ${moonbitlang$core$builtin$$Show$to_string$5$(_line)}, column ${moonbitlang$core$builtin$$Show$to_string$5$(_column)}`;
+      return `Invalid character ${moonbitlang$core$builtin$$Show$to_string$14$(_c)} at line ${moonbitlang$core$builtin$$Show$to_string$5$(_line)}, column ${moonbitlang$core$builtin$$Show$to_string$5$(_column)}`;
     }
     case 1: {
       return "Unexpected end of file";
@@ -7508,7 +7789,7 @@ function moonbitlang$x$json5$$ParseError$to_string(self) {
     }
   }
 }
-function moonbitlang$core$builtin$$Show$output$34$(self, logger) {
+function moonbitlang$core$builtin$$Show$output$38$(self, logger) {
   logger.method_0(logger.self, moonbitlang$x$json5$$ParseError$to_string(self));
 }
 function moonbitlang$x$json5$$read_char(ctx) {
@@ -7539,7 +7820,7 @@ function moonbitlang$x$json5$$read_char(ctx) {
 function moonbitlang$x$json5$$lex_comment(ctx) {
   const _bind = moonbitlang$x$json5$$read_char(ctx);
   if (_bind === -1) {
-    return moonbitlang$x$json5$$parse_error$7$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
+    return moonbitlang$x$json5$$parse_error$11$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
   } else {
     const _Some = _bind;
     const _x = _Some;
@@ -7581,7 +7862,7 @@ function moonbitlang$x$json5$$lex_comment(ctx) {
         while (true) {
           const _bind$2 = moonbitlang$x$json5$$read_char(ctx);
           if (_bind$2 === -1) {
-            const _bind$3 = moonbitlang$x$json5$$parse_error$7$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
+            const _bind$3 = moonbitlang$x$json5$$parse_error$11$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
             if (_bind$3.$tag === 1) {
               const _ok = _bind$3;
               _ok._0;
@@ -7607,7 +7888,7 @@ function moonbitlang$x$json5$$lex_comment(ctx) {
         }
       }
       default: {
-        return moonbitlang$x$json5$$invalid_char$46$inner$7$(ctx, -1);
+        return moonbitlang$x$json5$$invalid_char$46$inner$11$(ctx, -1);
       }
     }
   }
@@ -7620,7 +7901,7 @@ function moonbitlang$x$json5$$CharClass$contains(self, c) {
     const right = _tmp$2;
     if (left < right) {
       const middle = (left + right | 0) / 2 | 0;
-      const _bind = moonbitlang$core$array$$Array$at$27$(self, middle);
+      const _bind = moonbitlang$core$array$$Array$at$31$(self, middle);
       const _min = _bind._0;
       const _max = _bind._1;
       if (c < _min) {
@@ -7696,11 +7977,11 @@ function moonbitlang$x$json5$$lex_skip_whitespace(ctx) {
 function moonbitlang$x$json5$$lex_assert_char(ctx, c) {
   const _bind = moonbitlang$x$json5$$read_char(ctx);
   if (_bind === -1) {
-    return moonbitlang$x$json5$$parse_error$7$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
+    return moonbitlang$x$json5$$parse_error$11$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
   } else {
     const _Some = _bind;
     const _c2 = _Some;
-    return c === _c2 ? new Result$Ok$12$(undefined) : moonbitlang$x$json5$$invalid_char$46$inner$7$(ctx, -1);
+    return c === _c2 ? new Result$Ok$12$(undefined) : moonbitlang$x$json5$$invalid_char$46$inner$11$(ctx, -1);
   }
 }
 function moonbitlang$x$json5$$lex_number_end(ctx, start, end) {
@@ -7730,7 +8011,7 @@ function moonbitlang$x$json5$$lex_number_end(ctx, start, end) {
     const _d = _Ok._0;
     return new Result$Ok$13$(_d);
   } else {
-    return moonbitlang$x$json5$$parse_error$12$(new $64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidNumber(moonbitlang$x$json5$$offset_to_position(ctx.input, start), s));
+    return moonbitlang$x$json5$$parse_error$15$(new $64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidNumber(moonbitlang$x$json5$$offset_to_position(ctx.input, start), s));
   }
 }
 function moonbitlang$x$json5$$lex_decimal_exponent_integer(ctx, start) {
@@ -7771,7 +8052,7 @@ function moonbitlang$x$json5$$lex_decimal_exponent_integer(ctx, start) {
 function moonbitlang$x$json5$$lex_decimal_exponent_sign(ctx, start) {
   const _bind = moonbitlang$x$json5$$read_char(ctx);
   if (_bind === -1) {
-    return moonbitlang$x$json5$$parse_error$12$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
+    return moonbitlang$x$json5$$parse_error$15$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
   } else {
     const _Some = _bind;
     const _c = _Some;
@@ -7787,14 +8068,14 @@ function moonbitlang$x$json5$$lex_decimal_exponent_sign(ctx, start) {
       return new Result$Ok$13$(_tmp);
     }
     ctx.offset = ctx.offset - 1 | 0;
-    return moonbitlang$x$json5$$invalid_char$46$inner$12$(ctx, 0);
+    return moonbitlang$x$json5$$invalid_char$46$inner$15$(ctx, 0);
   }
 }
 function moonbitlang$x$json5$$lex_decimal_exponent(ctx, start) {
   _L: {
     const _bind = moonbitlang$x$json5$$read_char(ctx);
     if (_bind === -1) {
-      return moonbitlang$x$json5$$parse_error$12$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
+      return moonbitlang$x$json5$$parse_error$15$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
     } else {
       const _Some = _bind;
       const _x = _Some;
@@ -7818,7 +8099,7 @@ function moonbitlang$x$json5$$lex_decimal_exponent(ctx, start) {
             return new Result$Ok$13$(_tmp);
           }
           ctx.offset = ctx.offset - 1 | 0;
-          return moonbitlang$x$json5$$invalid_char$46$inner$12$(ctx, 0);
+          return moonbitlang$x$json5$$invalid_char$46$inner$15$(ctx, 0);
         }
       }
     }
@@ -8018,7 +8299,7 @@ function moonbitlang$x$json5$$lex_decimal_integer(ctx, start) {
 function moonbitlang$x$json5$$lex_decimal_point_leading(ctx, start) {
   const _bind = moonbitlang$x$json5$$read_char(ctx);
   if (_bind === -1) {
-    return moonbitlang$x$json5$$parse_error$12$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
+    return moonbitlang$x$json5$$parse_error$15$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
   } else {
     const _Some = _bind;
     const _c = _Some;
@@ -8034,7 +8315,7 @@ function moonbitlang$x$json5$$lex_decimal_point_leading(ctx, start) {
       return new Result$Ok$13$(_tmp);
     }
     ctx.offset = ctx.offset - 1 | 0;
-    return moonbitlang$x$json5$$invalid_char$46$inner$12$(ctx, 0);
+    return moonbitlang$x$json5$$invalid_char$46$inner$15$(ctx, 0);
   }
 }
 function moonbitlang$x$json5$$lex_infinity(ctx) {
@@ -8090,7 +8371,7 @@ function moonbitlang$x$json5$$lex_hex_digits(ctx, n) {
     if (i < n) {
       const _bind = moonbitlang$x$json5$$read_char(ctx);
       if (_bind === -1) {
-        const _bind$2 = moonbitlang$x$json5$$parse_error$7$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
+        const _bind$2 = moonbitlang$x$json5$$parse_error$11$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
         if (_bind$2.$tag === 1) {
           const _ok = _bind$2;
           _ok._0;
@@ -8103,7 +8384,7 @@ function moonbitlang$x$json5$$lex_hex_digits(ctx, n) {
         if (_c >= 65) {
           const d = ((_c & ~32) - 65 | 0) + 10 | 0;
           if (d > 15) {
-            const _bind$2 = moonbitlang$x$json5$$invalid_char$46$inner$7$(ctx, -1);
+            const _bind$2 = moonbitlang$x$json5$$invalid_char$46$inner$11$(ctx, -1);
             if (_bind$2.$tag === 1) {
               const _ok = _bind$2;
               _ok._0;
@@ -8116,7 +8397,7 @@ function moonbitlang$x$json5$$lex_hex_digits(ctx, n) {
           if (_c >= 48) {
             const d = _c - 48 | 0;
             if (d > 9) {
-              const _bind$2 = moonbitlang$x$json5$$invalid_char$46$inner$7$(ctx, -1);
+              const _bind$2 = moonbitlang$x$json5$$invalid_char$46$inner$11$(ctx, -1);
               if (_bind$2.$tag === 1) {
                 const _ok = _bind$2;
                 _ok._0;
@@ -8126,7 +8407,7 @@ function moonbitlang$x$json5$$lex_hex_digits(ctx, n) {
             }
             r = r << 4 | d;
           } else {
-            const _bind$2 = moonbitlang$x$json5$$invalid_char$46$inner$7$(ctx, -1);
+            const _bind$2 = moonbitlang$x$json5$$invalid_char$46$inner$11$(ctx, -1);
             if (_bind$2.$tag === 1) {
               const _ok = _bind$2;
               _ok._0;
@@ -8145,7 +8426,7 @@ function moonbitlang$x$json5$$lex_hex_digits(ctx, n) {
   return new Result$Ok$15$(r);
 }
 function moonbitlang$x$json5$$StringBuilder$add_char(self, c) {
-  self.buffer = `${self.buffer}${moonbitlang$core$builtin$$Show$to_string$11$(c)}`;
+  self.buffer = `${self.buffer}${moonbitlang$core$builtin$$Show$to_string$14$(c)}`;
 }
 function moonbitlang$x$json5$$StringBuilder$add_substring(self, s, start, end) {
   self.buffer = `${self.buffer}${moonbitlang$core$string$$String$substring$46$inner(s, start, end)}`;
@@ -8177,7 +8458,7 @@ function moonbitlang$x$json5$$lex_string(ctx, quote) {
             _L$5: {
               const _bind = moonbitlang$x$json5$$read_char(ctx);
               if (_bind === -1) {
-                const _bind$2 = moonbitlang$x$json5$$parse_error$7$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
+                const _bind$2 = moonbitlang$x$json5$$parse_error$11$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
                 if (_bind$2.$tag === 1) {
                   const _ok = _bind$2;
                   _ok._0;
@@ -8206,7 +8487,7 @@ function moonbitlang$x$json5$$lex_string(ctx, quote) {
                     moonbitlang$x$json5$$lex_string$46$flush$124$112(_env, ctx.offset - 1 | 0);
                     const _bind$2 = moonbitlang$x$json5$$read_char(ctx);
                     if (_bind$2 === -1) {
-                      const _bind$3 = moonbitlang$x$json5$$parse_error$7$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
+                      const _bind$3 = moonbitlang$x$json5$$parse_error$11$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
                       if (_bind$3.$tag === 1) {
                         const _ok = _bind$3;
                         _ok._0;
@@ -8261,7 +8542,7 @@ function moonbitlang$x$json5$$lex_string(ctx, quote) {
                             const _c = _Some$3;
                             ctx.offset = ctx.offset - 1 | 0;
                             if (_c >= 48 && _c <= 57) {
-                              const _bind$4 = moonbitlang$x$json5$$invalid_char$46$inner$7$(ctx, 0);
+                              const _bind$4 = moonbitlang$x$json5$$invalid_char$46$inner$11$(ctx, 0);
                               if (_bind$4.$tag === 1) {
                                 const _ok = _bind$4;
                                 _ok._0;
@@ -8299,7 +8580,7 @@ function moonbitlang$x$json5$$lex_string(ctx, quote) {
                         }
                         default: {
                           if (_x$2 >= 49 && _x$2 <= 57) {
-                            const _bind$6 = moonbitlang$x$json5$$invalid_char$46$inner$7$(ctx, -1);
+                            const _bind$6 = moonbitlang$x$json5$$invalid_char$46$inner$11$(ctx, -1);
                             if (_bind$6.$tag === 1) {
                               const _ok = _bind$6;
                               _ok._0;
@@ -8328,7 +8609,7 @@ function moonbitlang$x$json5$$lex_string(ctx, quote) {
           }
           break _L$2;
         }
-        const _bind = moonbitlang$x$json5$$invalid_char$46$inner$7$(ctx, -1);
+        const _bind = moonbitlang$x$json5$$invalid_char$46$inner$11$(ctx, -1);
         if (_bind.$tag === 1) {
           const _ok = _bind;
           _ok._0;
@@ -8364,7 +8645,7 @@ function moonbitlang$x$json5$$lex_hexadecimal_integer(ctx, n) {
 function moonbitlang$x$json5$$lex_hexadecimal(ctx, neg) {
   const _bind = moonbitlang$x$json5$$read_char(ctx);
   if (_bind === -1) {
-    return moonbitlang$x$json5$$parse_error$12$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
+    return moonbitlang$x$json5$$parse_error$15$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
   } else {
     const _Some = _bind;
     const _c = _Some;
@@ -8373,7 +8654,7 @@ function moonbitlang$x$json5$$lex_hexadecimal(ctx, neg) {
       return new Result$Ok$13$(neg ? -n : n);
     }
     ctx.offset = ctx.offset - 1 | 0;
-    return moonbitlang$x$json5$$invalid_char$46$inner$12$(ctx, 0);
+    return moonbitlang$x$json5$$invalid_char$46$inner$15$(ctx, 0);
   }
 }
 function moonbitlang$x$json5$$lex_zero(ctx, neg, start) {
@@ -8420,7 +8701,7 @@ function moonbitlang$x$json5$$lex_zero(ctx, neg, start) {
           default: {
             if (_x >= 48 && _x <= 57) {
               ctx.offset = ctx.offset - 1 | 0;
-              const _bind$3 = moonbitlang$x$json5$$invalid_char$46$inner$7$(ctx, 0);
+              const _bind$3 = moonbitlang$x$json5$$invalid_char$46$inner$11$(ctx, 0);
               if (_bind$3.$tag === 1) {
                 const _ok = _bind$3;
                 _ok._0;
@@ -8474,7 +8755,7 @@ function moonbitlang$x$json5$$lex_value$46$inner(ctx, allow_rbracket) {
                 _L$7: {
                   const _bind = moonbitlang$x$json5$$read_char(ctx);
                   if (_bind === -1) {
-                    const _bind$2 = moonbitlang$x$json5$$parse_error$7$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
+                    const _bind$2 = moonbitlang$x$json5$$parse_error$11$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
                     if (_bind$2.$tag === 1) {
                       const _ok = _bind$2;
                       _ok._0;
@@ -8523,7 +8804,7 @@ function moonbitlang$x$json5$$lex_value$46$inner(ctx, allow_rbracket) {
                         if (allow_rbracket) {
                           return new Result$Ok$14$($64$moonbitlang$47$x$47$json5$46$Token$RBracket);
                         } else {
-                          const _bind$3 = moonbitlang$x$json5$$invalid_char$46$inner$7$(ctx, -1);
+                          const _bind$3 = moonbitlang$x$json5$$invalid_char$46$inner$11$(ctx, -1);
                           if (_bind$3.$tag === 1) {
                             const _ok = _bind$3;
                             _ok._0;
@@ -8722,7 +9003,7 @@ function moonbitlang$x$json5$$lex_value$46$inner(ctx, allow_rbracket) {
                         if (_x > 127 && moonbitlang$x$json5$$CharClass$contains(moonbitlang$x$json5$$non_ascii_whitespace, _x)) {
                           break _L;
                         }
-                        const _bind$20 = moonbitlang$x$json5$$invalid_char$46$inner$7$(ctx, -1);
+                        const _bind$20 = moonbitlang$x$json5$$invalid_char$46$inner$11$(ctx, -1);
                         if (_bind$20.$tag === 1) {
                           const _ok = _bind$20;
                           _ok._0;
@@ -8740,7 +9021,7 @@ function moonbitlang$x$json5$$lex_value$46$inner(ctx, allow_rbracket) {
             }
             const _bind = moonbitlang$x$json5$$read_char(ctx);
             if (_bind === -1) {
-              const _bind$2 = moonbitlang$x$json5$$parse_error$7$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
+              const _bind$2 = moonbitlang$x$json5$$parse_error$11$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
               if (_bind$2.$tag === 1) {
                 const _ok = _bind$2;
                 _ok._0;
@@ -8812,7 +9093,7 @@ function moonbitlang$x$json5$$lex_value$46$inner(ctx, allow_rbracket) {
                     }
                     return new Result$Ok$14$(new $64$moonbitlang$47$x$47$json5$46$Token$Number(n$3));
                   }
-                  const _bind$7 = moonbitlang$x$json5$$invalid_char$46$inner$7$(ctx, -1);
+                  const _bind$7 = moonbitlang$x$json5$$invalid_char$46$inner$11$(ctx, -1);
                   if (_bind$7.$tag === 1) {
                     const _ok = _bind$7;
                     _ok._0;
@@ -8850,7 +9131,7 @@ function moonbitlang$x$json5$$lex_after_array_value(ctx) {
   }
   const _bind$2 = moonbitlang$x$json5$$read_char(ctx);
   if (_bind$2 === -1) {
-    return moonbitlang$x$json5$$parse_error$101$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
+    return moonbitlang$x$json5$$parse_error$105$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
   } else {
     const _Some = _bind$2;
     const _x = _Some;
@@ -8862,7 +9143,7 @@ function moonbitlang$x$json5$$lex_after_array_value(ctx) {
         return new Result$Ok$14$($64$moonbitlang$47$x$47$json5$46$Token$Comma);
       }
       default: {
-        return moonbitlang$x$json5$$invalid_char$46$inner$101$(ctx, -1);
+        return moonbitlang$x$json5$$invalid_char$46$inner$105$(ctx, -1);
       }
     }
   }
@@ -8877,7 +9158,7 @@ function moonbitlang$x$json5$$lex_after_object_value(ctx) {
   }
   const _bind$2 = moonbitlang$x$json5$$read_char(ctx);
   if (_bind$2 === -1) {
-    return moonbitlang$x$json5$$parse_error$101$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
+    return moonbitlang$x$json5$$parse_error$105$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
   } else {
     const _Some = _bind$2;
     const _x = _Some;
@@ -8889,7 +9170,7 @@ function moonbitlang$x$json5$$lex_after_object_value(ctx) {
         return new Result$Ok$14$($64$moonbitlang$47$x$47$json5$46$Token$Comma);
       }
       default: {
-        return moonbitlang$x$json5$$invalid_char$46$inner$101$(ctx, -1);
+        return moonbitlang$x$json5$$invalid_char$46$inner$105$(ctx, -1);
       }
     }
   }
@@ -8904,14 +9185,14 @@ function moonbitlang$x$json5$$lex_after_property_name(ctx) {
   }
   const _bind$2 = moonbitlang$x$json5$$read_char(ctx);
   if (_bind$2 === -1) {
-    return moonbitlang$x$json5$$parse_error$101$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
+    return moonbitlang$x$json5$$parse_error$105$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
   } else {
     const _Some = _bind$2;
     const _x = _Some;
     if (_x === 58) {
       return new Result$Ok$14$($64$moonbitlang$47$x$47$json5$46$Token$Colon);
     } else {
-      return moonbitlang$x$json5$$invalid_char$46$inner$101$(ctx, -1);
+      return moonbitlang$x$json5$$invalid_char$46$inner$105$(ctx, -1);
     }
   }
 }
@@ -8963,7 +9244,7 @@ function moonbitlang$x$json5$$lex_ident$46$inner(ctx, start, buffer) {
                   start$2.val = ctx.offset;
                   break _L$2;
                 } else {
-                  const _bind$4 = moonbitlang$x$json5$$parse_error$7$(new $64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidIdentEscape(moonbitlang$x$json5$$offset_to_position(ctx.input, ctx.offset - 6 | 0)));
+                  const _bind$4 = moonbitlang$x$json5$$parse_error$11$(new $64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidIdentEscape(moonbitlang$x$json5$$offset_to_position(ctx.input, ctx.offset - 6 | 0)));
                   if (_bind$4.$tag === 1) {
                     const _ok = _bind$4;
                     _ok._0;
@@ -9022,7 +9303,7 @@ function moonbitlang$x$json5$$lex_property_name(ctx) {
     _L$2: {
       const _bind$2 = moonbitlang$x$json5$$read_char(ctx);
       if (_bind$2 === -1) {
-        return moonbitlang$x$json5$$parse_error$101$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
+        return moonbitlang$x$json5$$parse_error$105$($64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidEof);
       } else {
         const _Some = _bind$2;
         const _x = _Some;
@@ -9074,7 +9355,7 @@ function moonbitlang$x$json5$$lex_property_name(ctx) {
               }
               return new Result$Ok$14$(new $64$moonbitlang$47$x$47$json5$46$Token$String(s));
             } else {
-              return moonbitlang$x$json5$$parse_error$101$(new $64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidIdentEscape(moonbitlang$x$json5$$offset_to_position(ctx.input, ctx.offset - 6 | 0)));
+              return moonbitlang$x$json5$$parse_error$105$(new $64$moonbitlang$47$x$47$json5$46$ParseErrorData$InvalidIdentEscape(moonbitlang$x$json5$$offset_to_position(ctx.input, ctx.offset - 6 | 0)));
             }
           }
           default: {
@@ -9089,7 +9370,7 @@ function moonbitlang$x$json5$$lex_property_name(ctx) {
               }
               return new Result$Ok$14$(new $64$moonbitlang$47$x$47$json5$46$Token$String(s));
             }
-            return moonbitlang$x$json5$$invalid_char$46$inner$101$(ctx, -1);
+            return moonbitlang$x$json5$$invalid_char$46$inner$105$(ctx, -1);
           }
         }
       }
@@ -9156,7 +9437,7 @@ function moonbitlang$x$json5$$parse_value2(ctx, tok) {
       return moonbitlang$x$json5$$parse_array(ctx);
     }
     default: {
-      return new Result$Ok$11$(moonbitlang$core$abort$$abort$6$("unreachable"));
+      return new Result$Ok$11$(moonbitlang$core$abort$$abort$9$("unreachable"));
     }
   }
 }
@@ -9183,7 +9464,7 @@ function moonbitlang$x$json5$$parse_array(ctx) {
         } else {
           return _bind$2;
         }
-        moonbitlang$core$array$$Array$push$6$(vec, _tmp);
+        moonbitlang$core$array$$Array$push$9$(vec, _tmp);
         const _bind$3 = moonbitlang$x$json5$$lex_after_array_value(ctx);
         let tok2;
         if (_bind$3.$tag === 1) {
@@ -9200,7 +9481,7 @@ function moonbitlang$x$json5$$parse_array(ctx) {
             break _L;
           }
           default: {
-            moonbitlang$core$abort$$abort$7$("unreachable");
+            moonbitlang$core$abort$$abort$11$("unreachable");
           }
         }
       }
@@ -9211,7 +9492,7 @@ function moonbitlang$x$json5$$parse_array(ctx) {
   return new Result$Ok$11$(new $64$moonbitlang$47$core$47$builtin$46$Json$Array(vec));
 }
 function moonbitlang$x$json5$$parse_object(ctx) {
-  const map = moonbitlang$core$builtin$$Map$new$46$inner$58$(8);
+  const map = moonbitlang$core$builtin$$Map$new$46$inner$62$(8);
   _L: while (true) {
     _L$2: {
       const _bind = moonbitlang$x$json5$$lex_property_name(ctx);
@@ -9246,7 +9527,7 @@ function moonbitlang$x$json5$$parse_object(ctx) {
             } else {
               return _bind$3;
             }
-            moonbitlang$core$builtin$$Map$set$58$(map, _name, val);
+            moonbitlang$core$builtin$$Map$set$62$(map, _name, val);
             const _bind$4 = moonbitlang$x$json5$$lex_after_object_value(ctx);
             let tok3;
             if (_bind$4.$tag === 1) {
@@ -9263,16 +9544,16 @@ function moonbitlang$x$json5$$parse_object(ctx) {
                 break _L;
               }
               default: {
-                moonbitlang$core$abort$$abort$7$("unreachable");
+                moonbitlang$core$abort$$abort$11$("unreachable");
               }
             }
           } else {
-            moonbitlang$core$abort$$abort$7$("unreachable");
+            moonbitlang$core$abort$$abort$11$("unreachable");
           }
           break;
         }
         default: {
-          moonbitlang$core$abort$$abort$7$("unreachable");
+          moonbitlang$core$abort$$abort$11$("unreachable");
         }
       }
       break _L$2;
@@ -9301,7 +9582,7 @@ function moonbitlang$x$json5$$parse(input) {
   } else {
     return _bind$2;
   }
-  return ctx.offset >= ctx.end_offset ? new Result$Ok$11$(val) : moonbitlang$x$json5$$invalid_char$46$inner$6$(ctx, 0);
+  return ctx.offset >= ctx.end_offset ? new Result$Ok$11$(val) : moonbitlang$x$json5$$invalid_char$46$inner$9$(ctx, 0);
 }
 function moonbitlang$x$internal$ffi$$utf8_bytes_to_mbt_string(bytes) {
   const res = [];
@@ -9313,7 +9594,7 @@ function moonbitlang$x$internal$ffi$$utf8_bytes_to_mbt_string(bytes) {
       $bound_check(bytes, _tmp);
       let c = bytes[_tmp];
       if (c < 128) {
-        moonbitlang$core$array$$Array$push$11$(res, c);
+        moonbitlang$core$array$$Array$push$14$(res, c);
         i = i + 1 | 0;
       } else {
         if (c < 224) {
@@ -9324,7 +9605,7 @@ function moonbitlang$x$internal$ffi$$utf8_bytes_to_mbt_string(bytes) {
           const _tmp$3 = i + 1 | 0;
           $bound_check(bytes, _tmp$3);
           c = _tmp$2 | bytes[_tmp$3] & 63;
-          moonbitlang$core$array$$Array$push$11$(res, c);
+          moonbitlang$core$array$$Array$push$14$(res, c);
           i = i + 2 | 0;
         } else {
           if (c < 240) {
@@ -9338,7 +9619,7 @@ function moonbitlang$x$internal$ffi$$utf8_bytes_to_mbt_string(bytes) {
             const _tmp$5 = i + 2 | 0;
             $bound_check(bytes, _tmp$5);
             c = _tmp$4 | bytes[_tmp$5] & 63;
-            moonbitlang$core$array$$Array$push$11$(res, c);
+            moonbitlang$core$array$$Array$push$14$(res, c);
             i = i + 3 | 0;
           } else {
             if ((i + 3 | 0) >= len) {
@@ -9355,8 +9636,8 @@ function moonbitlang$x$internal$ffi$$utf8_bytes_to_mbt_string(bytes) {
             $bound_check(bytes, _tmp$7);
             c = _tmp$6 | bytes[_tmp$7] & 63;
             c = c - 65536 | 0;
-            moonbitlang$core$array$$Array$push$11$(res, (c >> 10) + 55296 | 0);
-            moonbitlang$core$array$$Array$push$11$(res, (c & 1023) + 56320 | 0);
+            moonbitlang$core$array$$Array$push$14$(res, (c >> 10) + 55296 | 0);
+            moonbitlang$core$array$$Array$push$14$(res, (c & 1023) + 56320 | 0);
             i = i + 4 | 0;
           }
         }
@@ -9368,11 +9649,11 @@ function moonbitlang$x$internal$ffi$$utf8_bytes_to_mbt_string(bytes) {
   }
   return moonbitlang$core$string$$String$from_array(res);
 }
-function moonbitlang$core$builtin$$Show$output$48$(_x_51, _x_52) {
+function moonbitlang$core$builtin$$Show$output$52$(_x_51, _x_52) {
   const _IOError = _x_51;
   const _$42$err_payload_53 = _IOError._0;
   _x_52.method_0(_x_52.self, "IOError(");
-  moonbitlang$core$builtin$$Logger$write_object$13$(_x_52, _$42$err_payload_53);
+  moonbitlang$core$builtin$$Logger$write_object$16$(_x_52, _$42$err_payload_53);
   _x_52.method_0(_x_52.self, ")");
 }
 function moonbitlang$x$fs$$read_file_to_bytes_internal(path) {
@@ -9400,7 +9681,7 @@ function moonbitlang$x$fs$$read_file_to_string_internal$46$inner(path, encoding)
 function moonbitlang$x$fs$$read_file_to_string$46$inner(path, encoding) {
   return moonbitlang$x$fs$$read_file_to_string_internal$46$inner(path, encoding);
 }
-function moonbitlang$core$builtin$$Show$output$43$(_x_273, _x_274) {
+function moonbitlang$core$builtin$$Show$output$47$(_x_273, _x_274) {
   switch (_x_273) {
     case 0: {
       _x_274.method_0(_x_274.self, "Static");
@@ -9416,16 +9697,16 @@ function moonbitlang$core$builtin$$Show$output$43$(_x_273, _x_274) {
     }
   }
 }
-function moonbitlang$core$builtin$$Show$output$46$(_x_229, _x_230) {
+function moonbitlang$core$builtin$$Show$output$50$(_x_229, _x_230) {
   switch (_x_229.$tag) {
     case 0: {
       const _Box = _x_229;
       const _$42$arg_231 = _Box._0;
       const _$42$arg_232 = _Box._1;
       _x_230.method_0(_x_230.self, "Box(");
-      moonbitlang$core$builtin$$Logger$write_object$12$(_x_230, _$42$arg_231);
+      moonbitlang$core$builtin$$Logger$write_object$15$(_x_230, _$42$arg_231);
       _x_230.method_0(_x_230.self, ", ");
-      moonbitlang$core$builtin$$Logger$write_object$12$(_x_230, _$42$arg_232);
+      moonbitlang$core$builtin$$Logger$write_object$15$(_x_230, _$42$arg_232);
       _x_230.method_0(_x_230.self, ")");
       return;
     }
@@ -9433,7 +9714,7 @@ function moonbitlang$core$builtin$$Show$output$46$(_x_229, _x_230) {
       const _Circle = _x_229;
       const _$42$arg_233 = _Circle._0;
       _x_230.method_0(_x_230.self, "Circle(");
-      moonbitlang$core$builtin$$Logger$write_object$12$(_x_230, _$42$arg_233);
+      moonbitlang$core$builtin$$Logger$write_object$15$(_x_230, _$42$arg_233);
       _x_230.method_0(_x_230.self, ")");
       return;
     }
@@ -9441,7 +9722,7 @@ function moonbitlang$core$builtin$$Show$output$46$(_x_229, _x_230) {
       const _Polygon = _x_229;
       const _$42$arg_234 = _Polygon._0;
       _x_230.method_0(_x_230.self, "Polygon(");
-      moonbitlang$core$builtin$$Logger$write_object$14$(_x_230, _$42$arg_234);
+      moonbitlang$core$builtin$$Logger$write_object$17$(_x_230, _$42$arg_234);
       _x_230.method_0(_x_230.self, ")");
       return;
     }
@@ -9455,14 +9736,14 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$MapLoaderShapeTy
       const _height = _Box._1;
       const shape = Demonmasterlqx$box2d_ffi$box2d$$b2BoxDef();
       Demonmasterlqx$box2d_ffi$box2d$$B2BoxDef$setExtents(shape, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(_width / 2, _height / 2));
-      return { self: shape, method_0: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$, method_1: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$computeMass$89$, method_2: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalPosition$89$, method_3: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getLocalPosition$89$, method_4: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalRotation$89$, method_5: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getLocalRotation$89$, method_6: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$89$, method_7: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getFriction$89$, method_8: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setRestitution$89$, method_9: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getRestitution$89$, method_10: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$89$, method_11: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getDensity$89$, method_12: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setCategoryBits$89$, method_13: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getCategoryBits$89$, method_14: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setMaskBits$89$, method_15: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getMaskBits$89$, method_16: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$89$, method_17: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getGroupIndex$89$ };
+      return { self: shape, method_0: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$, method_1: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$computeMass$93$, method_2: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalPosition$93$, method_3: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getLocalPosition$93$, method_4: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalRotation$93$, method_5: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getLocalRotation$93$, method_6: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$93$, method_7: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getFriction$93$, method_8: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setRestitution$93$, method_9: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getRestitution$93$, method_10: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$93$, method_11: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getDensity$93$, method_12: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setCategoryBits$93$, method_13: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getCategoryBits$93$, method_14: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setMaskBits$93$, method_15: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getMaskBits$93$, method_16: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$93$, method_17: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getGroupIndex$93$ };
     }
     case 1: {
       const _Circle = self;
       const _radius = _Circle._0;
       const shape$2 = Demonmasterlqx$box2d_ffi$box2d$$b2CircleDef();
       Demonmasterlqx$box2d_ffi$box2d$$B2CircleDef$setRadius(shape$2, _radius);
-      return { self: shape$2, method_0: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$87$, method_1: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$computeMass$90$, method_2: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalPosition$90$, method_3: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getLocalPosition$90$, method_4: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalRotation$90$, method_5: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getLocalRotation$90$, method_6: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$90$, method_7: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getFriction$90$, method_8: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setRestitution$90$, method_9: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getRestitution$90$, method_10: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$90$, method_11: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getDensity$90$, method_12: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setCategoryBits$90$, method_13: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getCategoryBits$90$, method_14: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setMaskBits$90$, method_15: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getMaskBits$90$, method_16: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$90$, method_17: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getGroupIndex$90$ };
+      return { self: shape$2, method_0: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$91$, method_1: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$computeMass$94$, method_2: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalPosition$94$, method_3: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getLocalPosition$94$, method_4: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalRotation$94$, method_5: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getLocalRotation$94$, method_6: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$94$, method_7: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getFriction$94$, method_8: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setRestitution$94$, method_9: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getRestitution$94$, method_10: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$94$, method_11: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getDensity$94$, method_12: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setCategoryBits$94$, method_13: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getCategoryBits$94$, method_14: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setMaskBits$94$, method_15: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getMaskBits$94$, method_16: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$94$, method_17: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getGroupIndex$94$ };
     }
     default: {
       const _Polygon = self;
@@ -9484,7 +9765,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$MapLoaderShapeTy
       }
       const vecs = _p;
       Demonmasterlqx$box2d_ffi$box2d$$B2PolygonDef$setVertices(shape$3, vecs);
-      return { self: shape$3, method_0: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$88$, method_1: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$computeMass$91$, method_2: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalPosition$91$, method_3: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getLocalPosition$91$, method_4: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalRotation$91$, method_5: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getLocalRotation$91$, method_6: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$91$, method_7: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getFriction$91$, method_8: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setRestitution$91$, method_9: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getRestitution$91$, method_10: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$91$, method_11: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getDensity$91$, method_12: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setCategoryBits$91$, method_13: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getCategoryBits$91$, method_14: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setMaskBits$91$, method_15: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getMaskBits$91$, method_16: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$91$, method_17: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getGroupIndex$91$ };
+      return { self: shape$3, method_0: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$92$, method_1: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$computeMass$95$, method_2: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalPosition$95$, method_3: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getLocalPosition$95$, method_4: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalRotation$95$, method_5: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getLocalRotation$95$, method_6: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$95$, method_7: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getFriction$95$, method_8: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setRestitution$95$, method_9: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getRestitution$95$, method_10: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$95$, method_11: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getDensity$95$, method_12: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setCategoryBits$95$, method_13: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getCategoryBits$95$, method_14: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setMaskBits$95$, method_15: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getMaskBits$95$, method_16: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$95$, method_17: Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getGroupIndex$95$ };
     }
   }
 }
@@ -9537,7 +9818,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_shape_type_f
     if (shape_json.$tag === 6) {
       const _Object = shape_json;
       const _x = _Object._0;
-      const _x$2 = moonbitlang$core$builtin$$Map$get$58$(_x, "type");
+      const _x$2 = moonbitlang$core$builtin$$Map$get$62$(_x, "type");
       if (_x$2 === undefined) {
         break _L;
       } else {
@@ -9548,7 +9829,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_shape_type_f
           const _x$4 = _String._0;
           switch (_x$4) {
             case "box": {
-              const _x$5 = moonbitlang$core$builtin$$Map$get$58$(_x, "params");
+              const _x$5 = moonbitlang$core$builtin$$Map$get$62$(_x, "params");
               if (_x$5 === undefined) {
                 break _L;
               } else {
@@ -9557,7 +9838,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_shape_type_f
                 if (_x$6.$tag === 6) {
                   const _Object$2 = _x$6;
                   const _x$7 = _Object$2._0;
-                  const _x$8 = moonbitlang$core$builtin$$Map$get$58$(_x$7, "width");
+                  const _x$8 = moonbitlang$core$builtin$$Map$get$62$(_x$7, "width");
                   if (_x$8 === undefined) {
                     break _L;
                   } else {
@@ -9566,7 +9847,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_shape_type_f
                     if (_x$9.$tag === 3) {
                       const _Number = _x$9;
                       const _width = _Number._0;
-                      const _x$10 = moonbitlang$core$builtin$$Map$get$58$(_x$7, "height");
+                      const _x$10 = moonbitlang$core$builtin$$Map$get$62$(_x$7, "height");
                       if (_x$10 === undefined) {
                         break _L;
                       } else {
@@ -9590,7 +9871,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_shape_type_f
               }
             }
             case "circle": {
-              const _x$6 = moonbitlang$core$builtin$$Map$get$58$(_x, "params");
+              const _x$6 = moonbitlang$core$builtin$$Map$get$62$(_x, "params");
               if (_x$6 === undefined) {
                 break _L;
               } else {
@@ -9599,7 +9880,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_shape_type_f
                 if (_x$7.$tag === 6) {
                   const _Object$2 = _x$7;
                   const _x$8 = _Object$2._0;
-                  const _x$9 = moonbitlang$core$builtin$$Map$get$58$(_x$8, "radius");
+                  const _x$9 = moonbitlang$core$builtin$$Map$get$62$(_x$8, "radius");
                   if (_x$9 === undefined) {
                     break _L;
                   } else {
@@ -9619,7 +9900,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_shape_type_f
               }
             }
             case "polygon": {
-              const _x$7 = moonbitlang$core$builtin$$Map$get$58$(_x, "params");
+              const _x$7 = moonbitlang$core$builtin$$Map$get$62$(_x, "params");
               if (_x$7 === undefined) {
                 break _L;
               } else {
@@ -9628,7 +9909,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_shape_type_f
                 if (_x$8.$tag === 6) {
                   const _Object$2 = _x$8;
                   const _x$9 = _Object$2._0;
-                  const _x$10 = moonbitlang$core$builtin$$Map$get$58$(_x$9, "vertices");
+                  const _x$10 = moonbitlang$core$builtin$$Map$get$62$(_x$9, "vertices");
                   if (_x$10 === undefined) {
                     break _L;
                   } else {
@@ -9749,7 +10030,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_body_def_fro
     if (body_json.$tag === 6) {
       const _Object = body_json;
       const _x = _Object._0;
-      const _x$2 = moonbitlang$core$builtin$$Map$get$58$(_x, "id");
+      const _x$2 = moonbitlang$core$builtin$$Map$get$62$(_x, "id");
       if (_x$2 === undefined) {
         e = body_json;
         break _L;
@@ -9759,7 +10040,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_body_def_fro
         if (_x$3.$tag === 4) {
           const _String = _x$3;
           const _id = _String._0;
-          const _x$4 = moonbitlang$core$builtin$$Map$get$58$(_x, "body_def");
+          const _x$4 = moonbitlang$core$builtin$$Map$get$62$(_x, "body_def");
           if (_x$4 === undefined) {
             e = body_json;
             break _L;
@@ -9769,7 +10050,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_body_def_fro
             if (_x$5.$tag === 6) {
               const _Object$2 = _x$5;
               const _x$6 = _Object$2._0;
-              const _x$7 = moonbitlang$core$builtin$$Map$get$58$(_x$6, "type");
+              const _x$7 = moonbitlang$core$builtin$$Map$get$62$(_x$6, "type");
               if (_x$7 === undefined) {
                 e = body_json;
                 break _L;
@@ -9779,7 +10060,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_body_def_fro
                 if (_x$8.$tag === 4) {
                   const _String$2 = _x$8;
                   const _type_str = _String$2._0;
-                  const _x$9 = moonbitlang$core$builtin$$Map$get$58$(_x$6, "position");
+                  const _x$9 = moonbitlang$core$builtin$$Map$get$62$(_x$6, "position");
                   if (_x$9 === undefined) {
                     e = body_json;
                     break _L;
@@ -9798,7 +10079,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_body_def_fro
                           if (_x$13.$tag === 3) {
                             const _Number$2 = _x$13;
                             const _py = _Number$2._0;
-                            const _x$14 = moonbitlang$core$builtin$$Map$get$58$(_x$6, "angle");
+                            const _x$14 = moonbitlang$core$builtin$$Map$get$62$(_x$6, "angle");
                             if (_x$14 === undefined) {
                               e = body_json;
                               break _L;
@@ -9808,7 +10089,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_body_def_fro
                               if (_x$15.$tag === 3) {
                                 const _Number$3 = _x$15;
                                 const _angle = _Number$3._0;
-                                const _x$16 = moonbitlang$core$builtin$$Map$get$58$(_x$6, "linear_velocity");
+                                const _x$16 = moonbitlang$core$builtin$$Map$get$62$(_x$6, "linear_velocity");
                                 if (_x$16 === undefined) {
                                   e = body_json;
                                   break _L;
@@ -9827,7 +10108,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_body_def_fro
                                         if (_x$20.$tag === 3) {
                                           const _Number$5 = _x$20;
                                           const _lvy = _Number$5._0;
-                                          const _x$21 = moonbitlang$core$builtin$$Map$get$58$(_x$6, "angular_velocity");
+                                          const _x$21 = moonbitlang$core$builtin$$Map$get$62$(_x$6, "angular_velocity");
                                           if (_x$21 === undefined) {
                                             e = body_json;
                                             break _L;
@@ -9837,7 +10118,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_body_def_fro
                                             if (_x$22.$tag === 3) {
                                               const _Number$6 = _x$22;
                                               const _angular_velocity = _Number$6._0;
-                                              const _x$23 = moonbitlang$core$builtin$$Map$get$58$(_x$6, "linear_damping");
+                                              const _x$23 = moonbitlang$core$builtin$$Map$get$62$(_x$6, "linear_damping");
                                               if (_x$23 === undefined) {
                                                 e = body_json;
                                                 break _L;
@@ -9847,7 +10128,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_body_def_fro
                                                 if (_x$24.$tag === 3) {
                                                   const _Number$7 = _x$24;
                                                   const _linear_damping = _Number$7._0;
-                                                  const _x$25 = moonbitlang$core$builtin$$Map$get$58$(_x$6, "angular_damping");
+                                                  const _x$25 = moonbitlang$core$builtin$$Map$get$62$(_x$6, "angular_damping");
                                                   if (_x$25 === undefined) {
                                                     e = body_json;
                                                     break _L;
@@ -9857,35 +10138,35 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_body_def_fro
                                                     if (_x$26.$tag === 3) {
                                                       const _Number$8 = _x$26;
                                                       const _angular_damping = _Number$8._0;
-                                                      const _x$27 = moonbitlang$core$builtin$$Map$get$58$(_x$6, "allow_sleep");
+                                                      const _x$27 = moonbitlang$core$builtin$$Map$get$62$(_x$6, "allow_sleep");
                                                       if (_x$27 === undefined) {
                                                         e = body_json;
                                                         break _L;
                                                       } else {
                                                         const _Some$10 = _x$27;
                                                         const _allow_sleep = _Some$10;
-                                                        const _x$28 = moonbitlang$core$builtin$$Map$get$58$(_x$6, "awake");
+                                                        const _x$28 = moonbitlang$core$builtin$$Map$get$62$(_x$6, "awake");
                                                         if (_x$28 === undefined) {
                                                           e = body_json;
                                                           break _L;
                                                         } else {
                                                           const _Some$11 = _x$28;
                                                           const _awake = _Some$11;
-                                                          const _x$29 = moonbitlang$core$builtin$$Map$get$58$(_x$6, "fixed_rotation");
+                                                          const _x$29 = moonbitlang$core$builtin$$Map$get$62$(_x$6, "fixed_rotation");
                                                           if (_x$29 === undefined) {
                                                             e = body_json;
                                                             break _L;
                                                           } else {
                                                             const _Some$12 = _x$29;
                                                             const _fixed_rotation = _Some$12;
-                                                            const _x$30 = moonbitlang$core$builtin$$Map$get$58$(_x$6, "bullet");
+                                                            const _x$30 = moonbitlang$core$builtin$$Map$get$62$(_x$6, "bullet");
                                                             if (_x$30 === undefined) {
                                                               e = body_json;
                                                               break _L;
                                                             } else {
                                                               const _Some$13 = _x$30;
                                                               const _bullet = _Some$13;
-                                                              const _x$31 = moonbitlang$core$builtin$$Map$get$58$(_x$6, "gravity_scale");
+                                                              const _x$31 = moonbitlang$core$builtin$$Map$get$62$(_x$6, "gravity_scale");
                                                               if (_x$31 === undefined) {
                                                                 e = body_json;
                                                                 break _L;
@@ -9895,7 +10176,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_body_def_fro
                                                                 if (_x$32.$tag === 3) {
                                                                   const _Number$9 = _x$32;
                                                                   const _gravity_scale = _Number$9._0;
-                                                                  const _x$33 = moonbitlang$core$builtin$$Map$get$58$(_x, "fixtures");
+                                                                  const _x$33 = moonbitlang$core$builtin$$Map$get$62$(_x, "fixtures");
                                                                   if (_x$33 === undefined) {
                                                                     e = body_json;
                                                                     break _L;
@@ -9910,14 +10191,14 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_body_def_fro
                                                                         if (_x$36.$tag === 6) {
                                                                           const _Object$3 = _x$36;
                                                                           const _x$37 = _Object$3._0;
-                                                                          const _x$38 = moonbitlang$core$builtin$$Map$get$58$(_x$37, "shape");
+                                                                          const _x$38 = moonbitlang$core$builtin$$Map$get$62$(_x$37, "shape");
                                                                           if (_x$38 === undefined) {
                                                                             e = body_json;
                                                                             break _L;
                                                                           } else {
                                                                             const _Some$16 = _x$38;
                                                                             const _shape_json = _Some$16;
-                                                                            const _x$39 = moonbitlang$core$builtin$$Map$get$58$(_x$37, "fixture_def");
+                                                                            const _x$39 = moonbitlang$core$builtin$$Map$get$62$(_x$37, "fixture_def");
                                                                             if (_x$39 === undefined) {
                                                                               e = body_json;
                                                                               break _L;
@@ -9927,7 +10208,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_body_def_fro
                                                                               if (_x$40.$tag === 6) {
                                                                                 const _Object$4 = _x$40;
                                                                                 const _x$41 = _Object$4._0;
-                                                                                const _x$42 = moonbitlang$core$builtin$$Map$get$58$(_x$41, "density");
+                                                                                const _x$42 = moonbitlang$core$builtin$$Map$get$62$(_x$41, "density");
                                                                                 if (_x$42 === undefined) {
                                                                                   e = body_json;
                                                                                   break _L;
@@ -9937,7 +10218,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_body_def_fro
                                                                                   if (_x$43.$tag === 3) {
                                                                                     const _Number$10 = _x$43;
                                                                                     const _density = _Number$10._0;
-                                                                                    const _x$44 = moonbitlang$core$builtin$$Map$get$58$(_x$41, "friction");
+                                                                                    const _x$44 = moonbitlang$core$builtin$$Map$get$62$(_x$41, "friction");
                                                                                     if (_x$44 === undefined) {
                                                                                       e = body_json;
                                                                                       break _L;
@@ -9947,7 +10228,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_body_def_fro
                                                                                       if (_x$45.$tag === 3) {
                                                                                         const _Number$11 = _x$45;
                                                                                         const _friction = _Number$11._0;
-                                                                                        const _x$46 = moonbitlang$core$builtin$$Map$get$58$(_x$41, "restitution");
+                                                                                        const _x$46 = moonbitlang$core$builtin$$Map$get$62$(_x$41, "restitution");
                                                                                         if (_x$46 === undefined) {
                                                                                           e = body_json;
                                                                                           break _L;
@@ -9957,14 +10238,14 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_body_def_fro
                                                                                           if (_x$47.$tag === 3) {
                                                                                             const _Number$12 = _x$47;
                                                                                             const _restitution = _Number$12._0;
-                                                                                            const _x$48 = moonbitlang$core$builtin$$Map$get$58$(_x$41, "is_sensor");
+                                                                                            const _x$48 = moonbitlang$core$builtin$$Map$get$62$(_x$41, "is_sensor");
                                                                                             if (_x$48 === undefined) {
                                                                                               e = body_json;
                                                                                               break _L;
                                                                                             } else {
                                                                                               const _Some$21 = _x$48;
                                                                                               const _is_sensor = _Some$21;
-                                                                                              const _x$49 = moonbitlang$core$builtin$$Map$get$58$(_x$41, "filter_category_bits");
+                                                                                              const _x$49 = moonbitlang$core$builtin$$Map$get$62$(_x$41, "filter_category_bits");
                                                                                               if (_x$49 === undefined) {
                                                                                                 e = body_json;
                                                                                                 break _L;
@@ -9974,7 +10255,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_body_def_fro
                                                                                                 if (_x$50.$tag === 3) {
                                                                                                   const _Number$13 = _x$50;
                                                                                                   const _filter_category_bits = _Number$13._0;
-                                                                                                  const _x$51 = moonbitlang$core$builtin$$Map$get$58$(_x$41, "filter_mask_bits");
+                                                                                                  const _x$51 = moonbitlang$core$builtin$$Map$get$62$(_x$41, "filter_mask_bits");
                                                                                                   if (_x$51 === undefined) {
                                                                                                     e = body_json;
                                                                                                     break _L;
@@ -9984,7 +10265,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_body_def_fro
                                                                                                     if (_x$52.$tag === 3) {
                                                                                                       const _Number$14 = _x$52;
                                                                                                       const _filter_mask_bits = _Number$14._0;
-                                                                                                      const _x$53 = moonbitlang$core$builtin$$Map$get$58$(_x$41, "filter_group_index");
+                                                                                                      const _x$53 = moonbitlang$core$builtin$$Map$get$62$(_x$41, "filter_group_index");
                                                                                                       if (_x$53 === undefined) {
                                                                                                         e = body_json;
                                                                                                         break _L;
@@ -10035,7 +10316,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_body_def_fro
                                                                                                           const _bind = moonbitlang$core$json$$Json$as_bool(_allow_sleep);
                                                                                                           let _tmp;
                                                                                                           if (_bind === -1) {
-                                                                                                            moonbitlang$core$builtin$$println$13$("allow_sleep is not a bool, defaulting to true");
+                                                                                                            moonbitlang$core$builtin$$println$16$("allow_sleep is not a bool, defaulting to true");
                                                                                                             _tmp = true;
                                                                                                           } else {
                                                                                                             _tmp = _bind;
@@ -10044,7 +10325,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_body_def_fro
                                                                                                           const _bind$2 = moonbitlang$core$json$$Json$as_bool(_awake);
                                                                                                           let _tmp$3;
                                                                                                           if (_bind$2 === -1) {
-                                                                                                            moonbitlang$core$builtin$$println$13$("awake is not a bool, defaulting to true");
+                                                                                                            moonbitlang$core$builtin$$println$16$("awake is not a bool, defaulting to true");
                                                                                                             _tmp$3 = true;
                                                                                                           } else {
                                                                                                             _tmp$3 = _bind$2;
@@ -10053,7 +10334,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_body_def_fro
                                                                                                           const _bind$3 = moonbitlang$core$json$$Json$as_bool(_fixed_rotation);
                                                                                                           let _tmp$5;
                                                                                                           if (_bind$3 === -1) {
-                                                                                                            moonbitlang$core$builtin$$println$13$("fixed_rotation is not a bool, defaulting to false");
+                                                                                                            moonbitlang$core$builtin$$println$16$("fixed_rotation is not a bool, defaulting to false");
                                                                                                             _tmp$5 = false;
                                                                                                           } else {
                                                                                                             _tmp$5 = _bind$3;
@@ -10062,7 +10343,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_body_def_fro
                                                                                                           const _bind$4 = moonbitlang$core$json$$Json$as_bool(_bullet);
                                                                                                           let _tmp$7;
                                                                                                           if (_bind$4 === -1) {
-                                                                                                            moonbitlang$core$builtin$$println$13$("bullet is not a bool, defaulting to false");
+                                                                                                            moonbitlang$core$builtin$$println$16$("bullet is not a bool, defaulting to false");
                                                                                                             _tmp$7 = false;
                                                                                                           } else {
                                                                                                             _tmp$7 = _bind$4;
@@ -10071,7 +10352,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_body_def_fro
                                                                                                           const _bind$5 = moonbitlang$core$json$$Json$as_bool(_is_sensor);
                                                                                                           let _tmp$9;
                                                                                                           if (_bind$5 === -1) {
-                                                                                                            moonbitlang$core$builtin$$println$13$("is_sensor is not a bool, defaulting to false");
+                                                                                                            moonbitlang$core$builtin$$println$16$("is_sensor is not a bool, defaulting to false");
                                                                                                             _tmp$9 = false;
                                                                                                           } else {
                                                                                                             _tmp$9 = _bind$5;
@@ -10210,7 +10491,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_body_def_fro
       break _L;
     }
   }
-  return new Result$Err$25$(new Error$Demonmasterlqx$47$moonbit_stickman_map_loader$47$map_loader$46$MapLoaderError$46$MapLoaderError(`Invalid body JSON ${moonbitlang$core$builtin$$Show$to_string$39$(e)}`));
+  return new Result$Err$25$(new Error$Demonmasterlqx$47$moonbit_stickman_map_loader$47$map_loader$46$MapLoaderError$46$MapLoaderError(`Invalid body JSON ${moonbitlang$core$builtin$$Show$to_string$43$(e)}`));
 }
 function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$get_bodydef_from_raw(ctx, json) {
   let json_ = undefined;
@@ -10236,7 +10517,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$get_bodydef_from
           }
           break _L;
         }
-        moonbitlang$core$builtin$$println$13$(`Failed to parse bodydef JSON: ${moonbitlang$core$builtin$$Show$to_string$1$(_try_err)}`);
+        moonbitlang$core$builtin$$println$16$(`Failed to parse bodydef JSON: ${moonbitlang$core$builtin$$Show$to_string$1$(_try_err)}`);
         _tmp = undefined;
       }
     }
@@ -10277,7 +10558,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_world_def_fr
     if (world_json.$tag === 6) {
       const _Object = world_json;
       const _x = _Object._0;
-      const _x$2 = moonbitlang$core$builtin$$Map$get$58$(_x, "gravity");
+      const _x$2 = moonbitlang$core$builtin$$Map$get$62$(_x, "gravity");
       if (_x$2 === undefined) {
         e = world_json;
         break _L;
@@ -10296,14 +10577,14 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_world_def_fr
               if (_x$6.$tag === 3) {
                 const _Number$2 = _x$6;
                 const _gy = _Number$2._0;
-                const _x$7 = moonbitlang$core$builtin$$Map$get$58$(_x, "allow_sleeping");
+                const _x$7 = moonbitlang$core$builtin$$Map$get$62$(_x, "allow_sleeping");
                 if (_x$7 === undefined) {
                   e = world_json;
                   break _L;
                 } else {
                   const _Some$2 = _x$7;
                   const _allow_sleeping = _Some$2;
-                  const _x$8 = moonbitlang$core$builtin$$Map$get$58$(_x, "auto_clear_forces");
+                  const _x$8 = moonbitlang$core$builtin$$Map$get$62$(_x, "auto_clear_forces");
                   if (_x$8 === undefined) {
                     e = world_json;
                     break _L;
@@ -10314,7 +10595,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_world_def_fr
                     const _bind = moonbitlang$core$json$$Json$as_bool(_allow_sleeping);
                     let _tmp$2;
                     if (_bind === -1) {
-                      moonbitlang$core$builtin$$println$13$("allow_sleeping is not a bool, defaulting to true");
+                      moonbitlang$core$builtin$$println$16$("allow_sleeping is not a bool, defaulting to true");
                       _tmp$2 = true;
                     } else {
                       _tmp$2 = _bind;
@@ -10323,12 +10604,12 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_world_def_fr
                     const _bind$2 = moonbitlang$core$json$$Json$as_bool(_auto_clear_forces);
                     let _tmp$4;
                     if (_bind$2 === -1) {
-                      moonbitlang$core$builtin$$println$13$("auto_clear_forces is not a bool, defaulting to true");
+                      moonbitlang$core$builtin$$println$16$("auto_clear_forces is not a bool, defaulting to true");
                       _tmp$4 = true;
                     } else {
                       _tmp$4 = _bind$2;
                     }
-                    return new Result$Ok$28$({ gravity: _tmp, aabb: Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_world_def_from_json$46$tuple$47$2687, allow_sleeping: _tmp$3, auto_clear_forces: _tmp$4 });
+                    return new Result$Ok$28$({ gravity: _tmp, aabb: Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_world_def_from_json$46$tuple$47$2738, allow_sleeping: _tmp$3, auto_clear_forces: _tmp$4 });
                   }
                 }
               } else {
@@ -10353,7 +10634,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_world_def_fr
       break _L;
     }
   }
-  return new Result$Err$29$(new Error$Demonmasterlqx$47$moonbit_stickman_map_loader$47$map_loader$46$MapLoaderError$46$MapLoaderError(`Invalid world settings JSON: ${moonbitlang$core$builtin$$Show$to_string$39$(e)}`));
+  return new Result$Err$29$(new Error$Demonmasterlqx$47$moonbit_stickman_map_loader$47$map_loader$46$MapLoaderError$46$MapLoaderError(`Invalid world settings JSON: ${moonbitlang$core$builtin$$Show$to_string$43$(e)}`));
 }
 function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_joint_type_from_json(type_str) {
   if (type_str === "revolute") {
@@ -10367,7 +10648,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_joint_def_fr
     if (joint_json.$tag === 6) {
       const _Object = joint_json;
       const _x = _Object._0;
-      const _x$2 = moonbitlang$core$builtin$$Map$get$58$(_x, "id");
+      const _x$2 = moonbitlang$core$builtin$$Map$get$62$(_x, "id");
       if (_x$2 === undefined) {
         break _L;
       } else {
@@ -10376,7 +10657,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_joint_def_fr
         if (_x$3.$tag === 4) {
           const _String = _x$3;
           const _id = _String._0;
-          const _x$4 = moonbitlang$core$builtin$$Map$get$58$(_x, "joint_type");
+          const _x$4 = moonbitlang$core$builtin$$Map$get$62$(_x, "joint_type");
           if (_x$4 === undefined) {
             break _L;
           } else {
@@ -10385,7 +10666,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_joint_def_fr
             if (_x$5.$tag === 4) {
               const _String$2 = _x$5;
               const _type_str = _String$2._0;
-              const _x$6 = moonbitlang$core$builtin$$Map$get$58$(_x, "body_a");
+              const _x$6 = moonbitlang$core$builtin$$Map$get$62$(_x, "body_a");
               if (_x$6 === undefined) {
                 break _L;
               } else {
@@ -10394,7 +10675,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_joint_def_fr
                 if (_x$7.$tag === 4) {
                   const _String$3 = _x$7;
                   const _body_a_id = _String$3._0;
-                  const _x$8 = moonbitlang$core$builtin$$Map$get$58$(_x, "body_b");
+                  const _x$8 = moonbitlang$core$builtin$$Map$get$62$(_x, "body_b");
                   if (_x$8 === undefined) {
                     break _L;
                   } else {
@@ -10403,7 +10684,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_joint_def_fr
                     if (_x$9.$tag === 4) {
                       const _String$4 = _x$9;
                       const _body_b_id = _String$4._0;
-                      const _x$10 = moonbitlang$core$builtin$$Map$get$58$(_x, "joint_def");
+                      const _x$10 = moonbitlang$core$builtin$$Map$get$62$(_x, "joint_def");
                       if (_x$10 === undefined) {
                         break _L;
                       } else {
@@ -10412,7 +10693,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_joint_def_fr
                         if (_x$11.$tag === 6) {
                           const _Object$2 = _x$11;
                           const _x$12 = _Object$2._0;
-                          const _x$13 = moonbitlang$core$builtin$$Map$get$58$(_x$12, "local_anchor_a");
+                          const _x$13 = moonbitlang$core$builtin$$Map$get$62$(_x$12, "local_anchor_a");
                           if (_x$13 === undefined) {
                             break _L;
                           } else {
@@ -10430,7 +10711,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_joint_def_fr
                                   if (_x$17.$tag === 3) {
                                     const _Number$2 = _x$17;
                                     const _lay = _Number$2._0;
-                                    const _x$18 = moonbitlang$core$builtin$$Map$get$58$(_x$12, "local_anchor_b");
+                                    const _x$18 = moonbitlang$core$builtin$$Map$get$62$(_x$12, "local_anchor_b");
                                     if (_x$18 === undefined) {
                                       break _L;
                                     } else {
@@ -10448,7 +10729,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_joint_def_fr
                                             if (_x$22.$tag === 3) {
                                               const _Number$4 = _x$22;
                                               const _lby = _Number$4._0;
-                                              const _x$23 = moonbitlang$core$builtin$$Map$get$58$(_x$12, "reference_angle");
+                                              const _x$23 = moonbitlang$core$builtin$$Map$get$62$(_x$12, "reference_angle");
                                               if (_x$23 === undefined) {
                                                 break _L;
                                               } else {
@@ -10457,13 +10738,13 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_joint_def_fr
                                                 if (_x$24.$tag === 3) {
                                                   const _Number$5 = _x$24;
                                                   const _reference_angle = _Number$5._0;
-                                                  const _x$25 = moonbitlang$core$builtin$$Map$get$58$(_x$12, "enable_limit");
+                                                  const _x$25 = moonbitlang$core$builtin$$Map$get$62$(_x$12, "enable_limit");
                                                   if (_x$25 === undefined) {
                                                     break _L;
                                                   } else {
                                                     const _Some$9 = _x$25;
                                                     const _enable_limit = _Some$9;
-                                                    const _x$26 = moonbitlang$core$builtin$$Map$get$58$(_x$12, "lower_angle");
+                                                    const _x$26 = moonbitlang$core$builtin$$Map$get$62$(_x$12, "lower_angle");
                                                     if (_x$26 === undefined) {
                                                       break _L;
                                                     } else {
@@ -10472,7 +10753,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_joint_def_fr
                                                       if (_x$27.$tag === 3) {
                                                         const _Number$6 = _x$27;
                                                         const _lower_angle = _Number$6._0;
-                                                        const _x$28 = moonbitlang$core$builtin$$Map$get$58$(_x$12, "upper_angle");
+                                                        const _x$28 = moonbitlang$core$builtin$$Map$get$62$(_x$12, "upper_angle");
                                                         if (_x$28 === undefined) {
                                                           break _L;
                                                         } else {
@@ -10481,13 +10762,13 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_joint_def_fr
                                                           if (_x$29.$tag === 3) {
                                                             const _Number$7 = _x$29;
                                                             const _upper_angle = _Number$7._0;
-                                                            const _x$30 = moonbitlang$core$builtin$$Map$get$58$(_x$12, "enable_motor");
+                                                            const _x$30 = moonbitlang$core$builtin$$Map$get$62$(_x$12, "enable_motor");
                                                             if (_x$30 === undefined) {
                                                               break _L;
                                                             } else {
                                                               const _Some$12 = _x$30;
                                                               const _enable_motor = _Some$12;
-                                                              const _x$31 = moonbitlang$core$builtin$$Map$get$58$(_x$12, "motor_speed");
+                                                              const _x$31 = moonbitlang$core$builtin$$Map$get$62$(_x$12, "motor_speed");
                                                               if (_x$31 === undefined) {
                                                                 break _L;
                                                               } else {
@@ -10496,7 +10777,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_joint_def_fr
                                                                 if (_x$32.$tag === 3) {
                                                                   const _Number$8 = _x$32;
                                                                   const _motor_speed = _Number$8._0;
-                                                                  const _x$33 = moonbitlang$core$builtin$$Map$get$58$(_x$12, "max_motor_torque");
+                                                                  const _x$33 = moonbitlang$core$builtin$$Map$get$62$(_x$12, "max_motor_torque");
                                                                   if (_x$33 === undefined) {
                                                                     break _L;
                                                                   } else {
@@ -10505,7 +10786,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_joint_def_fr
                                                                     if (_x$34.$tag === 3) {
                                                                       const _Number$9 = _x$34;
                                                                       const _max_motor_torque = _Number$9._0;
-                                                                      const _x$35 = moonbitlang$core$builtin$$Map$get$58$(_x$12, "collide_connected");
+                                                                      const _x$35 = moonbitlang$core$builtin$$Map$get$62$(_x$12, "collide_connected");
                                                                       if (_x$35 === undefined) {
                                                                         break _L;
                                                                       } else {
@@ -10532,7 +10813,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_joint_def_fr
                                                                         const _bind = moonbitlang$core$json$$Json$as_bool(_collide_connected);
                                                                         let _tmp;
                                                                         if (_bind === -1) {
-                                                                          moonbitlang$core$builtin$$println$13$("collide_connected is not a bool, defaulting to false");
+                                                                          moonbitlang$core$builtin$$println$16$("collide_connected is not a bool, defaulting to false");
                                                                           _tmp = false;
                                                                         } else {
                                                                           _tmp = _bind;
@@ -10543,7 +10824,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_joint_def_fr
                                                                         const _bind$2 = moonbitlang$core$json$$Json$as_bool(_enable_limit);
                                                                         let _tmp$5;
                                                                         if (_bind$2 === -1) {
-                                                                          moonbitlang$core$builtin$$println$13$("enable_limit is not a bool, defaulting to false");
+                                                                          moonbitlang$core$builtin$$println$16$("enable_limit is not a bool, defaulting to false");
                                                                           _tmp$5 = false;
                                                                         } else {
                                                                           _tmp$5 = _bind$2;
@@ -10552,7 +10833,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_joint_def_fr
                                                                         const _bind$3 = moonbitlang$core$json$$Json$as_bool(_enable_motor);
                                                                         let _tmp$7;
                                                                         if (_bind$3 === -1) {
-                                                                          moonbitlang$core$builtin$$println$13$("enable_motor is not a bool, defaulting to false");
+                                                                          moonbitlang$core$builtin$$println$16$("enable_motor is not a bool, defaulting to false");
                                                                           _tmp$7 = false;
                                                                         } else {
                                                                           _tmp$7 = _bind$3;
@@ -10635,7 +10916,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$map_joint_def_fr
 }
 function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$load_map$46$inner(file_content, file_path) {
   if (file_content === "" && file_path === "") {
-    moonbitlang$core$builtin$$println$13$("No file content or path provided");
+    moonbitlang$core$builtin$$println$16$("No file content or path provided");
     return new Result$Err$34$(new Error$Demonmasterlqx$47$moonbit_stickman_map_loader$47$map_loader$46$MapLoaderError$46$MapLoaderError("No file content or path provided"));
   }
   let content;
@@ -10660,7 +10941,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$load_map$46$inne
       }
       const _IOError = _try_err;
       const _s = _IOError._0;
-      moonbitlang$core$builtin$$println$13$(`Failed to read file: ${_s}`);
+      moonbitlang$core$builtin$$println$16$(`Failed to read file: ${_s}`);
       return new Result$Err$34$(new Error$Demonmasterlqx$47$moonbit_stickman_map_loader$47$map_loader$46$MapLoaderError$46$MapLoaderError(`Failed to read file: ${_s}`));
     }
   }
@@ -10682,7 +10963,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$load_map$46$inne
     }
     const _ParseError = _try_err;
     _ParseError._0;
-    moonbitlang$core$builtin$$println$13$("Failed to parse JSON:");
+    moonbitlang$core$builtin$$println$16$("Failed to parse JSON:");
     const _bind = moonbitlang$x$json5$$parse("{}");
     if (_bind.$tag === 1) {
       const _ok = _bind;
@@ -10691,24 +10972,24 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$load_map$46$inne
       return _bind;
     }
   }
-  moonbitlang$core$builtin$$println$13$("Parsed JSON OK ");
+  moonbitlang$core$builtin$$println$16$("Parsed JSON OK ");
   _L$2: {
     if (raw_json.$tag === 6) {
       const _Object = raw_json;
       const _x = _Object._0;
-      const _x$2 = moonbitlang$core$builtin$$Map$get$58$(_x, "world_settings");
+      const _x$2 = moonbitlang$core$builtin$$Map$get$62$(_x, "world_settings");
       if (_x$2 === undefined) {
         break _L$2;
       } else {
         const _Some = _x$2;
         const _world_settings = _Some;
-        const _x$3 = moonbitlang$core$builtin$$Map$get$58$(_x, "bodies");
+        const _x$3 = moonbitlang$core$builtin$$Map$get$62$(_x, "bodies");
         if (_x$3 === undefined) {
           break _L$2;
         } else {
           const _Some$2 = _x$3;
           const _bodies = _Some$2;
-          const _x$4 = moonbitlang$core$builtin$$Map$get$58$(_x, "joints");
+          const _x$4 = moonbitlang$core$builtin$$Map$get$62$(_x, "joints");
           if (_x$4 === undefined) {
             break _L$2;
           } else {
@@ -10732,7 +11013,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$load_map$46$inne
               }
               return new Result$Err$35$(_try_err$2);
             }
-            moonbitlang$core$builtin$$println$13$("Mapped world OK");
+            moonbitlang$core$builtin$$println$16$("Mapped world OK");
             const _bind = moonbitlang$core$json$$Json$as_array(_bodies);
             let body_defs;
             if (_bind.$tag === 0) {
@@ -10809,7 +11090,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$load_map$46$inne
             } else {
               return _bind$2;
             }
-            moonbitlang$core$builtin$$println$13$(`Mapped bodies OK, count: ${moonbitlang$core$builtin$$Show$to_string$5$(bodies_mapped.length)}`);
+            moonbitlang$core$builtin$$println$16$(`Mapped bodies OK, count: ${moonbitlang$core$builtin$$Show$to_string$5$(bodies_mapped.length)}`);
             const _bind$3 = moonbitlang$core$json$$Json$as_array(_joints);
             let joint_defs;
             if (_bind$3.$tag === 0) {
@@ -10886,8 +11167,8 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$load_map$46$inne
             } else {
               return _bind$4;
             }
-            moonbitlang$core$builtin$$println$13$(`Mapped joints OK, count: ${moonbitlang$core$builtin$$Show$to_string$5$(joints_mapped.length)}`);
-            return new Result$Ok$35$({ world_def: world_def, bodies: bodies_mapped, joints: joints_mapped, bodies_map: moonbitlang$core$builtin$$Map$from_array$56$([]), joints_map: moonbitlang$core$builtin$$Map$from_array$57$([]), world: undefined });
+            moonbitlang$core$builtin$$println$16$(`Mapped joints OK, count: ${moonbitlang$core$builtin$$Show$to_string$5$(joints_mapped.length)}`);
+            return new Result$Ok$35$({ world_def: world_def, bodies: bodies_mapped, joints: joints_mapped, bodies_map: moonbitlang$core$builtin$$Map$from_array$60$([]), joints_map: moonbitlang$core$builtin$$Map$from_array$61$([]), world: undefined });
           }
         }
       }
@@ -10899,30 +11180,30 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$load_map$46$inne
 }
 function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$MapDef$add_body(self, body) {
   const body_def = Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$get_bodydef(body);
-  moonbitlang$core$builtin$$println$13$("=== Adding Body ===");
-  moonbitlang$core$builtin$$println$13$(`Body ID: ${body.id}`);
-  moonbitlang$core$builtin$$println$13$(`Body Type: ${moonbitlang$core$builtin$$Show$to_string$42$(body.body_def_type)}`);
-  moonbitlang$core$builtin$$println$13$(`Body Position: (${moonbitlang$core$builtin$$Show$to_string$33$(body.position._0)}, ${moonbitlang$core$builtin$$Show$to_string$33$(body.position._1)})`);
-  moonbitlang$core$builtin$$println$13$(`Body Angle: ${moonbitlang$core$builtin$$Show$to_string$33$(body.angle)}`);
-  moonbitlang$core$builtin$$println$13$(`Body Linear Velocity: (${moonbitlang$core$builtin$$Show$to_string$33$(body.linear_velocity._0)}, ${moonbitlang$core$builtin$$Show$to_string$33$(body.linear_velocity._1)})`);
-  moonbitlang$core$builtin$$println$13$(`Body Angular Velocity: ${moonbitlang$core$builtin$$Show$to_string$33$(body.angular_velocity)}`);
-  moonbitlang$core$builtin$$println$13$(`Body Linear Damping: ${moonbitlang$core$builtin$$Show$to_string$33$(body.linear_damping)}`);
-  moonbitlang$core$builtin$$println$13$(`Body Angular Damping: ${moonbitlang$core$builtin$$Show$to_string$33$(body.angular_damping)}`);
-  moonbitlang$core$builtin$$println$13$(`Body Allow Sleep: ${moonbitlang$core$builtin$$Show$to_string$44$(body.allow_sleep)}`);
-  moonbitlang$core$builtin$$println$13$(`Body Awake: ${moonbitlang$core$builtin$$Show$to_string$44$(body.awake)}`);
-  moonbitlang$core$builtin$$println$13$(`Body Fixed Rotation: ${moonbitlang$core$builtin$$Show$to_string$44$(body.fixed_rotation)}`);
-  moonbitlang$core$builtin$$println$13$(`Body Bullet: ${moonbitlang$core$builtin$$Show$to_string$44$(body.bullet)}`);
-  moonbitlang$core$builtin$$println$13$(`Body Gravity Scale: ${moonbitlang$core$builtin$$Show$to_string$33$(body.gravity_scale)}`);
-  moonbitlang$core$builtin$$println$13$("--- Fixture ---");
-  moonbitlang$core$builtin$$println$13$(`Fixture Type: ${moonbitlang$core$builtin$$Show$to_string$45$(body.fixture_type)}`);
-  moonbitlang$core$builtin$$println$13$(`Fixture Density: ${moonbitlang$core$builtin$$Show$to_string$33$(body.density)}`);
-  moonbitlang$core$builtin$$println$13$(`Fixture Friction: ${moonbitlang$core$builtin$$Show$to_string$33$(body.friction)}`);
-  moonbitlang$core$builtin$$println$13$(`Fixture Restitution: ${moonbitlang$core$builtin$$Show$to_string$33$(body.restitution)}`);
-  moonbitlang$core$builtin$$println$13$(`Fixture Is Sensor: ${moonbitlang$core$builtin$$Show$to_string$44$(body.is_sensor)}`);
-  moonbitlang$core$builtin$$println$13$(`Fixture Filter Category Bits: ${moonbitlang$core$builtin$$Show$to_string$5$(body.filter_category_bits)}`);
-  moonbitlang$core$builtin$$println$13$(`Fixture Filter Mask Bits: ${moonbitlang$core$builtin$$Show$to_string$5$(body.filter_mask_bits)}`);
-  moonbitlang$core$builtin$$println$13$(`Fixture Filter Group Index: ${moonbitlang$core$builtin$$Show$to_string$5$(body.filter_group_index)}`);
-  moonbitlang$core$builtin$$println$13$("==================");
+  moonbitlang$core$builtin$$println$16$("=== Adding Body ===");
+  moonbitlang$core$builtin$$println$16$(`Body ID: ${body.id}`);
+  moonbitlang$core$builtin$$println$16$(`Body Type: ${moonbitlang$core$builtin$$Show$to_string$46$(body.body_def_type)}`);
+  moonbitlang$core$builtin$$println$16$(`Body Position: (${moonbitlang$core$builtin$$Show$to_string$37$(body.position._0)}, ${moonbitlang$core$builtin$$Show$to_string$37$(body.position._1)})`);
+  moonbitlang$core$builtin$$println$16$(`Body Angle: ${moonbitlang$core$builtin$$Show$to_string$37$(body.angle)}`);
+  moonbitlang$core$builtin$$println$16$(`Body Linear Velocity: (${moonbitlang$core$builtin$$Show$to_string$37$(body.linear_velocity._0)}, ${moonbitlang$core$builtin$$Show$to_string$37$(body.linear_velocity._1)})`);
+  moonbitlang$core$builtin$$println$16$(`Body Angular Velocity: ${moonbitlang$core$builtin$$Show$to_string$37$(body.angular_velocity)}`);
+  moonbitlang$core$builtin$$println$16$(`Body Linear Damping: ${moonbitlang$core$builtin$$Show$to_string$37$(body.linear_damping)}`);
+  moonbitlang$core$builtin$$println$16$(`Body Angular Damping: ${moonbitlang$core$builtin$$Show$to_string$37$(body.angular_damping)}`);
+  moonbitlang$core$builtin$$println$16$(`Body Allow Sleep: ${moonbitlang$core$builtin$$Show$to_string$48$(body.allow_sleep)}`);
+  moonbitlang$core$builtin$$println$16$(`Body Awake: ${moonbitlang$core$builtin$$Show$to_string$48$(body.awake)}`);
+  moonbitlang$core$builtin$$println$16$(`Body Fixed Rotation: ${moonbitlang$core$builtin$$Show$to_string$48$(body.fixed_rotation)}`);
+  moonbitlang$core$builtin$$println$16$(`Body Bullet: ${moonbitlang$core$builtin$$Show$to_string$48$(body.bullet)}`);
+  moonbitlang$core$builtin$$println$16$(`Body Gravity Scale: ${moonbitlang$core$builtin$$Show$to_string$37$(body.gravity_scale)}`);
+  moonbitlang$core$builtin$$println$16$("--- Fixture ---");
+  moonbitlang$core$builtin$$println$16$(`Fixture Type: ${moonbitlang$core$builtin$$Show$to_string$49$(body.fixture_type)}`);
+  moonbitlang$core$builtin$$println$16$(`Fixture Density: ${moonbitlang$core$builtin$$Show$to_string$37$(body.density)}`);
+  moonbitlang$core$builtin$$println$16$(`Fixture Friction: ${moonbitlang$core$builtin$$Show$to_string$37$(body.friction)}`);
+  moonbitlang$core$builtin$$println$16$(`Fixture Restitution: ${moonbitlang$core$builtin$$Show$to_string$37$(body.restitution)}`);
+  moonbitlang$core$builtin$$println$16$(`Fixture Is Sensor: ${moonbitlang$core$builtin$$Show$to_string$48$(body.is_sensor)}`);
+  moonbitlang$core$builtin$$println$16$(`Fixture Filter Category Bits: ${moonbitlang$core$builtin$$Show$to_string$5$(body.filter_category_bits)}`);
+  moonbitlang$core$builtin$$println$16$(`Fixture Filter Mask Bits: ${moonbitlang$core$builtin$$Show$to_string$5$(body.filter_mask_bits)}`);
+  moonbitlang$core$builtin$$println$16$(`Fixture Filter Group Index: ${moonbitlang$core$builtin$$Show$to_string$5$(body.filter_group_index)}`);
+  moonbitlang$core$builtin$$println$16$("==================");
   const _bind = self.world;
   if (_bind === undefined) {
     return new Result$Err$36$(new Error$Demonmasterlqx$47$moonbit_stickman_map_loader$47$map_loader$46$MapLoaderError$46$MapLoaderError("World is not initialized"));
@@ -10930,38 +11211,38 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$MapDef$add_body(
     const _Some = _bind;
     const _w = _Some;
     const b = _w.method_3(_w.self, body_def);
-    moonbitlang$core$builtin$$Map$set$56$(self.bodies_map, body.id, b);
-    return new Result$Ok$37$(moonbitlang$core$builtin$$println$13$(`Added body: ${body.id}`));
+    moonbitlang$core$builtin$$Map$set$60$(self.bodies_map, body.id, b);
+    return new Result$Ok$37$(moonbitlang$core$builtin$$println$16$(`Added body: ${body.id}`));
   }
 }
 function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$MapDef$add_joint(self, joint) {
-  moonbitlang$core$builtin$$println$13$("=== Adding Joint ===");
-  moonbitlang$core$builtin$$println$13$(`Joint ID: ${joint.id}`);
-  moonbitlang$core$builtin$$println$13$(`Joint Type: ${moonbitlang$core$builtin$$Show$to_string$47$(joint.joint_type)}`);
-  moonbitlang$core$builtin$$println$13$(`Body A ID: ${joint.body_a_id}`);
-  moonbitlang$core$builtin$$println$13$(`Body B ID: ${joint.body_b_id}`);
-  moonbitlang$core$builtin$$println$13$(`Collide Connected: ${moonbitlang$core$builtin$$Show$to_string$44$(joint.collide_connected)}`);
-  moonbitlang$core$builtin$$println$13$(`Local Anchor A: (${moonbitlang$core$builtin$$Show$to_string$33$(joint.local_anchor_a._0)}, ${moonbitlang$core$builtin$$Show$to_string$33$(joint.local_anchor_a._1)})`);
-  moonbitlang$core$builtin$$println$13$(`Local Anchor B: (${moonbitlang$core$builtin$$Show$to_string$33$(joint.local_anchor_b._0)}, ${moonbitlang$core$builtin$$Show$to_string$33$(joint.local_anchor_b._1)})`);
-  moonbitlang$core$builtin$$println$13$(`Reference Angle: ${moonbitlang$core$builtin$$Show$to_string$33$(joint.reference_angle)}`);
-  moonbitlang$core$builtin$$println$13$(`Lower Angle: ${moonbitlang$core$builtin$$Show$to_string$33$(joint.lower_angle)}`);
-  moonbitlang$core$builtin$$println$13$(`Upper Angle: ${moonbitlang$core$builtin$$Show$to_string$33$(joint.upper_angle)}`);
-  moonbitlang$core$builtin$$println$13$(`Enable Limit: ${moonbitlang$core$builtin$$Show$to_string$44$(joint.enable_limit)}`);
-  moonbitlang$core$builtin$$println$13$(`Enable Motor: ${moonbitlang$core$builtin$$Show$to_string$44$(joint.enable_motor)}`);
-  moonbitlang$core$builtin$$println$13$(`Motor Speed: ${moonbitlang$core$builtin$$Show$to_string$33$(joint.motor_speed)}`);
-  moonbitlang$core$builtin$$println$13$(`Max Motor Torque: ${moonbitlang$core$builtin$$Show$to_string$33$(joint.max_motor_torque)}`);
-  const body_a = moonbitlang$core$builtin$$Map$at$56$(self.bodies_map, joint.body_a_id);
-  const body_b = moonbitlang$core$builtin$$Map$at$56$(self.bodies_map, joint.body_b_id);
-  moonbitlang$core$builtin$$println$13$("Body A and Body B found successfully");
+  moonbitlang$core$builtin$$println$16$("=== Adding Joint ===");
+  moonbitlang$core$builtin$$println$16$(`Joint ID: ${joint.id}`);
+  moonbitlang$core$builtin$$println$16$(`Joint Type: ${moonbitlang$core$builtin$$Show$to_string$51$(joint.joint_type)}`);
+  moonbitlang$core$builtin$$println$16$(`Body A ID: ${joint.body_a_id}`);
+  moonbitlang$core$builtin$$println$16$(`Body B ID: ${joint.body_b_id}`);
+  moonbitlang$core$builtin$$println$16$(`Collide Connected: ${moonbitlang$core$builtin$$Show$to_string$48$(joint.collide_connected)}`);
+  moonbitlang$core$builtin$$println$16$(`Local Anchor A: (${moonbitlang$core$builtin$$Show$to_string$37$(joint.local_anchor_a._0)}, ${moonbitlang$core$builtin$$Show$to_string$37$(joint.local_anchor_a._1)})`);
+  moonbitlang$core$builtin$$println$16$(`Local Anchor B: (${moonbitlang$core$builtin$$Show$to_string$37$(joint.local_anchor_b._0)}, ${moonbitlang$core$builtin$$Show$to_string$37$(joint.local_anchor_b._1)})`);
+  moonbitlang$core$builtin$$println$16$(`Reference Angle: ${moonbitlang$core$builtin$$Show$to_string$37$(joint.reference_angle)}`);
+  moonbitlang$core$builtin$$println$16$(`Lower Angle: ${moonbitlang$core$builtin$$Show$to_string$37$(joint.lower_angle)}`);
+  moonbitlang$core$builtin$$println$16$(`Upper Angle: ${moonbitlang$core$builtin$$Show$to_string$37$(joint.upper_angle)}`);
+  moonbitlang$core$builtin$$println$16$(`Enable Limit: ${moonbitlang$core$builtin$$Show$to_string$48$(joint.enable_limit)}`);
+  moonbitlang$core$builtin$$println$16$(`Enable Motor: ${moonbitlang$core$builtin$$Show$to_string$48$(joint.enable_motor)}`);
+  moonbitlang$core$builtin$$println$16$(`Motor Speed: ${moonbitlang$core$builtin$$Show$to_string$37$(joint.motor_speed)}`);
+  moonbitlang$core$builtin$$println$16$(`Max Motor Torque: ${moonbitlang$core$builtin$$Show$to_string$37$(joint.max_motor_torque)}`);
+  const body_a = moonbitlang$core$builtin$$Map$at$60$(self.bodies_map, joint.body_a_id);
+  const body_b = moonbitlang$core$builtin$$Map$at$60$(self.bodies_map, joint.body_b_id);
+  moonbitlang$core$builtin$$println$16$("Body A and Body B found successfully");
   const rev_def = Demonmasterlqx$box2d_ffi$box2d$$b2RevoluteJointDef();
   Demonmasterlqx$box2d_ffi$box2d$$B2RevoluteJointDef$setEnableLimit(rev_def, joint.enable_limit);
   Demonmasterlqx$box2d_ffi$box2d$$B2RevoluteJointDef$setLowerAngle(rev_def, joint.lower_angle);
   Demonmasterlqx$box2d_ffi$box2d$$B2RevoluteJointDef$setUpperAngle(rev_def, joint.upper_angle);
   Demonmasterlqx$box2d_ffi$box2d$$B2RevoluteJointDef$setEnableMotor(rev_def, joint.enable_motor);
   Demonmasterlqx$box2d_ffi$box2d$$B2RevoluteJointDef$setMotorSpeed(rev_def, joint.motor_speed);
-  Demonmasterlqx$box2d_ffi$box2d$$JointDef$setCollideConnected$97$(rev_def, joint.collide_connected);
+  Demonmasterlqx$box2d_ffi$box2d$$JointDef$setCollideConnected$101$(rev_def, joint.collide_connected);
   Demonmasterlqx$box2d_ffi$box2d$$B2RevoluteJointDef$setAnchorPoint(rev_def, Demonmasterlqx$box2d_ffi$box2d$$B2Body$getWorldPoint(body_a, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(joint.local_anchor_a._0, joint.local_anchor_a._1)));
-  const joint_def = { self: rev_def, method_0: Demonmasterlqx$box2d_ffi$box2d$$JointDef$setBody1$97$, method_1: Demonmasterlqx$box2d_ffi$box2d$$JointDef$setBody2$97$, method_2: Demonmasterlqx$box2d_ffi$box2d$$JointDef$setCollideConnected$97$, method_3: Demonmasterlqx$box2d_ffi$box2d$$JointDefBase$getBase$98$ };
+  const joint_def = { self: rev_def, method_0: Demonmasterlqx$box2d_ffi$box2d$$JointDef$setBody1$101$, method_1: Demonmasterlqx$box2d_ffi$box2d$$JointDef$setBody2$101$, method_2: Demonmasterlqx$box2d_ffi$box2d$$JointDef$setCollideConnected$101$, method_3: Demonmasterlqx$box2d_ffi$box2d$$JointDefBase$getBase$102$ };
   joint_def.method_0(joint_def.self, body_a);
   joint_def.method_1(joint_def.self, body_b);
   joint_def.method_2(joint_def.self, joint.collide_connected);
@@ -10971,9 +11252,9 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$MapDef$add_joint
   } else {
     const _Some = _bind;
     const _w = _Some;
-    moonbitlang$core$builtin$$Map$set$57$(self.joints_map, joint.id, _w.method_6(_w.self, joint_def.method_3(joint_def.self)));
-    moonbitlang$core$builtin$$println$13$(`Joint created successfully: ${joint.id}`);
-    return new Result$Ok$37$(moonbitlang$core$builtin$$println$13$("=================="));
+    moonbitlang$core$builtin$$Map$set$61$(self.joints_map, joint.id, _w.method_6(_w.self, joint_def.method_3(joint_def.self)));
+    moonbitlang$core$builtin$$println$16$(`Joint created successfully: ${joint.id}`);
+    return new Result$Ok$37$(moonbitlang$core$builtin$$println$16$("=================="));
   }
 }
 function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$MapDef$construct_world(self) {
@@ -10981,9 +11262,9 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$MapDef$construct
   const world_gravity = Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(self.world_def.gravity._0, self.world_def.gravity._1);
   Demonmasterlqx$box2d_ffi$box2d$$B2AABB$setminVertex(world_aabb, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(self.world_def.aabb._0._0, self.world_def.aabb._0._1));
   Demonmasterlqx$box2d_ffi$box2d$$B2AABB$setmaxVertex(world_aabb, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(self.world_def.aabb._1._0, self.world_def.aabb._1._1));
-  moonbitlang$core$builtin$$println$13$(`Creating world with gravity: (${moonbitlang$core$builtin$$Show$to_string$33$(Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(world_gravity))}, ${moonbitlang$core$builtin$$Show$to_string$33$(Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(world_gravity))})`);
-  self.world = { self: Demonmasterlqx$box2d_ffi$box2d$$b2World(world_aabb, world_gravity, self.world_def.allow_sleeping), method_0: Demonmasterlqx$box2d_ffi$box2d$$World$getBase$82$, method_1: Demonmasterlqx$box2d_ffi$box2d$$World$setListener$84$, method_2: Demonmasterlqx$box2d_ffi$box2d$$World$setFilter$84$, method_3: Demonmasterlqx$box2d_ffi$box2d$$World$createBody$84$, method_4: Demonmasterlqx$box2d_ffi$box2d$$World$destroyBody$84$, method_5: Demonmasterlqx$box2d_ffi$box2d$$World$clearBodyList$84$, method_6: Demonmasterlqx$box2d_ffi$box2d$$World$createJoint$84$, method_7: Demonmasterlqx$box2d_ffi$box2d$$World$destroyJoint$84$, method_8: Demonmasterlqx$box2d_ffi$box2d$$World$getGroundBody$84$, method_9: Demonmasterlqx$box2d_ffi$box2d$$World$step$84$, method_10: Demonmasterlqx$box2d_ffi$box2d$$World$query$84$, method_11: Demonmasterlqx$box2d_ffi$box2d$$World$getBodyList$84$, method_12: Demonmasterlqx$box2d_ffi$box2d$$World$getJointList$84$, method_13: Demonmasterlqx$box2d_ffi$box2d$$World$getContactList$84$ };
-  moonbitlang$core$builtin$$println$13$("World created successfully");
+  moonbitlang$core$builtin$$println$16$(`Creating world with gravity: (${moonbitlang$core$builtin$$Show$to_string$37$(Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(world_gravity))}, ${moonbitlang$core$builtin$$Show$to_string$37$(Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(world_gravity))})`);
+  self.world = { self: Demonmasterlqx$box2d_ffi$box2d$$b2World(world_aabb, world_gravity, self.world_def.allow_sleeping), method_0: Demonmasterlqx$box2d_ffi$box2d$$World$getBase$86$, method_1: Demonmasterlqx$box2d_ffi$box2d$$World$setListener$88$, method_2: Demonmasterlqx$box2d_ffi$box2d$$World$setFilter$88$, method_3: Demonmasterlqx$box2d_ffi$box2d$$World$createBody$88$, method_4: Demonmasterlqx$box2d_ffi$box2d$$World$destroyBody$88$, method_5: Demonmasterlqx$box2d_ffi$box2d$$World$clearBodyList$88$, method_6: Demonmasterlqx$box2d_ffi$box2d$$World$createJoint$88$, method_7: Demonmasterlqx$box2d_ffi$box2d$$World$destroyJoint$88$, method_8: Demonmasterlqx$box2d_ffi$box2d$$World$getGroundBody$88$, method_9: Demonmasterlqx$box2d_ffi$box2d$$World$step$88$, method_10: Demonmasterlqx$box2d_ffi$box2d$$World$query$88$, method_11: Demonmasterlqx$box2d_ffi$box2d$$World$getBodyList$88$, method_12: Demonmasterlqx$box2d_ffi$box2d$$World$getJointList$88$, method_13: Demonmasterlqx$box2d_ffi$box2d$$World$getContactList$88$ };
+  moonbitlang$core$builtin$$println$16$("World created successfully");
   const _arr = self.bodies;
   const _len = _arr.length;
   let _tmp = 0;
@@ -11014,7 +11295,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$MapDef$construct
       break;
     }
   }
-  moonbitlang$core$builtin$$println$13$(`All bodies added successfully, count: ${moonbitlang$core$builtin$$Show$to_string$5$(self.bodies.length)}`);
+  moonbitlang$core$builtin$$println$16$(`All bodies added successfully, count: ${moonbitlang$core$builtin$$Show$to_string$5$(self.bodies.length)}`);
   const _arr$2 = self.joints;
   const _len$2 = _arr$2.length;
   let _tmp$2 = 0;
@@ -11045,7 +11326,7 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$MapDef$construct
       break;
     }
   }
-  moonbitlang$core$builtin$$println$13$(`All joints added successfully, count: ${moonbitlang$core$builtin$$Show$to_string$5$(self.joints.length)}`);
+  moonbitlang$core$builtin$$println$16$(`All joints added successfully, count: ${moonbitlang$core$builtin$$Show$to_string$5$(self.joints.length)}`);
   const _bind = self.world;
   if (_bind === undefined) {
     return new Result$Err$39$(new Error$Demonmasterlqx$47$moonbit_stickman_map_loader$47$map_loader$46$MapLoaderError$46$MapLoaderError("World is not initialized"));
@@ -11055,675 +11336,675 @@ function Demonmasterlqx$moonbit_stickman_map_loader$map_loader$$MapDef$construct
     return new Result$Ok$38$(_w);
   }
 }
-function moonbitlang$core$builtin$$Eq$equal$54$(_x_813, _x_814) {
-  switch (_x_813) {
+function moonbitlang$core$builtin$$Eq$equal$58$(_x_975, _x_976) {
+  switch (_x_975) {
     case 0: {
-      if (_x_814 === 0) {
+      if (_x_976 === 0) {
         return true;
       } else {
         return false;
       }
     }
     case 1: {
-      if (_x_814 === 1) {
+      if (_x_976 === 1) {
         return true;
       } else {
         return false;
       }
     }
     case 2: {
-      if (_x_814 === 2) {
+      if (_x_976 === 2) {
         return true;
       } else {
         return false;
       }
     }
     case 3: {
-      if (_x_814 === 3) {
+      if (_x_976 === 3) {
         return true;
       } else {
         return false;
       }
     }
     case 4: {
-      if (_x_814 === 4) {
+      if (_x_976 === 4) {
         return true;
       } else {
         return false;
       }
     }
     case 5: {
-      if (_x_814 === 5) {
+      if (_x_976 === 5) {
         return true;
       } else {
         return false;
       }
     }
     case 6: {
-      if (_x_814 === 6) {
+      if (_x_976 === 6) {
         return true;
       } else {
         return false;
       }
     }
     case 7: {
-      if (_x_814 === 7) {
+      if (_x_976 === 7) {
         return true;
       } else {
         return false;
       }
     }
     case 8: {
-      if (_x_814 === 8) {
+      if (_x_976 === 8) {
         return true;
       } else {
         return false;
       }
     }
     case 9: {
-      if (_x_814 === 9) {
+      if (_x_976 === 9) {
         return true;
       } else {
         return false;
       }
     }
     case 10: {
-      if (_x_814 === 10) {
+      if (_x_976 === 10) {
         return true;
       } else {
         return false;
       }
     }
     case 11: {
-      if (_x_814 === 11) {
+      if (_x_976 === 11) {
         return true;
       } else {
         return false;
       }
     }
     case 12: {
-      if (_x_814 === 12) {
+      if (_x_976 === 12) {
         return true;
       } else {
         return false;
       }
     }
     case 13: {
-      if (_x_814 === 13) {
+      if (_x_976 === 13) {
         return true;
       } else {
         return false;
       }
     }
     case 14: {
-      if (_x_814 === 14) {
+      if (_x_976 === 14) {
         return true;
       } else {
         return false;
       }
     }
     case 15: {
-      if (_x_814 === 15) {
+      if (_x_976 === 15) {
         return true;
       } else {
         return false;
       }
     }
     case 16: {
-      if (_x_814 === 16) {
+      if (_x_976 === 16) {
         return true;
       } else {
         return false;
       }
     }
     case 17: {
-      if (_x_814 === 17) {
+      if (_x_976 === 17) {
         return true;
       } else {
         return false;
       }
     }
     case 18: {
-      if (_x_814 === 18) {
+      if (_x_976 === 18) {
         return true;
       } else {
         return false;
       }
     }
     case 19: {
-      if (_x_814 === 19) {
+      if (_x_976 === 19) {
         return true;
       } else {
         return false;
       }
     }
     case 20: {
-      if (_x_814 === 20) {
+      if (_x_976 === 20) {
         return true;
       } else {
         return false;
       }
     }
     case 21: {
-      if (_x_814 === 21) {
+      if (_x_976 === 21) {
         return true;
       } else {
         return false;
       }
     }
     case 22: {
-      if (_x_814 === 22) {
+      if (_x_976 === 22) {
         return true;
       } else {
         return false;
       }
     }
     case 23: {
-      if (_x_814 === 23) {
+      if (_x_976 === 23) {
         return true;
       } else {
         return false;
       }
     }
     case 24: {
-      if (_x_814 === 24) {
+      if (_x_976 === 24) {
         return true;
       } else {
         return false;
       }
     }
     case 25: {
-      if (_x_814 === 25) {
+      if (_x_976 === 25) {
         return true;
       } else {
         return false;
       }
     }
     case 26: {
-      if (_x_814 === 26) {
+      if (_x_976 === 26) {
         return true;
       } else {
         return false;
       }
     }
     case 27: {
-      if (_x_814 === 27) {
+      if (_x_976 === 27) {
         return true;
       } else {
         return false;
       }
     }
     case 28: {
-      if (_x_814 === 28) {
+      if (_x_976 === 28) {
         return true;
       } else {
         return false;
       }
     }
     case 29: {
-      if (_x_814 === 29) {
+      if (_x_976 === 29) {
         return true;
       } else {
         return false;
       }
     }
     case 30: {
-      if (_x_814 === 30) {
+      if (_x_976 === 30) {
         return true;
       } else {
         return false;
       }
     }
     case 31: {
-      if (_x_814 === 31) {
+      if (_x_976 === 31) {
         return true;
       } else {
         return false;
       }
     }
     case 32: {
-      if (_x_814 === 32) {
+      if (_x_976 === 32) {
         return true;
       } else {
         return false;
       }
     }
     case 33: {
-      if (_x_814 === 33) {
+      if (_x_976 === 33) {
         return true;
       } else {
         return false;
       }
     }
     case 34: {
-      if (_x_814 === 34) {
+      if (_x_976 === 34) {
         return true;
       } else {
         return false;
       }
     }
     case 35: {
-      if (_x_814 === 35) {
+      if (_x_976 === 35) {
         return true;
       } else {
         return false;
       }
     }
     case 36: {
-      if (_x_814 === 36) {
+      if (_x_976 === 36) {
         return true;
       } else {
         return false;
       }
     }
     case 37: {
-      if (_x_814 === 37) {
+      if (_x_976 === 37) {
         return true;
       } else {
         return false;
       }
     }
     case 38: {
-      if (_x_814 === 38) {
+      if (_x_976 === 38) {
         return true;
       } else {
         return false;
       }
     }
     case 39: {
-      if (_x_814 === 39) {
+      if (_x_976 === 39) {
         return true;
       } else {
         return false;
       }
     }
     case 40: {
-      if (_x_814 === 40) {
+      if (_x_976 === 40) {
         return true;
       } else {
         return false;
       }
     }
     case 41: {
-      if (_x_814 === 41) {
+      if (_x_976 === 41) {
         return true;
       } else {
         return false;
       }
     }
     case 42: {
-      if (_x_814 === 42) {
+      if (_x_976 === 42) {
         return true;
       } else {
         return false;
       }
     }
     case 43: {
-      if (_x_814 === 43) {
+      if (_x_976 === 43) {
         return true;
       } else {
         return false;
       }
     }
     case 44: {
-      if (_x_814 === 44) {
+      if (_x_976 === 44) {
         return true;
       } else {
         return false;
       }
     }
     case 45: {
-      if (_x_814 === 45) {
+      if (_x_976 === 45) {
         return true;
       } else {
         return false;
       }
     }
     case 46: {
-      if (_x_814 === 46) {
+      if (_x_976 === 46) {
         return true;
       } else {
         return false;
       }
     }
     case 47: {
-      if (_x_814 === 47) {
+      if (_x_976 === 47) {
         return true;
       } else {
         return false;
       }
     }
     case 48: {
-      if (_x_814 === 48) {
+      if (_x_976 === 48) {
         return true;
       } else {
         return false;
       }
     }
     case 49: {
-      if (_x_814 === 49) {
+      if (_x_976 === 49) {
         return true;
       } else {
         return false;
       }
     }
     case 50: {
-      if (_x_814 === 50) {
+      if (_x_976 === 50) {
         return true;
       } else {
         return false;
       }
     }
     case 51: {
-      if (_x_814 === 51) {
+      if (_x_976 === 51) {
         return true;
       } else {
         return false;
       }
     }
     case 52: {
-      if (_x_814 === 52) {
+      if (_x_976 === 52) {
         return true;
       } else {
         return false;
       }
     }
     case 53: {
-      if (_x_814 === 53) {
+      if (_x_976 === 53) {
         return true;
       } else {
         return false;
       }
     }
     case 54: {
-      if (_x_814 === 54) {
+      if (_x_976 === 54) {
         return true;
       } else {
         return false;
       }
     }
     case 55: {
-      if (_x_814 === 55) {
+      if (_x_976 === 55) {
         return true;
       } else {
         return false;
       }
     }
     case 56: {
-      if (_x_814 === 56) {
+      if (_x_976 === 56) {
         return true;
       } else {
         return false;
       }
     }
     case 57: {
-      if (_x_814 === 57) {
+      if (_x_976 === 57) {
         return true;
       } else {
         return false;
       }
     }
     case 58: {
-      if (_x_814 === 58) {
+      if (_x_976 === 58) {
         return true;
       } else {
         return false;
       }
     }
     case 59: {
-      if (_x_814 === 59) {
+      if (_x_976 === 59) {
         return true;
       } else {
         return false;
       }
     }
     case 60: {
-      if (_x_814 === 60) {
+      if (_x_976 === 60) {
         return true;
       } else {
         return false;
       }
     }
     case 61: {
-      if (_x_814 === 61) {
+      if (_x_976 === 61) {
         return true;
       } else {
         return false;
       }
     }
     case 62: {
-      if (_x_814 === 62) {
+      if (_x_976 === 62) {
         return true;
       } else {
         return false;
       }
     }
     case 63: {
-      if (_x_814 === 63) {
+      if (_x_976 === 63) {
         return true;
       } else {
         return false;
       }
     }
     case 64: {
-      if (_x_814 === 64) {
+      if (_x_976 === 64) {
         return true;
       } else {
         return false;
       }
     }
     case 65: {
-      if (_x_814 === 65) {
+      if (_x_976 === 65) {
         return true;
       } else {
         return false;
       }
     }
     case 66: {
-      if (_x_814 === 66) {
+      if (_x_976 === 66) {
         return true;
       } else {
         return false;
       }
     }
     case 67: {
-      if (_x_814 === 67) {
+      if (_x_976 === 67) {
         return true;
       } else {
         return false;
       }
     }
     case 68: {
-      if (_x_814 === 68) {
+      if (_x_976 === 68) {
         return true;
       } else {
         return false;
       }
     }
     case 69: {
-      if (_x_814 === 69) {
+      if (_x_976 === 69) {
         return true;
       } else {
         return false;
       }
     }
     case 70: {
-      if (_x_814 === 70) {
+      if (_x_976 === 70) {
         return true;
       } else {
         return false;
       }
     }
     case 71: {
-      if (_x_814 === 71) {
+      if (_x_976 === 71) {
         return true;
       } else {
         return false;
       }
     }
     case 72: {
-      if (_x_814 === 72) {
+      if (_x_976 === 72) {
         return true;
       } else {
         return false;
       }
     }
     case 73: {
-      if (_x_814 === 73) {
+      if (_x_976 === 73) {
         return true;
       } else {
         return false;
       }
     }
     case 74: {
-      if (_x_814 === 74) {
+      if (_x_976 === 74) {
         return true;
       } else {
         return false;
       }
     }
     case 75: {
-      if (_x_814 === 75) {
+      if (_x_976 === 75) {
         return true;
       } else {
         return false;
       }
     }
     case 76: {
-      if (_x_814 === 76) {
+      if (_x_976 === 76) {
         return true;
       } else {
         return false;
       }
     }
     case 77: {
-      if (_x_814 === 77) {
+      if (_x_976 === 77) {
         return true;
       } else {
         return false;
       }
     }
     case 78: {
-      if (_x_814 === 78) {
+      if (_x_976 === 78) {
         return true;
       } else {
         return false;
       }
     }
     case 79: {
-      if (_x_814 === 79) {
+      if (_x_976 === 79) {
         return true;
       } else {
         return false;
       }
     }
     case 80: {
-      if (_x_814 === 80) {
+      if (_x_976 === 80) {
         return true;
       } else {
         return false;
       }
     }
     case 81: {
-      if (_x_814 === 81) {
+      if (_x_976 === 81) {
         return true;
       } else {
         return false;
       }
     }
     case 82: {
-      if (_x_814 === 82) {
+      if (_x_976 === 82) {
         return true;
       } else {
         return false;
       }
     }
     case 83: {
-      if (_x_814 === 83) {
+      if (_x_976 === 83) {
         return true;
       } else {
         return false;
       }
     }
     case 84: {
-      if (_x_814 === 84) {
+      if (_x_976 === 84) {
         return true;
       } else {
         return false;
       }
     }
     case 85: {
-      if (_x_814 === 85) {
+      if (_x_976 === 85) {
         return true;
       } else {
         return false;
       }
     }
     case 86: {
-      if (_x_814 === 86) {
+      if (_x_976 === 86) {
         return true;
       } else {
         return false;
       }
     }
     case 87: {
-      if (_x_814 === 87) {
+      if (_x_976 === 87) {
         return true;
       } else {
         return false;
       }
     }
     case 88: {
-      if (_x_814 === 88) {
+      if (_x_976 === 88) {
         return true;
       } else {
         return false;
       }
     }
     case 89: {
-      if (_x_814 === 89) {
+      if (_x_976 === 89) {
         return true;
       } else {
         return false;
       }
     }
     case 90: {
-      if (_x_814 === 90) {
+      if (_x_976 === 90) {
         return true;
       } else {
         return false;
       }
     }
     case 91: {
-      if (_x_814 === 91) {
+      if (_x_976 === 91) {
         return true;
       } else {
         return false;
       }
     }
     case 92: {
-      if (_x_814 === 92) {
+      if (_x_976 === 92) {
         return true;
       } else {
         return false;
       }
     }
     case 93: {
-      if (_x_814 === 93) {
+      if (_x_976 === 93) {
         return true;
       } else {
         return false;
       }
     }
     case 94: {
-      if (_x_814 === 94) {
+      if (_x_976 === 94) {
         return true;
       } else {
         return false;
       }
     }
     default: {
-      if (_x_814 === 95) {
+      if (_x_976 === 95) {
         return true;
       } else {
         return false;
@@ -11751,48 +12032,41 @@ function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$textFont_(self, font, si
   }
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$textFont_$46$inner(self, font, size);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$text_(self, str, x, y, x2$46$opt, y2$46$opt) {
-  let x2;
-  if (x2$46$opt === undefined) {
-    x2 = Option$None$0$;
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$rotate1_(self, angle, axis$46$opt) {
+  let axis;
+  if (axis$46$opt === undefined) {
+    axis = Option$None$40$;
   } else {
-    const _Some = x2$46$opt;
-    x2 = _Some;
+    const _Some = axis$46$opt;
+    axis = _Some;
   }
-  let y2;
-  if (y2$46$opt === undefined) {
-    y2 = Option$None$0$;
-  } else {
-    const _Some = y2$46$opt;
-    y2 = _Some;
-  }
-  Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$text_$46$inner(self, str, x, y, x2, y2);
+  Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$rotate1_$46$inner(self, angle, axis);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getP5Instance$102$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getP5Instance$106$(self) {
   return self;
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getTouches$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getTouches$107$(self) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$getTouches_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setTouchEnded$103$(self, callback) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setTouchEnded$107$(self, callback) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$setTouchEnded_(self, callback);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelTouchEnded$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelTouchEnded$107$(self) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$cancelTouchEnded_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setTouchMoved$103$(self, callback) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setTouchMoved$107$(self, callback) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$setTouchMoved_(self, callback);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelTouchMoved$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelTouchMoved$107$(self) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$cancelTouchMoved_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setTouchStarted$103$(self, callback) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setTouchStarted$107$(self, callback) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$setTouchStarted_(self, callback);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelTouchStarted$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelTouchStarted$107$(self) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$cancelTouchStarted_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getKey$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getKey$107$(self) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$getKey_(self);
 }
 function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$intToKeyCode(code) {
@@ -12091,7 +12365,7 @@ function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$getKeyCode_(self) {
   const code = Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$getKeyCodeInt_(self);
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$intToKeyCode(code);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getKeyCode$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getKeyCode$107$(self) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$getKeyCode_(self);
 }
 function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$keyCodeToInt(code) {
@@ -12390,64 +12664,64 @@ function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$keyIsDown_(self, keyCode
   const code = Demonmasterlqx$MoonP5$cmd$p5js_ffi$$keyCodeToInt(keyCode);
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$keyIsDownInt_(self, code);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$keyIsDown$103$(self, keyCode) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$keyIsDown$107$(self, keyCode) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$keyIsDown_(self, keyCode);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$keyIsPressed$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$keyIsPressed$107$(self) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$keyIsPressed_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setKeyPressed$103$(self, callback) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setKeyPressed$107$(self, callback) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$setKeyPressed_(self, callback);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelKeyPressed$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelKeyPressed$107$(self) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$cancelKeyPressed_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setKeyReleased$103$(self, callback) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setKeyReleased$107$(self, callback) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$setKeyReleased_(self, callback);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelKeyReleased$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelKeyReleased$107$(self) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$cancelKeyReleased_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setKeyTyped$103$(self, callback) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setKeyTyped$107$(self, callback) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$setKeyTyped_(self, callback);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelKeyTyped$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelKeyTyped$107$(self) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$cancelKeyTyped_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getMouseX$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getMouseX$107$(self) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$getMouseX_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getMouseY$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getMouseY$107$(self) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$getMouseY_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getMovedX$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getMovedX$107$(self) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$getMovedX_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getMovedY$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getMovedY$107$(self) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$getMovedY_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getPmouseX$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getPmouseX$107$(self) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$getPmouseX_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getPmouseY$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getPmouseY$107$(self) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$getPmouseY_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getPwinMouseX$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getPwinMouseX$107$(self) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$getPwinMouseX_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getPwinMouseY$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getPwinMouseY$107$(self) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$getPwinMouseY_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getWinMouseX$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getWinMouseX$107$(self) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$getWinMouseX_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getWinMouseY$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getWinMouseY$107$(self) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$getWinMouseY_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$mouseIsPressed$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$mouseIsPressed$107$(self) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$mouseIsPressed_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getMouseButtonString$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getMouseButtonString$107$(self) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$getMouseButtonString_(self);
 }
 function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$getMouseButton_(self) {
@@ -12476,175 +12750,175 @@ function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$getMouseButton_(self) {
     }
   }
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getMouseButton$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getMouseButton$107$(self) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$getMouseButton_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setDoubleClicked$103$(self, callback) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setDoubleClicked$107$(self, callback) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$setDoubleClicked_(self, callback);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelDoubleClicked$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelDoubleClicked$107$(self) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$cancelDoubleClicked_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setMouseClicked$103$(self, callback) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setMouseClicked$107$(self, callback) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$setMouseClicked_(self, callback);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelMouseClicked$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelMouseClicked$107$(self) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$cancelMouseClicked_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setMouseDragged$103$(self, callback) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setMouseDragged$107$(self, callback) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$setMouseDragged_(self, callback);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelMouseDragged$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelMouseDragged$107$(self) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$cancelMouseDragged_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setMouseMoved$103$(self, callback) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setMouseMoved$107$(self, callback) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$setMouseMoved_(self, callback);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelMouseMoved$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelMouseMoved$107$(self) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$cancelMouseMoved_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setMousePressed$103$(self, callback) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setMousePressed$107$(self, callback) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$setMousePressed_(self, callback);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelMousePressed$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelMousePressed$107$(self) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$cancelMousePressed_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setMouseReleased$103$(self, callback) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setMouseReleased$107$(self, callback) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$setMouseReleased_(self, callback);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelMouseReleased$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelMouseReleased$107$(self) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$cancelMouseReleased_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setMouseWheel$103$(self, callback) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setMouseWheel$107$(self, callback) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$setMouseWheel_(self, callback);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelMouseWheel$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelMouseWheel$107$(self) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$cancelMouseWheel_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$requestPointerLock$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$requestPointerLock$107$(self) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$requestPointerLock_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$exitPointerLock$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$exitPointerLock$107$(self) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$exitPointerLock_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$ellipseMode$103$(self, mode) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$ellipseMode$107$(self, mode) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$ellipseMode_(self, mode);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$rectMode$103$(self, mode) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$rectMode$107$(self, mode) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$rectMode_(self, mode);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$noSmooth$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$noSmooth$107$(self) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$noSmooth_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$smooth$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$smooth$107$(self) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$smooth_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeCap$103$(self, cap) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeCap$107$(self, cap) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$strokeCap_(self, cap);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeJoin$103$(self, join) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeJoin$107$(self, join) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$strokeJoin_(self, join);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeWeight$103$(self, weight) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeWeight$107$(self, weight) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$strokeWeight_(self, weight);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$arc$103$(self, x, y, w, h, start, stop, mode, detail) {
-  Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$arc_(self, x, y, w, h, start, stop, new Option$Some$40$(mode), new Option$Some$41$(detail));
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$arc$107$(self, x, y, w, h, start, stop, mode, detail) {
+  Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$arc_(self, x, y, w, h, start, stop, new Option$Some$41$(mode), new Option$Some$42$(detail));
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$circle$103$(self, x, y, d) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$circle$107$(self, x, y, d) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$circle_(self, x, y, d);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$ellipse$103$(self, x, y, w, h) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$ellipse$107$(self, x, y, w, h) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$ellipse_(self, x, y, w, h);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$line$103$(self, x1, y1, x2, y2) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$line$107$(self, x1, y1, x2, y2) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$line_(self, x1, y1, x2, y2);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$point$103$(self, x, y) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$point$107$(self, x, y) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$point_(self, x, y);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$quad$103$(self, x1, y1, x2, y2, x3, y3, x4, y4) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$quad$107$(self, x1, y1, x2, y2, x3, y3, x4, y4) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$quad_(self, x1, y1, x2, y2, x3, y3, x4, y4);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$rect$103$(self, x, y, w, h) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$rect$107$(self, x, y, w, h) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$rect_(self, x, y, w, h);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$triangle$103$(self, x1, y1, x2, y2, x3, y3) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$triangle$107$(self, x1, y1, x2, y2, x3, y3) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$triangle_(self, x1, y1, x2, y2, x3, y3);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$square$103$(self, x, y, s) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$square$107$(self, x, y, s) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$square_(self, x, y, s);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$bezier$103$(self, x1, y1, x2, y2, x3, y3, x4, y4) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$bezier$107$(self, x1, y1, x2, y2, x3, y3, x4, y4) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$bezier_(self, x1, y1, x2, y2, x3, y3, x4, y4);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$bezierPoint$103$(self, a, b, c, d, t) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$bezierPoint$107$(self, a, b, c, d, t) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$bezierPoint_(self, a, b, c, d, t);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$bezierTangent$103$(self, a, b, c, d, t) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$bezierTangent$107$(self, a, b, c, d, t) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$bezierTangent_(self, a, b, c, d, t);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$curve$103$(self, x1, y1, x2, y2, x3, y3, x4, y4) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$curve$107$(self, x1, y1, x2, y2, x3, y3, x4, y4) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$curve_(self, x1, y1, x2, y2, x3, y3, x4, y4);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$curvePoint$103$(self, a, b, c, d, t) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$curvePoint$107$(self, a, b, c, d, t) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$curvePoint_(self, a, b, c, d, t);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$curveTangent$103$(self, a, b, c, d, t) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$curveTangent$107$(self, a, b, c, d, t) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$curveTangent_(self, a, b, c, d, t);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$curveTightness$103$(self, amount) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$curveTightness$107$(self, amount) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$curveTightness_(self, amount);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$beginContour$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$beginContour$107$(self) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$beginContour_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$endContour$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$endContour$107$(self) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$endContour_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$beginShape$103$(self, mode) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$beginShape$107$(self, mode) {
   if (mode === undefined) {
-    Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$beginShape_(self, undefined);
+    Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$beginShape2_(self);
     return;
   } else {
     const _Some = mode;
     const _m = _Some;
-    Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$beginShape_(self, _m);
+    Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$beginShape1_(self, _m);
     return;
   }
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$endShape$103$(self, mode, count) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$endShape$107$(self, mode, count) {
   if (mode === undefined) {
     if (count === undefined) {
-      Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$endShape_(self, undefined, undefined);
+      Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$endShape4_(self);
       return;
     } else {
       const _Some = count;
       const _c = _Some;
-      Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$endShape_(self, undefined, _c);
+      Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$endShape3_(self, _c);
       return;
     }
   } else {
     const _Some = mode;
     const _m = _Some;
     if (count === undefined) {
-      Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$endShape_(self, _m, undefined);
+      Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$endShape2_(self, _m);
       return;
     } else {
       const _Some$2 = count;
       const _c = _Some$2;
-      Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$endShape_(self, _m, _c);
+      Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$endShape1_(self, _m, _c);
       return;
     }
   }
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$bezierVertex$103$(self, x2, y2, x3, y3, x4, y4) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$bezierVertex$107$(self, x2, y2, x3, y3, x4, y4) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$bezierVertex_(self, x2, y2, x3, y3, x4, y4);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$curveVertex$103$(self, x, y) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$curveVertex$107$(self, x, y) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$curveVertex_(self, x, y);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$vertex$103$(self, x, y, z, u, v) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$vertex$107$(self, x, y, z, u, v) {
   _L: {
     if (z.$tag === 1) {
       const _Some = z;
@@ -12684,7 +12958,7 @@ function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$vertex$103$(self, x, y, z, u, 
   }
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$vertex_$46$inner(self, x, y, 0, 0, 0);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$normal$103$(self, nx, ny, nz) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$normal$107$(self, nx, ny, nz) {
   if (nz.$tag === 1) {
     const _Some = nz;
     const _nzv = _Some._0;
@@ -12695,96 +12969,96 @@ function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$normal$103$(self, nx, ny, nz) 
     return;
   }
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$quadraticVertex$103$(self, x2, y2, x3, y3) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$quadraticVertex$107$(self, x2, y2, x3, y3) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$quadraticVertex_(self, x2, y2, x3, y3);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$noStroke$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$noStroke$107$(self) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$noStroke_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$background$103$(self, v1, v2, v3, a) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$background$107$(self, v1, v2, v3, a) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$background_$46$inner(self, v1, v2, v3, a);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$fillColorPara$103$(self, v1, v2, v3, a) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$fillColorPara$107$(self, v1, v2, v3, a) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$fill_colorPara_$46$inner(self, v1, v2, v3, a);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$fillColorObj$103$(self, c) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$fillColorObj$107$(self, c) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$fill_colorObj_(self, c);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$beginClip$103$(self, x, y, w, h) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$beginClip$107$(self, x, y, w, h) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$beginClip_(self, x, y, w, h);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$endClip$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$endClip$107$(self) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$endClip_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$clear$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$clear$107$(self) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$clear_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$clip$103$(self, callback) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$clip$107$(self, callback) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$clip_(self, callback);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$clipOptions$103$(self, callback, options) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$clipOptions$107$(self, callback, options) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$clip_options_(self, callback, options);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$colorModeUniform$103$(self, mode, max) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$colorModeUniform$107$(self, mode, max) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$colorMode_uniform_(self, mode, max);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$colorModeDetailed$103$(self, mode, max1, max2, max3, maxA) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$colorModeDetailed$107$(self, mode, max1, max2, max3, maxA) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$colorMode_detailed_$46$inner(self, mode, max1, max2, max3, maxA);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$erase$103$(self, strengthFill, strengthStroke) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$erase$107$(self, strengthFill, strengthStroke) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$erase_$46$inner(self, strengthFill, strengthStroke);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$noErase$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$noErase$107$(self) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$noErase_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeColor$103$(self, c) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeColor$107$(self, c) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$stroke_color_(self, c);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeGray$103$(self, gray, alpha) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeGray$107$(self, gray, alpha) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$stroke_gray_$46$inner(self, gray, alpha);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeComponents$103$(self, v1, v2, v3, alpha) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeComponents$107$(self, v1, v2, v3, alpha) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$stroke_components_$46$inner(self, v1, v2, v3, alpha);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeString$103$(self, color_string) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeString$107$(self, color_string) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$stroke_string_(self, color_string);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$noFill$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$noFill$107$(self) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$noFill_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$brightness$103$(self, c) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$brightness$107$(self, c) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$brightness_(self, c);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$color$103$(self, v1, v2, v3, a) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$color$107$(self, v1, v2, v3, a) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$color_$46$inner(self, v1, v2, v3, a);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$alpha$103$(self, c) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$alpha$107$(self, c) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$alpha_(self, c);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$blue$103$(self, c) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$blue$107$(self, c) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$blue_(self, c);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$green$103$(self, c) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$green$107$(self, c) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$green_(self, c);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$red$103$(self, c) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$red$107$(self, c) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$red_(self, c);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$hue$103$(self, c) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$hue$107$(self, c) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$hue_(self, c);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$lerpColor$103$(self, c1, c2, amount) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$lerpColor$107$(self, c1, c2, amount) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$lerpColor_(self, c1, c2, amount);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$lightness$103$(self, c) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$lightness$107$(self, c) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$lightness_(self, c);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$paletteLerp$103$(self, colors_stops, amt) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$paletteLerp$107$(self, colors_stops, amt) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$paletteLerp_(self, colors_stops, amt);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textAlign$103$(self, horizAlign, vertAlign) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textAlign$107$(self, horizAlign, vertAlign) {
   if (vertAlign === undefined) {
-    Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$textAlign_(self, horizAlign, Option$None$40$);
+    Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$textAlign_(self, horizAlign, Option$None$41$);
     return;
   } else {
     const _Some = vertAlign;
@@ -12793,37 +13067,37 @@ function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textAlign$103$(self, horizAlig
     return;
   }
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textLeadingSet$103$(self, leading) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textLeadingSet$107$(self, leading) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$textLeading_set_(self, leading);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textLeadingGet$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textLeadingGet$107$(self) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$textLeading_get_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textAscent$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textAscent$107$(self) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$textAscent_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textDescent$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textDescent$107$(self) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$textDescent_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textSizeSet$103$(self, size) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textSizeSet$107$(self, size) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$textSize_set_(self, size);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textSizeGet$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textSizeGet$107$(self) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$textSize_get_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textStyle$103$(self, style) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textStyle$107$(self, style) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$textStyle_$46$inner(self, style);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textWidth$103$(self, str) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textWidth$107$(self, str) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$textWidth_(self, str);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textWrap$103$(self, mode) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textWrap$107$(self, mode) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$textWrap_(self, mode);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$loadFont$103$(self, path, onSuccess, onFailure) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$loadFont$107$(self, path, onSuccess, onFailure) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$loadFont_$46$inner(self, path, onSuccess, onFailure);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textFont$103$(self, font, size) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textFont$107$(self, font, size) {
   if (size.$tag === 1) {
     const _Some = size;
     const _s = _Some._0;
@@ -12834,183 +13108,231 @@ function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textFont$103$(self, font, size
     return;
   }
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$text$103$(self, str, x, y, x2, y2) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$text$107$(self, str, x, y, x2, y2) {
   if (x2.$tag === 1) {
     const _Some = x2;
-    const _x2v = _Some._0;
+    const _xv2 = _Some._0;
     if (y2.$tag === 1) {
       const _Some$2 = y2;
-      const _y2v = _Some$2._0;
-      Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$text_$46$inner(self, str, x, y, new Option$Some$0$(_x2v), new Option$Some$0$(_y2v));
+      const _yv2 = _Some$2._0;
+      Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$text1_$46$inner(self, str, x, y, new Option$Some$0$(_xv2), new Option$Some$0$(_yv2));
       return;
     } else {
-      Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$text_(self, str, x, y, new Option$Some$0$(_x2v), undefined);
+      Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$text3_$46$inner(self, str, x, y, new Option$Some$0$(_xv2));
       return;
     }
   } else {
     if (y2.$tag === 0) {
-      Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$text_(self, str, x, y, undefined, undefined);
+      Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$text2_(self, str, x, y);
       return;
     } else {
-      Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$text_(self, str, x, y, undefined, undefined);
+      Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$text2_(self, str, x, y);
       return;
     }
   }
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getCanvasWidth$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getCanvasWidth$107$(self) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$getCanvasWidth_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getCanvasHeight$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getCanvasHeight$107$(self) {
   return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$getCanvasHeight_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$image$103$(self, img, x, y, width, height) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$image$107$(self, img, x, y, width, height) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$image_$46$inner(self, img, x, y, width, height);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$imageMode$103$(self, mode) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$imageMode$107$(self, mode) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$imageMode_(self, mode);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$loadImage$103$(self, path, callback, errorCallback) {
-  return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$loadImage_(self, path, callback, errorCallback);
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$loadImage$107$(self, path, callback, errorCallback) {
+  if (callback === undefined) {
+    return errorCallback === undefined ? Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$loadImage2_(self, path) : Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$loadImage2_(self, path);
+  } else {
+    const _Some = callback;
+    const _cb = _Some;
+    if (errorCallback === undefined) {
+      return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$loadImage3_(self, path, _cb);
+    } else {
+      const _Some$2 = errorCallback;
+      const _eb = _Some$2;
+      return Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$loadImage1_(self, path, _cb, _eb);
+    }
+  }
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$applyMatrix$103$(self, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$applyMatrix$107$(self, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$applyMatrix_$46$inner(self, a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$resetMatrix$103$(self) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$resetMatrix$107$(self) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$resetMatrix_(self);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$rotate$103$(self, angle, axis) {
-  Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$rotate_$46$inner(self, angle, axis);
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$rotate$107$(self, angle, axis) {
+  if (axis.$tag === 1) {
+    const _Some = axis;
+    const _ax = _Some._0;
+    Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$rotate1_$46$inner(self, angle, new Option$Some$40$(_ax));
+    return;
+  } else {
+    Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$rotate1_(self, angle, undefined);
+    return;
+  }
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$rotateX$103$(self, angle) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$rotateX$107$(self, angle) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$rotateX_(self, angle);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$rotateY$103$(self, angle) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$rotateY$107$(self, angle) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$rotateY_(self, angle);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$rotateZ$103$(self, angle) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$rotateZ$107$(self, angle) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$rotateZ_(self, angle);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$scale$103$(self, s, y, z) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$scale$107$(self, s, y, z) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$scale_$46$inner(self, s, y, z);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$shearX$103$(self, angle) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$shearX$107$(self, angle) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$shearX_(self, angle);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$shearY$103$(self, angle) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$shearY$107$(self, angle) {
   Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$shearY_(self, angle);
 }
-function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$translate$103$(self, x, y, z) {
-  Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$translate_$46$inner(self, x, y, z);
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$translate$107$(self, x, y, z) {
+  if (z.$tag === 1) {
+    const _Some = z;
+    const _zv = _Some._0;
+    Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$translate1_$46$inner(self, x, y, new Option$Some$0$(_zv));
+    return;
+  } else {
+    Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$translate2_(self, x, y);
+    return;
+  }
 }
-function moonbitlang$core$builtin$$Eq$equal$30$(_x_1307, _x_1308) {
-  switch (_x_1307) {
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$push$107$(self) {
+  Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$push_(self);
+}
+function Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$pop$107$(self) {
+  Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5Instance$pop_(self);
+}
+function moonbitlang$core$builtin$$Eq$equal$34$(_x_1582, _x_1583) {
+  switch (_x_1582) {
     case 0: {
-      if (_x_1308 === 0) {
+      if (_x_1583 === 0) {
         return true;
       } else {
         return false;
       }
     }
     case 1: {
-      if (_x_1308 === 1) {
+      if (_x_1583 === 1) {
         return true;
       } else {
         return false;
       }
     }
     case 2: {
-      if (_x_1308 === 2) {
+      if (_x_1583 === 2) {
         return true;
       } else {
         return false;
       }
     }
     case 3: {
-      if (_x_1308 === 3) {
+      if (_x_1583 === 3) {
         return true;
       } else {
         return false;
       }
     }
     case 4: {
-      if (_x_1308 === 4) {
+      if (_x_1583 === 4) {
         return true;
       } else {
         return false;
       }
     }
     case 5: {
-      if (_x_1308 === 5) {
+      if (_x_1583 === 5) {
         return true;
       } else {
         return false;
       }
     }
     case 6: {
-      if (_x_1308 === 6) {
+      if (_x_1583 === 6) {
         return true;
       } else {
         return false;
       }
     }
     case 7: {
-      if (_x_1308 === 7) {
+      if (_x_1583 === 7) {
         return true;
       } else {
         return false;
       }
     }
     case 8: {
-      if (_x_1308 === 8) {
+      if (_x_1583 === 8) {
         return true;
       } else {
         return false;
       }
     }
     case 9: {
-      if (_x_1308 === 9) {
+      if (_x_1583 === 9) {
         return true;
       } else {
         return false;
       }
     }
     case 10: {
-      if (_x_1308 === 10) {
+      if (_x_1583 === 10) {
         return true;
       } else {
         return false;
       }
     }
     case 11: {
-      if (_x_1308 === 11) {
+      if (_x_1583 === 11) {
         return true;
       } else {
         return false;
       }
     }
     case 12: {
-      if (_x_1308 === 12) {
+      if (_x_1583 === 12) {
         return true;
       } else {
         return false;
       }
     }
     case 13: {
-      if (_x_1308 === 13) {
+      if (_x_1583 === 13) {
         return true;
       } else {
         return false;
       }
     }
     case 14: {
-      if (_x_1308 === 14) {
+      if (_x_1583 === 14) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    case 15: {
+      if (_x_1583 === 15) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    case 16: {
+      if (_x_1583 === 16) {
         return true;
       } else {
         return false;
       }
     }
     default: {
-      if (_x_1308 === 15) {
+      if (_x_1583 === 17) {
         return true;
       } else {
         return false;
@@ -13018,182 +13340,198 @@ function moonbitlang$core$builtin$$Eq$equal$30$(_x_1307, _x_1308) {
     }
   }
 }
-function moonbitlang$core$builtin$$Show$output$30$(_x_1303, _x_1304) {
-  switch (_x_1303) {
+function moonbitlang$core$builtin$$Show$output$34$(_x_1578, _x_1579) {
+  switch (_x_1578) {
     case 0: {
-      _x_1304.method_0(_x_1304.self, "PistolShot");
+      _x_1579.method_0(_x_1579.self, "PistolShot");
       return;
     }
     case 1: {
-      _x_1304.method_0(_x_1304.self, "ShotgunShot");
+      _x_1579.method_0(_x_1579.self, "ShotgunShot");
       return;
     }
     case 2: {
-      _x_1304.method_0(_x_1304.self, "SniperShot");
+      _x_1579.method_0(_x_1579.self, "SniperShot");
       return;
     }
     case 3: {
-      _x_1304.method_0(_x_1304.self, "LaserShot");
+      _x_1579.method_0(_x_1579.self, "LaserShot");
       return;
     }
     case 4: {
-      _x_1304.method_0(_x_1304.self, "SwordSwing");
+      _x_1579.method_0(_x_1579.self, "SwordSwing");
       return;
     }
     case 5: {
-      _x_1304.method_0(_x_1304.self, "BulletHit");
+      _x_1579.method_0(_x_1579.self, "BulletHit");
       return;
     }
     case 6: {
-      _x_1304.method_0(_x_1304.self, "KillEnemy");
+      _x_1579.method_0(_x_1579.self, "KillEnemy");
       return;
     }
     case 7: {
-      _x_1304.method_0(_x_1304.self, "PlayerDeath");
+      _x_1579.method_0(_x_1579.self, "PlayerDeath");
       return;
     }
     case 8: {
-      _x_1304.method_0(_x_1304.self, "LevelStart");
+      _x_1579.method_0(_x_1579.self, "LevelStart");
       return;
     }
     case 9: {
-      _x_1304.method_0(_x_1304.self, "LevelComplete");
+      _x_1579.method_0(_x_1579.self, "LevelComplete");
       return;
     }
     case 10: {
-      _x_1304.method_0(_x_1304.self, "GameOver");
+      _x_1579.method_0(_x_1579.self, "GameOver");
       return;
     }
     case 11: {
-      _x_1304.method_0(_x_1304.self, "BgmLevel1");
+      _x_1579.method_0(_x_1579.self, "BgmLevel1");
       return;
     }
     case 12: {
-      _x_1304.method_0(_x_1304.self, "BgmLevel2");
+      _x_1579.method_0(_x_1579.self, "BgmLevel2");
       return;
     }
     case 13: {
-      _x_1304.method_0(_x_1304.self, "BgmLevel3");
+      _x_1579.method_0(_x_1579.self, "BgmLevel3");
       return;
     }
     case 14: {
-      _x_1304.method_0(_x_1304.self, "BgmBoss");
+      _x_1579.method_0(_x_1579.self, "BgmLevel4");
+      return;
+    }
+    case 15: {
+      _x_1579.method_0(_x_1579.self, "BgmLevel5");
+      return;
+    }
+    case 16: {
+      _x_1579.method_0(_x_1579.self, "BgmBoss");
       return;
     }
     default: {
-      _x_1304.method_0(_x_1304.self, "BgmMenu");
+      _x_1579.method_0(_x_1579.self, "BgmMenu");
       return;
     }
   }
 }
-function moonbitlang$core$builtin$$Hash$hash_combine$30$(_x_1299, _x_1300) {
-  switch (_x_1299) {
+function moonbitlang$core$builtin$$Hash$hash_combine$34$(_x_1574, _x_1575) {
+  switch (_x_1574) {
     case 0: {
-      moonbitlang$core$builtin$$Hasher$combine_int(_x_1300, 0);
+      moonbitlang$core$builtin$$Hasher$combine_int(_x_1575, 0);
       return;
     }
     case 1: {
-      moonbitlang$core$builtin$$Hasher$combine_int(_x_1300, 1);
+      moonbitlang$core$builtin$$Hasher$combine_int(_x_1575, 1);
       return;
     }
     case 2: {
-      moonbitlang$core$builtin$$Hasher$combine_int(_x_1300, 2);
+      moonbitlang$core$builtin$$Hasher$combine_int(_x_1575, 2);
       return;
     }
     case 3: {
-      moonbitlang$core$builtin$$Hasher$combine_int(_x_1300, 3);
+      moonbitlang$core$builtin$$Hasher$combine_int(_x_1575, 3);
       return;
     }
     case 4: {
-      moonbitlang$core$builtin$$Hasher$combine_int(_x_1300, 4);
+      moonbitlang$core$builtin$$Hasher$combine_int(_x_1575, 4);
       return;
     }
     case 5: {
-      moonbitlang$core$builtin$$Hasher$combine_int(_x_1300, 5);
+      moonbitlang$core$builtin$$Hasher$combine_int(_x_1575, 5);
       return;
     }
     case 6: {
-      moonbitlang$core$builtin$$Hasher$combine_int(_x_1300, 6);
+      moonbitlang$core$builtin$$Hasher$combine_int(_x_1575, 6);
       return;
     }
     case 7: {
-      moonbitlang$core$builtin$$Hasher$combine_int(_x_1300, 7);
+      moonbitlang$core$builtin$$Hasher$combine_int(_x_1575, 7);
       return;
     }
     case 8: {
-      moonbitlang$core$builtin$$Hasher$combine_int(_x_1300, 8);
+      moonbitlang$core$builtin$$Hasher$combine_int(_x_1575, 8);
       return;
     }
     case 9: {
-      moonbitlang$core$builtin$$Hasher$combine_int(_x_1300, 9);
+      moonbitlang$core$builtin$$Hasher$combine_int(_x_1575, 9);
       return;
     }
     case 10: {
-      moonbitlang$core$builtin$$Hasher$combine_int(_x_1300, 10);
+      moonbitlang$core$builtin$$Hasher$combine_int(_x_1575, 10);
       return;
     }
     case 11: {
-      moonbitlang$core$builtin$$Hasher$combine_int(_x_1300, 11);
+      moonbitlang$core$builtin$$Hasher$combine_int(_x_1575, 11);
       return;
     }
     case 12: {
-      moonbitlang$core$builtin$$Hasher$combine_int(_x_1300, 12);
+      moonbitlang$core$builtin$$Hasher$combine_int(_x_1575, 12);
       return;
     }
     case 13: {
-      moonbitlang$core$builtin$$Hasher$combine_int(_x_1300, 13);
+      moonbitlang$core$builtin$$Hasher$combine_int(_x_1575, 13);
       return;
     }
     case 14: {
-      moonbitlang$core$builtin$$Hasher$combine_int(_x_1300, 14);
+      moonbitlang$core$builtin$$Hasher$combine_int(_x_1575, 14);
+      return;
+    }
+    case 15: {
+      moonbitlang$core$builtin$$Hasher$combine_int(_x_1575, 15);
+      return;
+    }
+    case 16: {
+      moonbitlang$core$builtin$$Hasher$combine_int(_x_1575, 16);
       return;
     }
     default: {
-      moonbitlang$core$builtin$$Hasher$combine_int(_x_1300, 15);
+      moonbitlang$core$builtin$$Hasher$combine_int(_x_1575, 17);
       return;
     }
   }
 }
-function moonbitlang$core$builtin$$Eq$equal$73$(_x_1295, _x_1296) {
-  if (_x_1295 === 0) {
-    if (_x_1296 === 0) {
+function moonbitlang$core$builtin$$Eq$equal$77$(_x_1570, _x_1571) {
+  if (_x_1570 === 0) {
+    if (_x_1571 === 0) {
       return true;
     } else {
       return false;
     }
   } else {
-    if (_x_1296 === 1) {
+    if (_x_1571 === 1) {
       return true;
     } else {
       return false;
     }
   }
 }
-function moonbitlang$core$builtin$$Eq$equal$104$(_x_1291, _x_1292) {
-  switch (_x_1291) {
+function moonbitlang$core$builtin$$Eq$equal$108$(_x_1566, _x_1567) {
+  switch (_x_1566) {
     case 0: {
-      if (_x_1292 === 0) {
+      if (_x_1567 === 0) {
         return true;
       } else {
         return false;
       }
     }
     case 1: {
-      if (_x_1292 === 1) {
+      if (_x_1567 === 1) {
         return true;
       } else {
         return false;
       }
     }
     case 2: {
-      if (_x_1292 === 2) {
+      if (_x_1567 === 2) {
         return true;
       } else {
         return false;
       }
     }
     default: {
-      if (_x_1292 === 3) {
+      if (_x_1567 === 3) {
         return true;
       } else {
         return false;
@@ -13201,60 +13539,60 @@ function moonbitlang$core$builtin$$Eq$equal$104$(_x_1291, _x_1292) {
     }
   }
 }
-function moonbitlang$core$builtin$$Show$output$36$(_x_1279, _x_1280) {
-  switch (_x_1279) {
+function moonbitlang$core$builtin$$Show$output$40$(_x_1554, _x_1555) {
+  switch (_x_1554) {
     case 0: {
-      _x_1280.method_0(_x_1280.self, "HealthPack");
+      _x_1555.method_0(_x_1555.self, "HealthPack");
       return;
     }
     case 1: {
-      _x_1280.method_0(_x_1280.self, "AmmoPack");
+      _x_1555.method_0(_x_1555.self, "AmmoPack");
       return;
     }
     case 2: {
-      _x_1280.method_0(_x_1280.self, "WeaponUpgrade");
+      _x_1555.method_0(_x_1555.self, "WeaponUpgrade");
       return;
     }
     default: {
-      _x_1280.method_0(_x_1280.self, "SpeedBoost");
+      _x_1555.method_0(_x_1555.self, "SpeedBoost");
       return;
     }
   }
 }
-function moonbitlang$core$builtin$$Show$output$16$(_x_1275, _x_1276) {
-  switch (_x_1275) {
+function moonbitlang$core$builtin$$Show$output$19$(_x_1550, _x_1551) {
+  switch (_x_1550) {
     case 0: {
-      _x_1276.method_0(_x_1276.self, "Player");
+      _x_1551.method_0(_x_1551.self, "Player");
       return;
     }
     case 1: {
-      _x_1276.method_0(_x_1276.self, "Enemy");
+      _x_1551.method_0(_x_1551.self, "Enemy");
       return;
     }
     default: {
-      _x_1276.method_0(_x_1276.self, "AllCharacters");
+      _x_1551.method_0(_x_1551.self, "AllCharacters");
       return;
     }
   }
 }
-function moonbitlang$core$builtin$$Eq$equal$16$(_x_1271, _x_1272) {
-  switch (_x_1271) {
+function moonbitlang$core$builtin$$Eq$equal$19$(_x_1546, _x_1547) {
+  switch (_x_1546) {
     case 0: {
-      if (_x_1272 === 0) {
+      if (_x_1547 === 0) {
         return true;
       } else {
         return false;
       }
     }
     case 1: {
-      if (_x_1272 === 1) {
+      if (_x_1547 === 1) {
         return true;
       } else {
         return false;
       }
     }
     default: {
-      if (_x_1272 === 2) {
+      if (_x_1547 === 2) {
         return true;
       } else {
         return false;
@@ -13262,16 +13600,19 @@ function moonbitlang$core$builtin$$Eq$equal$16$(_x_1271, _x_1272) {
     }
   }
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform(game, size, start_position, end_position, speed, now_position) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$new(path) {
+  return { image_path: path, img: Option$None$43$, is_failed: false, is_loading: false, x: 1, y: 1, offset_x: 0, offset_y: 0 };
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform$46$inner(game, size, start_position, end_position, speed, now_position, path) {
   const box_def = Demonmasterlqx$box2d_ffi$box2d$$b2BoxDef();
   Demonmasterlqx$box2d_ffi$box2d$$B2BoxDef$setExtents(box_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(size._0, size._1));
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$89$(box_def, 50);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$93$(box_def, 50);
   const body_def = Demonmasterlqx$box2d_ffi$box2d$$b2BodyDef();
   Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setPosition(body_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(now_position._0, now_position._1));
-  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$addShape(body_def, Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(box_def));
+  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$addShape(body_def, Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(box_def));
   Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setRotation(body_def, 0);
   Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setAllowSleep(body_def, false);
-  const body = Demonmasterlqx$box2d_ffi$box2d$$World$createBody$83$(game.world, body_def);
+  const body = Demonmasterlqx$box2d_ffi$box2d$$World$createBody$87$(game.world, body_def);
   const to_target = Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(end_position._0 - start_position._0, end_position._1 - start_position._1);
   const cooldown_time = moonbitlang$core$double$$Double$to_int(Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$length(to_target) / speed);
   const _bind = game.anchor;
@@ -13279,64 +13620,65 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platfor
   const _bind$3 = Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(start_position._0, start_position._1);
   const _bind$4 = Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(end_position._0, end_position._1);
   const _bind$5 = Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(now_position._0, now_position._1);
-  const new_ = { fulcrum: _bind, body: body, now_position: _bind$5, index: _bind$2, start_position: _bind$3, end_position: _bind$4, speed: speed, direction: 1, cooldown: cooldown_time, cooldown_time: cooldown_time };
-  moonbitlang$core$array$$Array$push$26$(game.platform_list, { self: new_, method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$update$105$, method_1: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_index$105$, method_2: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_body$105$, method_3: Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$105$ });
+  const _bind$6 = Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$new(path);
+  const new_ = { fulcrum: _bind, body: body, now_position: _bind$5, index: _bind$2, start_position: _bind$3, end_position: _bind$4, speed: speed, direction: 1, cooldown: cooldown_time, cooldown_time: cooldown_time, img: _bind$6 };
+  moonbitlang$core$array$$Array$push$30$(game.platform_list, { self: new_, method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$update$109$, method_1: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_index$109$, method_2: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_body$109$, method_3: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_width$110$, method_4: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_hight$110$, method_5: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_rotation$110$, method_6: Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$109$ });
   game.platform_index = game.platform_index + 1 | 0;
   return new_;
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, position, size, angle) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, position, size, angle, path) {
   const box_def = Demonmasterlqx$box2d_ffi$box2d$$b2BoxDef();
   Demonmasterlqx$box2d_ffi$box2d$$B2BoxDef$setExtents(box_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(size._0, size._1));
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$89$(box_def, 0);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$93$(box_def, 0);
   const body_def = Demonmasterlqx$box2d_ffi$box2d$$b2BodyDef();
   Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setPosition(body_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(position._0, position._1));
-  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$addShape(body_def, Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(box_def));
+  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$addShape(body_def, Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(box_def));
   Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setRotation(body_def, angle);
   Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setAllowSleep(body_def, false);
-  const new_ = { body: Demonmasterlqx$box2d_ffi$box2d$$World$createBody$83$(game.world, body_def), index: game.platform_index };
-  moonbitlang$core$array$$Array$push$26$(game.platform_list, { self: new_, method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$update$106$, method_1: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_index$106$, method_2: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_body$106$, method_3: Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$106$ });
+  const new_ = { body: Demonmasterlqx$box2d_ffi$box2d$$World$createBody$87$(game.world, body_def), index: game.platform_index, img: Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$new(path) };
+  moonbitlang$core$array$$Array$push$30$(game.platform_list, { self: new_, method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$update$111$, method_1: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_index$111$, method_2: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_body$111$, method_3: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_width$112$, method_4: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_hight$112$, method_5: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_rotation$112$, method_6: Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$111$ });
   game.platform_index = game.platform_index + 1 | 0;
   return new_;
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_revolute_joint$46$inner(self, body_a, body_b, anchor, enable_limit, lower_angle, upper_angle) {
   const joint_def = Demonmasterlqx$box2d_ffi$box2d$$b2RevoluteJointDef();
-  Demonmasterlqx$box2d_ffi$box2d$$JointDef$setBody1$97$(joint_def, body_a);
-  Demonmasterlqx$box2d_ffi$box2d$$JointDef$setBody2$97$(joint_def, body_b);
+  Demonmasterlqx$box2d_ffi$box2d$$JointDef$setBody1$101$(joint_def, body_a);
+  Demonmasterlqx$box2d_ffi$box2d$$JointDef$setBody2$101$(joint_def, body_b);
   Demonmasterlqx$box2d_ffi$box2d$$B2RevoluteJointDef$setAnchorPoint(joint_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(anchor._0, anchor._1));
   Demonmasterlqx$box2d_ffi$box2d$$B2RevoluteJointDef$setEnableLimit(joint_def, enable_limit);
   Demonmasterlqx$box2d_ffi$box2d$$B2RevoluteJointDef$setLowerAngle(joint_def, lower_angle);
   Demonmasterlqx$box2d_ffi$box2d$$B2RevoluteJointDef$setUpperAngle(joint_def, upper_angle);
-  return Demonmasterlqx$box2d_ffi$box2d$$World$createJoint$83$(self.world, Demonmasterlqx$box2d_ffi$box2d$$JointDefBase$getBase$98$(joint_def));
+  return Demonmasterlqx$box2d_ffi$box2d$$World$createJoint$87$(self.world, Demonmasterlqx$box2d_ffi$box2d$$JointDefBase$getBase$102$(joint_def));
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$create_rotatable_platform$46$inner(game, position, size, angle_speed, initial_angle) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$create_rotatable_platform$46$inner(game, position, size, angle_speed, initial_angle, path) {
   const box_def = Demonmasterlqx$box2d_ffi$box2d$$b2BoxDef();
   Demonmasterlqx$box2d_ffi$box2d$$B2BoxDef$setExtents(box_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(size._0, size._1));
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$89$(box_def, 50);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$93$(box_def, 50);
   const body_def = Demonmasterlqx$box2d_ffi$box2d$$b2BodyDef();
   Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setPosition(body_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(position._0, position._1));
-  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$addShape(body_def, Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(box_def));
+  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$addShape(body_def, Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(box_def));
   Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setRotation(body_def, initial_angle);
   Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setAllowSleep(body_def, false);
-  const body = Demonmasterlqx$box2d_ffi$box2d$$World$createBody$83$(game.world, body_def);
-  const new_ = { body: body, index: game.platform_index, angle_speed: angle_speed, angle: initial_angle };
+  const body = Demonmasterlqx$box2d_ffi$box2d$$World$createBody$87$(game.world, body_def);
+  const new_ = { body: body, index: game.platform_index, angle_speed: angle_speed, angle: initial_angle, img: Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$new(path) };
   const pos = { _0: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(body)), _1: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(body)) };
   Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_revolute_joint$46$inner(game, game.anchor, body, pos, false, 0, 0);
-  moonbitlang$core$array$$Array$push$26$(game.platform_list, { self: new_, method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$update$107$, method_1: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_index$107$, method_2: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_body$107$, method_3: Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$107$ });
+  moonbitlang$core$array$$Array$push$30$(game.platform_list, { self: new_, method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$update$113$, method_1: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_index$113$, method_2: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_body$113$, method_3: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_width$114$, method_4: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_hight$114$, method_5: Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_rotation$114$, method_6: Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$113$ });
   game.platform_index = game.platform_index + 1 | 0;
   return new_;
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_dynamic_box$46$inner(self, position, size, density, friciton, groupindex) {
   const box_def = Demonmasterlqx$box2d_ffi$box2d$$b2BoxDef();
   Demonmasterlqx$box2d_ffi$box2d$$B2BoxDef$setExtents(box_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(size._0, size._1));
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$89$(box_def, density);
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$89$(box_def, friciton);
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$89$(box_def, groupindex);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$93$(box_def, density);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$93$(box_def, friciton);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$93$(box_def, groupindex);
   const body_def = Demonmasterlqx$box2d_ffi$box2d$$b2BodyDef();
   Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setPosition(body_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(position._0, position._1));
-  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$addShape(body_def, Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(box_def));
+  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$addShape(body_def, Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(box_def));
   Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setRotation(body_def, 0);
   Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setAllowSleep(body_def, false);
-  return Demonmasterlqx$box2d_ffi$box2d$$World$createBody$83$(self.world, body_def);
+  return Demonmasterlqx$box2d_ffi$box2d$$World$createBody$87$(self.world, body_def);
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_particle_control$46$inner(self, walk_state, walk_direction, walk_cooldown, jump_cooldown, jump_state, jump_frame_count, health, faint_state, faint_resistance) {
   return { walk_state: walk_state, walk_direction: walk_direction, walk_cooldown: walk_cooldown, jump_cooldown: jump_cooldown, jump_state: jump_state, jump_frame_count: jump_frame_count, health: health, faint_state: faint_state, faint_resistance: faint_resistance, stand_cooldown: 0 };
@@ -13345,79 +13687,99 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_particle(s
   self.particle_index = self.particle_index + 1 | 0;
   const index = self.particle_index - 1 | 0;
   const player_collision_group = -(index + 1000 | 0) | 0;
-  const torso = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_dynamic_box$46$inner(self, { _0: position._0, _1: position._1 + 0.2 }, Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3378, 1, 0.2, player_collision_group);
-  const head = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_dynamic_box$46$inner(self, { _0: position._0, _1: position._1 + 1.4 }, Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3379, 1, 0.2, player_collision_group);
-  const left_thigh = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_dynamic_box$46$inner(self, { _0: position._0, _1: position._1 - 1 }, Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3380, 1, 0.2, player_collision_group);
-  const right_thigh = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_dynamic_box$46$inner(self, { _0: position._0, _1: position._1 - 1 }, Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3381, 1, 0.2, player_collision_group);
-  const left_shank = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_dynamic_box$46$inner(self, { _0: position._0, _1: position._1 - 2 }, Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3382, 1, 0.2, player_collision_group);
-  const right_shank = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_dynamic_box$46$inner(self, { _0: position._0, _1: position._1 - 2 }, Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3383, 1, 0.2, player_collision_group);
+  const torso = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_dynamic_box$46$inner(self, { _0: position._0, _1: position._1 + 0.2 }, Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3439, 1, 0.2, player_collision_group);
+  const head = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_dynamic_box$46$inner(self, { _0: position._0, _1: position._1 + 1.4 }, Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3440, 1, 0.2, player_collision_group);
+  const left_thigh = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_dynamic_box$46$inner(self, { _0: position._0, _1: position._1 - 1 }, Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3441, 1, 0.2, player_collision_group);
+  const right_thigh = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_dynamic_box$46$inner(self, { _0: position._0, _1: position._1 - 1 }, Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3442, 1, 0.2, player_collision_group);
+  const left_shank = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_dynamic_box$46$inner(self, { _0: position._0, _1: position._1 - 2 }, Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3443, 1, 0.2, player_collision_group);
+  const right_shank = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_dynamic_box$46$inner(self, { _0: position._0, _1: position._1 - 2 }, Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3444, 1, 0.2, player_collision_group);
   const neck_joint = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_revolute_joint$46$inner(self, torso, head, { _0: position._0, _1: position._1 + 1 }, true, 0, 0);
   const thigh_left_joint = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_revolute_joint$46$inner(self, torso, left_thigh, { _0: position._0, _1: position._1 - 0.5 }, true, -1, 1);
   const thigh_right_joint = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_revolute_joint$46$inner(self, torso, right_thigh, { _0: position._0, _1: position._1 - 0.5 }, true, -1, 1);
   const knee_left_joint = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_revolute_joint$46$inner(self, left_thigh, left_shank, { _0: position._0, _1: position._1 - 1.5 }, true, -1.3, 1.3);
   const knee_right_joint = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_revolute_joint$46$inner(self, right_thigh, right_shank, { _0: position._0, _1: position._1 - 1.5 }, true, -1.3, 1.3);
-  const left_arm = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_dynamic_box$46$inner(self, { _0: position._0, _1: position._1 + 0.5 }, Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3384, 1, 0.2, player_collision_group);
-  const right_arm = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_dynamic_box$46$inner(self, { _0: position._0, _1: position._1 + 0.5 }, Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3385, 1, 0.2, player_collision_group);
-  const left_forearm = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_dynamic_box$46$inner(self, { _0: position._0, _1: position._1 - 0.3 }, Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3386, 1, 0.2, player_collision_group);
-  const right_forearm = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_dynamic_box$46$inner(self, { _0: position._0, _1: position._1 - 0.3 }, Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3387, 1, 0.2, player_collision_group);
+  const left_arm = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_dynamic_box$46$inner(self, { _0: position._0, _1: position._1 + 0.5 }, Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3445, 1, 0.2, player_collision_group);
+  const right_arm = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_dynamic_box$46$inner(self, { _0: position._0, _1: position._1 + 0.5 }, Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3446, 1, 0.2, player_collision_group);
+  const left_forearm = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_dynamic_box$46$inner(self, { _0: position._0, _1: position._1 - 0.3 }, Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3447, 1, 0.2, player_collision_group);
+  const right_forearm = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_dynamic_box$46$inner(self, { _0: position._0, _1: position._1 - 0.3 }, Great$45$Love$45$League$Stick_Man_Battle$server$$create_particle$46$tuple$47$3448, 1, 0.2, player_collision_group);
   const arm_left_joint = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_revolute_joint$46$inner(self, torso, left_arm, { _0: position._0, _1: position._1 + 1 }, true, -1, 1);
   const arm_right_joint = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_revolute_joint$46$inner(self, torso, right_arm, { _0: position._0, _1: position._1 + 1 }, true, -1, 1);
   const forearm_left_joint = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_revolute_joint$46$inner(self, left_arm, left_forearm, { _0: position._0, _1: position._1 }, true, -1.3, 1.3);
   const forearm_right_joint = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_revolute_joint$46$inner(self, right_arm, right_forearm, { _0: position._0, _1: position._1 }, true, -1.3, 1.3);
   const tmp = { torso: torso, head: head, left_thigh: left_thigh, right_thigh: right_thigh, left_shank: left_shank, right_shank: right_shank, thigh_left_joint: thigh_left_joint, thigh_right_joint: thigh_right_joint, knee_left_joint: knee_left_joint, knee_right_joint: knee_right_joint, neck_joint: neck_joint, left_forearm: left_forearm, right_forearm: right_forearm, left_arm: left_arm, right_arm: right_arm, arm_left_joint: arm_left_joint, arm_right_joint: arm_right_joint, forearm_left_joint: forearm_left_joint, forearm_right_joint: forearm_right_joint, index: index, control: Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_particle_control$46$inner(self, false, 1, 0, -1, false, 0, 100, false, 0) };
-  moonbitlang$core$array$$Array$push$22$(self.particle_list, tmp);
+  moonbitlang$core$array$$Array$push$26$(self.particle_list, tmp);
   return tmp;
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$load_map(game, level) {
-  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_particle(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3412);
-  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_particle(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3413);
   switch (level) {
     case 1: {
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3414, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3415, 0);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3416, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3417, 0);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3418, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3419, 0);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3420, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3421, 0);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3422, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3423, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3424, 2, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3425);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3426, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3427, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3428, 2, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3429);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3430, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3431, 1.57);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3432, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3433, 1.57);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_rotatable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3434, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3435, 10, 0);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_rotatable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3436, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3437, 20, 0);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_particle(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3473);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_particle(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3474);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3475, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3476, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3477);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3478, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3479, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3480);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3481, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3482, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3483);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3484, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3485, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3486);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3487, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3488, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3489, 16, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3490, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3491);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3492, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3493, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3494, 16, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3495, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3496);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3497, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3498, 1.57, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3499);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3500, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3501, 1.57, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3502);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_rotatable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3503, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3504, 10, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3505);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_rotatable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3506, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3507, 20, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3508);
       return true;
     }
     case 2: {
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3438, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3439, 0);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3440, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3441, 0);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3442, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3443, 0);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3444, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3445, 0);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3446, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3447, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3448, 4, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3449);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3450, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3451, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3452, 4, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3453);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3454, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3455, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3456, 4, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3457);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3458, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3459, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3460, 4, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3461);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3462, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3463, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3464, 4, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3465);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3466, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3467, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3468, 4, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3469);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3470, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3471, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3472, 4, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3473);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3474, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3475, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3476, 4, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3477);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_particle(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3509);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_particle(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3510);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3511, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3512, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3513);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3514, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3515, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3516);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3517, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3518, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3519);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3520, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3521, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3522);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3523, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3524, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3525, 32, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3526, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3527);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3528, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3529, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3530, 32, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3531, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3532);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3533, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3534, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3535, 32, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3536, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3537);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3538, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3539, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3540, 32, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3541, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3542);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3543, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3544, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3545, 32, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3546, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3547);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3548, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3549, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3550, 32, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3551, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3552);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3553, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3554, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3555, 32, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3556, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3557);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3558, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3559, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3560, 32, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3561, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3562);
       return true;
     }
     case 3: {
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3478, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3479, 0);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_rotatable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3480, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3481, 2, 0.3);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_rotatable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3482, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3483, 2, 1.2);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_rotatable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3484, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3485, 2, 2.8);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_rotatable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3486, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3487, -2, -0.9);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_rotatable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3488, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3489, -2, 0.7);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_rotatable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3490, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3491, 2, -1.5);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_rotatable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3492, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3493, 2, 2.4);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_rotatable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3494, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3495, 2, -2.1);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_particle(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3563);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_particle(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3564);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3565, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3566, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3567);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_rotatable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3568, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3569, 2, 0.3, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3570);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_rotatable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3571, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3572, 2, 1.2, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3573);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_rotatable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3574, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3575, 2, 2.8, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3576);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_rotatable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3577, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3578, -2, -0.9, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3579);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_rotatable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3580, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3581, -2, 0.7, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3582);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_rotatable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3583, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3584, 2, -1.5, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3585);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_rotatable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3586, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3587, 2, 2.4, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3588);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_rotatable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3589, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3590, 2, -2.1, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3591);
       return true;
     }
     case 4: {
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3496, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3497, 0);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3498, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3499, 0);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3500, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3501, 0);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3502, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3503, 0);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$create_rotatable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3504, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3505, 1, 0);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_particle(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3592);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_particle(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3593);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3594, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3595, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3596);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3597, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3598, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3599);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3600, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3601, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3602);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3603, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3604, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3605);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_rotatable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3606, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3607, 1, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3608);
+      return true;
+    }
+    case 5: {
+      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_particle(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3609);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_particle(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3610);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3611, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3612, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3613);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3614, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3615, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3616);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3617, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3618, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3619);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3620, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3621, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3622);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_rotatable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3623, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3624, 10, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3625);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3626, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3627, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3628, 48, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3629, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3630);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3631, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3632, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3633, 48, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3634, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3635);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3636, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3637, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3638, 48, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3639, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3640);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$create_movable_platform$46$inner(game, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3641, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3642, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3643, 48, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$tuple$47$3644, Great$45$Love$45$League$Stick_Man_Battle$server$$load_map$46$constr$47$3645);
       return true;
     }
     default: {
@@ -13426,7 +13788,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$load_map(game, level) 
   }
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$create_weapon_manager() {
-  return { sword_index: 0, sword_list: moonbitlang$core$array$$Array$new$46$inner$72$(0), gun_index: 0, gun_list: moonbitlang$core$array$$Array$new$46$inner$63$(0) };
+  return { sword_index: 0, sword_list: moonbitlang$core$array$$Array$new$46$inner$76$(0), gun_index: 0, gun_list: moonbitlang$core$array$$Array$new$46$inner$7$(0) };
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$world_to_screen$46$inner(world_width, world_height, x, y, ppm) {
   return { _0: world_width / 2 + x * ppm, _1: world_height - y * ppm };
@@ -13456,9 +13818,9 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$world_to_screen(world_
   return Great$45$Love$45$League$Stick_Man_Battle$server$$world_to_screen$46$inner(world_width, world_height, x, y, ppm);
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_sound(self, event_type) {
-  const _bind = moonbitlang$core$builtin$$Map$get$55$(self.audio_configs, event_type);
+  const _bind = moonbitlang$core$builtin$$Map$get$59$(self.audio_configs, event_type);
   if (_bind === undefined) {
-    moonbitlang$core$builtin$$println$13$(`警告: 未找到音频配置 ${moonbitlang$core$builtin$$Show$to_string$31$(event_type)}`);
+    moonbitlang$core$builtin$$println$16$(`警告: 未找到音频配置 ${moonbitlang$core$builtin$$Show$to_string$35$(event_type)}`);
     return;
   } else {
     const _Some = _bind;
@@ -13466,7 +13828,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_soun
     const _bind$2 = _config.category;
     if (_bind$2 === 0) {
       if (self.sfx_enabled) {
-        moonbitlang$core$builtin$$println$13$(`播放音效: ${moonbitlang$core$builtin$$Show$to_string$31$(event_type)}, 路径: ${_config.path}`);
+        moonbitlang$core$builtin$$println$16$(`播放音效: ${moonbitlang$core$builtin$$Show$to_string$35$(event_type)}, 路径: ${_config.path}`);
         const volume = _config.default_volume * self.master_volume;
         Great$45$Love$45$League$Stick_Man_Battle$server$$js_play_audio(_config.path, volume, _config.should_loop);
         return;
@@ -13475,7 +13837,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_soun
       }
     } else {
       if (self.bgm_enabled) {
-        moonbitlang$core$builtin$$println$13$(`播放背景音乐: ${moonbitlang$core$builtin$$Show$to_string$31$(event_type)}, 路径: ${_config.path}`);
+        moonbitlang$core$builtin$$println$16$(`播放背景音乐: ${moonbitlang$core$builtin$$Show$to_string$35$(event_type)}, 路径: ${_config.path}`);
         const volume = _config.default_volume * self.master_volume;
         Great$45$Love$45$League$Stick_Man_Battle$server$$js_play_audio(_config.path, volume, _config.should_loop);
         return;
@@ -13486,15 +13848,15 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_soun
   }
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$add_animation(self, animation) {
-  moonbitlang$core$array$$Array$push$25$(self.animation_list, animation);
+  moonbitlang$core$array$$Array$push$29$(self.animation_list, animation);
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$who_shape_belongs_to(self, shape) {
-  const father = Demonmasterlqx$box2d_ffi$box2d$$Shape$getBody$94$(shape);
+  const father = Demonmasterlqx$box2d_ffi$box2d$$Shape$getBody$98$(shape);
   let _tmp = 0;
   while (true) {
     const i = _tmp;
     if (i < self.particle_list.length) {
-      const particle = moonbitlang$core$array$$Array$at$22$(self.particle_list, i);
+      const particle = moonbitlang$core$array$$Array$at$26$(self.particle_list, i);
       if (Great$45$Love$45$League$Stick_Man_Battle$server$$equals(particle.head, father)) {
         return i;
       }
@@ -13547,14 +13909,14 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Sword$get_attack_field
   Demonmasterlqx$box2d_ffi$box2d$$B2AABB$setmaxVertex(attack_range, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(new_max_x, new_max_y));
   return attack_range;
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponControl$attack$72$(self, game) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponControl$attack$76$(self, game) {
   Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_sound(game.audio, 4);
   if ((game.frame_count - self.last_attack_frame | 0) < self.attack_interval) {
     return undefined;
   }
   self.last_attack_frame = game.frame_count;
   const query_result = [];
-  Demonmasterlqx$box2d_ffi$box2d$$World$query$83$(game.world, Great$45$Love$45$League$Stick_Man_Battle$server$$Sword$get_attack_field(self), query_result, 10);
+  Demonmasterlqx$box2d_ffi$box2d$$World$query$87$(game.world, Great$45$Love$45$League$Stick_Man_Battle$server$$Sword$get_attack_field(self), query_result, 10);
   const _len = query_result.length;
   let _tmp = 0;
   while (true) {
@@ -13566,8 +13928,8 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponControl$attack$7
         if (target_particle === -1 || target_particle === self.owner_id) {
           break _L;
         }
-        moonbitlang$core$builtin$$println$13$(`Sword hit particle #${moonbitlang$core$builtin$$Show$to_string$5$(target_particle)}!`);
-        const target = moonbitlang$core$array$$Array$at$22$(game.particle_list, target_particle);
+        moonbitlang$core$builtin$$println$16$(`Sword hit particle #${moonbitlang$core$builtin$$Show$to_string$5$(target_particle)}!`);
+        const target = moonbitlang$core$array$$Array$at$26$(game.particle_list, target_particle);
         const _bind = target.control;
         _bind.health = _bind.health - 5 | 0;
         break _L;
@@ -13661,36 +14023,45 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponControl$attack$7
     p5.method_53(p5.self, 1);
     p5.method_79(p5.self);
     return frame_counter.val >= 20 ? 2 : 1;
-  }), method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$Animation$update$108$ });
+  }), method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$Animation$update$115$ });
   Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_sound(game.audio, 4);
-  moonbitlang$core$builtin$$println$13$("Sword attack!");
+  moonbitlang$core$builtin$$println$16$("Sword attack!");
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$world_to_screen_size(size, ppm$46$opt) {
+  let ppm;
+  if (ppm$46$opt.$tag === 1) {
+    const _Some = ppm$46$opt;
+    ppm = _Some._0;
+  } else {
+    ppm = 20;
+  }
+  return size * ppm;
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$drawCircle(p, shape) {
-  const position = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getWorldPoint(Demonmasterlqx$box2d_ffi$box2d$$Shape$getBody$96$(shape), Demonmasterlqx$box2d_ffi$box2d$$B2CircleShape$getLocalPosition(shape));
+  const position = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getWorldPoint(Demonmasterlqx$box2d_ffi$box2d$$Shape$getBody$100$(shape), Demonmasterlqx$box2d_ffi$box2d$$B2CircleShape$getLocalPosition(shape));
   const radius = Demonmasterlqx$box2d_ffi$box2d$$B2CircleShape$getRadius(shape);
   const screen_pos = Great$45$Love$45$League$Stick_Man_Battle$server$$world_to_screen(Option$None$0$, Option$None$0$, Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(position), Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(position), Option$None$0$);
-  const _p = 20;
-  const screen_radius = radius * _p;
+  const screen_radius = Great$45$Love$45$League$Stick_Man_Battle$server$$world_to_screen_size(radius, Option$None$0$);
   p.method_55(p.self, screen_pos._0, screen_pos._1, screen_radius * 2);
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$drawPolygon(p, shape) {
   const vertices = Demonmasterlqx$box2d_ffi$box2d$$B2PolygonShape$getVertices(shape);
-  const global_position = moonbitlang$core$array$$Array$new$46$inner$68$(0);
+  const global_position = moonbitlang$core$array$$Array$new$46$inner$70$(0);
   const _len = vertices.length;
   let _tmp = 0;
   while (true) {
     const _i = _tmp;
     if (_i < _len) {
       const vertex = vertices[_i];
-      const gvec = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getWorldPoint(Demonmasterlqx$box2d_ffi$box2d$$Shape$getBody$95$(shape), vertex);
-      moonbitlang$core$array$$Array$push$68$(global_position, gvec);
+      const gvec = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getWorldPoint(Demonmasterlqx$box2d_ffi$box2d$$Shape$getBody$99$(shape), vertex);
+      moonbitlang$core$array$$Array$push$70$(global_position, gvec);
       _tmp = _i + 1 | 0;
       continue;
     } else {
       break;
     }
   }
-  const screen_position = moonbitlang$core$array$$Array$new$46$inner$17$(0);
+  const screen_position = moonbitlang$core$array$$Array$new$46$inner$20$(0);
   const _len$2 = global_position.length;
   let _tmp$2 = 0;
   while (true) {
@@ -13698,7 +14069,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$drawPolygon(p, shape) 
     if (_i < _len$2) {
       const gvec = global_position[_i];
       const screen_coords = Great$45$Love$45$League$Stick_Man_Battle$server$$world_to_screen(Option$None$0$, Option$None$0$, Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(gvec), Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(gvec), Option$None$0$);
-      moonbitlang$core$array$$Array$push$17$(screen_position, screen_coords);
+      moonbitlang$core$array$$Array$push$20$(screen_position, screen_coords);
       _tmp$2 = _i + 1 | 0;
       continue;
     } else {
@@ -13706,12 +14077,12 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$drawPolygon(p, shape) 
     }
   }
   p.method_72(p.self, undefined);
-  const _end1073 = screen_position.length;
+  const _end1239 = screen_position.length;
   let _tmp$3 = 0;
   while (true) {
     const i = _tmp$3;
-    if (i < _end1073) {
-      const _bind = moonbitlang$core$array$$Array$at$17$(screen_position, i);
+    if (i < _end1239) {
+      const _bind = moonbitlang$core$array$$Array$at$20$(screen_position, i);
       const _x = _bind._0;
       const _y = _bind._1;
       p.method_76(p.self, _x, _y, Option$None$0$, Option$None$0$, Option$None$0$);
@@ -13721,9 +14092,9 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$drawPolygon(p, shape) 
       break;
     }
   }
-  p.method_73(p.self, Great$45$Love$45$League$Stick_Man_Battle$server$$drawPolygon$46$constr$47$3617, undefined);
+  p.method_73(p.self, Great$45$Love$45$League$Stick_Man_Battle$server$$drawPolygon$46$constr$47$3747, undefined);
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$72$(self) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$76$(self) {
   return (world, p) => {
     const _arr = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(self.body);
     const _len = _arr.length;
@@ -13732,7 +14103,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$
       const _i = _tmp;
       if (_i < _len) {
         const shape = _arr[_i];
-        const _bind = Demonmasterlqx$box2d_ffi$box2d$$Shape$getType$94$(shape);
+        const _bind = Demonmasterlqx$box2d_ffi$box2d$$Shape$getType$98$(shape);
         switch (_bind) {
           case 2: {
             Great$45$Love$45$League$Stick_Man_Battle$server$$drawPolygon(p, Demonmasterlqx$box2d_ffi$box2d$$B2Shape$toPolygonShape(shape));
@@ -13747,7 +14118,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$
             break;
           }
           default: {
-            moonbitlang$core$builtin$$println$13$("Unknown Shape");
+            moonbitlang$core$builtin$$println$16$("Unknown Shape");
           }
         }
         _tmp = _i + 1 | 0;
@@ -13758,7 +14129,15 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$
     }
   };
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponCreate$create$63$(game, owner_id) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$set_image_offset(self, offset_x, offset_y) {
+  self.offset_x = offset_x;
+  self.offset_y = offset_y;
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$set_image_size(self, x, y) {
+  self.x = x;
+  self.y = y;
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponCreate$create$7$(game, owner_id, url) {
   let bodydef;
   let _try_err;
   _L: {
@@ -13775,18 +14154,18 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponCreate$create$63
       }
       break _L;
     }
-    moonbitlang$core$builtin$$println$13$("Failed to create body definition for Gun");
+    moonbitlang$core$builtin$$println$16$("Failed to create body definition for Gun");
     bodydef = Demonmasterlqx$box2d_ffi$box2d$$b2BodyDef();
   }
-  const centerpos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(moonbitlang$core$array$$Array$at$22$(game.particle_list, owner_id).right_forearm);
-  const rotate = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getRotation(moonbitlang$core$array$$Array$at$22$(game.particle_list, owner_id).right_forearm);
+  const centerpos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(moonbitlang$core$array$$Array$at$26$(game.particle_list, owner_id).right_forearm);
+  const rotate = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getRotation(moonbitlang$core$array$$Array$at$26$(game.particle_list, owner_id).right_forearm);
   const handpos = Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(-Kaida$45$Amethyst$math$$sin(rotate) * 0.25 + Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(centerpos), -Kaida$45$Amethyst$math$$cos(rotate) * 0.25 + Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(centerpos));
   Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setPosition(bodydef, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(handpos) + Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(Great$45$Love$45$League$Stick_Man_Battle$server$$gun_body_shift), Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(handpos) + Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(Great$45$Love$45$League$Stick_Man_Battle$server$$gun_body_shift)));
   const _bind = game.weapon;
   _bind.gun_index = _bind.gun_index + 1 | 0;
-  const weapon_body = Demonmasterlqx$box2d_ffi$box2d$$World$createBody$83$(game.world, bodydef);
+  const weapon_body = Demonmasterlqx$box2d_ffi$box2d$$World$createBody$87$(game.world, bodydef);
   const owner_collision_group = -(owner_id + 1000 | 0) | 0;
-  const shapes_to_recreate = moonbitlang$core$array$$Array$new$46$inner$62$(0);
+  const shapes_to_recreate = moonbitlang$core$array$$Array$new$46$inner$65$(0);
   const _arr = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(weapon_body);
   const _len = _arr.length;
   let _tmp = 0;
@@ -13794,39 +14173,80 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponCreate$create$63
     const _i = _tmp;
     if (_i < _len) {
       const shape = _arr[_i];
-      moonbitlang$core$array$$Array$push$62$(shapes_to_recreate, shape);
+      moonbitlang$core$array$$Array$push$65$(shapes_to_recreate, shape);
       _tmp = _i + 1 | 0;
       continue;
     } else {
       break;
     }
   }
-  Demonmasterlqx$box2d_ffi$box2d$$World$destroyBody$83$(game.world, weapon_body);
+  Demonmasterlqx$box2d_ffi$box2d$$World$destroyBody$87$(game.world, weapon_body);
   const new_body_def = Demonmasterlqx$box2d_ffi$box2d$$b2BodyDef();
   Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setPosition(new_body_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(handpos) + Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(Great$45$Love$45$League$Stick_Man_Battle$server$$gun_body_shift), Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(handpos) + Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(Great$45$Love$45$League$Stick_Man_Battle$server$$gun_body_shift)));
   const weapon_box_def = Demonmasterlqx$box2d_ffi$box2d$$b2BoxDef();
   Demonmasterlqx$box2d_ffi$box2d$$B2BoxDef$setExtents(weapon_box_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(0.2, 0.5));
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$89$(weapon_box_def, 0.5);
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$89$(weapon_box_def, 0.3);
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setRestitution$89$(weapon_box_def, 0.5);
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$89$(weapon_box_def, owner_collision_group);
-  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$addShape(new_body_def, Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(weapon_box_def));
-  const final_weapon_body = Demonmasterlqx$box2d_ffi$box2d$$World$createBody$83$(game.world, new_body_def);
-  const aa = { id: game.weapon.gun_index, owner_id: owner_id, body: final_weapon_body, bullet_damage: 10, bullet_speed: 60, bullet_penetration: 0, bullet_targets: [0], fire_rate: 15, last_fire_frame: 0, gun_type: 0 };
-  moonbitlang$core$array$$Array$push$63$(game.weapon.gun_list, aa);
-  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_revolute_joint$46$inner(game, moonbitlang$core$array$$Array$at$22$(game.particle_list, owner_id).right_forearm, aa.body, { _0: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(handpos), _1: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(handpos) }, false, 0, 0);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$93$(weapon_box_def, 1);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$93$(weapon_box_def, 0.3);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setRestitution$93$(weapon_box_def, 0.5);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$93$(weapon_box_def, owner_collision_group);
+  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$addShape(new_body_def, Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(weapon_box_def));
+  const final_weapon_body = Demonmasterlqx$box2d_ffi$box2d$$World$createBody$87$(game.world, new_body_def);
+  const _bind$2 = game.weapon.gun_index;
+  const _bind$3 = [0];
+  const _bind$4 = Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$new(url);
+  const aa = { id: _bind$2, owner_id: owner_id, body: final_weapon_body, bullet_damage: 10, bullet_speed: 60, bullet_penetration: 0, bullet_targets: _bind$3, fire_rate: 15, last_fire_frame: 0, gun_type: 0, angle: 0, direction: 1, is_thrown: false, throw_damage: 0, ammo: 50, img: _bind$4 };
+  Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$set_image_offset(aa.img, 7, 1);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$set_image_size(aa.img, 35, 35);
+  moonbitlang$core$array$$Array$push$7$(game.weapon.gun_list, aa);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_revolute_joint$46$inner(game, moonbitlang$core$array$$Array$at$26$(game.particle_list, owner_id).right_forearm, aa.body, { _0: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(handpos), _1: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(handpos) }, false, 0, 0);
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$63$(self) {
-  return (world, p) => {
-    const _arr = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(self.body);
+function Great$45$Love$45$League$Stick_Man_Battle$server$$drawDynamicBody$46$inner(p, body, img, image_width, image_height, offset_x, offset_y, override_angle, reverse) {
+  const pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(body);
+  const _bind = Great$45$Love$45$League$Stick_Man_Battle$server$$world_to_screen(Option$None$0$, Option$None$0$, Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(pos), Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(pos), Option$None$0$);
+  const _sx = _bind._0;
+  const _sy = _bind._1;
+  if (img.$tag === 1) {
+    const _Some = img;
+    const _img = _Some._0;
+    let angle;
+    if (override_angle.$tag === 1) {
+      const _Some$2 = override_angle;
+      angle = _Some$2._0;
+    } else {
+      angle = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getRotation(body);
+    }
+    p.method_135(p.self);
+    p.method_134(p.self, _sx, _sy, Option$None$0$);
+    p.method_123(p.self, "center");
+    let draw_angle = -angle;
+    Kaida$45$Amethyst$math$$cos(angle);
+    Kaida$45$Amethyst$math$$sin(angle);
+    moonbitlang$core$builtin$$println$16$(`drawDynamicBody: raw angle=${moonbitlang$core$builtin$$Show$to_string$37$(angle)}`);
+    const need_flip = reverse === true ? true : angle > 1.57079632679489656 || angle < -1.57079632679489656;
+    if (need_flip) {
+      draw_angle = draw_angle + 3.14159265358979312;
+    }
+    if (need_flip === true) {
+      p.method_127(p.self, draw_angle, Option$None$40$);
+      p.method_131(p.self, -1, Great$45$Love$45$League$Stick_Man_Battle$server$$drawDynamicBody$46$inner$46$constr$47$3809, Option$None$0$);
+      p.method_122(p.self, _img, -offset_x, offset_y, new Option$Some$0$(image_width), new Option$Some$0$(image_height));
+    } else {
+      p.method_127(p.self, draw_angle, Option$None$40$);
+      p.method_122(p.self, _img, offset_x, offset_y, new Option$Some$0$(image_width), new Option$Some$0$(image_height));
+    }
+    p.method_136(p.self);
+    return;
+  } else {
+    const _arr = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(body);
     const _len = _arr.length;
     let _tmp = 0;
     while (true) {
       const _i = _tmp;
       if (_i < _len) {
         const shape = _arr[_i];
-        const _bind = Demonmasterlqx$box2d_ffi$box2d$$Shape$getType$94$(shape);
-        switch (_bind) {
+        p.method_81(p.self, 127, Great$45$Love$45$League$Stick_Man_Battle$server$$drawDynamicBody$46$inner$46$constr$47$3810, Great$45$Love$45$League$Stick_Man_Battle$server$$drawDynamicBody$46$inner$46$constr$47$3811, Great$45$Love$45$League$Stick_Man_Battle$server$$drawDynamicBody$46$inner$46$constr$47$3812);
+        const _bind$2 = Demonmasterlqx$box2d_ffi$box2d$$Shape$getType$98$(shape);
+        switch (_bind$2) {
           case 2: {
             Great$45$Love$45$League$Stick_Man_Battle$server$$drawPolygon(p, Demonmasterlqx$box2d_ffi$box2d$$B2Shape$toPolygonShape(shape));
             break;
@@ -13840,7 +14260,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$
             break;
           }
           default: {
-            moonbitlang$core$builtin$$println$13$("Unknown Shape");
+            moonbitlang$core$builtin$$println$16$("Unknown Shape");
           }
         }
         _tmp = _i + 1 | 0;
@@ -13849,9 +14269,73 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$
         return;
       }
     }
+  }
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$try_load_image(self, p) {
+  const _bind = self.image_path;
+  if (_bind === undefined) {
+    moonbitlang$core$builtin$$println$16$("Image path is None, cannot load image");
+    self.is_failed = true;
+    return;
+  } else {
+    const _Some = _bind;
+    const _path = _Some;
+    if (self.is_loading === true) {
+      return undefined;
+    }
+    self.is_loading = true;
+    p.method_124(p.self, _path, (img) => {
+      self.img = new Option$Some$43$(img);
+      moonbitlang$core$builtin$$println$16$(`Image loaded successfully from path: ${_path}`);
+      self.is_failed = false;
+      self.is_loading = false;
+    }, (err) => {
+      moonbitlang$core$builtin$$println$16$(`Failed to load image from path: ${_path} with error: ${err}`);
+      self.is_failed = true;
+      self.img = Option$None$43$;
+      self.is_loading = false;
+    });
+    return;
+  }
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$get_image(self, p) {
+  let _tmp;
+  const _p = self.is_failed;
+  const _p$2 = true;
+  if (!(_p === _p$2)) {
+    let _tmp$2;
+    if (moonbitlang$core$option$$Option$is_empty$13$(self.img)) {
+      const _p$3 = self.is_loading;
+      const _p$4 = true;
+      _tmp$2 = !(_p$3 === _p$4);
+    } else {
+      _tmp$2 = false;
+    }
+    _tmp = _tmp$2;
+  } else {
+    _tmp = false;
+  }
+  if (_tmp) {
+    Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$try_load_image(self, p);
+  }
+  return self.img;
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$7$(self) {
+  return (world, p) => {
+    const _tmp = self.body;
+    const _tmp$2 = Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$get_image(self.img, p);
+    const _p = self.img;
+    const _tmp$3 = _p.x;
+    const _p$2 = self.img;
+    const _tmp$4 = _p$2.y;
+    const _p$3 = self.img;
+    const _tmp$5 = _p$3.offset_x;
+    const _p$4 = self.img;
+    const _tmp$6 = _p$4.offset_y;
+    Great$45$Love$45$League$Stick_Man_Battle$server$$drawDynamicBody$46$inner(p, _tmp, _tmp$2, _tmp$3, _tmp$4, _tmp$5, _tmp$6, new Option$Some$0$(self.angle), false);
   };
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_bullet$46$inner(self, position, velocity, owner_id, damage, max_distance, target_types, penetration, gravity_compensation, collision_group) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_bullet$46$inner(self, position, velocity, owner_id, damage, max_distance, target_types, penetration, gravity_compensation, collision_group, path) {
   let actual_collision_group;
   if (collision_group === undefined) {
     actual_collision_group = -(owner_id + 1000 | 0) | 0;
@@ -13861,25 +14345,25 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_bullet$46$
   }
   const circle_def = Demonmasterlqx$box2d_ffi$box2d$$b2CircleDef();
   Demonmasterlqx$box2d_ffi$box2d$$B2CircleDef$setRadius(circle_def, 0.08);
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$90$(circle_def, 8);
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$90$(circle_def, 0);
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setRestitution$90$(circle_def, 0.3);
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$90$(circle_def, actual_collision_group);
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalPosition$90$(circle_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(0, 0));
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$94$(circle_def, 8);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$94$(circle_def, 0);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setRestitution$94$(circle_def, 0.3);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$94$(circle_def, actual_collision_group);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setLocalPosition$94$(circle_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(0, 0));
   const body_def = Demonmasterlqx$box2d_ffi$box2d$$b2BodyDef();
   Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setPosition(body_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(position._0, position._1));
-  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$addShape(body_def, Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$87$(circle_def));
+  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$addShape(body_def, Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$91$(circle_def));
   Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setAllowSleep(body_def, false);
   Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setLinearDamping(body_def, 0);
-  const body = Demonmasterlqx$box2d_ffi$box2d$$World$createBody$83$(self.world, body_def);
+  const body = Demonmasterlqx$box2d_ffi$box2d$$World$createBody$87$(self.world, body_def);
   Demonmasterlqx$box2d_ffi$box2d$$B2Body$setLinearVelocity(body, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(velocity._0, velocity._1));
   const bullet_id = self.bullet_list.length;
-  const bullet = { id: bullet_id, owner_id: owner_id, body: body, damage: damage, max_distance: max_distance, traveled_distance: 0, start_position: position, is_active: true, target_types: target_types, hit_targets: moonbitlang$core$array$$Array$new$46$inner$5$(0), penetration: penetration, gravity_compensation: gravity_compensation };
+  const bullet = { id: bullet_id, owner_id: owner_id, body: body, damage: damage, max_distance: max_distance, traveled_distance: 0, start_position: position, is_active: true, target_types: target_types, hit_targets: moonbitlang$core$array$$Array$new$46$inner$5$(0), penetration: penetration, gravity_compensation: gravity_compensation, img: Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$new(path) };
   moonbitlang$core$array$$Array$push$69$(self.bullet_list, bullet);
-  moonbitlang$core$builtin$$println$13$(`创建子弹 #${moonbitlang$core$builtin$$Show$to_string$5$(bullet_id)}: 位置(${moonbitlang$core$builtin$$Show$to_string$33$(position._0)}, ${moonbitlang$core$builtin$$Show$to_string$33$(position._1)}), 伤害${moonbitlang$core$builtin$$Show$to_string$5$(damage)}, 目标${moonbitlang$core$builtin$$Show$to_string$40$(target_types)}`);
+  moonbitlang$core$builtin$$println$16$(`创建子弹 #${moonbitlang$core$builtin$$Show$to_string$5$(bullet_id)}: 位置(${moonbitlang$core$builtin$$Show$to_string$37$(position._0)}, ${moonbitlang$core$builtin$$Show$to_string$37$(position._1)}), 伤害${moonbitlang$core$builtin$$Show$to_string$5$(damage)}, 目标${moonbitlang$core$builtin$$Show$to_string$44$(target_types)}`);
   return bullet;
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_bullet(self, position, velocity, owner_id, damage$46$opt, max_distance$46$opt, target_types$46$opt, penetration$46$opt, gravity_compensation$46$opt, collision_group$46$opt) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_bullet(self, position, velocity, owner_id, damage$46$opt, max_distance$46$opt, target_types$46$opt, penetration$46$opt, gravity_compensation$46$opt, collision_group$46$opt, path$46$opt) {
   let damage;
   if (damage$46$opt === undefined) {
     damage = 10;
@@ -13922,19 +14406,26 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_bullet(sel
   } else {
     collision_group = undefined;
   }
-  return Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_bullet$46$inner(self, position, velocity, owner_id, damage, max_distance, target_types, penetration, gravity_compensation, collision_group);
+  let path;
+  if (path$46$opt.$tag === 1) {
+    const _Some = path$46$opt;
+    path = _Some._0;
+  } else {
+    path = undefined;
+  }
+  return Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_bullet$46$inner(self, position, velocity, owner_id, damage, max_distance, target_types, penetration, gravity_compensation, collision_group, path);
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$shoot_bullet_advanced$46$inner(self, player_index, direction, speed, damage, max_distance, penetration, gravity_compensation, recoil_horizontal, recoil_vertical) {
   if (player_index >= self.particle_list.length) {
     return undefined;
   }
-  const particle = moonbitlang$core$array$$Array$at$22$(self.particle_list, player_index);
+  const particle = moonbitlang$core$array$$Array$at$26$(self.particle_list, player_index);
   const hand_pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(particle.right_forearm);
   const spawn_x = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(hand_pos) + direction * 0.8;
   const spawn_y = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(hand_pos);
   const position = { _0: spawn_x, _1: spawn_y };
   const velocity = { _0: direction * speed, _1: 0 };
-  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_bullet(self, position, velocity, player_index, damage, new Option$Some$0$(max_distance), new Option$Some$42$([0]), penetration, new Option$Some$0$(gravity_compensation), Option$None$41$);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_bullet(self, position, velocity, player_index, damage, new Option$Some$0$(max_distance), new Option$Some$44$([0]), penetration, new Option$Some$0$(gravity_compensation), Option$None$42$, Option$None$41$);
   const recoil_impulse = Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(-direction * recoil_horizontal, recoil_vertical);
   const torso_pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(particle.torso);
   Demonmasterlqx$box2d_ffi$box2d$$B2Body$applyImpulse(particle.torso, recoil_impulse, torso_pos);
@@ -13943,23 +14434,23 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$shoot_penetrating
   if (player_index >= self.particle_list.length) {
     return undefined;
   }
-  const particle = moonbitlang$core$array$$Array$at$22$(self.particle_list, player_index);
+  const particle = moonbitlang$core$array$$Array$at$26$(self.particle_list, player_index);
   const hand_pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(particle.right_forearm);
   const spawn_x = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(hand_pos) + direction * 0.8;
   const spawn_y = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(hand_pos);
   const position = { _0: spawn_x, _1: spawn_y };
   const velocity = { _0: direction * speed, _1: 0 };
-  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_bullet(self, position, velocity, player_index, damage, new Option$Some$0$(max_distance), new Option$Some$42$([0]), penetration_count, new Option$Some$0$(gravity_compensation), Option$None$41$);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_bullet(self, position, velocity, player_index, damage, new Option$Some$0$(max_distance), new Option$Some$44$([0]), penetration_count, new Option$Some$0$(gravity_compensation), Option$None$42$, Option$None$41$);
   const recoil_impulse = Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(-direction * recoil_horizontal, recoil_vertical);
   const torso_pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(particle.torso);
   Demonmasterlqx$box2d_ffi$box2d$$B2Body$applyImpulse(particle.torso, recoil_impulse, torso_pos);
-  moonbitlang$core$builtin$$println$13$(`玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(player_index)} 发射了穿透子弹 (穿透${moonbitlang$core$builtin$$Show$to_string$5$(penetration_count)}次)`);
+  moonbitlang$core$builtin$$println$16$(`玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(player_index)} 发射了穿透子弹 (穿透${moonbitlang$core$builtin$$Show$to_string$5$(penetration_count)}次)`);
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$shoot_shotgun$46$inner(self, player_index, direction, bullet_count, spread_angle, gravity_compensation, recoil_horizontal, recoil_vertical) {
   if (player_index >= self.particle_list.length) {
     return undefined;
   }
-  const particle = moonbitlang$core$array$$Array$at$22$(self.particle_list, player_index);
+  const particle = moonbitlang$core$array$$Array$at$26$(self.particle_list, player_index);
   const hand_pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(particle.right_forearm);
   const spawn_x = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(hand_pos) + direction * 0.8;
   const spawn_y = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(hand_pos);
@@ -13972,7 +14463,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$shoot_shotgun$46$
       const vx = direction * 50 * Kaida$45$Amethyst$math$$cos(angle_offset);
       const vy = 50 * Kaida$45$Amethyst$math$$sin(angle_offset);
       const velocity = { _0: vx, _1: vy };
-      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_bullet(self, position, velocity, player_index, Great$45$Love$45$League$Stick_Man_Battle$server$$shoot_shotgun$46$inner$46$constr$47$3753, Great$45$Love$45$League$Stick_Man_Battle$server$$shoot_shotgun$46$inner$46$constr$47$3754, new Option$Some$42$([0]), Great$45$Love$45$League$Stick_Man_Battle$server$$shoot_shotgun$46$inner$46$constr$47$3755, new Option$Some$0$(gravity_compensation), Option$None$41$);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_bullet(self, position, velocity, player_index, Great$45$Love$45$League$Stick_Man_Battle$server$$shoot_shotgun$46$inner$46$constr$47$3935, Great$45$Love$45$League$Stick_Man_Battle$server$$shoot_shotgun$46$inner$46$constr$47$3936, new Option$Some$44$([0]), Great$45$Love$45$League$Stick_Man_Battle$server$$shoot_shotgun$46$inner$46$constr$47$3937, new Option$Some$0$(gravity_compensation), Option$None$42$, Option$None$41$);
       _tmp = i + 1 | 0;
       continue;
     } else {
@@ -13983,38 +14474,50 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$shoot_shotgun$46$
   const recoil_impulse = Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(-direction * recoil_magnitude, recoil_vertical);
   const torso_pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(particle.torso);
   Demonmasterlqx$box2d_ffi$box2d$$B2Body$applyImpulse(particle.torso, recoil_impulse, torso_pos);
-  moonbitlang$core$builtin$$println$13$(`玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(player_index)} 发射了散弹 (${moonbitlang$core$builtin$$Show$to_string$5$(bullet_count)}发)`);
+  moonbitlang$core$builtin$$println$16$(`玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(player_index)} 发射了散弹 (${moonbitlang$core$builtin$$Show$to_string$5$(bullet_count)}发)`);
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponControl$attack$63$(self, game) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponControl$attack$7$(self, game) {
+  if (self.is_thrown) {
+    moonbitlang$core$builtin$$println$16$(`无法射击：武器已被投掷 (gun id: ${moonbitlang$core$builtin$$Show$to_string$5$(self.id)})`);
+    return undefined;
+  }
+  if (self.ammo <= 0) {
+    moonbitlang$core$builtin$$println$16$(`无法射击：武器没有子弹了 (gun id: ${moonbitlang$core$builtin$$Show$to_string$5$(self.id)})`);
+    return undefined;
+  }
   if ((game.frame_count - self.last_fire_frame | 0) < self.fire_rate) {
     return undefined;
   }
-  const holder = moonbitlang$core$array$$Array$at$22$(game.particle_list, self.owner_id);
+  const holder = moonbitlang$core$array$$Array$at$26$(game.particle_list, self.owner_id);
   const direction = holder.control.walk_direction > 0 ? 1 : -1;
+  self.angle = 0;
   const _bind = self.gun_type;
   switch (_bind) {
     case 0: {
       Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_sound(game.audio, 0);
       Great$45$Love$45$League$Stick_Man_Battle$server$$Game$shoot_bullet_advanced$46$inner(game, self.owner_id, direction, 60, 10, 100, 0, 0.95, 3, 0.3);
-      moonbitlang$core$builtin$$println$13$(`手枪射击，持有者: #${moonbitlang$core$builtin$$Show$to_string$5$(self.owner_id)}`);
+      self.ammo = self.ammo - 1 | 0;
+      moonbitlang$core$builtin$$println$16$(`手枪射击，持有者: #${moonbitlang$core$builtin$$Show$to_string$5$(self.owner_id)}，剩余子弹: ${moonbitlang$core$builtin$$Show$to_string$5$(self.ammo)}`);
       break;
     }
     case 1: {
-      Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_sound(game.audio, 1);
       Great$45$Love$45$League$Stick_Man_Battle$server$$Game$shoot_shotgun$46$inner(game, self.owner_id, direction, 5, 0.52, 0.85, 4, 0.6);
-      moonbitlang$core$builtin$$println$13$(`霰弹枪射击，持有者: #${moonbitlang$core$builtin$$Show$to_string$5$(self.owner_id)}`);
+      self.ammo = self.ammo - 5 | 0;
+      moonbitlang$core$builtin$$println$16$(`霰弹枪射击，持有者: #${moonbitlang$core$builtin$$Show$to_string$5$(self.owner_id)}，剩余子弹: ${moonbitlang$core$builtin$$Show$to_string$5$(self.ammo)}`);
       break;
     }
     case 2: {
       Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_sound(game.audio, 2);
       Great$45$Love$45$League$Stick_Man_Battle$server$$Game$shoot_penetrating_bullet_advanced$46$inner(game, self.owner_id, direction, 2, 80, 30, 120, 0.98, 30, 0.5);
-      moonbitlang$core$builtin$$println$13$(`狙击枪射击，持有者: #${moonbitlang$core$builtin$$Show$to_string$5$(self.owner_id)}`);
+      self.ammo = self.ammo - 1 | 0;
+      moonbitlang$core$builtin$$println$16$(`狙击枪射击，持有者: #${moonbitlang$core$builtin$$Show$to_string$5$(self.owner_id)}，剩余子弹: ${moonbitlang$core$builtin$$Show$to_string$5$(self.ammo)}`);
       break;
     }
     default: {
       Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_sound(game.audio, 3);
       Great$45$Love$45$League$Stick_Man_Battle$server$$Game$shoot_penetrating_bullet_advanced$46$inner(game, self.owner_id, direction, 5, 100, 15, 150, 1, 0, 0);
-      moonbitlang$core$builtin$$println$13$(`激光枪射击，持有者: #${moonbitlang$core$builtin$$Show$to_string$5$(self.owner_id)}`);
+      self.ammo = self.ammo - 1 | 0;
+      moonbitlang$core$builtin$$println$16$(`激光枪射击，持有者: #${moonbitlang$core$builtin$$Show$to_string$5$(self.owner_id)}，剩余子弹: ${moonbitlang$core$builtin$$Show$to_string$5$(self.ammo)}`);
     }
   }
   self.last_fire_frame = game.frame_count;
@@ -14022,7 +14525,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponControl$attack$6
 function Great$45$Love$45$League$Stick_Man_Battle$server$$maintain_rotation_test$46$inner(body, target_angle, kp, kd) {
   const angle = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getRotation(body);
   const error = target_angle - angle;
-  moonbitlang$core$builtin$$println$13$(`Current Angle: ${moonbitlang$core$builtin$$Show$to_string$33$(angle)}, Target Angle: ${moonbitlang$core$builtin$$Show$to_string$33$(target_angle)}, Error: ${moonbitlang$core$builtin$$Show$to_string$33$(error)}`);
+  moonbitlang$core$builtin$$println$16$(`Current Angle: ${moonbitlang$core$builtin$$Show$to_string$37$(angle)}, Target Angle: ${moonbitlang$core$builtin$$Show$to_string$37$(target_angle)}, Error: ${moonbitlang$core$builtin$$Show$to_string$37$(error)}`);
   const torque = kp * error - kd * Demonmasterlqx$box2d_ffi$box2d$$B2Body$getAngularVelocity(body);
   Demonmasterlqx$box2d_ffi$box2d$$B2Body$applyTorque(body, torque);
 }
@@ -14030,7 +14533,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$shoot_bullet_at_a
   if (player_index >= self.particle_list.length) {
     return undefined;
   }
-  const particle = moonbitlang$core$array$$Array$at$22$(self.particle_list, player_index);
+  const particle = moonbitlang$core$array$$Array$at$26$(self.particle_list, player_index);
   const hand_pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(particle.right_forearm);
   const spawn_x = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(hand_pos) + Kaida$45$Amethyst$math$$cos(angle) * 0.8;
   const spawn_y = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(hand_pos) + Kaida$45$Amethyst$math$$sin(angle) * 0.8;
@@ -14038,21 +14541,31 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$shoot_bullet_at_a
   const vx = Kaida$45$Amethyst$math$$cos(angle) * speed;
   const vy = Kaida$45$Amethyst$math$$sin(angle) * speed;
   const velocity = { _0: vx, _1: vy };
-  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_bullet(self, position, velocity, player_index, damage, new Option$Some$0$(max_distance), new Option$Some$42$([0]), penetration, new Option$Some$0$(gravity_compensation), Option$None$41$);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_bullet(self, position, velocity, player_index, damage, new Option$Some$0$(max_distance), new Option$Some$44$([0]), penetration, new Option$Some$0$(gravity_compensation), Option$None$42$, Option$None$41$);
   const recoil_impulse = Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(-Kaida$45$Amethyst$math$$cos(angle) * recoil_horizontal, -Kaida$45$Amethyst$math$$sin(angle) * recoil_horizontal + recoil_vertical);
   const torso_pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(particle.torso);
   Demonmasterlqx$box2d_ffi$box2d$$B2Body$applyImpulse(particle.torso, recoil_impulse, torso_pos);
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponControl$attack_at_angle$63$(self, game, angle) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponControl$attack_at_angle$7$(self, game, angle) {
+  if (self.is_thrown) {
+    moonbitlang$core$builtin$$println$16$(`无法射击：武器已被投掷 (gun id: ${moonbitlang$core$builtin$$Show$to_string$5$(self.id)})`);
+    return undefined;
+  }
+  if (self.ammo <= 0) {
+    moonbitlang$core$builtin$$println$16$(`无法射击：武器没有子弹了 (gun id: ${moonbitlang$core$builtin$$Show$to_string$5$(self.id)})`);
+    return undefined;
+  }
   if ((game.frame_count - self.last_fire_frame | 0) < self.fire_rate) {
     return undefined;
   }
   Great$45$Love$45$League$Stick_Man_Battle$server$$maintain_rotation_test$46$inner(self.body, angle, 2, 2);
+  self.angle = angle;
   const _bind = self.gun_type;
   switch (_bind) {
     case 0: {
       Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_sound(game.audio, 0);
       Great$45$Love$45$League$Stick_Man_Battle$server$$Game$shoot_bullet_at_angle$46$inner(game, self.owner_id, angle, 60, 10, 100, 0, 0.95, 3, 0.3);
+      self.ammo = self.ammo - 1 | 0;
       break;
     }
     case 1: {
@@ -14071,29 +14584,29 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponControl$attack_a
           break;
         }
       }
+      self.ammo = self.ammo - 5 | 0;
       break;
     }
     case 2: {
       Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_sound(game.audio, 2);
       Great$45$Love$45$League$Stick_Man_Battle$server$$Game$shoot_bullet_at_angle$46$inner(game, self.owner_id, angle, 80, 30, 120, 2, 0.98, 30, 0.5);
+      self.ammo = self.ammo - 1 | 0;
       break;
     }
     default: {
       Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_sound(game.audio, 3);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$shoot_bullet_at_angle$46$inner(game, self.owner_id, angle, 100, 15, 150, 5, 1, 0, 0);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$shoot_bullet_at_angle$46$inner(game, self.owner_id, angle, 100, 3, 150, 5, 1, 0, 0);
+      self.ammo = self.ammo - 1 | 0;
     }
   }
   self.last_fire_frame = game.frame_count;
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponDestroy$destroy$63$(self, game) {
-  Demonmasterlqx$box2d_ffi$box2d$$World$destroyBody$83$(game.world, self.body);
+function Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponDestroy$destroy$7$(self, game) {
+  Demonmasterlqx$box2d_ffi$box2d$$World$destroyBody$87$(game.world, self.body);
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_pistol(self, owner_id) {
-  Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponCreate$create$63$(self, owner_id);
-}
-function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_shotgun(self, owner_id) {
-  const centerpos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(moonbitlang$core$array$$Array$at$22$(self.particle_list, owner_id).right_forearm);
-  const rotate = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getRotation(moonbitlang$core$array$$Array$at$22$(self.particle_list, owner_id).right_forearm);
+function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_shotgun(self, owner_id, url) {
+  const centerpos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(moonbitlang$core$array$$Array$at$26$(self.particle_list, owner_id).right_forearm);
+  const rotate = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getRotation(moonbitlang$core$array$$Array$at$26$(self.particle_list, owner_id).right_forearm);
   const handpos = Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(-Kaida$45$Amethyst$math$$sin(rotate) * 0.25 + Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(centerpos), -Kaida$45$Amethyst$math$$cos(rotate) * 0.25 + Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(centerpos));
   const _bind = self.weapon;
   _bind.gun_index = _bind.gun_index + 1 | 0;
@@ -14102,18 +14615,24 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_shotgun(se
   Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setPosition(weapon_body_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(handpos) + Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(Great$45$Love$45$League$Stick_Man_Battle$server$$gun_body_shift), Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(handpos) + Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(Great$45$Love$45$League$Stick_Man_Battle$server$$gun_body_shift)));
   const weapon_box_def = Demonmasterlqx$box2d_ffi$box2d$$b2BoxDef();
   Demonmasterlqx$box2d_ffi$box2d$$B2BoxDef$setExtents(weapon_box_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(0.2, 0.5));
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$89$(weapon_box_def, 0.5);
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$89$(weapon_box_def, 0.3);
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setRestitution$89$(weapon_box_def, 0.5);
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$89$(weapon_box_def, owner_collision_group);
-  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$addShape(weapon_body_def, Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(weapon_box_def));
-  const gun = { id: self.weapon.gun_index, owner_id: owner_id, body: Demonmasterlqx$box2d_ffi$box2d$$World$createBody$83$(self.world, weapon_body_def), bullet_damage: 6, bullet_speed: 50, bullet_penetration: 0, bullet_targets: [0], fire_rate: 40, last_fire_frame: 0, gun_type: 1 };
-  moonbitlang$core$array$$Array$push$63$(self.weapon.gun_list, gun);
-  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_revolute_joint$46$inner(self, moonbitlang$core$array$$Array$at$22$(self.particle_list, owner_id).right_forearm, gun.body, { _0: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(handpos), _1: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(handpos) }, false, 0, 0);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$93$(weapon_box_def, 1);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$93$(weapon_box_def, 0.3);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setRestitution$93$(weapon_box_def, 0.5);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$93$(weapon_box_def, owner_collision_group);
+  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$addShape(weapon_body_def, Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(weapon_box_def));
+  const _bind$2 = self.weapon.gun_index;
+  const _bind$3 = Demonmasterlqx$box2d_ffi$box2d$$World$createBody$87$(self.world, weapon_body_def);
+  const _bind$4 = [0];
+  const _bind$5 = Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$new(url);
+  const gun = { id: _bind$2, owner_id: owner_id, body: _bind$3, bullet_damage: 6, bullet_speed: 50, bullet_penetration: 0, bullet_targets: _bind$4, fire_rate: 40, last_fire_frame: 0, gun_type: 1, angle: 0, direction: 1, is_thrown: false, throw_damage: 0, ammo: 30, img: _bind$5 };
+  Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$set_image_offset(gun.img, 21, 1);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$set_image_size(gun.img, 100, 100);
+  moonbitlang$core$array$$Array$push$7$(self.weapon.gun_list, gun);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_revolute_joint$46$inner(self, moonbitlang$core$array$$Array$at$26$(self.particle_list, owner_id).right_forearm, gun.body, { _0: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(handpos), _1: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(handpos) }, false, 0, 0);
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_sniper(self, owner_id) {
-  const centerpos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(moonbitlang$core$array$$Array$at$22$(self.particle_list, owner_id).right_forearm);
-  const rotate = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getRotation(moonbitlang$core$array$$Array$at$22$(self.particle_list, owner_id).right_forearm);
+function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_sniper(self, owner_id, url) {
+  const centerpos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(moonbitlang$core$array$$Array$at$26$(self.particle_list, owner_id).right_forearm);
+  const rotate = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getRotation(moonbitlang$core$array$$Array$at$26$(self.particle_list, owner_id).right_forearm);
   const handpos = Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(-Kaida$45$Amethyst$math$$sin(rotate) * 0.25 + Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(centerpos), -Kaida$45$Amethyst$math$$cos(rotate) * 0.25 + Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(centerpos));
   const _bind = self.weapon;
   _bind.gun_index = _bind.gun_index + 1 | 0;
@@ -14122,18 +14641,24 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_sniper(sel
   Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setPosition(weapon_body_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(handpos) + Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(Great$45$Love$45$League$Stick_Man_Battle$server$$gun_body_shift), Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(handpos) + Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(Great$45$Love$45$League$Stick_Man_Battle$server$$gun_body_shift)));
   const weapon_box_def = Demonmasterlqx$box2d_ffi$box2d$$b2BoxDef();
   Demonmasterlqx$box2d_ffi$box2d$$B2BoxDef$setExtents(weapon_box_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(0.2, 0.5));
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$89$(weapon_box_def, 0.5);
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$89$(weapon_box_def, 0.3);
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setRestitution$89$(weapon_box_def, 0.5);
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$89$(weapon_box_def, owner_collision_group);
-  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$addShape(weapon_body_def, Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(weapon_box_def));
-  const gun = { id: self.weapon.gun_index, owner_id: owner_id, body: Demonmasterlqx$box2d_ffi$box2d$$World$createBody$83$(self.world, weapon_body_def), bullet_damage: 30, bullet_speed: 80, bullet_penetration: 2, bullet_targets: [0], fire_rate: 60, last_fire_frame: 0, gun_type: 2 };
-  moonbitlang$core$array$$Array$push$63$(self.weapon.gun_list, gun);
-  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_revolute_joint$46$inner(self, moonbitlang$core$array$$Array$at$22$(self.particle_list, owner_id).right_forearm, gun.body, { _0: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(handpos), _1: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(handpos) }, false, 0, 0);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$93$(weapon_box_def, 1);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$93$(weapon_box_def, 0.3);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setRestitution$93$(weapon_box_def, 0.5);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$93$(weapon_box_def, owner_collision_group);
+  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$addShape(weapon_body_def, Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(weapon_box_def));
+  const _bind$2 = self.weapon.gun_index;
+  const _bind$3 = Demonmasterlqx$box2d_ffi$box2d$$World$createBody$87$(self.world, weapon_body_def);
+  const _bind$4 = [0];
+  const _bind$5 = Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$new(url);
+  const gun = { id: _bind$2, owner_id: owner_id, body: _bind$3, bullet_damage: 30, bullet_speed: 80, bullet_penetration: 2, bullet_targets: _bind$4, fire_rate: 60, last_fire_frame: 0, gun_type: 2, angle: 0, direction: 1, is_thrown: false, throw_damage: 0, ammo: 20, img: _bind$5 };
+  Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$set_image_offset(gun.img, 20, -2);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$set_image_size(gun.img, 100, 100);
+  moonbitlang$core$array$$Array$push$7$(self.weapon.gun_list, gun);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_revolute_joint$46$inner(self, moonbitlang$core$array$$Array$at$26$(self.particle_list, owner_id).right_forearm, gun.body, { _0: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(handpos), _1: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(handpos) }, false, 0, 0);
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_laser_rifle(self, owner_id) {
-  const centerpos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(moonbitlang$core$array$$Array$at$22$(self.particle_list, owner_id).right_forearm);
-  const rotate = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getRotation(moonbitlang$core$array$$Array$at$22$(self.particle_list, owner_id).right_forearm);
+function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_laser_rifle(self, owner_id, url) {
+  const centerpos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(moonbitlang$core$array$$Array$at$26$(self.particle_list, owner_id).right_forearm);
+  const rotate = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getRotation(moonbitlang$core$array$$Array$at$26$(self.particle_list, owner_id).right_forearm);
   const handpos = Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(-Kaida$45$Amethyst$math$$sin(rotate) * 0.25 + Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(centerpos), -Kaida$45$Amethyst$math$$cos(rotate) * 0.25 + Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(centerpos));
   const _bind = self.weapon;
   _bind.gun_index = _bind.gun_index + 1 | 0;
@@ -14142,16 +14667,129 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_laser_rifl
   Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setPosition(weapon_body_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(handpos) + Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(Great$45$Love$45$League$Stick_Man_Battle$server$$gun_body_shift), Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(handpos) + Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(Great$45$Love$45$League$Stick_Man_Battle$server$$gun_body_shift)));
   const weapon_box_def = Demonmasterlqx$box2d_ffi$box2d$$b2BoxDef();
   Demonmasterlqx$box2d_ffi$box2d$$B2BoxDef$setExtents(weapon_box_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(0.2, 0.5));
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$89$(weapon_box_def, 0.5);
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$89$(weapon_box_def, 0.3);
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setRestitution$89$(weapon_box_def, 0.5);
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$89$(weapon_box_def, owner_collision_group);
-  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$addShape(weapon_body_def, Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(weapon_box_def));
-  const gun = { id: self.weapon.gun_index, owner_id: owner_id, body: Demonmasterlqx$box2d_ffi$box2d$$World$createBody$83$(self.world, weapon_body_def), bullet_damage: 15, bullet_speed: 1000, bullet_penetration: 5, bullet_targets: [0], fire_rate: 5, last_fire_frame: 0, gun_type: 3 };
-  moonbitlang$core$array$$Array$push$63$(self.weapon.gun_list, gun);
-  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_revolute_joint$46$inner(self, moonbitlang$core$array$$Array$at$22$(self.particle_list, owner_id).right_forearm, gun.body, { _0: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(handpos), _1: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(handpos) }, false, 0, 0);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$93$(weapon_box_def, 1);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$93$(weapon_box_def, 0.3);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setRestitution$93$(weapon_box_def, 0.5);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$93$(weapon_box_def, owner_collision_group);
+  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$addShape(weapon_body_def, Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(weapon_box_def));
+  const _bind$2 = self.weapon.gun_index;
+  const _bind$3 = Demonmasterlqx$box2d_ffi$box2d$$World$createBody$87$(self.world, weapon_body_def);
+  const _bind$4 = [0];
+  const _bind$5 = Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$new(url);
+  const gun = { id: _bind$2, owner_id: owner_id, body: _bind$3, bullet_damage: 15, bullet_speed: 1000, bullet_penetration: 5, bullet_targets: _bind$4, fire_rate: 5, last_fire_frame: 0, gun_type: 3, angle: 0, direction: 1, is_thrown: false, throw_damage: 0, ammo: 100, img: _bind$5 };
+  Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$set_image_offset(gun.img, 7, -5);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$set_image_size(gun.img, 70, 70);
+  moonbitlang$core$array$$Array$push$7$(self.weapon.gun_list, gun);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_revolute_joint$46$inner(self, moonbitlang$core$array$$Array$at$26$(self.particle_list, owner_id).right_forearm, gun.body, { _0: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(handpos), _1: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(handpos) }, false, 0, 0);
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$getP5Instance(drawww, width$46$opt, height$46$opt) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$min$15$(a, b) {
+  if (a < b) {
+    return a;
+  }
+  return b;
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$max$15$(a, b) {
+  if (a >= b) {
+    return a;
+  }
+  return b;
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$get_entity_aabb(body_list) {
+  let max_x = -1000000000;
+  let max_y = -1000000000;
+  let min_x = 1000000000;
+  let min_y = 1000000000;
+  const _len = body_list.length;
+  let _tmp = 0;
+  while (true) {
+    const _i = _tmp;
+    if (_i < _len) {
+      const i = body_list[_i];
+      const _arr = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(i);
+      const _len$2 = _arr.length;
+      let _tmp$2 = 0;
+      while (true) {
+        const _i$2 = _tmp$2;
+        if (_i$2 < _len$2) {
+          const fixture = _arr[_i$2];
+          const _bind = Demonmasterlqx$box2d_ffi$box2d$$Shape$getType$98$(fixture);
+          switch (_bind) {
+            case 1: {
+              const circle = Demonmasterlqx$box2d_ffi$box2d$$B2Shape$toCircleShape(fixture);
+              const pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getWorldPoint(i, Demonmasterlqx$box2d_ffi$box2d$$B2CircleShape$getLocalPosition(circle));
+              const mmin_x = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(pos) - Demonmasterlqx$box2d_ffi$box2d$$B2CircleShape$getRadius(circle);
+              const mmax_x = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(pos) + Demonmasterlqx$box2d_ffi$box2d$$B2CircleShape$getRadius(circle);
+              const mmin_y = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(pos) - Demonmasterlqx$box2d_ffi$box2d$$B2CircleShape$getRadius(circle);
+              const mmax_y = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(pos) + Demonmasterlqx$box2d_ffi$box2d$$B2CircleShape$getRadius(circle);
+              max_x = Great$45$Love$45$League$Stick_Man_Battle$server$$max$15$(max_x, mmax_x);
+              max_y = Great$45$Love$45$League$Stick_Man_Battle$server$$max$15$(max_y, mmax_y);
+              min_x = Great$45$Love$45$League$Stick_Man_Battle$server$$min$15$(min_x, mmin_x);
+              min_y = Great$45$Love$45$League$Stick_Man_Battle$server$$min$15$(min_y, mmin_y);
+              break;
+            }
+            case 2: {
+              const poly = Demonmasterlqx$box2d_ffi$box2d$$B2Shape$toPolygonShape(fixture);
+              const _arr$2 = Demonmasterlqx$box2d_ffi$box2d$$B2PolygonShape$getVertices(poly);
+              const _len$3 = _arr$2.length;
+              let _tmp$3 = 0;
+              while (true) {
+                const _i$3 = _tmp$3;
+                if (_i$3 < _len$3) {
+                  const vertex = _arr$2[_i$3];
+                  const world_vertex = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getWorldPoint(i, vertex);
+                  max_x = Great$45$Love$45$League$Stick_Man_Battle$server$$max$15$(max_x, Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(world_vertex));
+                  max_y = Great$45$Love$45$League$Stick_Man_Battle$server$$max$15$(max_y, Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(world_vertex));
+                  min_x = Great$45$Love$45$League$Stick_Man_Battle$server$$min$15$(min_x, Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(world_vertex));
+                  min_y = Great$45$Love$45$League$Stick_Man_Battle$server$$min$15$(min_y, Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(world_vertex));
+                  _tmp$3 = _i$3 + 1 | 0;
+                  continue;
+                } else {
+                  break;
+                }
+              }
+              break;
+            }
+            case 3: {
+              const poly$2 = Demonmasterlqx$box2d_ffi$box2d$$B2Shape$toPolygonShape(fixture);
+              const _arr$3 = Demonmasterlqx$box2d_ffi$box2d$$B2PolygonShape$getVertices(poly$2);
+              const _len$4 = _arr$3.length;
+              let _tmp$4 = 0;
+              while (true) {
+                const _i$3 = _tmp$4;
+                if (_i$3 < _len$4) {
+                  const vertex = _arr$3[_i$3];
+                  const world_vertex = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getWorldPoint(i, vertex);
+                  max_x = Great$45$Love$45$League$Stick_Man_Battle$server$$max$15$(max_x, Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(world_vertex));
+                  max_y = Great$45$Love$45$League$Stick_Man_Battle$server$$max$15$(max_y, Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(world_vertex));
+                  min_x = Great$45$Love$45$League$Stick_Man_Battle$server$$min$15$(min_x, Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(world_vertex));
+                  min_y = Great$45$Love$45$League$Stick_Man_Battle$server$$min$15$(min_y, Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(world_vertex));
+                  _tmp$4 = _i$3 + 1 | 0;
+                  continue;
+                } else {
+                  break;
+                }
+              }
+              break;
+            }
+          }
+          _tmp$2 = _i$2 + 1 | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+      _tmp = _i + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  const res = Demonmasterlqx$box2d_ffi$box2d$$b2AABB();
+  Demonmasterlqx$box2d_ffi$box2d$$B2AABB$setmaxVertex(res, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(max_x, max_y));
+  Demonmasterlqx$box2d_ffi$box2d$$B2AABB$setminVertex(res, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(min_x, min_y));
+  return res;
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$getP5Instance(drawww, prelaod, width$46$opt, height$46$opt) {
   let width;
   if (width$46$opt.$tag === 1) {
     const _Some = width$46$opt;
@@ -14166,7 +14804,61 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$getP5Instance(drawww, 
   } else {
     height = 1000;
   }
-  return Great$45$Love$45$League$Stick_Man_Battle$server$$getP5Instance$46$inner(drawww, width, height);
+  return Great$45$Love$45$League$Stick_Man_Battle$server$$getP5Instance$46$inner(drawww, prelaod, width, height);
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$draw_image_at(p, img, x, y, width, height, angle, offset_x, offset_y) {
+  p.method_134(p.self, x, y, Option$None$0$);
+  p.method_127(p.self, angle, Option$None$40$);
+  p.method_123(p.self, "center");
+  p.method_122(p.self, img, offset_x, offset_y, new Option$Some$0$(width), new Option$Some$0$(height));
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$drawStaticBody$46$inner(p, body, img, image_width, image_height, offset_x, offset_y, is_bullet) {
+  const pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(body);
+  const _bind = Great$45$Love$45$League$Stick_Man_Battle$server$$world_to_screen(Option$None$0$, Option$None$0$, Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(pos), Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(pos), Option$None$0$);
+  const _sx = _bind._0;
+  const _sy = _bind._1;
+  if (img.$tag === 1) {
+    const _Some = img;
+    const _img = _Some._0;
+    const vel = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getLinearVelocity(body);
+    const angle = is_bullet ? Kaida$45$Amethyst$math$$atan2(Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vel), Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(vel)) : -Demonmasterlqx$box2d_ffi$box2d$$B2Body$getRotation(body);
+    moonbitlang$core$builtin$$println$16$(`Drawing body at (${moonbitlang$core$builtin$$Show$to_string$37$(_sx)}, ${moonbitlang$core$builtin$$Show$to_string$37$(_sy)}) with angle ${moonbitlang$core$builtin$$Show$to_string$37$(angle)} radians`);
+    Great$45$Love$45$League$Stick_Man_Battle$server$$draw_image_at(p, _img, _sx, _sy, image_width, image_height, angle, offset_x, offset_y);
+    return;
+  } else {
+    const _arr = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(body);
+    const _len = _arr.length;
+    let _tmp = 0;
+    while (true) {
+      const _i = _tmp;
+      if (_i < _len) {
+        const shape = _arr[_i];
+        p.method_81(p.self, 127, Great$45$Love$45$League$Stick_Man_Battle$server$$drawStaticBody$46$inner$46$constr$47$4105, Great$45$Love$45$League$Stick_Man_Battle$server$$drawStaticBody$46$inner$46$constr$47$4106, Great$45$Love$45$League$Stick_Man_Battle$server$$drawStaticBody$46$inner$46$constr$47$4107);
+        const _bind$2 = Demonmasterlqx$box2d_ffi$box2d$$Shape$getType$98$(shape);
+        switch (_bind$2) {
+          case 2: {
+            Great$45$Love$45$League$Stick_Man_Battle$server$$drawPolygon(p, Demonmasterlqx$box2d_ffi$box2d$$B2Shape$toPolygonShape(shape));
+            break;
+          }
+          case 3: {
+            Great$45$Love$45$League$Stick_Man_Battle$server$$drawPolygon(p, Demonmasterlqx$box2d_ffi$box2d$$B2Shape$toPolygonShape(shape));
+            break;
+          }
+          case 1: {
+            Great$45$Love$45$League$Stick_Man_Battle$server$$drawCircle(p, Demonmasterlqx$box2d_ffi$box2d$$B2Shape$toCircleShape(shape));
+            break;
+          }
+          default: {
+            moonbitlang$core$builtin$$println$16$("Unknown Shape");
+          }
+        }
+        _tmp = _i + 1 | 0;
+        continue;
+      } else {
+        return;
+      }
+    }
+  }
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$screen_to_world$46$inner(world_width, world_height, x, y, ppm) {
   return { _0: (x - world_width / 2) / ppm, _1: (world_height - y) / ppm };
@@ -14201,15 +14893,13 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$
     const _bind = Great$45$Love$45$League$Stick_Man_Battle$server$$world_to_screen(Option$None$0$, Option$None$0$, Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(pos), Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(pos), Option$None$0$);
     const _sx = _bind._0;
     const _sy = _bind._1;
-    const _p = 0.16;
-    const _p$2 = 20;
-    const r = _p * _p$2;
-    p.method_81(p.self, 255, Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$3876, Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$3877, Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$3878);
+    const r = Great$45$Love$45$League$Stick_Man_Battle$server$$world_to_screen_size(0.16, Option$None$0$);
+    p.method_81(p.self, 255, Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$4146, Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$4147, Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$4148);
     p.method_55(p.self, _sx, _sy, r);
     p.method_96(p.self);
   };
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$66$(self) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$67$(self) {
   return (world, p) => {
     const _arr = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(self.body);
     const _len = _arr.length;
@@ -14218,7 +14908,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$
       const _i = _tmp;
       if (_i < _len) {
         const shape = _arr[_i];
-        const _bind = Demonmasterlqx$box2d_ffi$box2d$$Shape$getType$94$(shape);
+        const _bind = Demonmasterlqx$box2d_ffi$box2d$$Shape$getType$98$(shape);
         switch (_bind) {
           case 2: {
             Great$45$Love$45$League$Stick_Man_Battle$server$$drawPolygon(p, Demonmasterlqx$box2d_ffi$box2d$$B2Shape$toPolygonShape(shape));
@@ -14233,7 +14923,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$
             break;
           }
           default: {
-            moonbitlang$core$builtin$$println$13$("Unknown Shape");
+            moonbitlang$core$builtin$$println$16$("Unknown Shape");
           }
         }
         _tmp = _i + 1 | 0;
@@ -14244,10 +14934,10 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$
     }
   };
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$to_screen$124$897(x, y) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$to_screen$124$1024(x, y) {
   return Great$45$Love$45$League$Stick_Man_Battle$server$$world_to_screen(Option$None$0$, Option$None$0$, x, y, Option$None$0$);
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$draw_body_line$124$915(p, body, half_w, half_h) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$draw_body_line$124$1042(p, body, half_w, half_h) {
   const pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(body);
   const angle = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getRotation(body);
   const sin_a = Kaida$45$Amethyst$math$$sin(angle);
@@ -14256,53 +14946,52 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$draw_bod
   const y1 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(pos) + cos_a * half_h;
   const x2 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(pos) + sin_a * half_h;
   const y2 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(pos) - cos_a * half_h;
-  const _bind = Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$to_screen$124$897(x1, y1);
+  const _bind = Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$to_screen$124$1024(x1, y1);
   const _sx1 = _bind._0;
   const _sy1 = _bind._1;
-  const _bind$2 = Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$to_screen$124$897(x2, y2);
+  const _bind$2 = Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$to_screen$124$1024(x2, y2);
   const _sx2 = _bind$2._0;
   const _sy2 = _bind$2._1;
   p.method_57(p.self, _sx1, _sy1, _sx2, _sy2);
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$22$(self) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$26$(self) {
   return (world, p) => {
     const head_pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(self.head);
-    const _bind = Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$to_screen$124$897(Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(head_pos), Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(head_pos));
+    const _bind = Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$to_screen$124$1024(Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(head_pos), Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(head_pos));
     const _hx = _bind._0;
     const _hy = _bind._1;
-    const _p = 0.5;
-    const _p$2 = 20;
-    const r = _p * _p$2;
-    p.method_81(p.self, 255, Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$3916, Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$3917, Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$3918);
+    const r = Great$45$Love$45$League$Stick_Man_Battle$server$$world_to_screen_size(0.5, Option$None$0$);
+    p.method_81(p.self, 255, Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$4186, Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$4187, Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$4188);
     p.method_55(p.self, _hx, _hy, r);
     p.method_96(p.self);
-    Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$draw_body_line$124$915(p, self.torso, 0.25, 0.75);
-    Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$draw_body_line$124$915(p, self.left_thigh, 0.15, 0.5);
-    Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$draw_body_line$124$915(p, self.right_thigh, 0.15, 0.5);
-    Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$draw_body_line$124$915(p, self.left_shank, 0.15, 0.5);
-    Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$draw_body_line$124$915(p, self.right_shank, 0.15, 0.5);
-    Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$draw_body_line$124$915(p, self.left_arm, 0.15, 0.5);
-    Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$draw_body_line$124$915(p, self.right_arm, 0.15, 0.5);
-    Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$draw_body_line$124$915(p, self.left_forearm, 0.15, 0.35);
-    Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$draw_body_line$124$915(p, self.right_forearm, 0.15, 0.35);
+    Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$draw_body_line$124$1042(p, self.torso, 0.25, 0.75);
+    Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$draw_body_line$124$1042(p, self.left_thigh, 0.15, 0.5);
+    Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$draw_body_line$124$1042(p, self.right_thigh, 0.15, 0.5);
+    Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$draw_body_line$124$1042(p, self.left_shank, 0.15, 0.5);
+    Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$draw_body_line$124$1042(p, self.right_shank, 0.15, 0.5);
+    Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$draw_body_line$124$1042(p, self.left_arm, 0.15, 0.5);
+    Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$draw_body_line$124$1042(p, self.right_arm, 0.15, 0.5);
+    Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$draw_body_line$124$1042(p, self.left_forearm, 0.15, 0.35);
+    Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$draw_body_line$124$1042(p, self.right_forearm, 0.15, 0.35);
   };
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$draw_game$46$unwrap_renderable$124$1006(renderable_list, rend) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$draw_game$46$unwrap_renderable$124$1172(renderable_list, rend) {
   if (rend === undefined) {
-    moonbitlang$core$builtin$$println$13$("Entity is not renderable");
+    moonbitlang$core$builtin$$println$16$("Entity is not renderable");
     return;
   } else {
     const _Some = rend;
     const _render_fn = _Some;
-    moonbitlang$core$array$$Array$push$67$(renderable_list, _render_fn);
+    moonbitlang$core$array$$Array$push$68$(renderable_list, _render_fn);
     return;
   }
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$DefaultRenderable$draw_game(self, p, game) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$DefaultRender$draw_game(self, p, game) {
+  p.method_135(p.self);
   p.method_53(p.self, 5);
-  p.method_94(p.self, 0, 0, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$draw_game$46$constr$47$3931);
+  p.method_94(p.self, 0, 0, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$draw_game$46$constr$47$4201);
   p.method_96(p.self);
-  const renderable_list = moonbitlang$core$array$$Array$new$46$inner$67$(0);
+  const renderable_list = moonbitlang$core$array$$Array$new$46$inner$68$(0);
   const _arr = game.particle_list;
   const _len = _arr.length;
   let _tmp = 0;
@@ -14310,7 +14999,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$DefaultRenderable$draw
     const _i = _tmp;
     if (_i < _len) {
       const particle = _arr[_i];
-      Great$45$Love$45$League$Stick_Man_Battle$server$$draw_game$46$unwrap_renderable$124$1006(renderable_list, Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$22$(particle));
+      Great$45$Love$45$League$Stick_Man_Battle$server$$draw_game$46$unwrap_renderable$124$1172(renderable_list, Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$26$(particle));
       _tmp = _i + 1 | 0;
       continue;
     } else {
@@ -14324,7 +15013,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$DefaultRenderable$draw
     const _i = _tmp$2;
     if (_i < _len$2) {
       const platform = _arr$2[_i];
-      Great$45$Love$45$League$Stick_Man_Battle$server$$draw_game$46$unwrap_renderable$124$1006(renderable_list, platform.method_3(platform.self));
+      Great$45$Love$45$League$Stick_Man_Battle$server$$draw_game$46$unwrap_renderable$124$1172(renderable_list, platform.method_6(platform.self));
       _tmp$2 = _i + 1 | 0;
       continue;
     } else {
@@ -14342,7 +15031,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$DefaultRenderable$draw
         if (!bullet.is_active) {
           break _L;
         }
-        Great$45$Love$45$League$Stick_Man_Battle$server$$draw_game$46$unwrap_renderable$124$1006(renderable_list, Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$69$(bullet));
+        Great$45$Love$45$League$Stick_Man_Battle$server$$draw_game$46$unwrap_renderable$124$1172(renderable_list, Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$69$(bullet));
         break _L;
       }
       _tmp$3 = _i + 1 | 0;
@@ -14362,7 +15051,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$DefaultRenderable$draw
         if (!item.is_active) {
           break _L;
         }
-        Great$45$Love$45$League$Stick_Man_Battle$server$$draw_game$46$unwrap_renderable$124$1006(renderable_list, Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$66$(item));
+        Great$45$Love$45$League$Stick_Man_Battle$server$$draw_game$46$unwrap_renderable$124$1172(renderable_list, Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$67$(item));
         break _L;
       }
       _tmp$4 = _i + 1 | 0;
@@ -14379,11 +15068,11 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$DefaultRenderable$draw
     if (_i < _len$5) {
       const enemy_option = _arr$5[_i];
       if (enemy_option === undefined) {
-        moonbitlang$core$builtin$$println$13$("Enemy is None, skipping rendering");
+        moonbitlang$core$builtin$$println$16$("Enemy is None, skipping rendering");
       } else {
         const _Some = enemy_option;
         const _enemy = _Some;
-        Great$45$Love$45$League$Stick_Man_Battle$server$$draw_game$46$unwrap_renderable$124$1006(renderable_list, _enemy.method_6(_enemy.self));
+        Great$45$Love$45$League$Stick_Man_Battle$server$$draw_game$46$unwrap_renderable$124$1172(renderable_list, _enemy.method_6(_enemy.self));
       }
       _tmp$5 = _i + 1 | 0;
       continue;
@@ -14398,7 +15087,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$DefaultRenderable$draw
     const _i = _tmp$6;
     if (_i < _len$6) {
       const weapon = _arr$6[_i];
-      Great$45$Love$45$League$Stick_Man_Battle$server$$draw_game$46$unwrap_renderable$124$1006(renderable_list, Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$72$(weapon));
+      Great$45$Love$45$League$Stick_Man_Battle$server$$draw_game$46$unwrap_renderable$124$1172(renderable_list, Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$76$(weapon));
       _tmp$6 = _i + 1 | 0;
       continue;
     } else {
@@ -14412,7 +15101,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$DefaultRenderable$draw
     const _i = _tmp$7;
     if (_i < _len$7) {
       const weapon = _arr$7[_i];
-      Great$45$Love$45$League$Stick_Man_Battle$server$$draw_game$46$unwrap_renderable$124$1006(renderable_list, Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$63$(weapon));
+      Great$45$Love$45$League$Stick_Man_Battle$server$$draw_game$46$unwrap_renderable$124$1172(renderable_list, Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$7$(weapon));
       _tmp$7 = _i + 1 | 0;
       continue;
     } else {
@@ -14425,7 +15114,9 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$DefaultRenderable$draw
     const _i = _tmp$8;
     if (_i < _len$8) {
       const render_fn = renderable_list[_i];
-      render_fn({ self: game.world, method_0: Demonmasterlqx$box2d_ffi$box2d$$World$getBase$85$, method_1: Demonmasterlqx$box2d_ffi$box2d$$World$setListener$83$, method_2: Demonmasterlqx$box2d_ffi$box2d$$World$setFilter$83$, method_3: Demonmasterlqx$box2d_ffi$box2d$$World$createBody$83$, method_4: Demonmasterlqx$box2d_ffi$box2d$$World$destroyBody$83$, method_5: Demonmasterlqx$box2d_ffi$box2d$$World$clearBodyList$83$, method_6: Demonmasterlqx$box2d_ffi$box2d$$World$createJoint$83$, method_7: Demonmasterlqx$box2d_ffi$box2d$$World$destroyJoint$83$, method_8: Demonmasterlqx$box2d_ffi$box2d$$World$getGroundBody$83$, method_9: Demonmasterlqx$box2d_ffi$box2d$$World$step$83$, method_10: Demonmasterlqx$box2d_ffi$box2d$$World$query$83$, method_11: Demonmasterlqx$box2d_ffi$box2d$$World$getBodyList$83$, method_12: Demonmasterlqx$box2d_ffi$box2d$$World$getJointList$83$, method_13: Demonmasterlqx$box2d_ffi$box2d$$World$getContactList$83$ }, p);
+      p.method_135(p.self);
+      render_fn({ self: game.world, method_0: Demonmasterlqx$box2d_ffi$box2d$$World$getBase$89$, method_1: Demonmasterlqx$box2d_ffi$box2d$$World$setListener$87$, method_2: Demonmasterlqx$box2d_ffi$box2d$$World$setFilter$87$, method_3: Demonmasterlqx$box2d_ffi$box2d$$World$createBody$87$, method_4: Demonmasterlqx$box2d_ffi$box2d$$World$destroyBody$87$, method_5: Demonmasterlqx$box2d_ffi$box2d$$World$clearBodyList$87$, method_6: Demonmasterlqx$box2d_ffi$box2d$$World$createJoint$87$, method_7: Demonmasterlqx$box2d_ffi$box2d$$World$destroyJoint$87$, method_8: Demonmasterlqx$box2d_ffi$box2d$$World$getGroundBody$87$, method_9: Demonmasterlqx$box2d_ffi$box2d$$World$step$87$, method_10: Demonmasterlqx$box2d_ffi$box2d$$World$query$87$, method_11: Demonmasterlqx$box2d_ffi$box2d$$World$getBodyList$87$, method_12: Demonmasterlqx$box2d_ffi$box2d$$World$getJointList$87$, method_13: Demonmasterlqx$box2d_ffi$box2d$$World$getContactList$87$ }, p);
+      p.method_136(p.self);
       _tmp$8 = _i + 1 | 0;
       continue;
     } else {
@@ -14433,133 +15124,322 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$DefaultRenderable$draw
     }
   }
   p.method_53(p.self, 0);
+  p.method_136(p.self);
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$DefaultRenderable$clear_screen(self, p) {
-  p.method_80(p.self, 255, Great$45$Love$45$League$Stick_Man_Battle$server$$clear_screen$46$constr$47$3979, Great$45$Love$45$League$Stick_Man_Battle$server$$clear_screen$46$constr$47$3980, Option$None$0$);
+function Great$45$Love$45$League$Stick_Man_Battle$server$$DefaultRender$clear_screen(self, p, game) {
+  p.method_135(p.self);
+  const _tmp = game.background;
+  const _bind = _tmp.method_0(_tmp.self);
+  if (_bind === undefined) {
+    p.method_80(p.self, 255, Great$45$Love$45$League$Stick_Man_Battle$server$$clear_screen$46$constr$47$4249, Great$45$Love$45$League$Stick_Man_Battle$server$$clear_screen$46$constr$47$4250, Option$None$0$);
+  } else {
+    const _Some = _bind;
+    const _draw_background = _Some;
+    _draw_background({ self: game.world, method_0: Demonmasterlqx$box2d_ffi$box2d$$World$getBase$89$, method_1: Demonmasterlqx$box2d_ffi$box2d$$World$setListener$87$, method_2: Demonmasterlqx$box2d_ffi$box2d$$World$setFilter$87$, method_3: Demonmasterlqx$box2d_ffi$box2d$$World$createBody$87$, method_4: Demonmasterlqx$box2d_ffi$box2d$$World$destroyBody$87$, method_5: Demonmasterlqx$box2d_ffi$box2d$$World$clearBodyList$87$, method_6: Demonmasterlqx$box2d_ffi$box2d$$World$createJoint$87$, method_7: Demonmasterlqx$box2d_ffi$box2d$$World$destroyJoint$87$, method_8: Demonmasterlqx$box2d_ffi$box2d$$World$getGroundBody$87$, method_9: Demonmasterlqx$box2d_ffi$box2d$$World$step$87$, method_10: Demonmasterlqx$box2d_ffi$box2d$$World$query$87$, method_11: Demonmasterlqx$box2d_ffi$box2d$$World$getBodyList$87$, method_12: Demonmasterlqx$box2d_ffi$box2d$$World$getJointList$87$, method_13: Demonmasterlqx$box2d_ffi$box2d$$World$getContactList$87$ }, p);
+  }
+  p.method_136(p.self);
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderTrait$render$109$(self, game, p) {
-  Great$45$Love$45$League$Stick_Man_Battle$server$$DefaultRenderable$draw_game(self, p, game);
+function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderTrait$render$116$(self, game, p) {
+  Great$45$Love$45$League$Stick_Man_Battle$server$$DefaultRender$draw_game(self, p, game);
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderTrait$clear_screen$109$(self, world, p) {
-  Great$45$Love$45$League$Stick_Man_Battle$server$$DefaultRenderable$clear_screen(self, p);
+function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderTrait$clear_screen$116$(self, game, p) {
+  Great$45$Love$45$League$Stick_Man_Battle$server$$DefaultRender$clear_screen(self, p, game);
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_body$106$(self) {
-  return self.body;
-}
-function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$106$(platform) {
-  return (world, p) => {
-    const _arr = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(platform.body);
-    const _len = _arr.length;
-    let _tmp = 0;
-    while (true) {
-      const _i = _tmp;
-      if (_i < _len) {
-        const shape = _arr[_i];
-        const _bind = Demonmasterlqx$box2d_ffi$box2d$$Shape$getType$94$(shape);
-        switch (_bind) {
-          case 2: {
-            Great$45$Love$45$League$Stick_Man_Battle$server$$drawPolygon(p, Demonmasterlqx$box2d_ffi$box2d$$B2Shape$toPolygonShape(shape));
-            break;
-          }
-          case 3: {
-            Great$45$Love$45$League$Stick_Man_Battle$server$$drawPolygon(p, Demonmasterlqx$box2d_ffi$box2d$$B2Shape$toPolygonShape(shape));
-            break;
-          }
-          case 1: {
-            Great$45$Love$45$League$Stick_Man_Battle$server$$drawCircle(p, Demonmasterlqx$box2d_ffi$box2d$$B2Shape$toCircleShape(shape));
-            break;
-          }
-          default: {
-            moonbitlang$core$builtin$$println$13$("Unknown Shape");
-          }
-        }
-        _tmp = _i + 1 | 0;
-        continue;
-      } else {
-        return;
-      }
+function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$117$(self) {
+  const render_fn = (world, p) => {
+    const _bind = Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$get_image(self.val, p);
+    if (_bind.$tag === 1) {
+      const _Some = _bind;
+      const _img = _Some._0;
+      p.method_123(p.self, "corner");
+      p.method_122(p.self, _img, 0, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$4263, Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$4264);
+      return;
+    } else {
+      p.method_80(p.self, 255, Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$4265, Great$45$Love$45$League$Stick_Man_Battle$server$$get_render$46$constr$47$4266, Option$None$0$);
+      return;
     }
   };
+  return render_fn;
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_body$107$(self) {
-  return self.body;
+function Great$45$Love$45$League$Stick_Man_Battle$server$$BackgroundImage$new(path) {
+  return { val: Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$new(path) };
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$107$(rotatable_platform) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_hight$112$(self) {
+  const body = self.body;
+  if (Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(body).length !== 1) {
+    moonbitlang$core$builtin$$println$16$(`Warning: Platform ${moonbitlang$core$builtin$$Show$to_string$5$(self.index)} has multiple shapes, the default impl only support one shape.`);
+  }
+  if (Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(body).length === 0) {
+    moonbitlang$core$builtin$$println$16$(`Warning: Platform ${moonbitlang$core$builtin$$Show$to_string$5$(self.index)} has no shape, returning 0.`);
+    return 0;
+  }
+  const _tmp = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(body);
+  $bound_check(_tmp, 0);
+  const shape = _tmp[0];
+  if (moonbitlang$core$builtin$$op_notequal$25$(Demonmasterlqx$box2d_ffi$box2d$$Shape$getType$98$(shape), 3)) {
+    moonbitlang$core$builtin$$println$16$(`Warning: Platform ${moonbitlang$core$builtin$$Show$to_string$5$(self.index)} shape is not BoxShape, the default impl only support BoxShape.`);
+    return 0;
+  }
+  const box_shape = Demonmasterlqx$box2d_ffi$box2d$$B2Shape$toPolygonShape(shape);
+  if (Demonmasterlqx$box2d_ffi$box2d$$B2PolygonShape$getVertexCount(box_shape) !== 4) {
+    moonbitlang$core$builtin$$println$16$(`Warning: Platform ${moonbitlang$core$builtin$$Show$to_string$5$(self.index)} BoxShape vertex count is not 4, the default impl only support rectangle.`);
+    return 0;
+  }
+  const vertexs = Demonmasterlqx$box2d_ffi$box2d$$B2PolygonShape$getVertices(box_shape);
+  $bound_check(vertexs, 2);
+  const _tmp$2 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(vertexs[2]);
+  $bound_check(vertexs, 1);
+  const _tmp$3 = _tmp$2 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(vertexs[1]);
+  $bound_check(vertexs, 2);
+  const _tmp$4 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(vertexs[2]);
+  $bound_check(vertexs, 1);
+  const _tmp$5 = _tmp$3 * (_tmp$4 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(vertexs[1]));
+  $bound_check(vertexs, 2);
+  const _tmp$6 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vertexs[2]);
+  $bound_check(vertexs, 1);
+  const _tmp$7 = _tmp$6 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vertexs[1]);
+  $bound_check(vertexs, 2);
+  const _tmp$8 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vertexs[2]);
+  $bound_check(vertexs, 1);
+  const _p = _tmp$5 + _tmp$7 * (_tmp$8 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vertexs[1]));
+  return Math.sqrt(_p);
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_hight$110$(self) {
+  const body = self.body;
+  if (Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(body).length !== 1) {
+    moonbitlang$core$builtin$$println$16$(`Warning: Platform ${moonbitlang$core$builtin$$Show$to_string$5$(self.index)} has multiple shapes, the default impl only support one shape.`);
+  }
+  if (Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(body).length === 0) {
+    moonbitlang$core$builtin$$println$16$(`Warning: Platform ${moonbitlang$core$builtin$$Show$to_string$5$(self.index)} has no shape, returning 0.`);
+    return 0;
+  }
+  const _tmp = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(body);
+  $bound_check(_tmp, 0);
+  const shape = _tmp[0];
+  if (moonbitlang$core$builtin$$op_notequal$25$(Demonmasterlqx$box2d_ffi$box2d$$Shape$getType$98$(shape), 3)) {
+    moonbitlang$core$builtin$$println$16$(`Warning: Platform ${moonbitlang$core$builtin$$Show$to_string$5$(self.index)} shape is not BoxShape, the default impl only support BoxShape.`);
+    return 0;
+  }
+  const box_shape = Demonmasterlqx$box2d_ffi$box2d$$B2Shape$toPolygonShape(shape);
+  if (Demonmasterlqx$box2d_ffi$box2d$$B2PolygonShape$getVertexCount(box_shape) !== 4) {
+    moonbitlang$core$builtin$$println$16$(`Warning: Platform ${moonbitlang$core$builtin$$Show$to_string$5$(self.index)} BoxShape vertex count is not 4, the default impl only support rectangle.`);
+    return 0;
+  }
+  const vertexs = Demonmasterlqx$box2d_ffi$box2d$$B2PolygonShape$getVertices(box_shape);
+  $bound_check(vertexs, 2);
+  const _tmp$2 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(vertexs[2]);
+  $bound_check(vertexs, 1);
+  const _tmp$3 = _tmp$2 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(vertexs[1]);
+  $bound_check(vertexs, 2);
+  const _tmp$4 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(vertexs[2]);
+  $bound_check(vertexs, 1);
+  const _tmp$5 = _tmp$3 * (_tmp$4 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(vertexs[1]));
+  $bound_check(vertexs, 2);
+  const _tmp$6 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vertexs[2]);
+  $bound_check(vertexs, 1);
+  const _tmp$7 = _tmp$6 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vertexs[1]);
+  $bound_check(vertexs, 2);
+  const _tmp$8 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vertexs[2]);
+  $bound_check(vertexs, 1);
+  const _p = _tmp$5 + _tmp$7 * (_tmp$8 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vertexs[1]));
+  return Math.sqrt(_p);
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_hight$114$(self) {
+  const body = self.body;
+  if (Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(body).length !== 1) {
+    moonbitlang$core$builtin$$println$16$(`Warning: Platform ${moonbitlang$core$builtin$$Show$to_string$5$(self.index)} has multiple shapes, the default impl only support one shape.`);
+  }
+  if (Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(body).length === 0) {
+    moonbitlang$core$builtin$$println$16$(`Warning: Platform ${moonbitlang$core$builtin$$Show$to_string$5$(self.index)} has no shape, returning 0.`);
+    return 0;
+  }
+  const _tmp = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(body);
+  $bound_check(_tmp, 0);
+  const shape = _tmp[0];
+  if (moonbitlang$core$builtin$$op_notequal$25$(Demonmasterlqx$box2d_ffi$box2d$$Shape$getType$98$(shape), 3)) {
+    moonbitlang$core$builtin$$println$16$(`Warning: Platform ${moonbitlang$core$builtin$$Show$to_string$5$(self.index)} shape is not BoxShape, the default impl only support BoxShape.`);
+    return 0;
+  }
+  const box_shape = Demonmasterlqx$box2d_ffi$box2d$$B2Shape$toPolygonShape(shape);
+  if (Demonmasterlqx$box2d_ffi$box2d$$B2PolygonShape$getVertexCount(box_shape) !== 4) {
+    moonbitlang$core$builtin$$println$16$(`Warning: Platform ${moonbitlang$core$builtin$$Show$to_string$5$(self.index)} BoxShape vertex count is not 4, the default impl only support rectangle.`);
+    return 0;
+  }
+  const vertexs = Demonmasterlqx$box2d_ffi$box2d$$B2PolygonShape$getVertices(box_shape);
+  $bound_check(vertexs, 2);
+  const _tmp$2 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(vertexs[2]);
+  $bound_check(vertexs, 1);
+  const _tmp$3 = _tmp$2 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(vertexs[1]);
+  $bound_check(vertexs, 2);
+  const _tmp$4 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(vertexs[2]);
+  $bound_check(vertexs, 1);
+  const _tmp$5 = _tmp$3 * (_tmp$4 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(vertexs[1]));
+  $bound_check(vertexs, 2);
+  const _tmp$6 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vertexs[2]);
+  $bound_check(vertexs, 1);
+  const _tmp$7 = _tmp$6 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vertexs[1]);
+  $bound_check(vertexs, 2);
+  const _tmp$8 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vertexs[2]);
+  $bound_check(vertexs, 1);
+  const _p = _tmp$5 + _tmp$7 * (_tmp$8 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vertexs[1]));
+  return Math.sqrt(_p);
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_width$112$(self) {
+  const body = self.body;
+  if (Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(body).length !== 1) {
+    moonbitlang$core$builtin$$println$16$(`Warning: Platform ${moonbitlang$core$builtin$$Show$to_string$5$(self.index)} has multiple shapes, the default impl only support one shape.`);
+  }
+  if (Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(body).length === 0) {
+    moonbitlang$core$builtin$$println$16$(`Warning: Platform ${moonbitlang$core$builtin$$Show$to_string$5$(self.index)} has no shape, returning 0.`);
+    return 0;
+  }
+  const _tmp = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(body);
+  $bound_check(_tmp, 0);
+  const shape = _tmp[0];
+  if (moonbitlang$core$builtin$$op_notequal$25$(Demonmasterlqx$box2d_ffi$box2d$$Shape$getType$98$(shape), 3)) {
+    moonbitlang$core$builtin$$println$16$(`Warning: Platform ${moonbitlang$core$builtin$$Show$to_string$5$(self.index)} shape is not BoxShape, the default impl only support BoxShape.`);
+    return 0;
+  }
+  const box_shape = Demonmasterlqx$box2d_ffi$box2d$$B2Shape$toPolygonShape(shape);
+  if (Demonmasterlqx$box2d_ffi$box2d$$B2PolygonShape$getVertexCount(box_shape) !== 4) {
+    moonbitlang$core$builtin$$println$16$(`Warning: Platform ${moonbitlang$core$builtin$$Show$to_string$5$(self.index)} BoxShape vertex count is not 4, the default impl only support rectangle.`);
+    return 0;
+  }
+  const vertexs = Demonmasterlqx$box2d_ffi$box2d$$B2PolygonShape$getVertices(box_shape);
+  $bound_check(vertexs, 0);
+  const _tmp$2 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(vertexs[0]);
+  $bound_check(vertexs, 1);
+  const _tmp$3 = _tmp$2 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(vertexs[1]);
+  $bound_check(vertexs, 0);
+  const _tmp$4 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(vertexs[0]);
+  $bound_check(vertexs, 1);
+  const _tmp$5 = _tmp$3 * (_tmp$4 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(vertexs[1]));
+  $bound_check(vertexs, 0);
+  const _tmp$6 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vertexs[0]);
+  $bound_check(vertexs, 1);
+  const _tmp$7 = _tmp$6 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vertexs[1]);
+  $bound_check(vertexs, 0);
+  const _tmp$8 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vertexs[0]);
+  $bound_check(vertexs, 1);
+  const _p = _tmp$5 + _tmp$7 * (_tmp$8 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vertexs[1]));
+  return Math.sqrt(_p);
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_width$110$(self) {
+  const body = self.body;
+  if (Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(body).length !== 1) {
+    moonbitlang$core$builtin$$println$16$(`Warning: Platform ${moonbitlang$core$builtin$$Show$to_string$5$(self.index)} has multiple shapes, the default impl only support one shape.`);
+  }
+  if (Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(body).length === 0) {
+    moonbitlang$core$builtin$$println$16$(`Warning: Platform ${moonbitlang$core$builtin$$Show$to_string$5$(self.index)} has no shape, returning 0.`);
+    return 0;
+  }
+  const _tmp = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(body);
+  $bound_check(_tmp, 0);
+  const shape = _tmp[0];
+  if (moonbitlang$core$builtin$$op_notequal$25$(Demonmasterlqx$box2d_ffi$box2d$$Shape$getType$98$(shape), 3)) {
+    moonbitlang$core$builtin$$println$16$(`Warning: Platform ${moonbitlang$core$builtin$$Show$to_string$5$(self.index)} shape is not BoxShape, the default impl only support BoxShape.`);
+    return 0;
+  }
+  const box_shape = Demonmasterlqx$box2d_ffi$box2d$$B2Shape$toPolygonShape(shape);
+  if (Demonmasterlqx$box2d_ffi$box2d$$B2PolygonShape$getVertexCount(box_shape) !== 4) {
+    moonbitlang$core$builtin$$println$16$(`Warning: Platform ${moonbitlang$core$builtin$$Show$to_string$5$(self.index)} BoxShape vertex count is not 4, the default impl only support rectangle.`);
+    return 0;
+  }
+  const vertexs = Demonmasterlqx$box2d_ffi$box2d$$B2PolygonShape$getVertices(box_shape);
+  $bound_check(vertexs, 0);
+  const _tmp$2 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(vertexs[0]);
+  $bound_check(vertexs, 1);
+  const _tmp$3 = _tmp$2 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(vertexs[1]);
+  $bound_check(vertexs, 0);
+  const _tmp$4 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(vertexs[0]);
+  $bound_check(vertexs, 1);
+  const _tmp$5 = _tmp$3 * (_tmp$4 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(vertexs[1]));
+  $bound_check(vertexs, 0);
+  const _tmp$6 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vertexs[0]);
+  $bound_check(vertexs, 1);
+  const _tmp$7 = _tmp$6 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vertexs[1]);
+  $bound_check(vertexs, 0);
+  const _tmp$8 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vertexs[0]);
+  $bound_check(vertexs, 1);
+  const _p = _tmp$5 + _tmp$7 * (_tmp$8 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vertexs[1]));
+  return Math.sqrt(_p);
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_width$114$(self) {
+  const body = self.body;
+  if (Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(body).length !== 1) {
+    moonbitlang$core$builtin$$println$16$(`Warning: Platform ${moonbitlang$core$builtin$$Show$to_string$5$(self.index)} has multiple shapes, the default impl only support one shape.`);
+  }
+  if (Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(body).length === 0) {
+    moonbitlang$core$builtin$$println$16$(`Warning: Platform ${moonbitlang$core$builtin$$Show$to_string$5$(self.index)} has no shape, returning 0.`);
+    return 0;
+  }
+  const _tmp = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(body);
+  $bound_check(_tmp, 0);
+  const shape = _tmp[0];
+  if (moonbitlang$core$builtin$$op_notequal$25$(Demonmasterlqx$box2d_ffi$box2d$$Shape$getType$98$(shape), 3)) {
+    moonbitlang$core$builtin$$println$16$(`Warning: Platform ${moonbitlang$core$builtin$$Show$to_string$5$(self.index)} shape is not BoxShape, the default impl only support BoxShape.`);
+    return 0;
+  }
+  const box_shape = Demonmasterlqx$box2d_ffi$box2d$$B2Shape$toPolygonShape(shape);
+  if (Demonmasterlqx$box2d_ffi$box2d$$B2PolygonShape$getVertexCount(box_shape) !== 4) {
+    moonbitlang$core$builtin$$println$16$(`Warning: Platform ${moonbitlang$core$builtin$$Show$to_string$5$(self.index)} BoxShape vertex count is not 4, the default impl only support rectangle.`);
+    return 0;
+  }
+  const vertexs = Demonmasterlqx$box2d_ffi$box2d$$B2PolygonShape$getVertices(box_shape);
+  $bound_check(vertexs, 0);
+  const _tmp$2 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(vertexs[0]);
+  $bound_check(vertexs, 1);
+  const _tmp$3 = _tmp$2 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(vertexs[1]);
+  $bound_check(vertexs, 0);
+  const _tmp$4 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(vertexs[0]);
+  $bound_check(vertexs, 1);
+  const _tmp$5 = _tmp$3 * (_tmp$4 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(vertexs[1]));
+  $bound_check(vertexs, 0);
+  const _tmp$6 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vertexs[0]);
+  $bound_check(vertexs, 1);
+  const _tmp$7 = _tmp$6 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vertexs[1]);
+  $bound_check(vertexs, 0);
+  const _tmp$8 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vertexs[0]);
+  $bound_check(vertexs, 1);
+  const _p = _tmp$5 + _tmp$7 * (_tmp$8 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vertexs[1]));
+  return Math.sqrt(_p);
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$111$(self) {
   return (world, p) => {
-    const _arr = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(rotatable_platform.body);
-    const _len = _arr.length;
-    let _tmp = 0;
-    while (true) {
-      const _i = _tmp;
-      if (_i < _len) {
-        const shape = _arr[_i];
-        const _bind = Demonmasterlqx$box2d_ffi$box2d$$Shape$getType$94$(shape);
-        switch (_bind) {
-          case 2: {
-            Great$45$Love$45$League$Stick_Man_Battle$server$$drawPolygon(p, Demonmasterlqx$box2d_ffi$box2d$$B2Shape$toPolygonShape(shape));
-            break;
-          }
-          case 3: {
-            Great$45$Love$45$League$Stick_Man_Battle$server$$drawPolygon(p, Demonmasterlqx$box2d_ffi$box2d$$B2Shape$toPolygonShape(shape));
-            break;
-          }
-          case 1: {
-            Great$45$Love$45$League$Stick_Man_Battle$server$$drawCircle(p, Demonmasterlqx$box2d_ffi$box2d$$B2Shape$toCircleShape(shape));
-            break;
-          }
-          default: {
-            moonbitlang$core$builtin$$println$13$("Unknown Shape");
-          }
-        }
-        _tmp = _i + 1 | 0;
-        continue;
-      } else {
-        return;
-      }
-    }
+    const pixel_width = Great$45$Love$45$League$Stick_Man_Battle$server$$world_to_screen_size(Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_width$112$(self), Option$None$0$);
+    const pixel_height = Great$45$Love$45$League$Stick_Man_Battle$server$$world_to_screen_size(Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_hight$112$(self), Option$None$0$);
+    Great$45$Love$45$League$Stick_Man_Battle$server$$drawStaticBody$46$inner(p, self.body, Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$get_image(self.img, p), pixel_width, pixel_height, 0, 0, false);
   };
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_body$105$(self) {
-  return self.body;
-}
-function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$105$(movable_platform) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$113$(self) {
   return (world, p) => {
-    const _arr = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getShapeList(movable_platform.body);
-    const _len = _arr.length;
-    let _tmp = 0;
-    while (true) {
-      const _i = _tmp;
-      if (_i < _len) {
-        const shape = _arr[_i];
-        const _bind = Demonmasterlqx$box2d_ffi$box2d$$Shape$getType$94$(shape);
-        switch (_bind) {
-          case 2: {
-            Great$45$Love$45$League$Stick_Man_Battle$server$$drawPolygon(p, Demonmasterlqx$box2d_ffi$box2d$$B2Shape$toPolygonShape(shape));
-            break;
-          }
-          case 3: {
-            Great$45$Love$45$League$Stick_Man_Battle$server$$drawPolygon(p, Demonmasterlqx$box2d_ffi$box2d$$B2Shape$toPolygonShape(shape));
-            break;
-          }
-          case 1: {
-            Great$45$Love$45$League$Stick_Man_Battle$server$$drawCircle(p, Demonmasterlqx$box2d_ffi$box2d$$B2Shape$toCircleShape(shape));
-            break;
-          }
-          default: {
-            moonbitlang$core$builtin$$println$13$("Unknown Shape");
-          }
-        }
-        _tmp = _i + 1 | 0;
-        continue;
-      } else {
-        return;
-      }
-    }
+    const pixel_width = Great$45$Love$45$League$Stick_Man_Battle$server$$world_to_screen_size(Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_width$114$(self), Option$None$0$);
+    const pixel_height = Great$45$Love$45$League$Stick_Man_Battle$server$$world_to_screen_size(Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_hight$114$(self), Option$None$0$);
+    Great$45$Love$45$League$Stick_Man_Battle$server$$drawStaticBody$46$inner(p, self.body, Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$get_image(self.img, p), pixel_width, pixel_height, 0, 0, false);
   };
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$update$106$(self, game) {}
-function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_index$106$(self) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$109$(self) {
+  return (world, p) => {
+    const pixel_width = Great$45$Love$45$League$Stick_Man_Battle$server$$world_to_screen_size(Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_width$110$(self), Option$None$0$);
+    const pixel_height = Great$45$Love$45$League$Stick_Man_Battle$server$$world_to_screen_size(Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_hight$110$(self), Option$None$0$);
+    Great$45$Love$45$League$Stick_Man_Battle$server$$drawStaticBody$46$inner(p, self.body, Great$45$Love$45$League$Stick_Man_Battle$server$$ImageLoader$get_image(self.img, p), pixel_width, pixel_height, 0, 0, false);
+  };
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_rotation$112$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2Body$getRotation(self.body);
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_rotation$110$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2Body$getRotation(self.body);
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_rotation$114$(self) {
+  return Demonmasterlqx$box2d_ffi$box2d$$B2Body$getRotation(self.body);
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$update$111$(self, game) {}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_index$111$(self) {
   return self.index;
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_body$111$(self) {
+  return self.body;
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$maintain_rotation$46$inner(body, target_angle, kp, kd) {
   const angle = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getRotation(body);
@@ -14567,14 +15447,17 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$maintain_rotation$46$i
   const torque = kp * error - kd * Demonmasterlqx$box2d_ffi$box2d$$B2Body$getAngularVelocity(body);
   Demonmasterlqx$box2d_ffi$box2d$$B2Body$applyTorque(body, torque);
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$update$107$(self, game) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$update$113$(self, game) {
   const current_angle = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getRotation(self.body);
   const new_angle = current_angle + self.angle_speed * 0.0166666666666666664;
   self.angle = self.angle + self.angle_speed * 0.0166666666666666664;
   Great$45$Love$45$League$Stick_Man_Battle$server$$maintain_rotation$46$inner(self.body, new_angle, 100000, 10000);
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_index$107$(self) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_index$113$(self) {
   return self.index;
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_body$113$(self) {
+  return self.body;
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$maintain_position$46$inner(body, target_pos, kp, kd) {
   const pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(body);
@@ -14585,9 +15468,9 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$maintain_position$46$i
   const force_y = kp * error_y - kd * Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(vel);
   Demonmasterlqx$box2d_ffi$box2d$$B2Body$applyForce(body, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(force_x, force_y), pos);
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$update$105$(self, game) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$update$109$(self, game) {
   Demonmasterlqx$box2d_ffi$box2d$$B2Body$applyForce(self.body, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(0, 9.8 * Demonmasterlqx$box2d_ffi$box2d$$B2Body$getMass(self.body)), Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(self.body));
-  Great$45$Love$45$League$Stick_Man_Battle$server$$maintain_rotation$46$inner(self.body, 0, 100000, 10000);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$maintain_rotation$46$inner(self.body, 0, 1000000, 100000);
   const current_pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(self.body);
   const target_pos = self.direction === 1 ? self.end_position : self.start_position;
   const to_target = Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(target_pos) - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(current_pos), Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(target_pos) - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(current_pos));
@@ -14603,25 +15486,48 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$update$1
     Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$setX(to_target, Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(to_target) * move_distance / len);
     Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$setY(to_target, Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(to_target) * move_distance / len);
     const new_pos = Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(current_pos) + Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(to_target), Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(current_pos) + Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(to_target));
-    Great$45$Love$45$League$Stick_Man_Battle$server$$maintain_position$46$inner(self.body, { _0: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(new_pos), _1: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(new_pos) }, 1000000, 5000);
+    Great$45$Love$45$League$Stick_Man_Battle$server$$maintain_position$46$inner(self.body, { _0: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(new_pos), _1: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(new_pos) }, 1000000, 50000);
     return;
   }
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_index$105$(self) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_index$109$(self) {
   return self.index;
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact(self, a, b) {
-  const contact_list = Demonmasterlqx$box2d_ffi$box2d$$World$getContactList$83$(self.world);
+function Great$45$Love$45$League$Stick_Man_Battle$server$$PlatformTrait$get_body$109$(self) {
+  return self.body;
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$Particle$get_all_bodies(self) {
+  const body_list = [];
+  moonbitlang$core$array$$Array$push$71$(body_list, self.torso);
+  moonbitlang$core$array$$Array$push$71$(body_list, self.head);
+  moonbitlang$core$array$$Array$push$71$(body_list, self.left_thigh);
+  moonbitlang$core$array$$Array$push$71$(body_list, self.right_thigh);
+  moonbitlang$core$array$$Array$push$71$(body_list, self.left_shank);
+  moonbitlang$core$array$$Array$push$71$(body_list, self.right_shank);
+  moonbitlang$core$array$$Array$push$71$(body_list, self.left_arm);
+  moonbitlang$core$array$$Array$push$71$(body_list, self.right_arm);
+  moonbitlang$core$array$$Array$push$71$(body_list, self.left_forearm);
+  moonbitlang$core$array$$Array$push$71$(body_list, self.right_forearm);
+  return body_list;
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact$46$inner(self, a, b, strict) {
+  const contact_list = Demonmasterlqx$box2d_ffi$box2d$$World$getContactList$87$(self.world);
   const _len = contact_list.length;
   let _tmp = 0;
   while (true) {
     const _i = _tmp;
     if (_i < _len) {
       const contact = contact_list[_i];
-      const bodyA = Demonmasterlqx$box2d_ffi$box2d$$Shape$getBody$94$(Demonmasterlqx$box2d_ffi$box2d$$B2Contact$getShape1(contact));
-      const bodyB = Demonmasterlqx$box2d_ffi$box2d$$Shape$getBody$94$(Demonmasterlqx$box2d_ffi$box2d$$B2Contact$getShape2(contact));
+      const bodyA = Demonmasterlqx$box2d_ffi$box2d$$Shape$getBody$98$(Demonmasterlqx$box2d_ffi$box2d$$B2Contact$getShape1(contact));
+      const bodyB = Demonmasterlqx$box2d_ffi$box2d$$Shape$getBody$98$(Demonmasterlqx$box2d_ffi$box2d$$B2Contact$getShape2(contact));
       if (Great$45$Love$45$League$Stick_Man_Battle$server$$equals(bodyA, a) && Great$45$Love$45$League$Stick_Man_Battle$server$$equals(bodyB, b) || Great$45$Love$45$League$Stick_Man_Battle$server$$equals(bodyA, b) && Great$45$Love$45$League$Stick_Man_Battle$server$$equals(bodyB, a)) {
-        return true;
+        if (strict) {
+          if (Demonmasterlqx$box2d_ffi$box2d$$B2Contact$getManifoldCount(contact) > 0) {
+            return true;
+          }
+        } else {
+          return true;
+        }
       }
       _tmp = _i + 1 | 0;
       continue;
@@ -14639,10 +15545,10 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$which_platform(se
     const _i = _tmp;
     if (_i < _len) {
       const platform = _arr[_i];
-      if (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact(self, particle.left_shank, platform.method_2(platform.self))) {
+      if (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact$46$inner(self, particle.left_shank, platform.method_2(platform.self), false)) {
         return platform.method_1(platform.self);
       }
-      if (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact(self, particle.right_shank, platform.method_2(platform.self))) {
+      if (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact$46$inner(self, particle.right_shank, platform.method_2(platform.self), false)) {
         return platform.method_1(platform.self);
       }
       _tmp = _i + 1 | 0;
@@ -14654,8 +15560,8 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$which_platform(se
   return -1;
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$maintain_joint$46$inner(joint, target_angle, kp, kd) {
-  const bodyA = Demonmasterlqx$box2d_ffi$box2d$$Joint$getBody1$99$(Demonmasterlqx$box2d_ffi$box2d$$B2Joint$toRevoluteJoint(joint));
-  const bodyB = Demonmasterlqx$box2d_ffi$box2d$$Joint$getBody2$99$(Demonmasterlqx$box2d_ffi$box2d$$B2Joint$toRevoluteJoint(joint));
+  const bodyA = Demonmasterlqx$box2d_ffi$box2d$$Joint$getBody1$103$(Demonmasterlqx$box2d_ffi$box2d$$B2Joint$toRevoluteJoint(joint));
+  const bodyB = Demonmasterlqx$box2d_ffi$box2d$$Joint$getBody2$103$(Demonmasterlqx$box2d_ffi$box2d$$B2Joint$toRevoluteJoint(joint));
   const angle = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getRotation(bodyB) - Demonmasterlqx$box2d_ffi$box2d$$B2Body$getRotation(bodyA);
   const error = target_angle - angle;
   const torque = kp * error - kd * (Demonmasterlqx$box2d_ffi$box2d$$B2Body$getAngularVelocity(bodyB) - Demonmasterlqx$box2d_ffi$box2d$$B2Body$getAngularVelocity(bodyA));
@@ -14705,8 +15611,8 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$particle_walk(sel
     return undefined;
   }
   Demonmasterlqx$box2d_ffi$box2d$$B2Body$applyForce(particle.torso, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(0, 10), Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(particle.torso));
-  const platform = moonbitlang$core$array$$Array$at$26$(self.platform_list, index);
-  let p_angle = moonbitlang$core$builtin$$Mod$mod$12$(moonbitlang$core$builtin$$Mod$mod$12$(Demonmasterlqx$box2d_ffi$box2d$$B2Body$getRotation(platform.method_2(platform.self)), 3.14) + 3.14, 3.14);
+  const platform = moonbitlang$core$array$$Array$at$30$(self.platform_list, index);
+  let p_angle = moonbitlang$core$builtin$$Mod$mod$15$(moonbitlang$core$builtin$$Mod$mod$15$(Demonmasterlqx$box2d_ffi$box2d$$B2Body$getRotation(platform.method_2(platform.self)), 3.14) + 3.14, 3.14);
   if (p_angle > 1.57) {
     p_angle = p_angle - 3.14;
   }
@@ -14718,11 +15624,11 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$particle_walk(sel
     return undefined;
   }
   const v = Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(100 * direction * Kaida$45$Amethyst$math$$cos(p_angle), 100 * direction * Kaida$45$Amethyst$math$$sin(p_angle));
-  let play_angle = moonbitlang$core$builtin$$Mod$mod$12$(moonbitlang$core$builtin$$Mod$mod$12$(p_angle, 6.28) + 6.28, 6.28);
+  let play_angle = moonbitlang$core$builtin$$Mod$mod$15$(moonbitlang$core$builtin$$Mod$mod$15$(p_angle, 6.28) + 6.28, 6.28);
   if (play_angle > 3.14) {
     play_angle = play_angle - 6.28;
   }
-  moonbitlang$core$builtin$$println$13$(`Fuck: ${moonbitlang$core$builtin$$Show$to_string$33$(play_angle)}`);
+  moonbitlang$core$builtin$$println$16$(`Fuck: ${moonbitlang$core$builtin$$Show$to_string$37$(play_angle)}`);
   Great$45$Love$45$League$Stick_Man_Battle$server$$maintain_rotation$46$inner(particle.torso, play_angle, 200, 20);
   Demonmasterlqx$box2d_ffi$box2d$$B2Body$applyForce(particle.torso, v, Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(particle.torso));
 }
@@ -14730,8 +15636,8 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$random_range(min, max)
   return moonbitlang$core$random$$Rand$double(Great$45$Love$45$League$Stick_Man_Battle$server$$r.val) * (max - min) + min;
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation(game, base_x, base_y) {
-  const frame_counter = { val: 0 };
-  const smokes = moonbitlang$core$ref$$Ref$new$79$(moonbitlang$core$array$$Array$new$46$inner$61$(0));
+  const frame_counter = moonbitlang$core$ref$$Ref$new$5$(0);
+  const smokes = moonbitlang$core$ref$$Ref$new$83$(moonbitlang$core$array$$Array$new$46$inner$72$(0));
   const animation = Great$45$Love$45$League$Stick_Man_Battle$server$$SampleAnimation$new((world, p5) => {
     frame_counter.val = frame_counter.val + 1 | 0;
     if (frame_counter.val === 1) {
@@ -14743,7 +15649,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animati
           const dist = Great$45$Love$45$League$Stick_Man_Battle$server$$random_range(2, 6);
           const speed = Great$45$Love$45$League$Stick_Man_Battle$server$$random_range(0.6, 1.5);
           const p = { x: base_x + Kaida$45$Amethyst$math$$cos(ang) * dist, y: base_y + Kaida$45$Amethyst$math$$sin(ang) * dist * 0.6, r: Great$45$Love$45$League$Stick_Man_Battle$server$$random_range(3, 7), alpha: Great$45$Love$45$League$Stick_Man_Battle$server$$random_range(180, 255), vx: Kaida$45$Amethyst$math$$cos(ang) * speed * 0.5, vy: Great$45$Love$45$League$Stick_Man_Battle$server$$random_range(-0.6, -0.25), rot: Great$45$Love$45$League$Stick_Man_Battle$server$$random_range(0, 6.28318530718), life: Great$45$Love$45$League$Stick_Man_Battle$server$$random_range(60, 90), beg: frame_counter.val };
-          moonbitlang$core$array$$Array$push$61$(smokes.val, p);
+          moonbitlang$core$array$$Array$push$72$(smokes.val, p);
           _tmp = i + 1 | 0;
           continue;
         } else {
@@ -14753,10 +15659,10 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animati
     }
     if ((frame_counter.val % 8 | 0) === 0 && frame_counter.val < 60) {
       const p = { x: base_x + Great$45$Love$45$League$Stick_Man_Battle$server$$random_range(-3, 3), y: base_y + Great$45$Love$45$League$Stick_Man_Battle$server$$random_range(-2, 2), r: Great$45$Love$45$League$Stick_Man_Battle$server$$random_range(2, 5), alpha: Great$45$Love$45$League$Stick_Man_Battle$server$$random_range(150, 220), vx: Great$45$Love$45$League$Stick_Man_Battle$server$$random_range(-0.3, 0.3), vy: Great$45$Love$45$League$Stick_Man_Battle$server$$random_range(-0.4, -0.1), rot: Great$45$Love$45$League$Stick_Man_Battle$server$$random_range(0, 6.28318530718), life: Great$45$Love$45$League$Stick_Man_Battle$server$$random_range(40, 70), beg: frame_counter.val };
-      moonbitlang$core$array$$Array$push$61$(smokes.val, p);
+      moonbitlang$core$array$$Array$push$72$(smokes.val, p);
     }
     p5.method_79(p5.self);
-    p5.method_81(p5.self, 255, Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4093, Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4094, Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4095);
+    p5.method_81(p5.self, 255, Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4403, Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4404, Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4405);
     const alive = [];
     const _arr = smokes.val;
     const _len = _arr.length;
@@ -14773,13 +15679,13 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animati
         s.life = s.life - 1;
         if (s.alpha > 8 && s.life > 0) {
           p5.method_79(p5.self);
-          p5.method_81(p5.self, 210, Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4096, Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4097, new Option$Some$0$(s.alpha * 0.25));
+          p5.method_81(p5.self, 210, Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4406, Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4407, new Option$Some$0$(s.alpha * 0.25));
           p5.method_56(p5.self, s.x, s.y, s.r * 2, s.r * 2);
-          p5.method_81(p5.self, 210, Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4098, Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4099, new Option$Some$0$(s.alpha * 0.55));
+          p5.method_81(p5.self, 210, Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4408, Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4409, new Option$Some$0$(s.alpha * 0.55));
           p5.method_56(p5.self, s.x, s.y, s.r * 1.2, s.r * 1.2);
-          p5.method_81(p5.self, 255, Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4100, Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4101, new Option$Some$0$(s.alpha * 0.8));
+          p5.method_81(p5.self, 255, Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4410, Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation$46$constr$47$4411, new Option$Some$0$(s.alpha * 0.8));
           p5.method_56(p5.self, s.x, s.y, s.r * 0.45, s.r * 0.45);
-          moonbitlang$core$array$$Array$push$61$(alive, s);
+          moonbitlang$core$array$$Array$push$72$(alive, s);
         }
         _tmp = _i + 1 | 0;
         continue;
@@ -14787,14 +15693,14 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animati
         break;
       }
     }
-    moonbitlang$core$array$$Array$clear$61$(smokes.val);
+    moonbitlang$core$array$$Array$clear$72$(smokes.val);
     const _len$2 = alive.length;
     let _tmp$2 = 0;
     while (true) {
       const _i = _tmp$2;
       if (_i < _len$2) {
         const pp = alive[_i];
-        moonbitlang$core$array$$Array$push$61$(smokes.val, pp);
+        moonbitlang$core$array$$Array$push$72$(smokes.val, pp);
         _tmp$2 = _i + 1 | 0;
         continue;
       } else {
@@ -14806,8 +15712,8 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animati
     }
     return 1;
   });
-  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$add_animation(game, { self: animation, method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$Animation$update$108$ });
-  moonbitlang$core$builtin$$println$13$(`踏空气场烟雾已注册在 (${moonbitlang$core$builtin$$Show$to_string$33$(base_x)}, ${moonbitlang$core$builtin$$Show$to_string$33$(base_y)})`);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$add_animation(game, { self: animation, method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$Animation$update$115$ });
+  moonbitlang$core$builtin$$println$16$(`踏空气场烟雾已注册在 (${moonbitlang$core$builtin$$Show$to_string$37$(base_x)}, ${moonbitlang$core$builtin$$Show$to_string$37$(base_y)})`);
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$particle_jump(self, particle, direction) {
   if (particle.control.jump_state) {
@@ -14832,7 +15738,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$particle_jump(sel
         Demonmasterlqx$box2d_ffi$box2d$$B2Body$applyImpulse(particle.torso, v, Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(particle.torso));
         const s_pos = Great$45$Love$45$League$Stick_Man_Battle$server$$world_to_screen(Option$None$0$, Option$None$0$, Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(particle.torso)), Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(particle.torso)) - 2, Option$None$0$);
         Great$45$Love$45$League$Stick_Man_Battle$server$$register_smoke_animation(self, s_pos._0, s_pos._1);
-        moonbitlang$core$builtin$$println$13$(`Jump Smoke: (${moonbitlang$core$builtin$$Show$to_string$33$(Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(v))}, ${moonbitlang$core$builtin$$Show$to_string$33$(Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(v))})`);
+        moonbitlang$core$builtin$$println$16$(`Jump Smoke: (${moonbitlang$core$builtin$$Show$to_string$37$(Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(v))}, ${moonbitlang$core$builtin$$Show$to_string$37$(Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(v))})`);
         return undefined;
       } else {
         if (particle.control.jump_frame_count < 31) {
@@ -14864,7 +15770,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$particle_stand(se
     }
     const _bind = particle.control;
     _bind.stand_cooldown = _bind.stand_cooldown - 1 | 0;
-    moonbitlang$core$builtin$$println$13$(`Stand cooldown: ${moonbitlang$core$builtin$$Show$to_string$5$(particle.control.stand_cooldown)}`);
+    moonbitlang$core$builtin$$println$16$(`Stand cooldown: ${moonbitlang$core$builtin$$Show$to_string$5$(particle.control.stand_cooldown)}`);
   }
   particle.control.stand_cooldown = 10;
   Great$45$Love$45$League$Stick_Man_Battle$server$$maintain_joint$46$inner(particle.thigh_left_joint, 0, 50, 2);
@@ -14878,7 +15784,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$particle_stand(se
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$create_world$46$inner(gravity, level, flag) {
   if (flag === true) {
-    const global_box2d_world = moonbitlang$core$ref$$Ref$new$80$(undefined);
+    const global_box2d_world = moonbitlang$core$ref$$Ref$new$82$(undefined);
     let _try_err;
     _L: {
       _L$2: {
@@ -14910,9 +15816,9 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$create_world$46$inner(
       if (_try_err.$tag === 3) {
         const _MapLoaderError = _try_err;
         const _e = _MapLoaderError._0;
-        moonbitlang$core$builtin$$println$13$(`Error loading map: ${_e}`);
+        moonbitlang$core$builtin$$println$16$(`Error loading map: ${_e}`);
       } else {
-        moonbitlang$core$builtin$$println$13$(`Unknown error loading map: ${moonbitlang$core$builtin$$Show$to_string$37$(_try_err)}`);
+        moonbitlang$core$builtin$$println$16$(`Unknown error loading map: ${moonbitlang$core$builtin$$Show$to_string$41$(_try_err)}`);
       }
     }
     const _p = global_box2d_world.val;
@@ -14934,7 +15840,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$create_world$46$inner(
 function Great$45$Love$45$League$Stick_Man_Battle$server$$create_world(gravity$46$opt, level$46$opt, flag$46$opt) {
   let gravity;
   if (gravity$46$opt === undefined) {
-    gravity = Great$45$Love$45$League$Stick_Man_Battle$server$$create_world$46$tuple$47$4147;
+    gravity = Great$45$Love$45$League$Stick_Man_Battle$server$$create_world$46$tuple$47$4457;
   } else {
     const _Some = gravity$46$opt;
     gravity = _Some;
@@ -14949,6 +15855,94 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$create_world(gravity$4
   const flag = flag$46$opt === -1 ? false : flag$46$opt;
   return Great$45$Love$45$League$Stick_Man_Battle$server$$create_world$46$inner(gravity, level, flag);
 }
+function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$register_custom_function(self, func) {
+  moonbitlang$core$array$$Array$push$64$(self.custom_functions, func);
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunction$new(stage, func) {
+  return { stage: stage, func: func };
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$register_weapon_exchange$46$clear_old$124$917(_env) {
+  const has_weapon = _env._2;
+  const game = _env._1;
+  const index = _env._0;
+  if (has_weapon.val) {
+    Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponDestroy$destroy$7$(moonbitlang$core$array$$Array$at$7$(game.weapon.gun_list, index.val), game);
+    moonbitlang$core$array$$Array$remove$7$(game.weapon.gun_list, index.val);
+    return;
+  } else {
+    return;
+  }
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$register_weapon_exchange(game, target_particle, exchange_condition) {
+  const pre_change_frame = { val: 0 };
+  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$register_custom_function(game, { self: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunction$new(1, (game$2, p) => {
+    if ((game$2.frame_count - pre_change_frame.val | 0) < 30) {
+      return undefined;
+    }
+    const has_weapon = { val: false };
+    const index = { val: 0 };
+    const _arr = game$2.weapon.gun_list;
+    const _len = _arr.length;
+    let _tmp = 0;
+    while (true) {
+      const _i = _tmp;
+      if (_i < _len) {
+        const gun = _arr[_i];
+        if (gun.owner_id === target_particle) {
+          has_weapon.val = true;
+          break;
+        }
+        index.val = index.val + 1 | 0;
+        _tmp = _i + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    const _env = { _0: index, _1: game$2, _2: has_weapon };
+    $bound_check(exchange_condition, 0);
+    const _func = exchange_condition[0];
+    if (_func(game$2, p)) {
+      Great$45$Love$45$League$Stick_Man_Battle$server$$register_weapon_exchange$46$clear_old$124$917(_env);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponCreate$create$7$(game$2, target_particle, Great$45$Love$45$League$Stick_Man_Battle$server$$register_weapon_exchange$46$constr$47$4478);
+      moonbitlang$core$builtin$$println$16$("装备手枪!");
+      pre_change_frame.val = game$2.frame_count;
+      return;
+    } else {
+      $bound_check(exchange_condition, 1);
+      const _func$2 = exchange_condition[1];
+      if (_func$2(game$2, p)) {
+        Great$45$Love$45$League$Stick_Man_Battle$server$$register_weapon_exchange$46$clear_old$124$917(_env);
+        Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_shotgun(game$2, target_particle, Great$45$Love$45$League$Stick_Man_Battle$server$$register_weapon_exchange$46$constr$47$4479);
+        moonbitlang$core$builtin$$println$16$("装备霰弹枪!");
+        pre_change_frame.val = game$2.frame_count;
+        return;
+      } else {
+        $bound_check(exchange_condition, 2);
+        const _func$3 = exchange_condition[2];
+        if (_func$3(game$2, p)) {
+          Great$45$Love$45$League$Stick_Man_Battle$server$$register_weapon_exchange$46$clear_old$124$917(_env);
+          Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_sniper(game$2, target_particle, Great$45$Love$45$League$Stick_Man_Battle$server$$register_weapon_exchange$46$constr$47$4480);
+          moonbitlang$core$builtin$$println$16$("装备狙击枪!");
+          pre_change_frame.val = game$2.frame_count;
+          return;
+        } else {
+          $bound_check(exchange_condition, 3);
+          const _func$4 = exchange_condition[3];
+          if (_func$4(game$2, p)) {
+            Great$45$Love$45$League$Stick_Man_Battle$server$$register_weapon_exchange$46$clear_old$124$917(_env);
+            Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_laser_rifle(game$2, target_particle, Great$45$Love$45$League$Stick_Man_Battle$server$$register_weapon_exchange$46$constr$47$4481);
+            moonbitlang$core$builtin$$println$16$("装备激光枪!");
+            pre_change_frame.val = game$2.frame_count;
+            return;
+          } else {
+            return;
+          }
+        }
+      }
+    }
+  }), method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$call_custom_function$118$, method_1: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$get_call_stage$118$ });
+}
 function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$get_auto_aim_angle(self, attacker_id, config) {
   if (!config.enabled) {
     return Option$None$0$;
@@ -14962,7 +15956,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$get_auto_aim_angl
     if (attacker_id >= self.particle_list.length) {
       return Option$None$0$;
     }
-    const attacker_pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(moonbitlang$core$array$$Array$at$22$(self.particle_list, attacker_id).torso);
+    const attacker_pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(moonbitlang$core$array$$Array$at$26$(self.particle_list, attacker_id).torso);
     const dx = _target.position._0 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(attacker_pos);
     const dy = _target.position._1 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(attacker_pos);
     const angle = Kaida$45$Amethyst$math$$atan2(dy, dx);
@@ -14971,43 +15965,70 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$get_auto_aim_angl
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$get_auto_aim_config(self, player_id) {
   if (player_id >= 0 && player_id < self.auto_aim_configs.length) {
-    return moonbitlang$core$array$$Array$at$23$(self.auto_aim_configs, player_id);
+    return moonbitlang$core$array$$Array$at$27$(self.auto_aim_configs, player_id);
   }
   return undefined;
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$register_custom_function(self, func) {
-  moonbitlang$core$array$$Array$push$64$(self.custom_functions, func);
-}
-function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_item$46$inner(self, position, item_type, value, lifetime) {
-  const box_def = Demonmasterlqx$box2d_ffi$box2d$$b2BoxDef();
-  Demonmasterlqx$box2d_ffi$box2d$$B2BoxDef$setExtents(box_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(0.3, 0.3));
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$89$(box_def, 0);
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$89$(box_def, -3);
-  const body_def = Demonmasterlqx$box2d_ffi$box2d$$b2BodyDef();
-  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setPosition(body_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(position._0, position._1));
-  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$addShape(body_def, Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(box_def));
-  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setAllowSleep(body_def, false);
-  const body = Demonmasterlqx$box2d_ffi$box2d$$World$createBody$83$(self.world, body_def);
-  const item_id = self.item_list.length;
-  const item = { id: item_id, body: body, item_type: item_type, value: value, is_active: true, position: position, lifetime: lifetime };
-  moonbitlang$core$array$$Array$push$66$(self.item_list, item);
-  moonbitlang$core$builtin$$println$13$(`Created ${moonbitlang$core$builtin$$Show$to_string$35$(item_type)} at (${moonbitlang$core$builtin$$Show$to_string$33$(position._0)}, ${moonbitlang$core$builtin$$Show$to_string$33$(position._1)})`);
-  return item;
-}
-function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$spawn_health_pack$46$inner(self, position, value) {
-  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_item$46$inner(self, position, 0, value, 600);
-}
-function Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunction$new(stage, func) {
-  return { stage: stage, func: func };
+function Great$45$Love$45$League$Stick_Man_Battle$server$$register_mouse_shoot(game, player_id) {
+  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$register_custom_function(game, { self: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunction$new(1, (game$2, p5) => {
+    if (p5.method_28(p5.self)) {
+      const _bind = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$get_auto_aim_config(game$2, player_id);
+      let angle;
+      if (_bind === undefined) {
+        const mouse_x = p5.method_18(p5.self) + 0;
+        const mouse_y = p5.method_19(p5.self) + 0;
+        const world_coords = Great$45$Love$45$League$Stick_Man_Battle$server$$screen_to_world(Option$None$0$, Option$None$0$, mouse_x, mouse_y, Option$None$0$);
+        const player_pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(moonbitlang$core$array$$Array$at$26$(game$2.particle_list, player_id).torso);
+        const dx = world_coords._0 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(player_pos);
+        const dy = world_coords._1 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(player_pos);
+        angle = Kaida$45$Amethyst$math$$atan2(dy, dx);
+      } else {
+        const _Some = _bind;
+        const _config = _Some;
+        const _bind$2 = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$get_auto_aim_angle(game$2, player_id, _config);
+        if (_bind$2.$tag === 1) {
+          const _Some$2 = _bind$2;
+          angle = _Some$2._0;
+        } else {
+          const mouse_x = p5.method_18(p5.self) + 0;
+          const mouse_y = p5.method_19(p5.self) + 0;
+          const world_coords = Great$45$Love$45$League$Stick_Man_Battle$server$$screen_to_world(Option$None$0$, Option$None$0$, mouse_x, mouse_y, Option$None$0$);
+          const player_pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(moonbitlang$core$array$$Array$at$26$(game$2.particle_list, player_id).torso);
+          const dx = world_coords._0 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(player_pos);
+          const dy = world_coords._1 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(player_pos);
+          angle = Kaida$45$Amethyst$math$$atan2(dy, dx);
+        }
+      }
+      const _arr = game$2.weapon.gun_list;
+      const _len = _arr.length;
+      let _tmp = 0;
+      while (true) {
+        const _i = _tmp;
+        if (_i < _len) {
+          const gun = _arr[_i];
+          if (gun.owner_id === player_id) {
+            Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponControl$attack_at_angle$7$(gun, game$2, angle);
+            break;
+          }
+          _tmp = _i + 1 | 0;
+          continue;
+        } else {
+          return;
+        }
+      }
+    } else {
+      return;
+    }
+  }), method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$call_custom_function$118$, method_1: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$get_call_stage$118$ });
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$register_particle_control_config(self, config) {
-  moonbitlang$core$array$$Array$push$65$(self.particle_control_configs, config);
+  moonbitlang$core$array$$Array$push$66$(self.particle_control_configs, config);
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$ParticleControlConfig$new$46$inner(target_particle_index, left_key, right_key, jump_key, faint_key, shoot_key, toggle_auto_aim_key, from_internet, target_ip, target_port) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$ParticleControlConfig$new$46$inner(target_particle_index, left_key, right_key, jump_key, faint_key, shoot_key, toggle_auto_aim_key, throw_weapon_key, from_internet, target_ip, target_port) {
   if (from_internet) {
-    if (moonbitlang$core$builtin$$Eq$equal$50$(target_ip, undefined) || moonbitlang$core$builtin$$Eq$equal$52$(target_port, undefined)) {
-      moonbitlang$core$builtin$$println$13$("Error: Missing target_ip or target_port for internet control.");
-      return new Result$Err$43$(new Error$Great$45$Love$45$League$47$Stick_Man_Battle$47$server$46$ParticleControlConfigError$46$ParticleControlConfigError("Missing target_ip or target_port for internet control."));
+    if (moonbitlang$core$builtin$$Eq$equal$54$(target_ip, undefined) || moonbitlang$core$builtin$$Eq$equal$56$(target_port, undefined)) {
+      moonbitlang$core$builtin$$println$16$("Error: Missing target_ip or target_port for internet control.");
+      return new Result$Err$45$(new Error$Great$45$Love$45$League$47$Stick_Man_Battle$47$server$46$ParticleControlConfigError$46$ParticleControlConfigError("Missing target_ip or target_port for internet control."));
     }
     let _tmp;
     if (target_ip === undefined) {
@@ -15024,12 +16045,12 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$ParticleControlConfig$
       const _p = target_port;
       _tmp$3 = _p;
     }
-    return new Result$Ok$43$({ from_internet: from_internet, left_key: 95, right_key: 95, jump_key: 95, shoot_key: 95, faint_key: 95, toggle_auto_aim_key: 95, target_ip: _tmp$2, target_port: _tmp$3, target_particle_index: target_particle_index });
+    return new Result$Ok$45$({ from_internet: from_internet, left_key: 95, right_key: 95, jump_key: 95, shoot_key: 95, faint_key: 95, toggle_auto_aim_key: 95, throw_weapon_key: 95, target_ip: _tmp$2, target_port: _tmp$3, target_particle_index: target_particle_index });
   }
   if (from_internet === false) {
-    if (moonbitlang$core$builtin$$Eq$equal$53$(left_key, undefined) || (moonbitlang$core$builtin$$Eq$equal$53$(right_key, undefined) || (moonbitlang$core$builtin$$Eq$equal$53$(jump_key, undefined) || (moonbitlang$core$builtin$$Eq$equal$53$(shoot_key, undefined) || moonbitlang$core$builtin$$Eq$equal$53$(toggle_auto_aim_key, undefined))))) {
-      moonbitlang$core$builtin$$println$13$("Error: Missing key bindings for local control.");
-      return new Result$Err$43$(new Error$Great$45$Love$45$League$47$Stick_Man_Battle$47$server$46$ParticleControlConfigError$46$ParticleControlConfigError("Missing key bindings for local control."));
+    if (moonbitlang$core$builtin$$Eq$equal$57$(left_key, undefined) || (moonbitlang$core$builtin$$Eq$equal$57$(right_key, undefined) || (moonbitlang$core$builtin$$Eq$equal$57$(jump_key, undefined) || (moonbitlang$core$builtin$$Eq$equal$57$(shoot_key, undefined) || (moonbitlang$core$builtin$$Eq$equal$57$(toggle_auto_aim_key, undefined) || moonbitlang$core$builtin$$Eq$equal$57$(throw_weapon_key, undefined)))))) {
+      moonbitlang$core$builtin$$println$16$("Error: Missing key bindings for local control.");
+      return new Result$Err$45$(new Error$Great$45$Love$45$League$47$Stick_Man_Battle$47$server$46$ParticleControlConfigError$46$ParticleControlConfigError("Missing key bindings for local control."));
     }
     let _tmp;
     if (left_key === undefined) {
@@ -15078,52 +16099,67 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$ParticleControlConfig$
       const _p = toggle_auto_aim_key;
       _tmp$11 = _p;
     }
-    return new Result$Ok$43$({ from_internet: from_internet, left_key: _tmp$2, right_key: _tmp$4, jump_key: _tmp$6, shoot_key: _tmp$8, faint_key: _tmp$10, toggle_auto_aim_key: _tmp$11, target_ip: "", target_port: 0, target_particle_index: target_particle_index });
+    const _tmp$12 = _tmp$11;
+    let _tmp$13;
+    if (throw_weapon_key === undefined) {
+      _tmp$13 = $panic();
+    } else {
+      const _p = throw_weapon_key;
+      _tmp$13 = _p;
+    }
+    return new Result$Ok$45$({ from_internet: from_internet, left_key: _tmp$2, right_key: _tmp$4, jump_key: _tmp$6, shoot_key: _tmp$8, faint_key: _tmp$10, toggle_auto_aim_key: _tmp$12, throw_weapon_key: _tmp$13, target_ip: "", target_port: 0, target_particle_index: target_particle_index });
   }
-  return new Result$Err$43$(new Error$Great$45$Love$45$League$47$Stick_Man_Battle$47$server$46$ParticleControlConfigError$46$ParticleControlConfigError("Unknown error in ParticleControlConfig::new"));
+  return new Result$Err$45$(new Error$Great$45$Love$45$League$47$Stick_Man_Battle$47$server$46$ParticleControlConfigError$46$ParticleControlConfigError("Unknown error in ParticleControlConfig::new"));
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$ParticleControlConfig$new(target_particle_index, left_key$46$opt, right_key$46$opt, jump_key$46$opt, faint_key$46$opt, shoot_key$46$opt, toggle_auto_aim_key$46$opt, from_internet$46$opt, target_ip$46$opt, target_port$46$opt) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$ParticleControlConfig$new(target_particle_index, left_key$46$opt, right_key$46$opt, jump_key$46$opt, faint_key$46$opt, shoot_key$46$opt, toggle_auto_aim_key$46$opt, throw_weapon_key$46$opt, from_internet$46$opt, target_ip$46$opt, target_port$46$opt) {
   let left_key;
   if (left_key$46$opt.$tag === 1) {
     const _Some = left_key$46$opt;
     left_key = _Some._0;
   } else {
-    left_key = Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4252;
+    left_key = Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4579;
   }
   let right_key;
   if (right_key$46$opt.$tag === 1) {
     const _Some = right_key$46$opt;
     right_key = _Some._0;
   } else {
-    right_key = Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4253;
+    right_key = Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4580;
   }
   let jump_key;
   if (jump_key$46$opt.$tag === 1) {
     const _Some = jump_key$46$opt;
     jump_key = _Some._0;
   } else {
-    jump_key = Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4254;
+    jump_key = Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4581;
   }
   let faint_key;
   if (faint_key$46$opt.$tag === 1) {
     const _Some = faint_key$46$opt;
     faint_key = _Some._0;
   } else {
-    faint_key = Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4255;
+    faint_key = Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4582;
   }
   let shoot_key;
   if (shoot_key$46$opt.$tag === 1) {
     const _Some = shoot_key$46$opt;
     shoot_key = _Some._0;
   } else {
-    shoot_key = Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4256;
+    shoot_key = Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4583;
   }
   let toggle_auto_aim_key;
   if (toggle_auto_aim_key$46$opt.$tag === 1) {
     const _Some = toggle_auto_aim_key$46$opt;
     toggle_auto_aim_key = _Some._0;
   } else {
-    toggle_auto_aim_key = Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4257;
+    toggle_auto_aim_key = Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4584;
+  }
+  let throw_weapon_key;
+  if (throw_weapon_key$46$opt.$tag === 1) {
+    const _Some = throw_weapon_key$46$opt;
+    throw_weapon_key = _Some._0;
+  } else {
+    throw_weapon_key = Great$45$Love$45$League$Stick_Man_Battle$server$$new$46$constr$47$4585;
   }
   const from_internet = from_internet$46$opt === -1 ? false : from_internet$46$opt;
   let target_ip;
@@ -15140,13 +16176,13 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$ParticleControlConfig$
   } else {
     target_port = undefined;
   }
-  return Great$45$Love$45$League$Stick_Man_Battle$server$$ParticleControlConfig$new$46$inner(target_particle_index, left_key, right_key, jump_key, faint_key, shoot_key, toggle_auto_aim_key, from_internet, target_ip, target_port);
+  return Great$45$Love$45$League$Stick_Man_Battle$server$$ParticleControlConfig$new$46$inner(target_particle_index, left_key, right_key, jump_key, faint_key, shoot_key, toggle_auto_aim_key, throw_weapon_key, from_internet, target_ip, target_port);
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$register_control(game) {
   let _try_err;
   _L: {
     _L$2: {
-      const _bind = Great$45$Love$45$League$Stick_Man_Battle$server$$ParticleControlConfig$new(0, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4287, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4289, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4291, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4293, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4295, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4297, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4298, Option$None$40$, Option$None$41$);
+      const _bind = Great$45$Love$45$League$Stick_Man_Battle$server$$ParticleControlConfig$new(0, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4618, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4620, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4622, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4624, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4626, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4628, Option$None$1$, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4629, Option$None$41$, Option$None$42$);
       let _tmp;
       if (_bind.$tag === 1) {
         const _ok = _bind;
@@ -15162,11 +16198,11 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$register_control(game)
     }
     const _ParticleControlConfigError = _try_err;
     const _e = _ParticleControlConfigError._0;
-    moonbitlang$core$builtin$$println$13$(`Error registering particle control config: ${_e}`);
+    moonbitlang$core$builtin$$println$16$(`Error registering particle control config: ${_e}`);
   }
   let _try_err$2;
   _L$2: {
-    const _bind = Great$45$Love$45$League$Stick_Man_Battle$server$$ParticleControlConfig$new(1, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4300, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4302, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4304, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4306, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4308, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4310, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4311, Option$None$40$, Option$None$41$);
+    const _bind = Great$45$Love$45$League$Stick_Man_Battle$server$$ParticleControlConfig$new(1, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4631, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4633, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4635, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4637, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4639, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4641, Option$None$1$, Great$45$Love$45$League$Stick_Man_Battle$server$$register_control$46$constr$47$4642, Option$None$41$, Option$None$42$);
     let _tmp;
     if (_bind.$tag === 1) {
       const _ok = _bind;
@@ -15182,13 +16218,13 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$register_control(game)
   }
   const _ParticleControlConfigError = _try_err$2;
   const _e = _ParticleControlConfigError._0;
-  moonbitlang$core$builtin$$println$13$(`Error registering particle control config: ${_e}`);
+  moonbitlang$core$builtin$$println$16$(`Error registering particle control config: ${_e}`);
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$AutoAimConfig$new$46$inner(enabled, target_types, max_range) {
   return { enabled: enabled, target_types: target_types, max_range: max_range, current_target: undefined };
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$AutoAimConfig$new(enabled$46$opt, target_types$46$opt, max_range$46$opt) {
-  const enabled = enabled$46$opt === -1 ? false : enabled$46$opt;
+  const enabled = enabled$46$opt === -1 ? true : enabled$46$opt;
   let target_types;
   if (target_types$46$opt.$tag === 1) {
     const _Some = target_types$46$opt;
@@ -15208,24 +16244,24 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$AutoAimConfig$new(enab
 function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$register_auto_aim_config(self, player_id, config) {
   while (true) {
     if (self.auto_aim_configs.length <= player_id) {
-      moonbitlang$core$array$$Array$push$23$(self.auto_aim_configs, Great$45$Love$45$League$Stick_Man_Battle$server$$AutoAimConfig$new(-1, Option$None$44$, Option$None$0$));
+      moonbitlang$core$array$$Array$push$27$(self.auto_aim_configs, Great$45$Love$45$League$Stick_Man_Battle$server$$AutoAimConfig$new(-1, Option$None$46$, Option$None$0$));
       continue;
     } else {
       break;
     }
   }
-  moonbitlang$core$array$$Array$set$23$(self.auto_aim_configs, player_id, config);
+  moonbitlang$core$array$$Array$set$27$(self.auto_aim_configs, player_id, config);
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$register_auto_aim(game) {
-  const config_player0 = Great$45$Love$45$League$Stick_Man_Battle$server$$AutoAimConfig$new$46$inner(false, [0, 1], 50);
+  const config_player0 = Great$45$Love$45$League$Stick_Man_Battle$server$$AutoAimConfig$new$46$inner(true, [0, 1], 50);
   Great$45$Love$45$League$Stick_Man_Battle$server$$Game$register_auto_aim_config(game, 0, config_player0);
-  const config_player1 = Great$45$Love$45$League$Stick_Man_Battle$server$$AutoAimConfig$new$46$inner(false, [0, 1], 50);
+  const config_player1 = Great$45$Love$45$League$Stick_Man_Battle$server$$AutoAimConfig$new$46$inner(true, [0, 1], 50);
   Great$45$Love$45$League$Stick_Man_Battle$server$$Game$register_auto_aim_config(game, 1, config_player1);
-  moonbitlang$core$builtin$$println$13$("自动瞄准系统已初始化");
-  moonbitlang$core$builtin$$println$13$("  - 按 T 键切换自动瞄准开关");
-  moonbitlang$core$builtin$$println$13$("  - 可瞄准其他玩家和敌方AI实体");
-  moonbitlang$core$builtin$$println$13$("  - 自动排除瞄准自己");
-  moonbitlang$core$builtin$$println$13$("  - 最大瞄准距离: 50米");
+  moonbitlang$core$builtin$$println$16$("自动瞄准系统已初始化");
+  moonbitlang$core$builtin$$println$16$("  - 按 T 键切换自动瞄准开关");
+  moonbitlang$core$builtin$$println$16$("  - 可瞄准其他玩家和敌方AI实体");
+  moonbitlang$core$builtin$$println$16$("  - 自动排除瞄准自己");
+  moonbitlang$core$builtin$$println$16$("  - 最大瞄准距离: 50米");
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show(game) {
   Great$45$Love$45$League$Stick_Man_Battle$server$$Game$register_custom_function(game, { self: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunction$new(1, (game$2, p5) => {
@@ -15241,7 +16277,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show(game)
         const x = screen_pos._0;
         const y = screen_pos._1 - 50;
         if ((game$2.frame_count % 60 | 0) === 0) {
-          moonbitlang$core$builtin$$println$13$(`绘制血量条，角色 ${moonbitlang$core$builtin$$Show$to_string$5$(particle.index)} 屏幕位置: (${moonbitlang$core$builtin$$Show$to_string$33$(x)}, ${moonbitlang$core$builtin$$Show$to_string$33$(y)})`);
+          moonbitlang$core$builtin$$println$16$(`绘制血量条，角色 ${moonbitlang$core$builtin$$Show$to_string$5$(particle.index)} 屏幕位置: (${moonbitlang$core$builtin$$Show$to_string$37$(x)}, ${moonbitlang$core$builtin$$Show$to_string$37$(y)})`);
         }
         let hp_ratio = (particle.control.health + 0) / 100;
         if (hp_ratio < 0) {
@@ -15252,113 +16288,815 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show(game)
         }
         const left = x - 20;
         const top = y - 3;
-        p5.method_81(p5.self, 60, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4340, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4341, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4342);
+        p5.method_81(p5.self, 60, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4671, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4672, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4673);
         p5.method_60(p5.self, left - 4, top - 4, 50, 16);
-        p5.method_81(p5.self, 8, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4343, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4344, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4345);
+        p5.method_81(p5.self, 8, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4674, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4675, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4676);
         p5.method_60(p5.self, left, top, 42, 8);
         const fg_w = 40 * hp_ratio;
         const r = 255 * (1 - hp_ratio) + 0 * hp_ratio;
         const g = 20 * (1 - hp_ratio) + 255 * hp_ratio;
         const b = 160 * (1 - hp_ratio) + 230 * hp_ratio;
-        p5.method_81(p5.self, r, new Option$Some$0$(g), new Option$Some$0$(b), Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4346);
+        p5.method_81(p5.self, r, new Option$Some$0$(g), new Option$Some$0$(b), Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4677);
         p5.method_60(p5.self, left + 1, top + 1, fg_w, 6);
         const text_x = left + 21;
         const text_y = top + 4 + 3;
         p5.method_112(p5.self, 10);
-        p5.method_81(p5.self, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4347, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4348, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4349);
-        p5.method_119(p5.self, moonbitlang$core$int$$Int$to_string$46$inner(particle.control.health, 10), text_x + 1, text_y + 1, Option$None$0$, Option$None$0$);
-        p5.method_81(p5.self, 255, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4350, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4351, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4352);
-        p5.method_119(p5.self, moonbitlang$core$int$$Int$to_string$46$inner(particle.control.health, 10), text_x, text_y, Option$None$0$, Option$None$0$);
+        p5.method_81(p5.self, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4678, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4679, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4680);
+        p5.method_119(p5.self, moonbitlang$core$int$$Int$to_string$46$inner(particle.control.health, 10), text_x + 1, text_y + 1, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4681, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4682);
+        p5.method_81(p5.self, 255, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4683, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4684, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4685);
+        p5.method_119(p5.self, moonbitlang$core$int$$Int$to_string$46$inner(particle.control.health, 10), text_x, text_y, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4686, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4687);
         const text_x$2 = left + 21;
         const text_y$2 = top - 10;
         p5.method_112(p5.self, 12);
-        p5.method_81(p5.self, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4353, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4354, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4355);
-        p5.method_119(p5.self, `P ${moonbitlang$core$builtin$$Show$to_string$5$(particle.index)}`, text_x$2 + 1, text_y$2 + 1, Option$None$0$, Option$None$0$);
-        p5.method_81(p5.self, 255, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4356, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4357, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4358);
-        p5.method_119(p5.self, `P ${moonbitlang$core$builtin$$Show$to_string$5$(particle.index)}`, text_x$2, text_y$2, Option$None$0$, Option$None$0$);
+        p5.method_81(p5.self, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4688, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4689, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4690);
+        p5.method_119(p5.self, `P ${moonbitlang$core$builtin$$Show$to_string$5$(particle.index)}`, text_x$2 + 1, text_y$2 + 1, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4691, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4692);
+        p5.method_81(p5.self, 255, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4693, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4694, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4695);
+        p5.method_119(p5.self, `P ${moonbitlang$core$builtin$$Show$to_string$5$(particle.index)}`, text_x$2, text_y$2, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4696, Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show$46$constr$47$4697);
         _tmp = _i + 1 | 0;
         continue;
       } else {
         return;
       }
     }
-  }), method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$call_custom_function$110$, method_1: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$get_call_stage$110$ });
+  }), method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$call_custom_function$118$, method_1: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$get_call_stage$118$ });
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$register_show_mouse_screen_coords(game) {
   Great$45$Love$45$League$Stick_Man_Battle$server$$Game$register_custom_function(game, { self: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunction$new(1, (game$2, p5) => {
     const mouse_x = p5.method_18(p5.self) + 0;
     const mouse_y = p5.method_19(p5.self) + 0;
     if ((game$2.frame_count % 60 | 0) === 0) {
-      moonbitlang$core$builtin$$println$13$(`鼠标位置: (${moonbitlang$core$builtin$$Show$to_string$33$(mouse_x)}, ${moonbitlang$core$builtin$$Show$to_string$33$(mouse_y)})`);
+      moonbitlang$core$builtin$$println$16$(`鼠标位置: (${moonbitlang$core$builtin$$Show$to_string$37$(mouse_x)}, ${moonbitlang$core$builtin$$Show$to_string$37$(mouse_y)})`);
       return;
     } else {
       return;
     }
-  }), method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$call_custom_function$110$, method_1: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$get_call_stage$110$ });
+  }), method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$call_custom_function$118$, method_1: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$get_call_stage$118$ });
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$set_master_volume(self, volume) {
+  const clamped = volume < 0 ? 0 : volume > 1 ? 1 : volume;
+  self.master_volume = clamped;
+  moonbitlang$core$builtin$$println$16$(`主音量设置为: ${moonbitlang$core$builtin$$Show$to_string$37$(self.master_volume)}`);
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$stop_bgm(self) {
+  const _bind = self.current_bgm;
+  if (_bind === undefined) {
+    return;
+  } else {
+    const _Some = _bind;
+    const _current = _Some;
+    const _bind$2 = moonbitlang$core$builtin$$Map$get$59$(self.audio_configs, _current);
+    if (_bind$2 === undefined) {
+    } else {
+      const _Some$2 = _bind$2;
+      const _config = _Some$2;
+      moonbitlang$core$builtin$$println$16$(`停止背景音乐: ${moonbitlang$core$builtin$$Show$to_string$35$(_current)}`);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$js_stop_audio(_config.path);
+    }
+    self.current_bgm = undefined;
+    return;
+  }
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$toggle_bgm(self) {
+  self.bgm_enabled = !self.bgm_enabled;
+  if (!self.bgm_enabled) {
+    Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$stop_bgm(self);
+  } else {
+    const _bind = self.current_bgm;
+    if (_bind === undefined) {
+    } else {
+      const _Some = _bind;
+      const _current = _Some;
+      Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_sound(self, _current);
+    }
+  }
+  const status = self.bgm_enabled ? "开启" : "关闭";
+  moonbitlang$core$builtin$$println$16$(`背景音乐: ${status}`);
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$toggle_sfx(self) {
+  self.sfx_enabled = !self.sfx_enabled;
+  const status = self.sfx_enabled ? "开启" : "关闭";
+  moonbitlang$core$builtin$$println$16$(`音效: ${status}`);
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$register_audio_controls(game) {
+  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$register_custom_function(game, { self: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunction$new(1, (game$2, p5) => {
+    if (p5.method_10(p5.self, 12) && (game$2.frame_count % 30 | 0) === 0) {
+      Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$toggle_bgm(game$2.audio);
+      const status = game$2.audio.bgm_enabled ? "开启" : "关闭";
+      moonbitlang$core$builtin$$println$16$(`背景音乐已${status}`);
+    }
+    if (p5.method_10(p5.self, 13) && (game$2.frame_count % 30 | 0) === 0) {
+      Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$toggle_sfx(game$2.audio);
+      const status = game$2.audio.sfx_enabled ? "开启" : "关闭";
+      moonbitlang$core$builtin$$println$16$(`音效已${status}`);
+    }
+    if (p5.method_10(p5.self, 33) && (game$2.frame_count % 10 | 0) === 0) {
+      const new_volume = game$2.audio.master_volume - 0.1;
+      Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$set_master_volume(game$2.audio, new_volume);
+      moonbitlang$core$builtin$$println$16$(`主音量: ${moonbitlang$core$builtin$$Show$to_string$37$(game$2.audio.master_volume)}`);
+    }
+    if (p5.method_10(p5.self, 26) && (game$2.frame_count % 10 | 0) === 0) {
+      const new_volume = game$2.audio.master_volume + 0.1;
+      Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$set_master_volume(game$2.audio, new_volume);
+      moonbitlang$core$builtin$$println$16$(`主音量: ${moonbitlang$core$builtin$$Show$to_string$37$(game$2.audio.master_volume)}`);
+      return;
+    } else {
+      return;
+    }
+  }), method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$call_custom_function$118$, method_1: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$get_call_stage$118$ });
+  moonbitlang$core$builtin$$println$16$("音频控制已注册:");
+  moonbitlang$core$builtin$$println$16$("  M键 - 切换背景音乐");
+  moonbitlang$core$builtin$$println$16$("  N键 - 切换音效");
+  moonbitlang$core$builtin$$println$16$("  7键 - 降低音量");
+  moonbitlang$core$builtin$$println$16$("  0键 - 提高音量");
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$register_end_router(game) {
+  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$register_custom_function(game, { self: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunction$new(3, (game$2, p) => {
+    if (!game$2.navigation_requested) {
+      if (p.method_10(p.self, 17)) {
+        game$2.navigation_requested = true;
+        game$2.navigation_target = undefined;
+        Great$45$Love$45$League$Stick_Man_Battle$server$$reloadPage();
+        return;
+      } else {
+        if (p.method_10(p.self, 27)) {
+          game$2.navigation_requested = true;
+          game$2.navigation_target = Great$45$Love$45$League$Stick_Man_Battle$server$$register_end_router$46$constr$47$4750;
+          Great$45$Love$45$League$Stick_Man_Battle$server$$navigateTo("game-level1.html");
+          return;
+        } else {
+          if (p.method_10(p.self, 28)) {
+            game$2.navigation_requested = true;
+            game$2.navigation_target = Great$45$Love$45$League$Stick_Man_Battle$server$$register_end_router$46$constr$47$4751;
+            Great$45$Love$45$League$Stick_Man_Battle$server$$navigateTo("game-level2.html");
+            return;
+          } else {
+            if (p.method_10(p.self, 29)) {
+              game$2.navigation_requested = true;
+              game$2.navigation_target = Great$45$Love$45$League$Stick_Man_Battle$server$$register_end_router$46$constr$47$4752;
+              Great$45$Love$45$League$Stick_Man_Battle$server$$navigateTo("game-level3.html");
+              return;
+            } else {
+              if (p.method_10(p.self, 30)) {
+                game$2.navigation_requested = true;
+                game$2.navigation_target = Great$45$Love$45$League$Stick_Man_Battle$server$$register_end_router$46$constr$47$4753;
+                Great$45$Love$45$League$Stick_Man_Battle$server$$navigateTo("game-level4.html");
+                return;
+              } else {
+                if (p.method_10(p.self, 31)) {
+                  game$2.navigation_requested = true;
+                  game$2.navigation_target = Great$45$Love$45$League$Stick_Man_Battle$server$$register_end_router$46$constr$47$4754;
+                  Great$45$Love$45$League$Stick_Man_Battle$server$$navigateTo("game-level5.html");
+                  return;
+                } else {
+                  return;
+                }
+              }
+            }
+          }
+        }
+      }
+    } else {
+      return;
+    }
+  }), method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$call_custom_function$118$, method_1: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$get_call_stage$118$ });
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$register_stop_router(game) {
+  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$register_custom_function(game, { self: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunction$new(2, (game$2, p) => {
+    if (!game$2.navigation_requested) {
+      if (p.method_10(p.self, 17)) {
+        game$2.navigation_requested = true;
+        game$2.navigation_target = undefined;
+        Great$45$Love$45$League$Stick_Man_Battle$server$$reloadPage();
+        return;
+      } else {
+        if (p.method_10(p.self, 27)) {
+          game$2.navigation_requested = true;
+          game$2.navigation_target = Great$45$Love$45$League$Stick_Man_Battle$server$$register_stop_router$46$constr$47$4758;
+          Great$45$Love$45$League$Stick_Man_Battle$server$$navigateTo("game-level1.html");
+          return;
+        } else {
+          if (p.method_10(p.self, 28)) {
+            game$2.navigation_requested = true;
+            game$2.navigation_target = Great$45$Love$45$League$Stick_Man_Battle$server$$register_stop_router$46$constr$47$4759;
+            Great$45$Love$45$League$Stick_Man_Battle$server$$navigateTo("game-level2.html");
+            return;
+          } else {
+            if (p.method_10(p.self, 29)) {
+              game$2.navigation_requested = true;
+              game$2.navigation_target = Great$45$Love$45$League$Stick_Man_Battle$server$$register_stop_router$46$constr$47$4760;
+              Great$45$Love$45$League$Stick_Man_Battle$server$$navigateTo("game-level3.html");
+              return;
+            } else {
+              if (p.method_10(p.self, 30)) {
+                game$2.navigation_requested = true;
+                game$2.navigation_target = Great$45$Love$45$League$Stick_Man_Battle$server$$register_stop_router$46$constr$47$4761;
+                Great$45$Love$45$League$Stick_Man_Battle$server$$navigateTo("game-level4.html");
+                return;
+              } else {
+                if (p.method_10(p.self, 31)) {
+                  game$2.navigation_requested = true;
+                  game$2.navigation_target = Great$45$Love$45$League$Stick_Man_Battle$server$$register_stop_router$46$constr$47$4762;
+                  Great$45$Love$45$League$Stick_Man_Battle$server$$navigateTo("game-level5.html");
+                  return;
+                } else {
+                  return;
+                }
+              }
+            }
+          }
+        }
+      }
+    } else {
+      return;
+    }
+  }), method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$call_custom_function$118$, method_1: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$get_call_stage$118$ });
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$register_both_weapon_change$46$key_pressed$124$813(key) {
+  return (game, p) => p.method_10(p.self, key);
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$register_both_weapon_change(game) {
+  Great$45$Love$45$League$Stick_Man_Battle$server$$register_weapon_exchange(game, 0, [Great$45$Love$45$League$Stick_Man_Battle$server$$register_both_weapon_change$46$key_pressed$124$813(27), Great$45$Love$45$League$Stick_Man_Battle$server$$register_both_weapon_change$46$key_pressed$124$813(28), Great$45$Love$45$League$Stick_Man_Battle$server$$register_both_weapon_change$46$key_pressed$124$813(29), Great$45$Love$45$League$Stick_Man_Battle$server$$register_both_weapon_change$46$key_pressed$124$813(30)]);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$register_weapon_exchange(game, 1, [Great$45$Love$45$League$Stick_Man_Battle$server$$register_both_weapon_change$46$key_pressed$124$813(33), Great$45$Love$45$League$Stick_Man_Battle$server$$register_both_weapon_change$46$key_pressed$124$813(34), Great$45$Love$45$League$Stick_Man_Battle$server$$register_both_weapon_change$46$key_pressed$124$813(35), Great$45$Love$45$League$Stick_Man_Battle$server$$register_both_weapon_change$46$key_pressed$124$813(26)]);
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$register_audio(self, event_type, path, category, default_volume, should_loop) {
   const config = { path: path, category: category, default_volume: default_volume, should_loop: should_loop };
-  moonbitlang$core$builtin$$Map$set$55$(self.audio_configs, event_type, config);
+  moonbitlang$core$builtin$$Map$set$59$(self.audio_configs, event_type, config);
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$init_audio_configs(self) {
   Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$register_audio(self, 0, "assets/Audio/Weapons/pistol_shot.mp3", 0, 0.6, false);
   Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$register_audio(self, 1, "assets/Audio/Weapons/shotgun_shot.mp3", 0, 0.7, false);
   Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$register_audio(self, 2, "assets/Audio/Weapons/sniper_shot.mp3", 0, 0.8, false);
-  Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$register_audio(self, 3, "assets/Audio/Weapons/laser_shot.wav", 0, 0.5, false);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$register_audio(self, 3, "assets/Audio/Weapons/laser_shot.mp3", 0, 0.5, false);
   Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$register_audio(self, 4, "assets/Audio/Weapons/sword_swing.wav", 0, 0.4, false);
   Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$register_audio(self, 5, "assets/Audio/Effects/bullet_hit.wav", 0, 0.5, false);
   Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$register_audio(self, 6, "assets/Audio/Effects/kill_enemy.wav", 0, 0.7, false);
-  Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$register_audio(self, 7, "assets/Audio/Effects/player_death.wav", 0, 0.8, false);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$register_audio(self, 7, "assets/Audio/Effects/player_death.mp3", 0, 0.8, false);
   Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$register_audio(self, 8, "assets/Audio/Effects/level_start.mp3", 0, 0.6, false);
   Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$register_audio(self, 9, "assets/Audio/Effects/level_complete.wav", 0, 0.7, false);
   Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$register_audio(self, 10, "assets/Audio/Effects/game_over.wav", 0, 0.8, false);
-  Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$register_audio(self, 15, "assets/Audio/BGM/menu.wav", 1, 0.3, true);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$register_audio(self, 17, "assets/Audio/BGM/menu.wav", 1, 0.3, true);
   Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$register_audio(self, 11, "assets/Audio/BGM/level1.wav", 1, 0.3, true);
   Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$register_audio(self, 12, "assets/Audio/BGM/level2.wav", 1, 0.3, true);
   Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$register_audio(self, 13, "assets/Audio/BGM/level3.wav", 1, 0.3, true);
-  Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$register_audio(self, 14, "assets/Audio/BGM/boss.wav", 1, 0.4, true);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$register_audio(self, 14, "assets/Audio/BGM/level4.wav", 1, 0.3, true);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$register_audio(self, 15, "assets/Audio/BGM/level5.wav", 1, 0.3, true);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$register_audio(self, 16, "assets/Audio/BGM/boss.wav", 1, 0.4, true);
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$new() {
-  return { sfx_enabled: true, bgm_enabled: true, master_volume: 0.5, audio_configs: moonbitlang$core$builtin$$Map$new$46$inner$55$(8), current_bgm: undefined };
+  return { sfx_enabled: true, bgm_enabled: true, master_volume: 0.5, audio_configs: moonbitlang$core$builtin$$Map$new$46$inner$59$(8), current_bgm: undefined };
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$create_game$46$inner(render) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$create_game$46$inner(render, background) {
   const world = Great$45$Love$45$League$Stick_Man_Battle$server$$create_world(undefined, undefined, -1);
   const weapon = Great$45$Love$45$League$Stick_Man_Battle$server$$create_weapon_manager();
   const anchor_box_def = Demonmasterlqx$box2d_ffi$box2d$$b2BoxDef();
   Demonmasterlqx$box2d_ffi$box2d$$B2BoxDef$setExtents(anchor_box_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(0.01, 0.01));
-  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$89$(anchor_box_def, 0);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$93$(anchor_box_def, 0);
   const anchor_body_def = Demonmasterlqx$box2d_ffi$box2d$$b2BodyDef();
   Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setPosition(anchor_body_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(0, 0));
-  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$addShape(anchor_body_def, Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$86$(anchor_box_def));
+  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$addShape(anchor_body_def, Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(anchor_box_def));
   Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setRotation(anchor_body_def, 0);
   Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setAllowSleep(anchor_body_def, false);
-  const anchor = Demonmasterlqx$box2d_ffi$box2d$$World$createBody$83$(world, anchor_body_def);
+  const anchor = Demonmasterlqx$box2d_ffi$box2d$$World$createBody$87$(world, anchor_body_def);
   const audio = Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$new();
   Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$init_audio_configs(audio);
-  const _bind = moonbitlang$core$array$$Array$new$46$inner$22$(0);
-  const _bind$2 = moonbitlang$core$array$$Array$new$46$inner$26$(0);
-  const _bind$3 = moonbitlang$core$array$$Array$new$46$inner$28$(0);
+  const _bind = moonbitlang$core$array$$Array$new$46$inner$26$(0);
+  const _bind$2 = moonbitlang$core$array$$Array$new$46$inner$30$(0);
+  const _bind$3 = moonbitlang$core$array$$Array$new$46$inner$32$(0);
   const _bind$4 = moonbitlang$core$array$$Array$new$46$inner$69$(0);
-  const _bind$5 = moonbitlang$core$array$$Array$new$46$inner$66$(0);
-  const _bind$6 = moonbitlang$core$array$$Array$new$46$inner$65$(0);
+  const _bind$5 = moonbitlang$core$array$$Array$new$46$inner$67$(0);
+  const _bind$6 = moonbitlang$core$array$$Array$new$46$inner$66$(0);
   const _bind$7 = moonbitlang$core$array$$Array$new$46$inner$64$(0);
-  const _bind$8 = moonbitlang$core$array$$Array$new$46$inner$23$(0);
-  const _bind$9 = moonbitlang$core$array$$Array$new$46$inner$25$(0);
-  return { world: world, weapon: weapon, render: render, state: 1, particle_list: _bind, particle_index: 0, platform_list: _bind$2, platform_index: 0, enemy_list: _bind$3, bullet_list: _bind$4, item_list: _bind$5, frame_count: 0, slow_mode: false, shake_timer: 0, shake_duration: 15, shake_magnitude: 8, particle_control_configs: _bind$6, custom_functions: _bind$7, auto_aim_configs: _bind$8, animation_list: _bind$9, audio: audio, anchor: anchor };
+  const _bind$8 = moonbitlang$core$array$$Array$new$46$inner$27$(0);
+  const _bind$9 = moonbitlang$core$array$$Array$new$46$inner$29$(0);
+  const _bind$10 = moonbitlang$core$array$$Array$new$46$inner$71$(0);
+  const _bind$11 = undefined;
+  return { world: world, weapon: weapon, render: render, state: 1, particle_list: _bind, particle_index: 0, platform_list: _bind$2, platform_index: 0, enemy_list: _bind$3, bullet_list: _bind$4, item_list: _bind$5, frame_count: 0, slow_mode: false, shake_timer: 0, shake_duration: 15, shake_magnitude: 8, particle_control_configs: _bind$6, custom_functions: _bind$7, auto_aim_configs: _bind$8, animation_list: _bind$9, custom_barrier: _bind$10, audio: audio, anchor: anchor, background: background, navigation_requested: false, navigation_target: _bind$11, pre_key_p: false, key_p_changed_count: 0 };
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$create_game(render$46$opt) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$create_game(render$46$opt, background$46$opt) {
   let render;
   if (render$46$opt === undefined) {
-    render = { self: {}, method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$RenderTrait$render$109$, method_1: Great$45$Love$45$League$Stick_Man_Battle$server$$RenderTrait$clear_screen$109$ };
+    render = { self: {}, method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$RenderTrait$render$116$, method_1: Great$45$Love$45$League$Stick_Man_Battle$server$$RenderTrait$clear_screen$116$ };
   } else {
     const _Some = render$46$opt;
     render = _Some;
   }
-  return Great$45$Love$45$League$Stick_Man_Battle$server$$create_game$46$inner(render);
+  let background;
+  if (background$46$opt === undefined) {
+    background = { self: Great$45$Love$45$League$Stick_Man_Battle$server$$BackgroundImage$new(undefined), method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$117$ };
+  } else {
+    const _Some = background$46$opt;
+    background = _Some;
+  }
+  return Great$45$Love$45$League$Stick_Man_Battle$server$$create_game$46$inner(render, background);
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_bgm(self, event_type) {
+  const _bind = self.current_bgm;
+  if (_bind === undefined) {
+  } else {
+    const _Some = _bind;
+    const _current = _Some;
+    const _bind$2 = moonbitlang$core$builtin$$Map$get$59$(self.audio_configs, _current);
+    if (_bind$2 === undefined) {
+    } else {
+      const _Some$2 = _bind$2;
+      const _config = _Some$2;
+      moonbitlang$core$builtin$$println$16$(`停止背景音乐: ${moonbitlang$core$builtin$$Show$to_string$35$(_current)}`);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$js_stop_audio(_config.path);
+    }
+  }
+  Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_sound(self, event_type);
+  self.current_bgm = event_type;
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$play_level_bgm(self, level) {
+  switch (level) {
+    case 1: {
+      Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_bgm(self.audio, 11);
+      return;
+    }
+    case 2: {
+      Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_bgm(self.audio, 12);
+      return;
+    }
+    case 3: {
+      Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_bgm(self.audio, 13);
+      return;
+    }
+    case 4: {
+      Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_bgm(self.audio, 14);
+      return;
+    }
+    case 5: {
+      Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_bgm(self.audio, 15);
+      return;
+    }
+    default: {
+      moonbitlang$core$builtin$$println$16$(`警告: 未知关卡 ${moonbitlang$core$builtin$$Show$to_string$5$(level)}，播放默认菜单音乐`);
+      Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_bgm(self.audio, 17);
+      return;
+    }
+  }
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$run_custom_functions(self, stage, p5) {
+  const _arr = self.custom_functions;
+  const _len = _arr.length;
+  let _tmp = 0;
+  while (true) {
+    const _i = _tmp;
+    if (_i < _len) {
+      const func = _arr[_i];
+      if (moonbitlang$core$builtin$$Eq$equal$108$(func.method_1(func.self), stage)) {
+        func.method_0(func.self, self, p5);
+      }
+      _tmp = _i + 1 | 0;
+      continue;
+    } else {
+      return;
+    }
+  }
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$game_over(self, p5) {
+  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$run_custom_functions(self, 3, p5);
+  let winner_index = -1;
+  let _tmp = 0;
+  while (true) {
+    const i = _tmp;
+    if (i < self.particle_list.length) {
+      if (moonbitlang$core$array$$Array$at$26$(self.particle_list, i).control.health > 0) {
+        winner_index = i;
+        break;
+      }
+      _tmp = i + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  p5.method_135(p5.self);
+  p5.method_81(p5.self, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4821, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4822, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4823);
+  p5.method_79(p5.self);
+  p5.method_60(p5.self, 0, 0, 1000, 1000);
+  p5.method_112(p5.self, 80);
+  p5.method_81(p5.self, 255, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4824, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4825, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4826);
+  p5.method_107(p5.self, "center", Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4827);
+  p5.method_119(p5.self, "游戏结束", 500, 420, Option$None$0$, Option$None$0$);
+  if (winner_index >= 0) {
+    p5.method_112(p5.self, 60);
+    p5.method_81(p5.self, 255, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4828, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4829, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4830);
+    p5.method_119(p5.self, `玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(winner_index)} 获胜!`, 500, 500, Option$None$0$, Option$None$0$);
+  } else {
+    p5.method_112(p5.self, 60);
+    p5.method_81(p5.self, 200, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4831, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4832, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4833);
+    p5.method_119(p5.self, "平局", 500, 500, Option$None$0$, Option$None$0$);
+  }
+  p5.method_112(p5.self, 30);
+  p5.method_81(p5.self, 255, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4834, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4835, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4836);
+  p5.method_119(p5.self, "按 1-5 载入对应关卡，R 刷新", 500, 580, Option$None$0$, Option$None$0$);
+  p5.method_136(p5.self);
+  self.state = 3;
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$pause(self, p5) {
+  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$run_custom_functions(self, 2, p5);
+  p5.method_135(p5.self);
+  p5.method_81(p5.self, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4842, Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4843, Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4844);
+  p5.method_79(p5.self);
+  p5.method_60(p5.self, 0, 0, 1000, 1000);
+  p5.method_112(p5.self, 80);
+  p5.method_81(p5.self, 255, Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4845, Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4846, Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4847);
+  p5.method_107(p5.self, "center", Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4848);
+  p5.method_119(p5.self, "暂停中", 500, 400, Option$None$0$, Option$None$0$);
+  p5.method_112(p5.self, 30);
+  p5.method_81(p5.self, 200, Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4849, Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4850, Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4851);
+  p5.method_119(p5.self, "按 P 键继续游戏", 500, 500, Option$None$0$, Option$None$0$);
+  p5.method_112(p5.self, 24);
+  p5.method_81(p5.self, 150, Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4852, Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4853, Great$45$Love$45$League$Stick_Man_Battle$server$$pause$46$constr$47$4854);
+  p5.method_119(p5.self, "按 1-5 载入对应关卡，R 刷新", 500, 580, Option$None$0$, Option$None$0$);
+  p5.method_136(p5.self);
+  if ((self.key_p_changed_count % 4 | 0) === 0) {
+    self.state = 1;
+    return;
+  } else {
+    self.state = 2;
+    return;
+  }
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$prepare(self, p5) {
+  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$run_custom_functions(self, 0, p5);
+  self.state = 1;
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$check_particle_out_of_bounds(self, particle) {
+  const body_aabb = Great$45$Love$45$League$Stick_Man_Battle$server$$get_entity_aabb(Great$45$Love$45$League$Stick_Man_Battle$server$$Particle$get_all_bodies(particle));
+  const _bind = Great$45$Love$45$League$Stick_Man_Battle$server$$world_to_screen(Option$None$0$, Option$None$0$, Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(Demonmasterlqx$box2d_ffi$box2d$$B2AABB$getminVertex(body_aabb)), Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(Demonmasterlqx$box2d_ffi$box2d$$B2AABB$getminVertex(body_aabb)), Option$None$0$);
+  const _min_x = _bind._0;
+  const _max_y = _bind._1;
+  const _bind$2 = Great$45$Love$45$League$Stick_Man_Battle$server$$world_to_screen(Option$None$0$, Option$None$0$, Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(Demonmasterlqx$box2d_ffi$box2d$$B2AABB$getmaxVertex(body_aabb)), Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(Demonmasterlqx$box2d_ffi$box2d$$B2AABB$getmaxVertex(body_aabb)), Option$None$0$);
+  const _max_x = _bind$2._0;
+  const _min_y = _bind$2._1;
+  if (_max_y < 0 || (_min_y > 1000 || (_max_x < 0 || _min_x > 1000))) {
+    moonbitlang$core$builtin$$println$16$(`max_y : ${moonbitlang$core$builtin$$Show$to_string$37$(_max_y)}, min_y : ${moonbitlang$core$builtin$$Show$to_string$37$(_min_y)}, max_x : ${moonbitlang$core$builtin$$Show$to_string$37$(_max_x)}, min_x : ${moonbitlang$core$builtin$$Show$to_string$37$(_min_x)}`);
+    moonbitlang$core$builtin$$println$16$(`Height : ${moonbitlang$core$builtin$$Show$to_string$37$(1000)}, Width : ${moonbitlang$core$builtin$$Show$to_string$37$(1000)}`);
+    return true;
+  }
+  return false;
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$cleanup_bullets(self) {
+  const active_bullets = moonbitlang$core$array$$Array$new$46$inner$69$(0);
+  const _arr = self.bullet_list;
+  const _len = _arr.length;
+  let _tmp = 0;
+  while (true) {
+    const _i = _tmp;
+    if (_i < _len) {
+      const bullet = _arr[_i];
+      if (bullet.is_active) {
+        moonbitlang$core$array$$Array$push$69$(active_bullets, bullet);
+      } else {
+        Demonmasterlqx$box2d_ffi$box2d$$World$destroyBody$87$(self.world, bullet.body);
+      }
+      _tmp = _i + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  self.bullet_list = active_bullets;
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$cleanup_items(self) {
+  const active_items = moonbitlang$core$array$$Array$new$46$inner$67$(0);
+  let cleaned_count = 0;
+  const _arr = self.item_list;
+  const _len = _arr.length;
+  let _tmp = 0;
+  while (true) {
+    const _i = _tmp;
+    if (_i < _len) {
+      const item = _arr[_i];
+      if (item.is_active) {
+        moonbitlang$core$array$$Array$push$67$(active_items, item);
+      } else {
+        Demonmasterlqx$box2d_ffi$box2d$$World$destroyBody$87$(self.world, item.body);
+        cleaned_count = cleaned_count + 1 | 0;
+      }
+      _tmp = _i + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  if (cleaned_count > 0) {
+    moonbitlang$core$builtin$$println$16$(`清理了 ${moonbitlang$core$builtin$$Show$to_string$5$(cleaned_count)} 个物品`);
+  }
+  self.item_list = active_items;
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$keyDownMaybeSim(game, p5, player_index, key) {
+  if (Great$45$Love$45$League$Stick_Man_Battle$server$$start_screen_active.val) {
+    if (player_index >= 0 && player_index < Great$45$Love$45$League$Stick_Man_Battle$server$$start_simulated_keys.val.length) {
+      const arr = moonbitlang$core$array$$Array$at$4$(Great$45$Love$45$League$Stick_Man_Battle$server$$start_simulated_keys.val, player_index);
+      if (moonbitlang$core$array$$Array$contains$58$(arr, key)) {
+        return true;
+      }
+    }
+    return false;
+  }
+  return p5.method_10(p5.self, key);
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$throw_weapon(self, gun, angle) {
+  gun.is_thrown = true;
+  const pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(gun.body);
+  const old_collision_group = -(gun.owner_id + 1000 | 0) | 0;
+  Demonmasterlqx$box2d_ffi$box2d$$World$destroyBody$87$(self.world, gun.body);
+  const weapon_body_def = Demonmasterlqx$box2d_ffi$box2d$$b2BodyDef();
+  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setPosition(weapon_body_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(pos), Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(pos)));
+  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setRotation(weapon_body_def, angle);
+  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setLinearDamping(weapon_body_def, 0.1);
+  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setAngularDamping(weapon_body_def, 0.5);
+  const weapon_box_def = Demonmasterlqx$box2d_ffi$box2d$$b2BoxDef();
+  Demonmasterlqx$box2d_ffi$box2d$$B2BoxDef$setExtents(weapon_box_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(0.5, 0.15));
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$93$(weapon_box_def, 2);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$93$(weapon_box_def, 0.3);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setRestitution$93$(weapon_box_def, 0.3);
+  Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$93$(weapon_box_def, old_collision_group);
+  Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$addShape(weapon_body_def, Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(weapon_box_def));
+  const new_body = Demonmasterlqx$box2d_ffi$box2d$$World$createBody$87$(self.world, weapon_body_def);
+  gun.body = new_body;
+  const vx = 300 * Kaida$45$Amethyst$math$$cos(angle);
+  const vy = 300 * Kaida$45$Amethyst$math$$sin(angle);
+  Demonmasterlqx$box2d_ffi$box2d$$B2Body$setLinearVelocity(gun.body, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(vx, vy));
+  Demonmasterlqx$box2d_ffi$box2d$$B2Body$setAngularVelocity(gun.body, 10);
+  gun.throw_damage = 300;
+  moonbitlang$core$builtin$$println$16$(`武器已投掷，初速度: ${moonbitlang$core$builtin$$Show$to_string$37$(300)}, 角度: ${moonbitlang$core$builtin$$Show$to_string$37$(angle)}, 伤害: ${moonbitlang$core$builtin$$Show$to_string$37$(gun.throw_damage)}`);
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$AutoAimConfig$set_enabled(self, enabled) {
+  self.enabled = enabled;
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$toggle_auto_aim(self, player_id) {
+  const _bind = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$get_auto_aim_config(self, player_id);
+  if (_bind === undefined) {
+    return;
+  } else {
+    const _Some = _bind;
+    const _config = _Some;
+    Great$45$Love$45$League$Stick_Man_Battle$server$$AutoAimConfig$set_enabled(_config, !_config.enabled);
+    return;
+  }
+}
+function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$particle_control(self, control_config, p) {
+  const particle_index = control_config.target_particle_index;
+  if (particle_index < 0 || particle_index >= self.particle_list.length) {
+    moonbitlang$core$builtin$$println$16$(`Error: Invalid target_particle_index ${moonbitlang$core$builtin$$Show$to_string$5$(particle_index)} in particle_control.`);
+    return new Result$Err$47$(new Error$Great$45$Love$45$League$47$Stick_Man_Battle$47$server$46$GameStateError$46$GameStateError(`Invalid target_particle_index in particle_control. want to control ${moonbitlang$core$builtin$$Show$to_string$5$(particle_index)}, but only ${moonbitlang$core$builtin$$Show$to_string$5$(self.particle_list.length)} particles exist.`));
+  }
+  const particle = moonbitlang$core$array$$Array$at$26$(self.particle_list, particle_index);
+  if (control_config.from_internet) {
+    return new Result$Err$47$(new Error$Great$45$Love$45$League$47$Stick_Man_Battle$47$server$46$GameStateError$46$GameStateError("Internet control not implemented yet."));
+  }
+  if (Great$45$Love$45$League$Stick_Man_Battle$server$$keyDownMaybeSim(self, p, particle_index, control_config.toggle_auto_aim_key)) {
+    if ((self.frame_count % 30 | 0) === 0) {
+      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$toggle_auto_aim(self, particle_index);
+      const _bind = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$get_auto_aim_config(self, particle_index);
+      if (_bind === undefined) {
+      } else {
+        const _Some = _bind;
+        const _config = _Some;
+        if (_config.enabled) {
+          moonbitlang$core$builtin$$println$16$(`玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(particle_index)}: 自动瞄准已启用`);
+        } else {
+          moonbitlang$core$builtin$$println$16$(`玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(particle_index)}: 自动瞄准已禁用`);
+        }
+      }
+    }
+  }
+  if (Great$45$Love$45$League$Stick_Man_Battle$server$$keyDownMaybeSim(self, p, particle_index, control_config.throw_weapon_key)) {
+    if ((self.frame_count % 30 | 0) === 0) {
+      const _arr = self.weapon.gun_list;
+      const _len = _arr.length;
+      let _tmp = 0;
+      while (true) {
+        const _i = _tmp;
+        if (_i < _len) {
+          const gun = _arr[_i];
+          if (gun.owner_id === particle_index && !gun.is_thrown) {
+            const _bind = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$get_auto_aim_config(self, particle_index);
+            let throw_angle;
+            if (_bind === undefined) {
+              const holder = moonbitlang$core$array$$Array$at$26$(self.particle_list, particle_index);
+              throw_angle = holder.control.walk_direction > 0 ? 0 : 3.14159;
+            } else {
+              const _Some = _bind;
+              const _config = _Some;
+              if (_config.enabled) {
+                const _bind$2 = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$get_auto_aim_angle(self, particle_index, _config);
+                if (_bind$2.$tag === 1) {
+                  const _Some$2 = _bind$2;
+                  throw_angle = _Some$2._0;
+                } else {
+                  const holder = moonbitlang$core$array$$Array$at$26$(self.particle_list, particle_index);
+                  throw_angle = holder.control.walk_direction > 0 ? 0 : 3.14159;
+                }
+              } else {
+                const holder = moonbitlang$core$array$$Array$at$26$(self.particle_list, particle_index);
+                throw_angle = holder.control.walk_direction > 0 ? 0 : 3.14159;
+              }
+            }
+            Great$45$Love$45$League$Stick_Man_Battle$server$$Game$throw_weapon(self, gun, throw_angle);
+            moonbitlang$core$builtin$$println$16$(`玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(particle_index)} 投掷武器，角度: ${moonbitlang$core$builtin$$Show$to_string$37$(throw_angle)}`);
+            break;
+          }
+          _tmp = _i + 1 | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+    }
+  }
+  if ((self.frame_count % 30 | 0) === 0) {
+    let found = false;
+    const _arr = self.weapon.gun_list;
+    const _len = _arr.length;
+    let _tmp = 0;
+    while (true) {
+      const _i = _tmp;
+      if (_i < _len) {
+        const gun = _arr[_i];
+        if (gun.owner_id === particle_index && !gun.is_thrown) {
+          found = true;
+          break;
+        }
+        _tmp = _i + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    const has_weapon = found;
+    if (!has_weapon) {
+      const player_pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(particle.torso);
+      const player_x = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(player_pos);
+      const player_y = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(player_pos);
+      let _tmp$2 = 0;
+      while (true) {
+        const gun_idx = _tmp$2;
+        if (gun_idx < self.weapon.gun_list.length) {
+          const gun = moonbitlang$core$array$$Array$at$7$(self.weapon.gun_list, gun_idx);
+          if (gun.is_thrown && gun.ammo > 0) {
+            const gun_pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(gun.body);
+            const dx = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(gun_pos) - player_x;
+            const dy = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(gun_pos) - player_y;
+            const _p = dx * dx + dy * dy;
+            const distance = Math.sqrt(_p);
+            const velocity = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getLinearVelocity(gun.body);
+            const _p$2 = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(velocity) * Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(velocity) + Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(velocity) * Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(velocity);
+            const speed = Math.sqrt(_p$2);
+            if (distance < 2 && speed < 5) {
+              moonbitlang$core$builtin$$println$16$(`玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(particle_index)} 自动拾取了武器 ${moonbitlang$core$builtin$$Show$to_string$5$(gun_idx)}，剩余子弹: ${moonbitlang$core$builtin$$Show$to_string$5$(gun.ammo)}`);
+              Demonmasterlqx$box2d_ffi$box2d$$World$destroyBody$87$(self.world, gun.body);
+              const gun_body_def = Demonmasterlqx$box2d_ffi$box2d$$b2BodyDef();
+              Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setPosition(gun_body_def, player_pos);
+              Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setRotation(gun_body_def, 0);
+              Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setLinearDamping(gun_body_def, 0);
+              Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$setAngularDamping(gun_body_def, 0);
+              const gun_box_def = Demonmasterlqx$box2d_ffi$box2d$$b2BoxDef();
+              Demonmasterlqx$box2d_ffi$box2d$$B2BoxDef$setExtents(gun_box_def, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(0.5, 0.15));
+              Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setDensity$93$(gun_box_def, 0.5);
+              Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setFriction$93$(gun_box_def, 0.1);
+              Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setRestitution$93$(gun_box_def, 0.1);
+              Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$setGroupIndex$93$(gun_box_def, -(particle_index + 1000 | 0) | 0);
+              Demonmasterlqx$box2d_ffi$box2d$$B2BodyDef$addShape(gun_body_def, Demonmasterlqx$box2d_ffi$box2d$$ShapeDef$getBase$90$(gun_box_def));
+              const new_body = Demonmasterlqx$box2d_ffi$box2d$$World$createBody$87$(self.world, gun_body_def);
+              gun.body = new_body;
+              gun.is_thrown = false;
+              gun.owner_id = particle_index;
+              Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_sound(self.audio, 5);
+              break;
+            }
+          }
+          _tmp$2 = gun_idx + 1 | 0;
+          continue;
+        } else {
+          break;
+        }
+      }
+    }
+  }
+  if (Great$45$Love$45$League$Stick_Man_Battle$server$$keyDownMaybeSim(self, p, particle_index, control_config.shoot_key)) {
+    const _arr = self.weapon.gun_list;
+    const _len = _arr.length;
+    let _tmp = 0;
+    while (true) {
+      const _i = _tmp;
+      if (_i < _len) {
+        const gun = _arr[_i];
+        if (gun.owner_id === particle_index) {
+          if (gun.is_thrown) {
+            break;
+          }
+          if (gun.ammo <= 0) {
+            moonbitlang$core$builtin$$println$16$("武器没有子弹了！");
+            break;
+          }
+          const _bind = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$get_auto_aim_config(self, particle_index);
+          if (_bind === undefined) {
+            Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponControl$attack$7$(gun, self);
+          } else {
+            const _Some = _bind;
+            const _config = _Some;
+            if (_config.enabled) {
+              const _bind$2 = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$get_auto_aim_angle(self, particle_index, _config);
+              if (_bind$2.$tag === 1) {
+                const _Some$2 = _bind$2;
+                const _angle = _Some$2._0;
+                Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponControl$attack_at_angle$7$(gun, self, _angle);
+              } else {
+                Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponControl$attack$7$(gun, self);
+              }
+            } else {
+              Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponControl$attack$7$(gun, self);
+            }
+          }
+          break;
+        }
+        _tmp = _i + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+    const _arr$2 = self.weapon.sword_list;
+    const _len$2 = _arr$2.length;
+    let _tmp$2 = 0;
+    while (true) {
+      const _i = _tmp$2;
+      if (_i < _len$2) {
+        const sword = _arr$2[_i];
+        if (sword.owner_id === particle_index) {
+          Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponControl$attack$76$(sword, self);
+          break;
+        }
+        _tmp$2 = _i + 1 | 0;
+        continue;
+      } else {
+        break;
+      }
+    }
+  }
+  if (Great$45$Love$45$League$Stick_Man_Battle$server$$keyDownMaybeSim(self, p, particle_index, control_config.faint_key)) {
+    Demonmasterlqx$box2d_ffi$box2d$$B2Body$applyForce(particle.torso, Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(0, -100), Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(particle.torso));
+    return new Result$Ok$37$(undefined);
+  }
+  if (Great$45$Love$45$League$Stick_Man_Battle$server$$keyDownMaybeSim(self, p, particle_index, control_config.left_key)) {
+    Great$45$Love$45$League$Stick_Man_Battle$server$$Game$particle_walk(self, particle, -1);
+  } else {
+    if (Great$45$Love$45$League$Stick_Man_Battle$server$$keyDownMaybeSim(self, p, particle_index, control_config.right_key)) {
+      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$particle_walk(self, particle, 1);
+    } else {
+      if (!particle.control.jump_state) {
+        Great$45$Love$45$League$Stick_Man_Battle$server$$Game$particle_stand(self, particle);
+      }
+    }
+  }
+  if (Great$45$Love$45$League$Stick_Man_Battle$server$$keyDownMaybeSim(self, p, particle_index, control_config.jump_key)) {
+    if (particle.control.jump_cooldown <= 0) {
+      if (!particle.control.jump_state) {
+        particle.control.jump_state = true;
+        particle.control.jump_frame_count = 0;
+        particle.control.jump_cooldown = 31;
+      }
+    }
+  }
+  if (particle.control.jump_cooldown > 0) {
+    const _bind = particle.control;
+    _bind.jump_cooldown = _bind.jump_cooldown - 1 | 0;
+  }
+  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$particle_jump(self, particle, 0);
+  const _arr = self.weapon.gun_list;
+  const _len = _arr.length;
+  let _tmp = 0;
+  while (true) {
+    const _i = _tmp;
+    if (_i < _len) {
+      const gun = _arr[_i];
+      if (gun.owner_id === particle_index) {
+        gun.direction = particle.control.walk_direction;
+        moonbitlang$core$builtin$$println$16$(moonbitlang$core$builtin$$Show$to_string$37$(gun.angle));
+        if (gun.angle < -1.57) {
+          gun.direction = -1;
+        } else {
+          gun.direction = 1;
+        }
+        Great$45$Love$45$League$Stick_Man_Battle$server$$maintain_rotation$46$inner(gun.body, gun.angle, 20, 2);
+        break;
+      }
+      _tmp = _i + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  return new Result$Ok$37$(undefined);
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_animation(game, x, y, vx, vy) {
-  const frame_counter = { val: 0 };
-  const particles = moonbitlang$core$ref$$Ref$new$78$(moonbitlang$core$array$$Array$new$46$inner$60$(0));
+  const frame_counter = moonbitlang$core$ref$$Ref$new$5$(0);
+  const particles = moonbitlang$core$ref$$Ref$new$84$(moonbitlang$core$array$$Array$new$46$inner$73$(0));
   const dir_angle = Kaida$45$Amethyst$math$$atan2(vy, vx);
   const _p = vx * vx + vy * vy;
   const base_speed = Math.sqrt(_p) * 5;
@@ -15374,7 +17112,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_a
           const ang = dir_angle + offset_angle;
           const speed = base_speed * speed_factor;
           const p = { x: x + Great$45$Love$45$League$Stick_Man_Battle$server$$random_range(-2, 2), y: y + Great$45$Love$45$League$Stick_Man_Battle$server$$random_range(-2, 2), r: Great$45$Love$45$League$Stick_Man_Battle$server$$random_range(2, 4), alpha: Great$45$Love$45$League$Stick_Man_Battle$server$$random_range(200, 255), vx: Kaida$45$Amethyst$math$$cos(ang) * speed, vy: Kaida$45$Amethyst$math$$sin(ang) * speed, life: Great$45$Love$45$League$Stick_Man_Battle$server$$random_range(45, 75) };
-          moonbitlang$core$array$$Array$push$60$(particles.val, p);
+          moonbitlang$core$array$$Array$push$73$(particles.val, p);
           _tmp = i + 1 | 0;
           continue;
         } else {
@@ -15400,13 +17138,13 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_a
         s.life = s.life - 1;
         if (s.alpha > 8 && s.life > 0) {
           p5.method_79(p5.self);
-          p5.method_81(p5.self, 160, Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_animation$46$constr$47$4460, Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_animation$46$constr$47$4461, new Option$Some$0$(s.alpha * 0.25));
+          p5.method_81(p5.self, 160, Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_animation$46$constr$47$4971, Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_animation$46$constr$47$4972, new Option$Some$0$(s.alpha * 0.25));
           p5.method_56(p5.self, s.x, s.y, s.r * 2.4, s.r * 2.4);
-          p5.method_81(p5.self, 220, Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_animation$46$constr$47$4462, Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_animation$46$constr$47$4463, new Option$Some$0$(s.alpha * 0.6));
+          p5.method_81(p5.self, 220, Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_animation$46$constr$47$4973, Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_animation$46$constr$47$4974, new Option$Some$0$(s.alpha * 0.6));
           p5.method_56(p5.self, s.x, s.y, s.r * 1.4, s.r * 1.4);
-          p5.method_81(p5.self, 255, Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_animation$46$constr$47$4464, Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_animation$46$constr$47$4465, new Option$Some$0$(s.alpha * 0.8));
+          p5.method_81(p5.self, 255, Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_animation$46$constr$47$4975, Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_animation$46$constr$47$4976, new Option$Some$0$(s.alpha * 0.8));
           p5.method_56(p5.self, s.x, s.y, s.r * 0.5, s.r * 0.5);
-          moonbitlang$core$array$$Array$push$60$(alive, s);
+          moonbitlang$core$array$$Array$push$73$(alive, s);
         }
         _tmp = _i + 1 | 0;
         continue;
@@ -15414,14 +17152,14 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_a
         break;
       }
     }
-    moonbitlang$core$array$$Array$clear$60$(particles.val);
+    moonbitlang$core$array$$Array$clear$73$(particles.val);
     const _len$2 = alive.length;
     let _tmp$2 = 0;
     while (true) {
       const _i = _tmp$2;
       if (_i < _len$2) {
         const pp = alive[_i];
-        moonbitlang$core$array$$Array$push$60$(particles.val, pp);
+        moonbitlang$core$array$$Array$push$73$(particles.val, pp);
         _tmp$2 = _i + 1 | 0;
         continue;
       } else {
@@ -15433,244 +17171,8 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$register_blood_spray_a
     }
     return 1;
   });
-  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$add_animation(game, { self: animation, method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$Animation$update$108$ });
-  moonbitlang$core$builtin$$println$13$(`血雾动画已注册在 (${moonbitlang$core$builtin$$Show$to_string$33$(x)}, ${moonbitlang$core$builtin$$Show$to_string$33$(y)})，方向 (${moonbitlang$core$builtin$$Show$to_string$33$(vx)}, ${moonbitlang$core$builtin$$Show$to_string$33$(vy)})`);
-}
-function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$run_custom_functions(self, stage, p5) {
-  const _arr = self.custom_functions;
-  const _len = _arr.length;
-  let _tmp = 0;
-  while (true) {
-    const _i = _tmp;
-    if (_i < _len) {
-      const func = _arr[_i];
-      if (moonbitlang$core$builtin$$Eq$equal$104$(func.method_1(func.self), stage)) {
-        func.method_0(func.self, self, p5);
-      }
-      _tmp = _i + 1 | 0;
-      continue;
-    } else {
-      return;
-    }
-  }
-}
-function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$game_over(self, p5) {
-  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$run_custom_functions(self, 3, p5);
-  let winner_index = -1;
-  let _tmp = 0;
-  while (true) {
-    const i = _tmp;
-    if (i < self.particle_list.length) {
-      if (moonbitlang$core$array$$Array$at$22$(self.particle_list, i).control.health > 0) {
-        winner_index = i;
-        break;
-      }
-      _tmp = i + 1 | 0;
-      continue;
-    } else {
-      break;
-    }
-  }
-  p5.method_81(p5.self, 0, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4511, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4512, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4513);
-  p5.method_79(p5.self);
-  p5.method_60(p5.self, 0, 0, 1000, 1000);
-  p5.method_112(p5.self, 80);
-  p5.method_81(p5.self, 255, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4514, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4515, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4516);
-  p5.method_107(p5.self, "center", Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4517);
-  p5.method_119(p5.self, "游戏结束", 500, 420, Option$None$0$, Option$None$0$);
-  if (winner_index >= 0) {
-    p5.method_112(p5.self, 60);
-    p5.method_81(p5.self, 255, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4518, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4519, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4520);
-    p5.method_119(p5.self, `玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(winner_index)} 获胜!`, 500, 500, Option$None$0$, Option$None$0$);
-  } else {
-    p5.method_112(p5.self, 60);
-    p5.method_81(p5.self, 200, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4521, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4522, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4523);
-    p5.method_119(p5.self, "平局", 500, 500, Option$None$0$, Option$None$0$);
-  }
-  p5.method_112(p5.self, 30);
-  p5.method_81(p5.self, 255, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4524, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4525, Great$45$Love$45$League$Stick_Man_Battle$server$$game_over$46$constr$47$4526);
-  p5.method_119(p5.self, "刷新页面重新开始", 500, 580, Option$None$0$, Option$None$0$);
-  self.state = 3;
-}
-function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$pause(self, p5) {
-  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$run_custom_functions(self, 2, p5);
-  self.state = 1;
-}
-function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$prepare(self, p5) {
-  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$run_custom_functions(self, 0, p5);
-  self.state = 1;
-}
-function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$cleanup_bullets(self) {
-  const active_bullets = moonbitlang$core$array$$Array$new$46$inner$69$(0);
-  const _arr = self.bullet_list;
-  const _len = _arr.length;
-  let _tmp = 0;
-  while (true) {
-    const _i = _tmp;
-    if (_i < _len) {
-      const bullet = _arr[_i];
-      if (bullet.is_active) {
-        moonbitlang$core$array$$Array$push$69$(active_bullets, bullet);
-      } else {
-        Demonmasterlqx$box2d_ffi$box2d$$World$destroyBody$83$(self.world, bullet.body);
-      }
-      _tmp = _i + 1 | 0;
-      continue;
-    } else {
-      break;
-    }
-  }
-  self.bullet_list = active_bullets;
-}
-function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$cleanup_items(self) {
-  const active_items = moonbitlang$core$array$$Array$new$46$inner$66$(0);
-  let cleaned_count = 0;
-  const _arr = self.item_list;
-  const _len = _arr.length;
-  let _tmp = 0;
-  while (true) {
-    const _i = _tmp;
-    if (_i < _len) {
-      const item = _arr[_i];
-      if (item.is_active) {
-        moonbitlang$core$array$$Array$push$66$(active_items, item);
-      } else {
-        Demonmasterlqx$box2d_ffi$box2d$$World$destroyBody$83$(self.world, item.body);
-        cleaned_count = cleaned_count + 1 | 0;
-      }
-      _tmp = _i + 1 | 0;
-      continue;
-    } else {
-      break;
-    }
-  }
-  if (cleaned_count > 0) {
-    moonbitlang$core$builtin$$println$13$(`清理了 ${moonbitlang$core$builtin$$Show$to_string$5$(cleaned_count)} 个物品`);
-  }
-  self.item_list = active_items;
-}
-function Great$45$Love$45$League$Stick_Man_Battle$server$$AutoAimConfig$set_enabled(self, enabled) {
-  self.enabled = enabled;
-}
-function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$toggle_auto_aim(self, player_id) {
-  const _bind = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$get_auto_aim_config(self, player_id);
-  if (_bind === undefined) {
-    return;
-  } else {
-    const _Some = _bind;
-    const _config = _Some;
-    Great$45$Love$45$League$Stick_Man_Battle$server$$AutoAimConfig$set_enabled(_config, !_config.enabled);
-    return;
-  }
-}
-function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$particle_control(self, control_config, p) {
-  const particle_index = control_config.target_particle_index;
-  if (particle_index < 0 || particle_index >= self.particle_list.length) {
-    moonbitlang$core$builtin$$println$13$(`Error: Invalid target_particle_index ${moonbitlang$core$builtin$$Show$to_string$5$(particle_index)} in particle_control.`);
-    return new Result$Err$45$(new Error$Great$45$Love$45$League$47$Stick_Man_Battle$47$server$46$GameStateError$46$GameStateError(`Invalid target_particle_index in particle_control. want to control ${moonbitlang$core$builtin$$Show$to_string$5$(particle_index)}, but only ${moonbitlang$core$builtin$$Show$to_string$5$(self.particle_list.length)} particles exist.`));
-  }
-  const particle = moonbitlang$core$array$$Array$at$22$(self.particle_list, particle_index);
-  if (control_config.from_internet) {
-    return new Result$Err$45$(new Error$Great$45$Love$45$League$47$Stick_Man_Battle$47$server$46$GameStateError$46$GameStateError("Internet control not implemented yet."));
-  }
-  if (p.method_10(p.self, control_config.toggle_auto_aim_key)) {
-    if ((self.frame_count % 30 | 0) === 0) {
-      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$toggle_auto_aim(self, particle_index);
-      const _bind = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$get_auto_aim_config(self, particle_index);
-      if (_bind === undefined) {
-      } else {
-        const _Some = _bind;
-        const _config = _Some;
-        if (_config.enabled) {
-          moonbitlang$core$builtin$$println$13$(`玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(particle_index)}: 自动瞄准已启用`);
-        } else {
-          moonbitlang$core$builtin$$println$13$(`玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(particle_index)}: 自动瞄准已禁用`);
-        }
-      }
-    }
-  }
-  if (p.method_10(p.self, control_config.shoot_key)) {
-    const _arr = self.weapon.gun_list;
-    const _len = _arr.length;
-    let _tmp = 0;
-    while (true) {
-      const _i = _tmp;
-      if (_i < _len) {
-        const gun = _arr[_i];
-        if (gun.owner_id === particle_index) {
-          const _bind = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$get_auto_aim_config(self, particle_index);
-          if (_bind === undefined) {
-            Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponControl$attack$63$(gun, self);
-          } else {
-            const _Some = _bind;
-            const _config = _Some;
-            if (_config.enabled) {
-              const _bind$2 = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$get_auto_aim_angle(self, particle_index, _config);
-              if (_bind$2.$tag === 1) {
-                const _Some$2 = _bind$2;
-                const _angle = _Some$2._0;
-                Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponControl$attack_at_angle$63$(gun, self, _angle);
-              } else {
-                Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponControl$attack$63$(gun, self);
-              }
-            } else {
-              Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponControl$attack$63$(gun, self);
-            }
-          }
-          break;
-        }
-        _tmp = _i + 1 | 0;
-        continue;
-      } else {
-        break;
-      }
-    }
-    const _arr$2 = self.weapon.sword_list;
-    const _len$2 = _arr$2.length;
-    let _tmp$2 = 0;
-    while (true) {
-      const _i = _tmp$2;
-      if (_i < _len$2) {
-        const sword = _arr$2[_i];
-        if (sword.owner_id === particle_index) {
-          Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponControl$attack$72$(sword, self);
-          break;
-        }
-        _tmp$2 = _i + 1 | 0;
-        continue;
-      } else {
-        break;
-      }
-    }
-  }
-  if (p.method_10(p.self, control_config.faint_key)) {
-    return new Result$Ok$37$(undefined);
-  }
-  if (p.method_10(p.self, control_config.left_key)) {
-    Great$45$Love$45$League$Stick_Man_Battle$server$$Game$particle_walk(self, particle, -1);
-  } else {
-    if (p.method_10(p.self, control_config.right_key)) {
-      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$particle_walk(self, particle, 1);
-    } else {
-      if (!particle.control.jump_state) {
-        Great$45$Love$45$League$Stick_Man_Battle$server$$Game$particle_stand(self, particle);
-      }
-    }
-  }
-  if (p.method_10(p.self, control_config.jump_key)) {
-    if (particle.control.jump_cooldown <= 0) {
-      if (!particle.control.jump_state) {
-        particle.control.jump_state = true;
-        particle.control.jump_frame_count = 0;
-        particle.control.jump_cooldown = 31;
-      }
-    }
-  }
-  if (particle.control.jump_cooldown > 0) {
-    const _bind = particle.control;
-    _bind.jump_cooldown = _bind.jump_cooldown - 1 | 0;
-  }
-  return new Result$Ok$37$(Great$45$Love$45$League$Stick_Man_Battle$server$$Game$particle_jump(self, particle, 0));
+  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$add_animation(game, { self: animation, method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$Animation$update$115$ });
+  moonbitlang$core$builtin$$println$16$(`血雾动画已注册在 (${moonbitlang$core$builtin$$Show$to_string$37$(x)}, ${moonbitlang$core$builtin$$Show$to_string$37$(y)})，方向 (${moonbitlang$core$builtin$$Show$to_string$37$(vx)}, ${moonbitlang$core$builtin$$Show$to_string$37$(vy)})`);
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$check_bullet_environment_collision(self, bullet) {
   const _arr = self.platform_list;
@@ -15680,8 +17182,9 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$check_bullet_envi
     const _i = _tmp;
     if (_i < _len) {
       const platform = _arr[_i];
-      if (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact(self, platform.method_2(platform.self), bullet.body)) {
+      if (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact$46$inner(self, platform.method_2(platform.self), bullet.body, true)) {
         bullet.is_active = false;
+        moonbitlang$core$builtin$$println$16$(`子弹 #${moonbitlang$core$builtin$$Show$to_string$5$(bullet.id)} 击中环境（平台），回收子弹`);
         return undefined;
       }
       _tmp = _i + 1 | 0;
@@ -15690,34 +17193,52 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$check_bullet_envi
       break;
     }
   }
-  const contact_list = Demonmasterlqx$box2d_ffi$box2d$$World$getContactList$83$(self.world);
-  const _len$2 = contact_list.length;
+  const _arr$2 = self.custom_barrier;
+  const _len$2 = _arr$2.length;
   let _tmp$2 = 0;
   while (true) {
     const _i = _tmp$2;
     if (_i < _len$2) {
+      const barrier = _arr$2[_i];
+      if (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact$46$inner(self, barrier, bullet.body, true)) {
+        bullet.is_active = false;
+        moonbitlang$core$builtin$$println$16$(`子弹 #${moonbitlang$core$builtin$$Show$to_string$5$(bullet.id)} 击中环境（自定义障碍物），回收子弹`);
+        return undefined;
+      }
+      _tmp$2 = _i + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  const contact_list = Demonmasterlqx$box2d_ffi$box2d$$World$getContactList$87$(self.world);
+  const _len$3 = contact_list.length;
+  let _tmp$3 = 0;
+  while (true) {
+    const _i = _tmp$3;
+    if (_i < _len$3) {
       const contact = contact_list[_i];
       const shape1 = Demonmasterlqx$box2d_ffi$box2d$$B2Contact$getShape1(contact);
       const shape2 = Demonmasterlqx$box2d_ffi$box2d$$B2Contact$getShape2(contact);
-      const body1 = Demonmasterlqx$box2d_ffi$box2d$$Shape$getBody$94$(shape1);
-      const body2 = Demonmasterlqx$box2d_ffi$box2d$$Shape$getBody$94$(shape2);
+      const body1 = Demonmasterlqx$box2d_ffi$box2d$$Shape$getBody$98$(shape1);
+      const body2 = Demonmasterlqx$box2d_ffi$box2d$$Shape$getBody$98$(shape2);
       const bullet_body = bullet.body;
       if (Great$45$Love$45$League$Stick_Man_Battle$server$$equals(body1, bullet_body) || Great$45$Love$45$League$Stick_Man_Battle$server$$equals(body2, bullet_body)) {
         const other_body = Great$45$Love$45$League$Stick_Man_Battle$server$$equals(body1, bullet_body) ? body2 : body1;
         if (Demonmasterlqx$box2d_ffi$box2d$$B2Body$getMass(other_body) === 0) {
           let is_character_part = false;
-          const _arr$2 = self.particle_list;
-          const _len$3 = _arr$2.length;
-          let _tmp$3 = 0;
+          const _arr$3 = self.particle_list;
+          const _len$4 = _arr$3.length;
+          let _tmp$4 = 0;
           while (true) {
-            const _i$2 = _tmp$3;
-            if (_i$2 < _len$3) {
-              const particle = _arr$2[_i$2];
+            const _i$2 = _tmp$4;
+            if (_i$2 < _len$4) {
+              const particle = _arr$3[_i$2];
               if (Great$45$Love$45$League$Stick_Man_Battle$server$$equals(other_body, particle.head) || (Great$45$Love$45$League$Stick_Man_Battle$server$$equals(other_body, particle.torso) || (Great$45$Love$45$League$Stick_Man_Battle$server$$equals(other_body, particle.left_thigh) || (Great$45$Love$45$League$Stick_Man_Battle$server$$equals(other_body, particle.right_thigh) || (Great$45$Love$45$League$Stick_Man_Battle$server$$equals(other_body, particle.left_shank) || (Great$45$Love$45$League$Stick_Man_Battle$server$$equals(other_body, particle.right_shank) || (Great$45$Love$45$League$Stick_Man_Battle$server$$equals(other_body, particle.left_arm) || (Great$45$Love$45$League$Stick_Man_Battle$server$$equals(other_body, particle.right_arm) || (Great$45$Love$45$League$Stick_Man_Battle$server$$equals(other_body, particle.left_forearm) || Great$45$Love$45$League$Stick_Man_Battle$server$$equals(other_body, particle.right_forearm)))))))))) {
                 is_character_part = true;
                 break;
               }
-              _tmp$3 = _i$2 + 1 | 0;
+              _tmp$4 = _i$2 + 1 | 0;
               continue;
             } else {
               break;
@@ -15725,12 +17246,12 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$check_bullet_envi
           }
           if (!is_character_part) {
             bullet.is_active = false;
-            moonbitlang$core$builtin$$println$13$(`子弹 #${moonbitlang$core$builtin$$Show$to_string$5$(bullet.id)} 击中环境（静态物体），回收子弹`);
+            moonbitlang$core$builtin$$println$16$(`子弹 #${moonbitlang$core$builtin$$Show$to_string$5$(bullet.id)} 击中环境（静态物体），回收子弹`);
             return undefined;
           }
         }
       }
-      _tmp$2 = _i + 1 | 0;
+      _tmp$3 = _i + 1 | 0;
       continue;
     } else {
       return;
@@ -15746,7 +17267,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$check_bullet_coll
     const _i = _tmp;
     if (_i < _len) {
       const target_type = _arr[_i];
-      if (moonbitlang$core$builtin$$Eq$equal$16$(target_type, 0) || moonbitlang$core$builtin$$Eq$equal$16$(target_type, 2)) {
+      if (moonbitlang$core$builtin$$Eq$equal$19$(target_type, 0) || moonbitlang$core$builtin$$Eq$equal$19$(target_type, 2)) {
         should_hit_players = true;
         break;
       }
@@ -15794,27 +17315,27 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$check_bullet_coll
           }
           let hit = false;
           let damage = 0;
-          if (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact(self, particle.head, bullet.body)) {
+          if (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact$46$inner(self, particle.head, bullet.body, false)) {
             damage = Math.imul(bullet.damage, 2) | 0;
             hit = true;
           } else {
-            if (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact(self, particle.torso, bullet.body)) {
+            if (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact$46$inner(self, particle.torso, bullet.body, false)) {
               damage = bullet.damage;
               hit = true;
             } else {
-              if (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact(self, particle.left_thigh, bullet.body) || Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact(self, particle.right_thigh, bullet.body)) {
+              if (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact$46$inner(self, particle.left_thigh, bullet.body, false) || Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact$46$inner(self, particle.right_thigh, bullet.body, false)) {
                 damage = bullet.damage / 2 | 0;
                 hit = true;
               } else {
-                if (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact(self, particle.left_shank, bullet.body) || Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact(self, particle.right_shank, bullet.body)) {
+                if (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact$46$inner(self, particle.left_shank, bullet.body, false) || Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact$46$inner(self, particle.right_shank, bullet.body, false)) {
                   damage = bullet.damage / 3 | 0;
                   hit = true;
                 } else {
-                  if (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact(self, particle.left_arm, bullet.body) || Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact(self, particle.right_arm, bullet.body)) {
+                  if (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact$46$inner(self, particle.left_arm, bullet.body, false) || Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact$46$inner(self, particle.right_arm, bullet.body, false)) {
                     damage = bullet.damage / 2 | 0;
                     hit = true;
                   } else {
-                    if (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact(self, particle.left_forearm, bullet.body) || Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact(self, particle.right_forearm, bullet.body)) {
+                    if (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact$46$inner(self, particle.left_forearm, bullet.body, false) || Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact$46$inner(self, particle.right_forearm, bullet.body, false)) {
                       damage = bullet.damage / 3 | 0;
                       hit = true;
                     }
@@ -15841,30 +17362,20 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$check_bullet_coll
             }
             const _bind = particle.control;
             _bind.health = _bind.health - damage | 0;
-/* __MMB_HIT_SNIPPET start */
-try{ if (typeof window !== undefined && window.__mmb_trigger_hit) { try{ var __mmb_idx = (typeof particle !== undefined && particle && particle.index!==undefined) ? particle.index : (typeof idx !== undefined ? idx : null); var __mmb_hx = (typeof hx !== undefined) ? hx : undefined; var __mmb_hy = (typeof hy !== undefined) ? hy : undefined; var __mmb_dmg = (typeof damage !== undefined) ? damage : 0; try{ window.__mmb_trigger_hit(__mmb_idx, __mmb_hx, __mmb_hy, __mmb_dmg); }catch(e){} }catch(e){} }catch(e){}
-/* __MMB_HIT_SNIPPET end */
-
-            // --- AUTO-HOOK: notify frontend FX/HUD about a hit (defensive) ---
-            try {
-              if (typeof window !== 'undefined' && window.__mmb_trigger_hit) {
-                try { window.__mmb_trigger_hit(particle.index, hx, hy, damage); } catch(e) {}
-              }
-            } catch(e) {}
-            moonbitlang$core$builtin$$println$13$(`子弹 #${moonbitlang$core$builtin$$Show$to_string$5$(bullet.id)} 击中玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(particle.index)}, 伤害 ${moonbitlang$core$builtin$$Show$to_string$5$(damage)} (剩余血量: ${moonbitlang$core$builtin$$Show$to_string$5$(particle.control.health)})`);
+            moonbitlang$core$builtin$$println$16$(`子弹 #${moonbitlang$core$builtin$$Show$to_string$5$(bullet.id)} 击中玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(particle.index)}, 伤害 ${moonbitlang$core$builtin$$Show$to_string$5$(damage)} (剩余血量: ${moonbitlang$core$builtin$$Show$to_string$5$(particle.control.health)})`);
             if (particle.control.health <= 0) {
               particle.control.faint_state = true;
               Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_sound(self.audio, 7);
-              moonbitlang$core$builtin$$println$13$(`玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(particle.index)} 被击倒!`);
+              moonbitlang$core$builtin$$println$16$(`玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(particle.index)} 被击倒!`);
             }
             moonbitlang$core$array$$Array$push$5$(bullet.hit_targets, particle.index);
             if (bullet.penetration <= 0) {
               bullet.is_active = false;
-              moonbitlang$core$builtin$$println$13$(`子弹 #${moonbitlang$core$builtin$$Show$to_string$5$(bullet.id)} 穿透次数用完，回收子弹`);
+              moonbitlang$core$builtin$$println$16$(`子弹 #${moonbitlang$core$builtin$$Show$to_string$5$(bullet.id)} 穿透次数用完，回收子弹`);
               break;
             } else {
               bullet.penetration = bullet.penetration - 1 | 0;
-              moonbitlang$core$builtin$$println$13$(`子弹 #${moonbitlang$core$builtin$$Show$to_string$5$(bullet.id)} 穿透! 剩余穿透次数: ${moonbitlang$core$builtin$$Show$to_string$5$(bullet.penetration)}`);
+              moonbitlang$core$builtin$$println$16$(`子弹 #${moonbitlang$core$builtin$$Show$to_string$5$(bullet.id)} 穿透! 剩余穿透次数: ${moonbitlang$core$builtin$$Show$to_string$5$(bullet.penetration)}`);
             }
           }
           break _L;
@@ -15924,25 +17435,15 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$update_all_bullet
       break;
     }
   }
+  const _arr$2 = self.bullet_list;
+  const _len$2 = _arr$2.length;
   let _tmp$2 = 0;
   while (true) {
     const _i = _tmp$2;
-    if (_i < 10) {
-      const _arr$2 = self.bullet_list;
-      const _len$2 = _arr$2.length;
-      let _tmp$3 = 0;
-      while (true) {
-        const _i$2 = _tmp$3;
-        if (_i$2 < _len$2) {
-          const bullet = _arr$2[_i$2];
-          if (bullet.is_active) {
-            Great$45$Love$45$League$Stick_Man_Battle$server$$Game$check_bullet_collision(self, bullet);
-          }
-          _tmp$3 = _i$2 + 1 | 0;
-          continue;
-        } else {
-          break;
-        }
+    if (_i < _len$2) {
+      const bullet = _arr$2[_i];
+      if (bullet.is_active) {
+        Great$45$Love$45$League$Stick_Man_Battle$server$$Game$check_bullet_collision(self, bullet);
       }
       _tmp$2 = _i + 1 | 0;
       continue;
@@ -15962,26 +17463,26 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$apply_item_effect
         particle.control.health = 100;
       }
       const recovered = particle.control.health - old_health | 0;
-      moonbitlang$core$builtin$$println$13$(`玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(particle.index)} 拾取了血包! 恢复 ${moonbitlang$core$builtin$$Show$to_string$5$(recovered)} 点生命值 (当前: ${moonbitlang$core$builtin$$Show$to_string$5$(particle.control.health)}/100)`);
+      moonbitlang$core$builtin$$println$16$(`玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(particle.index)} 拾取了血包! 恢复 ${moonbitlang$core$builtin$$Show$to_string$5$(recovered)} 点生命值 (当前: ${moonbitlang$core$builtin$$Show$to_string$5$(particle.control.health)}/100)`);
       if (particle.control.faint_state && particle.control.health >= 50) {
         particle.control.faint_state = false;
         particle.control.faint_resistance = 0;
-        moonbitlang$core$builtin$$println$13$(`玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(particle.index)} 苏醒了!`);
+        moonbitlang$core$builtin$$println$16$(`玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(particle.index)} 苏醒了!`);
         return;
       } else {
         return;
       }
     }
     case 1: {
-      moonbitlang$core$builtin$$println$13$(`玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(particle.index)} 拾取了弹药包! +${moonbitlang$core$builtin$$Show$to_string$5$(item.value)} 发子弹 (功能待实现)`);
+      moonbitlang$core$builtin$$println$16$(`玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(particle.index)} 拾取了弹药包! +${moonbitlang$core$builtin$$Show$to_string$5$(item.value)} 发子弹 (功能待实现)`);
       return;
     }
     case 2: {
-      moonbitlang$core$builtin$$println$13$(`玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(particle.index)} 拾取了武器升级! (功能待实现)`);
+      moonbitlang$core$builtin$$println$16$(`玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(particle.index)} 拾取了武器升级! (功能待实现)`);
       return;
     }
     default: {
-      moonbitlang$core$builtin$$println$13$(`玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(particle.index)} 拾取了速度提升! 持续 ${moonbitlang$core$builtin$$Show$to_string$5$(item.value)} 帧 (功能待实现)`);
+      moonbitlang$core$builtin$$println$16$(`玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(particle.index)} 拾取了速度提升! 持续 ${moonbitlang$core$builtin$$Show$to_string$5$(item.value)} 帧 (功能待实现)`);
       return;
     }
   }
@@ -15998,7 +17499,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$check_item_pickup
         if (particle.control.faint_state) {
           break _L;
         }
-        if (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact(self, particle.torso, item.body) || (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact(self, particle.head, item.body) || (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact(self, particle.left_thigh, item.body) || Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact(self, particle.right_thigh, item.body)))) {
+        if (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact$46$inner(self, particle.torso, item.body, false) || (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact$46$inner(self, particle.head, item.body, false) || (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact$46$inner(self, particle.left_thigh, item.body, false) || Great$45$Love$45$League$Stick_Man_Battle$server$$Game$is_contact$46$inner(self, particle.right_thigh, item.body, false)))) {
           Great$45$Love$45$League$Stick_Man_Battle$server$$Game$apply_item_effect(self, particle, item);
           return true;
         }
@@ -16026,7 +17527,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$update_all_items(
             item.lifetime = item.lifetime - 1 | 0;
             if (item.lifetime === 0) {
               item.is_active = false;
-              moonbitlang$core$builtin$$println$13$(`物品 ${moonbitlang$core$builtin$$Show$to_string$35$(item.item_type)} 已过期消失`);
+              moonbitlang$core$builtin$$println$16$(`物品 ${moonbitlang$core$builtin$$Show$to_string$39$(item.item_type)} 已过期消失`);
               break _L;
             }
           }
@@ -16044,7 +17545,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$update_all_items(
   }
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$update_animations(self, p5) {
-  const animations_state = moonbitlang$core$array$$Array$new$46$inner$24$(0);
+  const animations_state = moonbitlang$core$array$$Array$new$46$inner$28$(0);
   const _arr = self.animation_list;
   const _len = _arr.length;
   let _tmp = 0;
@@ -16052,30 +17553,30 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$update_animations
     const _i = _tmp;
     if (_i < _len) {
       const animation = _arr[_i];
-      const state = animation.method_0(animation.self, { self: self.world, method_0: Demonmasterlqx$box2d_ffi$box2d$$World$getBase$85$, method_1: Demonmasterlqx$box2d_ffi$box2d$$World$setListener$83$, method_2: Demonmasterlqx$box2d_ffi$box2d$$World$setFilter$83$, method_3: Demonmasterlqx$box2d_ffi$box2d$$World$createBody$83$, method_4: Demonmasterlqx$box2d_ffi$box2d$$World$destroyBody$83$, method_5: Demonmasterlqx$box2d_ffi$box2d$$World$clearBodyList$83$, method_6: Demonmasterlqx$box2d_ffi$box2d$$World$createJoint$83$, method_7: Demonmasterlqx$box2d_ffi$box2d$$World$destroyJoint$83$, method_8: Demonmasterlqx$box2d_ffi$box2d$$World$getGroundBody$83$, method_9: Demonmasterlqx$box2d_ffi$box2d$$World$step$83$, method_10: Demonmasterlqx$box2d_ffi$box2d$$World$query$83$, method_11: Demonmasterlqx$box2d_ffi$box2d$$World$getBodyList$83$, method_12: Demonmasterlqx$box2d_ffi$box2d$$World$getJointList$83$, method_13: Demonmasterlqx$box2d_ffi$box2d$$World$getContactList$83$ }, p5);
-      moonbitlang$core$array$$Array$push$24$(animations_state, state);
+      const state = animation.method_0(animation.self, { self: self.world, method_0: Demonmasterlqx$box2d_ffi$box2d$$World$getBase$89$, method_1: Demonmasterlqx$box2d_ffi$box2d$$World$setListener$87$, method_2: Demonmasterlqx$box2d_ffi$box2d$$World$setFilter$87$, method_3: Demonmasterlqx$box2d_ffi$box2d$$World$createBody$87$, method_4: Demonmasterlqx$box2d_ffi$box2d$$World$destroyBody$87$, method_5: Demonmasterlqx$box2d_ffi$box2d$$World$clearBodyList$87$, method_6: Demonmasterlqx$box2d_ffi$box2d$$World$createJoint$87$, method_7: Demonmasterlqx$box2d_ffi$box2d$$World$destroyJoint$87$, method_8: Demonmasterlqx$box2d_ffi$box2d$$World$getGroundBody$87$, method_9: Demonmasterlqx$box2d_ffi$box2d$$World$step$87$, method_10: Demonmasterlqx$box2d_ffi$box2d$$World$query$87$, method_11: Demonmasterlqx$box2d_ffi$box2d$$World$getBodyList$87$, method_12: Demonmasterlqx$box2d_ffi$box2d$$World$getJointList$87$, method_13: Demonmasterlqx$box2d_ffi$box2d$$World$getContactList$87$ }, p5);
+      moonbitlang$core$array$$Array$push$28$(animations_state, state);
       _tmp = _i + 1 | 0;
       continue;
     } else {
       break;
     }
   }
-  const rest_animations = moonbitlang$core$array$$Array$new$46$inner$25$(0);
+  const rest_animations = moonbitlang$core$array$$Array$new$46$inner$29$(0);
   let _tmp$2 = 0;
   while (true) {
     const i = _tmp$2;
     if (i < self.animation_list.length) {
-      const _bind = moonbitlang$core$array$$Array$at$24$(animations_state, i);
+      const _bind = moonbitlang$core$array$$Array$at$28$(animations_state, i);
       switch (_bind) {
         case 2: {
           break;
         }
         case 1: {
-          moonbitlang$core$array$$Array$push$25$(rest_animations, moonbitlang$core$array$$Array$at$25$(self.animation_list, i));
+          moonbitlang$core$array$$Array$push$29$(rest_animations, moonbitlang$core$array$$Array$at$29$(self.animation_list, i));
           break;
         }
         default: {
-          moonbitlang$core$array$$Array$push$25$(rest_animations, moonbitlang$core$array$$Array$at$25$(self.animation_list, i));
+          moonbitlang$core$array$$Array$push$29$(rest_animations, moonbitlang$core$array$$Array$at$29$(self.animation_list, i));
         }
       }
       _tmp$2 = i + 1 | 0;
@@ -16087,14 +17588,14 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$update_animations
   self.animation_list = rest_animations;
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$get_all_targetable_entities(self, attacker_id, config) {
-  const targets = moonbitlang$core$array$$Array$new$46$inner$70$(0);
+  const targets = moonbitlang$core$array$$Array$new$46$inner$74$(0);
   if (attacker_id >= self.particle_list.length) {
     return targets;
   }
-  const attacker_pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(moonbitlang$core$array$$Array$at$22$(self.particle_list, attacker_id).torso);
+  const attacker_pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(moonbitlang$core$array$$Array$at$26$(self.particle_list, attacker_id).torso);
   const attacker_x = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(attacker_pos);
   const attacker_y = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(attacker_pos);
-  if (moonbitlang$core$array$$Array$contains$73$(config.target_types, 0)) {
+  if (moonbitlang$core$array$$Array$contains$77$(config.target_types, 0)) {
     let _tmp = 0;
     while (true) {
       const i = _tmp;
@@ -16103,14 +17604,14 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$get_all_targetabl
           if (i === attacker_id) {
             break _L;
           }
-          const particle = moonbitlang$core$array$$Array$at$22$(self.particle_list, i);
+          const particle = moonbitlang$core$array$$Array$at$26$(self.particle_list, i);
           const pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(particle.torso);
           const dx = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(pos) - attacker_x;
           const dy = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(pos) - attacker_y;
           const _p = dx * dx + dy * dy;
           const distance = Math.sqrt(_p);
           if (distance <= config.max_range) {
-            moonbitlang$core$array$$Array$push$70$(targets, { entity_type: 0, entity_id: i, position: { _0: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(pos), _1: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(pos) }, distance: distance });
+            moonbitlang$core$array$$Array$push$74$(targets, { entity_type: 0, entity_id: i, position: { _0: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(pos), _1: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(pos) }, distance: distance });
           }
           break _L;
         }
@@ -16121,13 +17622,13 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$get_all_targetabl
       }
     }
   }
-  if (moonbitlang$core$array$$Array$contains$73$(config.target_types, 1)) {
+  if (moonbitlang$core$array$$Array$contains$77$(config.target_types, 1)) {
     let _tmp = 0;
     while (true) {
       const i = _tmp;
       if (i < self.enemy_list.length) {
         _L: {
-          const _bind = moonbitlang$core$array$$Array$at$28$(self.enemy_list, i);
+          const _bind = moonbitlang$core$array$$Array$at$32$(self.enemy_list, i);
           if (_bind === undefined) {
             break _L;
           } else {
@@ -16147,7 +17648,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$get_all_targetabl
               const _p = dx * dx + dy * dy;
               const distance = Math.sqrt(_p);
               if (distance <= config.max_range) {
-                moonbitlang$core$array$$Array$push$70$(targets, { entity_type: 1, entity_id: i, position: _pos, distance: distance });
+                moonbitlang$core$array$$Array$push$74$(targets, { entity_type: 1, entity_id: i, position: _pos, distance: distance });
               }
             }
           }
@@ -16194,6 +17695,90 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$update_auto_aim_t
   }
   config.current_target = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$find_nearest_target(self, attacker_id, config);
 }
+function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$update_thrown_weapons(self) {
+  const weapons_to_remove = moonbitlang$core$array$$Array$new$46$inner$5$(0);
+  let _tmp = 0;
+  while (true) {
+    const gun_idx = _tmp;
+    if (gun_idx < self.weapon.gun_list.length) {
+      _L: {
+        const gun = moonbitlang$core$array$$Array$at$7$(self.weapon.gun_list, gun_idx);
+        if (!gun.is_thrown) {
+          break _L;
+        }
+        if (gun.ammo <= 0) {
+          moonbitlang$core$builtin$$println$16$(`武器 ${moonbitlang$core$builtin$$Show$to_string$5$(gun_idx)} 没有子弹了，将被销毁`);
+          moonbitlang$core$array$$Array$push$5$(weapons_to_remove, gun_idx);
+          break _L;
+        }
+        const velocity = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getLinearVelocity(gun.body);
+        const _p = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(velocity) * Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(velocity) + Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(velocity) * Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(velocity);
+        const speed = Math.sqrt(_p);
+        gun.throw_damage = speed * 2;
+        const gun_pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(gun.body);
+        const gun_x = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(gun_pos);
+        const gun_y = Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(gun_pos);
+        let _tmp$2 = 0;
+        while (true) {
+          const i = _tmp$2;
+          if (i < self.particle_list.length) {
+            _L$2: {
+              if (i === gun.owner_id) {
+                break _L$2;
+              }
+              const particle = moonbitlang$core$array$$Array$at$26$(self.particle_list, i);
+              const torso_pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(particle.torso);
+              const dx = gun_x - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(torso_pos);
+              const dy = gun_y - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(torso_pos);
+              const _p$2 = dx * dx + dy * dy;
+              const distance = Math.sqrt(_p$2);
+              if (distance < 1) {
+                const damage = moonbitlang$core$double$$Double$to_int(gun.throw_damage);
+                const _bind = particle.control;
+                _bind.health = _bind.health - damage | 0;
+                moonbitlang$core$builtin$$println$16$(`投掷武器击中玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(i)}，造成 ${moonbitlang$core$builtin$$Show$to_string$5$(damage)} 伤害，剩余HP: ${moonbitlang$core$builtin$$Show$to_string$5$(particle.control.health)}`);
+                Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_sound(self.audio, 5);
+                if (particle.control.health <= 0) {
+                  particle.control.health = 0;
+                  Great$45$Love$45$League$Stick_Man_Battle$server$$AudioManager$play_sound(self.audio, 7);
+                  moonbitlang$core$builtin$$println$16$(`玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(i)} 被投掷武器击杀！`);
+                }
+                const reduced_velocity = Demonmasterlqx$box2d_ffi$box2d$$b2Vec2(Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(velocity) * 0.3, Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(velocity) * 0.3);
+                Demonmasterlqx$box2d_ffi$box2d$$B2Body$setLinearVelocity(gun.body, reduced_velocity);
+                Demonmasterlqx$box2d_ffi$box2d$$B2Body$setAngularVelocity(gun.body, Demonmasterlqx$box2d_ffi$box2d$$B2Body$getAngularVelocity(gun.body) * 0.5);
+              }
+              break _L$2;
+            }
+            _tmp$2 = i + 1 | 0;
+            continue;
+          } else {
+            break;
+          }
+        }
+        break _L;
+      }
+      _tmp = gun_idx + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  let _tmp$2 = weapons_to_remove.length - 1 | 0;
+  while (true) {
+    const i = _tmp$2;
+    if (i >= 0) {
+      const gun_idx = moonbitlang$core$array$$Array$at$5$(weapons_to_remove, i);
+      const gun = moonbitlang$core$array$$Array$at$7$(self.weapon.gun_list, gun_idx);
+      Demonmasterlqx$box2d_ffi$box2d$$World$destroyBody$87$(self.world, gun.body);
+      moonbitlang$core$array$$Array$remove$7$(self.weapon.gun_list, gun_idx);
+      moonbitlang$core$builtin$$println$16$(`武器 ${moonbitlang$core$builtin$$Show$to_string$5$(gun_idx)} 已被销毁`);
+      _tmp$2 = i - 1 | 0;
+      continue;
+    } else {
+      return;
+    }
+  }
+}
 function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$running(self, p5) {
   self.frame_count = self.frame_count + 1 | 0;
   if (p5.method_10(p5.self, 34)) {
@@ -16236,7 +17821,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$running(self, p5)
             }
             break _L;
           }
-          moonbitlang$core$builtin$$println$13$(`Error in particle_control: ${moonbitlang$core$builtin$$Show$to_string$37$(_try_err)} in particle index ${moonbitlang$core$builtin$$Show$to_string$5$(config.target_particle_index)}.`);
+          moonbitlang$core$builtin$$println$16$(`Error in particle_control: ${moonbitlang$core$builtin$$Show$to_string$41$(_try_err)} in particle index ${moonbitlang$core$builtin$$Show$to_string$5$(config.target_particle_index)}.`);
         }
       }
       _tmp$2 = _i + 1 | 0;
@@ -16246,6 +17831,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$running(self, p5)
     }
   }
   Great$45$Love$45$League$Stick_Man_Battle$server$$Game$update_all_bullets(self);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$update_thrown_weapons(self);
   Great$45$Love$45$League$Stick_Man_Battle$server$$Game$update_all_items(self);
   const _arr$3 = self.enemy_list;
   const _len$3 = _arr$3.length;
@@ -16270,7 +17856,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$running(self, p5)
   while (true) {
     const i = _tmp$4;
     if (i < self.auto_aim_configs.length) {
-      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$update_auto_aim_target(self, i, moonbitlang$core$array$$Array$at$23$(self.auto_aim_configs, i));
+      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$update_auto_aim_target(self, i, moonbitlang$core$array$$Array$at$27$(self.auto_aim_configs, i));
       _tmp$4 = i + 1 | 0;
       continue;
     } else {
@@ -16320,7 +17906,7 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$running(self, p5)
   while (true) {
     const i = _tmp$7;
     if (i < self.auto_aim_configs.length) {
-      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$update_auto_aim_target(self, i, moonbitlang$core$array$$Array$at$23$(self.auto_aim_configs, i));
+      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$update_auto_aim_target(self, i, moonbitlang$core$array$$Array$at$27$(self.auto_aim_configs, i));
       _tmp$7 = i + 1 | 0;
       continue;
     } else {
@@ -16346,10 +17932,10 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$running(self, p5)
     }
   }
   if (self.slow_mode) {
-    moonbitlang$core$builtin$$println$13$("1/4 速模式：物理步进");
-    Demonmasterlqx$box2d_ffi$box2d$$World$step$83$(self.world, 0.00416666666666666661, 4);
+    moonbitlang$core$builtin$$println$16$("1/4 速模式：物理步进");
+    Demonmasterlqx$box2d_ffi$box2d$$World$step$87$(self.world, 0.00416666666666666661, 4);
   } else {
-    Demonmasterlqx$box2d_ffi$box2d$$World$step$83$(self.world, 0.0166666666666666664, 4);
+    Demonmasterlqx$box2d_ffi$box2d$$World$step$87$(self.world, 0.0166666666666666664, 4);
   }
   Great$45$Love$45$League$Stick_Man_Battle$server$$Game$run_custom_functions(self, 1, p5);
   Great$45$Love$45$League$Stick_Man_Battle$server$$Game$update_animations(self, p5);
@@ -16362,10 +17948,9 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$running(self, p5)
   while (true) {
     const _i = _tmp$9;
     if (_i < _len$7) {
-      const i = _arr$7[_i];
-      if (i.control.health <= 0) {
-        self.state = 3;
-        return undefined;
+      const particle = _arr$7[_i];
+      if (Great$45$Love$45$League$Stick_Man_Battle$server$$Game$check_particle_out_of_bounds(self, particle)) {
+        particle.control.health = 0;
       }
       _tmp$9 = _i + 1 | 0;
       continue;
@@ -16373,11 +17958,34 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$running(self, p5)
       break;
     }
   }
-  self.state = 1;
+  const _arr$8 = self.particle_list;
+  const _len$8 = _arr$8.length;
+  let _tmp$10 = 0;
+  while (true) {
+    const _i = _tmp$10;
+    if (_i < _len$8) {
+      const i = _arr$8[_i];
+      if (i.control.health <= 0) {
+        self.state = 3;
+        return undefined;
+      }
+      _tmp$10 = _i + 1 | 0;
+      continue;
+    } else {
+      break;
+    }
+  }
+  if ((self.key_p_changed_count % 4 | 0) !== 0) {
+    self.state = 2;
+    return;
+  } else {
+    self.state = 1;
+    return;
+  }
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$state_machine_update(self, p5) {
   const _tmp = self.render;
-  _tmp.method_1(_tmp.self, { self: self.world, method_0: Demonmasterlqx$box2d_ffi$box2d$$World$getBase$85$, method_1: Demonmasterlqx$box2d_ffi$box2d$$World$setListener$83$, method_2: Demonmasterlqx$box2d_ffi$box2d$$World$setFilter$83$, method_3: Demonmasterlqx$box2d_ffi$box2d$$World$createBody$83$, method_4: Demonmasterlqx$box2d_ffi$box2d$$World$destroyBody$83$, method_5: Demonmasterlqx$box2d_ffi$box2d$$World$clearBodyList$83$, method_6: Demonmasterlqx$box2d_ffi$box2d$$World$createJoint$83$, method_7: Demonmasterlqx$box2d_ffi$box2d$$World$destroyJoint$83$, method_8: Demonmasterlqx$box2d_ffi$box2d$$World$getGroundBody$83$, method_9: Demonmasterlqx$box2d_ffi$box2d$$World$step$83$, method_10: Demonmasterlqx$box2d_ffi$box2d$$World$query$83$, method_11: Demonmasterlqx$box2d_ffi$box2d$$World$getBodyList$83$, method_12: Demonmasterlqx$box2d_ffi$box2d$$World$getJointList$83$, method_13: Demonmasterlqx$box2d_ffi$box2d$$World$getContactList$83$ }, p5);
+  _tmp.method_1(_tmp.self, self, p5);
   const _bind = self.state;
   switch (_bind) {
     case 0: {
@@ -16401,257 +18009,44 @@ function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$state_machine_upd
 }
 function Great$45$Love$45$League$Stick_Man_Battle$server$$Game$start_run(self) {
   self.state = 0;
-  Great$45$Love$45$League$Stick_Man_Battle$server$$getP5Instance((p) => {
-    Great$45$Love$45$League$Stick_Man_Battle$server$$Game$state_machine_update(self, { self: p, method_0: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getP5Instance$102$, method_1: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getTouches$103$, method_2: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setTouchEnded$103$, method_3: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelTouchEnded$103$, method_4: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setTouchMoved$103$, method_5: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelTouchMoved$103$, method_6: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setTouchStarted$103$, method_7: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelTouchStarted$103$, method_8: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getKey$103$, method_9: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getKeyCode$103$, method_10: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$keyIsDown$103$, method_11: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$keyIsPressed$103$, method_12: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setKeyPressed$103$, method_13: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelKeyPressed$103$, method_14: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setKeyReleased$103$, method_15: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelKeyReleased$103$, method_16: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setKeyTyped$103$, method_17: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelKeyTyped$103$, method_18: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getMouseX$103$, method_19: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getMouseY$103$, method_20: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getMovedX$103$, method_21: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getMovedY$103$, method_22: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getPmouseX$103$, method_23: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getPmouseY$103$, method_24: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getPwinMouseX$103$, method_25: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getPwinMouseY$103$, method_26: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getWinMouseX$103$, method_27: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getWinMouseY$103$, method_28: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$mouseIsPressed$103$, method_29: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getMouseButtonString$103$, method_30: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getMouseButton$103$, method_31: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setDoubleClicked$103$, method_32: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelDoubleClicked$103$, method_33: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setMouseClicked$103$, method_34: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelMouseClicked$103$, method_35: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setMouseDragged$103$, method_36: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelMouseDragged$103$, method_37: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setMouseMoved$103$, method_38: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelMouseMoved$103$, method_39: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setMousePressed$103$, method_40: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelMousePressed$103$, method_41: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setMouseReleased$103$, method_42: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelMouseReleased$103$, method_43: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setMouseWheel$103$, method_44: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelMouseWheel$103$, method_45: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$requestPointerLock$103$, method_46: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$exitPointerLock$103$, method_47: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$ellipseMode$103$, method_48: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$rectMode$103$, method_49: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$noSmooth$103$, method_50: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$smooth$103$, method_51: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeCap$103$, method_52: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeJoin$103$, method_53: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeWeight$103$, method_54: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$arc$103$, method_55: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$circle$103$, method_56: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$ellipse$103$, method_57: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$line$103$, method_58: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$point$103$, method_59: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$quad$103$, method_60: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$rect$103$, method_61: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$triangle$103$, method_62: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$square$103$, method_63: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$bezier$103$, method_64: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$bezierPoint$103$, method_65: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$bezierTangent$103$, method_66: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$curve$103$, method_67: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$curvePoint$103$, method_68: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$curveTangent$103$, method_69: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$curveTightness$103$, method_70: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$beginContour$103$, method_71: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$endContour$103$, method_72: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$beginShape$103$, method_73: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$endShape$103$, method_74: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$bezierVertex$103$, method_75: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$curveVertex$103$, method_76: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$vertex$103$, method_77: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$normal$103$, method_78: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$quadraticVertex$103$, method_79: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$noStroke$103$, method_80: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$background$103$, method_81: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$fillColorPara$103$, method_82: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$fillColorObj$103$, method_83: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$beginClip$103$, method_84: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$endClip$103$, method_85: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$clear$103$, method_86: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$clip$103$, method_87: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$clipOptions$103$, method_88: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$colorModeUniform$103$, method_89: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$colorModeDetailed$103$, method_90: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$erase$103$, method_91: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$noErase$103$, method_92: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeColor$103$, method_93: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeGray$103$, method_94: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeComponents$103$, method_95: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeString$103$, method_96: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$noFill$103$, method_97: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$brightness$103$, method_98: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$color$103$, method_99: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$alpha$103$, method_100: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$blue$103$, method_101: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$green$103$, method_102: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$red$103$, method_103: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$hue$103$, method_104: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$lerpColor$103$, method_105: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$lightness$103$, method_106: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$paletteLerp$103$, method_107: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textAlign$103$, method_108: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textLeadingSet$103$, method_109: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textLeadingGet$103$, method_110: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textAscent$103$, method_111: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textDescent$103$, method_112: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textSizeSet$103$, method_113: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textSizeGet$103$, method_114: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textStyle$103$, method_115: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textWidth$103$, method_116: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textWrap$103$, method_117: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$loadFont$103$, method_118: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textFont$103$, method_119: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$text$103$, method_120: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getCanvasWidth$103$, method_121: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getCanvasHeight$103$, method_122: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$image$103$, method_123: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$imageMode$103$, method_124: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$loadImage$103$, method_125: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$applyMatrix$103$, method_126: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$resetMatrix$103$, method_127: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$rotate$103$, method_128: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$rotateX$103$, method_129: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$rotateY$103$, method_130: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$rotateZ$103$, method_131: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$scale$103$, method_132: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$shearX$103$, method_133: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$shearY$103$, method_134: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$translate$103$ });
-  }, Option$None$0$, Option$None$0$);
+  const draw = (p5) => {
+    const _p = Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$keyIsDown$107$(p5, 15);
+    const _p$2 = self.pre_key_p;
+    if (!(_p === _p$2)) {
+      self.key_p_changed_count = self.key_p_changed_count + 1 | 0;
+    }
+    Great$45$Love$45$League$Stick_Man_Battle$server$$Game$state_machine_update(self, { self: p5, method_0: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getP5Instance$106$, method_1: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getTouches$107$, method_2: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setTouchEnded$107$, method_3: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelTouchEnded$107$, method_4: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setTouchMoved$107$, method_5: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelTouchMoved$107$, method_6: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setTouchStarted$107$, method_7: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelTouchStarted$107$, method_8: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getKey$107$, method_9: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getKeyCode$107$, method_10: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$keyIsDown$107$, method_11: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$keyIsPressed$107$, method_12: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setKeyPressed$107$, method_13: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelKeyPressed$107$, method_14: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setKeyReleased$107$, method_15: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelKeyReleased$107$, method_16: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setKeyTyped$107$, method_17: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelKeyTyped$107$, method_18: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getMouseX$107$, method_19: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getMouseY$107$, method_20: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getMovedX$107$, method_21: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getMovedY$107$, method_22: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getPmouseX$107$, method_23: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getPmouseY$107$, method_24: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getPwinMouseX$107$, method_25: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getPwinMouseY$107$, method_26: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getWinMouseX$107$, method_27: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getWinMouseY$107$, method_28: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$mouseIsPressed$107$, method_29: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getMouseButtonString$107$, method_30: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getMouseButton$107$, method_31: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setDoubleClicked$107$, method_32: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelDoubleClicked$107$, method_33: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setMouseClicked$107$, method_34: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelMouseClicked$107$, method_35: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setMouseDragged$107$, method_36: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelMouseDragged$107$, method_37: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setMouseMoved$107$, method_38: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelMouseMoved$107$, method_39: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setMousePressed$107$, method_40: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelMousePressed$107$, method_41: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setMouseReleased$107$, method_42: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelMouseReleased$107$, method_43: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$setMouseWheel$107$, method_44: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$cancelMouseWheel$107$, method_45: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$requestPointerLock$107$, method_46: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$exitPointerLock$107$, method_47: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$ellipseMode$107$, method_48: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$rectMode$107$, method_49: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$noSmooth$107$, method_50: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$smooth$107$, method_51: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeCap$107$, method_52: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeJoin$107$, method_53: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeWeight$107$, method_54: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$arc$107$, method_55: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$circle$107$, method_56: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$ellipse$107$, method_57: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$line$107$, method_58: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$point$107$, method_59: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$quad$107$, method_60: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$rect$107$, method_61: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$triangle$107$, method_62: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$square$107$, method_63: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$bezier$107$, method_64: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$bezierPoint$107$, method_65: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$bezierTangent$107$, method_66: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$curve$107$, method_67: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$curvePoint$107$, method_68: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$curveTangent$107$, method_69: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$curveTightness$107$, method_70: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$beginContour$107$, method_71: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$endContour$107$, method_72: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$beginShape$107$, method_73: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$endShape$107$, method_74: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$bezierVertex$107$, method_75: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$curveVertex$107$, method_76: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$vertex$107$, method_77: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$normal$107$, method_78: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$quadraticVertex$107$, method_79: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$noStroke$107$, method_80: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$background$107$, method_81: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$fillColorPara$107$, method_82: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$fillColorObj$107$, method_83: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$beginClip$107$, method_84: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$endClip$107$, method_85: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$clear$107$, method_86: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$clip$107$, method_87: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$clipOptions$107$, method_88: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$colorModeUniform$107$, method_89: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$colorModeDetailed$107$, method_90: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$erase$107$, method_91: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$noErase$107$, method_92: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeColor$107$, method_93: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeGray$107$, method_94: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeComponents$107$, method_95: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$strokeString$107$, method_96: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$noFill$107$, method_97: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$brightness$107$, method_98: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$color$107$, method_99: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$alpha$107$, method_100: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$blue$107$, method_101: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$green$107$, method_102: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$red$107$, method_103: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$hue$107$, method_104: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$lerpColor$107$, method_105: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$lightness$107$, method_106: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$paletteLerp$107$, method_107: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textAlign$107$, method_108: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textLeadingSet$107$, method_109: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textLeadingGet$107$, method_110: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textAscent$107$, method_111: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textDescent$107$, method_112: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textSizeSet$107$, method_113: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textSizeGet$107$, method_114: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textStyle$107$, method_115: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textWidth$107$, method_116: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textWrap$107$, method_117: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$loadFont$107$, method_118: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$textFont$107$, method_119: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$text$107$, method_120: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getCanvasWidth$107$, method_121: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$getCanvasHeight$107$, method_122: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$image$107$, method_123: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$imageMode$107$, method_124: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$loadImage$107$, method_125: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$applyMatrix$107$, method_126: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$resetMatrix$107$, method_127: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$rotate$107$, method_128: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$rotateX$107$, method_129: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$rotateY$107$, method_130: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$rotateZ$107$, method_131: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$scale$107$, method_132: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$shearX$107$, method_133: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$shearY$107$, method_134: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$translate$107$, method_135: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$push$107$, method_136: Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$pop$107$ });
+    self.pre_key_p = Demonmasterlqx$MoonP5$cmd$p5js_ffi$$P5JS$keyIsDown$107$(p5, 15);
+  };
+  const preload = (p5) => {
+    Great$45$Love$45$League$Stick_Man_Battle$server$$register_end_router(self);
+    Great$45$Love$45$League$Stick_Man_Battle$server$$register_stop_router(self);
+    Great$45$Love$45$League$Stick_Man_Battle$server$$register_audio_controls(self);
+  };
+  Great$45$Love$45$League$Stick_Man_Battle$server$$getP5Instance(draw, preload, Option$None$0$, Option$None$0$);
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$call_custom_function$110$(self, game, p5) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$call_custom_function$118$(self, game, p5) {
   const _func = self.func;
   _func(game, p5);
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$get_call_stage$110$(self) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$get_call_stage$118$(self) {
   return self.stage;
 }
-function Great$45$Love$45$League$Stick_Man_Battle$server$$Animation$update$108$(self, world, p5) {
+function Great$45$Love$45$League$Stick_Man_Battle$server$$Animation$update$115$(self, world, p5) {
   const _func = self.fun;
   return _func(world, p5);
 }
-function Great$45$Love$45$League$Stick_Man_Battle$game$45$level2$$load_custom_functions(game) {
-  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$register_custom_function(game, { self: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunction$new(1, (game$2, p5) => {
-    if (moonbitlang$core$array$$Array$at$22$(game$2.particle_list, 0).control.faint_state) {
-      if (moonbitlang$core$array$$Array$at$22$(game$2.particle_list, 0).control.faint_resistance < 300) {
-        const _bind = moonbitlang$core$array$$Array$at$22$(game$2.particle_list, 0).control;
-        _bind.faint_resistance = _bind.faint_resistance + 1 | 0;
-      } else {
-        moonbitlang$core$array$$Array$at$22$(game$2.particle_list, 0).control.faint_state = false;
-        moonbitlang$core$array$$Array$at$22$(game$2.particle_list, 0).control.health = 100;
-        moonbitlang$core$array$$Array$at$22$(game$2.particle_list, 0).control.faint_resistance = 0;
-      }
-      return undefined;
-    }
-    if (p5.method_10(p5.self, 9)) {
-      moonbitlang$core$array$$Array$at$22$(game$2.particle_list, 0).control.faint_state = true;
-      return;
-    } else {
-      return;
-    }
-  }), method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$call_custom_function$110$, method_1: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$get_call_stage$110$ });
-  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$register_custom_function(game, { self: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunction$new(1, (game$2, p) => {
-    if (p.method_10(p.self, 27)) {
-      const _arr = game$2.weapon.gun_list;
-      const _len = _arr.length;
-      let _tmp = 0;
-      while (true) {
-        const _i = _tmp;
-        if (_i < _len) {
-          const gun = _arr[_i];
-          if (gun.owner_id === 0) {
-            Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponDestroy$destroy$63$(gun, game$2);
-          }
-          _tmp = _i + 1 | 0;
-          continue;
-        } else {
-          break;
-        }
-      }
-      moonbitlang$core$array$$Array$clear$63$(game$2.weapon.gun_list);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_pistol(game$2, 0);
-      moonbitlang$core$builtin$$println$13$("装备手枪!");
-    }
-    if (p.method_10(p.self, 28)) {
-      const _arr = game$2.weapon.gun_list;
-      const _len = _arr.length;
-      let _tmp = 0;
-      while (true) {
-        const _i = _tmp;
-        if (_i < _len) {
-          const gun = _arr[_i];
-          if (gun.owner_id === 0) {
-            Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponDestroy$destroy$63$(gun, game$2);
-          }
-          _tmp = _i + 1 | 0;
-          continue;
-        } else {
-          break;
-        }
-      }
-      moonbitlang$core$array$$Array$clear$63$(game$2.weapon.gun_list);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_shotgun(game$2, 0);
-      moonbitlang$core$builtin$$println$13$("装备霰弹枪!");
-    }
-    if (p.method_10(p.self, 29)) {
-      const _arr = game$2.weapon.gun_list;
-      const _len = _arr.length;
-      let _tmp = 0;
-      while (true) {
-        const _i = _tmp;
-        if (_i < _len) {
-          const gun = _arr[_i];
-          if (gun.owner_id === 0) {
-            Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponDestroy$destroy$63$(gun, game$2);
-          }
-          _tmp = _i + 1 | 0;
-          continue;
-        } else {
-          break;
-        }
-      }
-      moonbitlang$core$array$$Array$clear$63$(game$2.weapon.gun_list);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_sniper(game$2, 0);
-      moonbitlang$core$builtin$$println$13$("装备狙击枪!");
-    }
-    if (p.method_10(p.self, 30)) {
-      const _arr = game$2.weapon.gun_list;
-      const _len = _arr.length;
-      let _tmp = 0;
-      while (true) {
-        const _i = _tmp;
-        if (_i < _len) {
-          const gun = _arr[_i];
-          if (gun.owner_id === 0) {
-            Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponDestroy$destroy$63$(gun, game$2);
-          }
-          _tmp = _i + 1 | 0;
-          continue;
-        } else {
-          break;
-        }
-      }
-      moonbitlang$core$array$$Array$clear$63$(game$2.weapon.gun_list);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$create_laser_rifle(game$2, 0);
-      moonbitlang$core$builtin$$println$13$("装备激光枪!");
-      return;
-    } else {
-      return;
-    }
-  }), method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$call_custom_function$110$, method_1: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$get_call_stage$110$ });
-  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$register_custom_function(game, { self: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunction$new(1, (game$2, p5) => {
-    if (p5.method_10(p5.self, 10)) {
-      const particle_pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(moonbitlang$core$array$$Array$at$22$(game$2.particle_list, 0).torso);
-      Great$45$Love$45$League$Stick_Man_Battle$server$$Game$spawn_health_pack$46$inner(game$2, { _0: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(particle_pos) + 3, _1: Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(particle_pos) }, 30);
-      return;
-    } else {
-      return;
-    }
-  }), method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$call_custom_function$110$, method_1: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$get_call_stage$110$ });
-  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$register_custom_function(game, { self: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunction$new(1, (game$2, p5) => {
-    if (p5.method_28(p5.self)) {
-      const _bind = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$get_auto_aim_config(game$2, 0);
-      let angle;
-      if (_bind === undefined) {
-        const mouse_x = p5.method_18(p5.self) + 0;
-        const mouse_y = p5.method_19(p5.self) + 0;
-        const world_coords = Great$45$Love$45$League$Stick_Man_Battle$server$$screen_to_world(Option$None$0$, Option$None$0$, mouse_x, mouse_y, Option$None$0$);
-        const player_pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(moonbitlang$core$array$$Array$at$22$(game$2.particle_list, 0).torso);
-        const dx = world_coords._0 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(player_pos);
-        const dy = world_coords._1 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(player_pos);
-        angle = Kaida$45$Amethyst$math$$atan2(dy, dx);
-      } else {
-        const _Some = _bind;
-        const _config = _Some;
-        const _bind$2 = Great$45$Love$45$League$Stick_Man_Battle$server$$Game$get_auto_aim_angle(game$2, 0, _config);
-        if (_bind$2.$tag === 1) {
-          const _Some$2 = _bind$2;
-          angle = _Some$2._0;
-        } else {
-          const mouse_x = p5.method_18(p5.self) + 0;
-          const mouse_y = p5.method_19(p5.self) + 0;
-          const world_coords = Great$45$Love$45$League$Stick_Man_Battle$server$$screen_to_world(Option$None$0$, Option$None$0$, mouse_x, mouse_y, Option$None$0$);
-          const player_pos = Demonmasterlqx$box2d_ffi$box2d$$B2Body$getCenterPosition(moonbitlang$core$array$$Array$at$22$(game$2.particle_list, 0).torso);
-          const dx = world_coords._0 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getX(player_pos);
-          const dy = world_coords._1 - Demonmasterlqx$box2d_ffi$box2d$$B2Vec2$getY(player_pos);
-          angle = Kaida$45$Amethyst$math$$atan2(dy, dx);
-        }
-      }
-      const _arr = game$2.weapon.gun_list;
-      const _len = _arr.length;
-      let _tmp = 0;
-      while (true) {
-        const _i = _tmp;
-        if (_i < _len) {
-          const gun = _arr[_i];
-          if (gun.owner_id === 0) {
-            Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponControl$attack_at_angle$63$(gun, game$2, angle);
-            break;
-          }
-          _tmp = _i + 1 | 0;
-          continue;
-        } else {
-          return;
-        }
-      }
-    } else {
-      return;
-    }
-  }), method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$call_custom_function$110$, method_1: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$get_call_stage$110$ });
-  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$register_custom_function(game, { self: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunction$new(1, (game$2, p5) => {
-    if ((game$2.frame_count % 100 | 0) === 0) {
-      const _arr = game$2.particle_list;
-      const _len = _arr.length;
-      let _tmp = 0;
-      while (true) {
-        const _i = _tmp;
-        if (_i < _len) {
-          const particle = _arr[_i];
-          moonbitlang$core$builtin$$println$13$(`玩家 ${moonbitlang$core$builtin$$Show$to_string$5$(particle.index)} 血量: ${moonbitlang$core$builtin$$Show$to_string$5$(particle.control.health)}`);
-          _tmp = _i + 1 | 0;
-          continue;
-        } else {
-          return;
-        }
-      }
-    } else {
-      return;
-    }
-  }), method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$call_custom_function$110$, method_1: Great$45$Love$45$League$Stick_Man_Battle$server$$GameCustomFunctionTrait$get_call_stage$110$ });
-}
 (() => {
-  const game = Great$45$Love$45$League$Stick_Man_Battle$server$$create_game(undefined);
+  const game = Great$45$Love$45$League$Stick_Man_Battle$server$$create_game(undefined, { self: Great$45$Love$45$League$Stick_Man_Battle$server$$BackgroundImage$new(Great$45$Love$45$League$Stick_Man_Battle$game$45$level2$$_main$46$constr$47$5300), method_0: Great$45$Love$45$League$Stick_Man_Battle$server$$RenderAble$get_render$117$ });
   Great$45$Love$45$League$Stick_Man_Battle$server$$load_map(game, 2);
-  Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponCreate$create$63$(game, 0);
-  Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponCreate$create$63$(game, 1);
-  Great$45$Love$45$League$Stick_Man_Battle$game$45$level2$$load_custom_functions(game);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponCreate$create$7$(game, 0, Great$45$Love$45$League$Stick_Man_Battle$game$45$level2$$_main$46$constr$47$5301);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$WeaponCreate$create$7$(game, 1, Great$45$Love$45$League$Stick_Man_Battle$game$45$level2$$_main$46$constr$47$5302);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$play_level_bgm(game, 2);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$register_both_weapon_change(game);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$register_mouse_shoot(game, 0);
   Great$45$Love$45$League$Stick_Man_Battle$server$$register_control(game);
   Great$45$Love$45$League$Stick_Man_Battle$server$$register_auto_aim(game);
   Great$45$Love$45$League$Stick_Man_Battle$server$$register_hp_show(game);
   Great$45$Love$45$League$Stick_Man_Battle$server$$register_show_mouse_screen_coords(game);
-  // --- AUTO-HOOK: expose read-only game state for external HUDs (safe, defensive) ---
-  try {
-    if (typeof window !== 'undefined') {
-      try { window.__mmb_game = game; } catch(e) {}
-      try {
-        window.__mmb_get_state = function() {
-          try {
-            var players = [];
-            if (game && game.particle_list && game.particle_list.length) {
-              for (var i=0;i<game.particle_list.length;i++) {
-                var p = game.particle_list[i];
-                var ctrl = (p && p.control) ? p.control : { health: 0 };
-                var obj = { index: (p && p.index)!==undefined ? p.index : i, health: (ctrl.health===undefined?0:ctrl.health) };
-                // defensive optional fields
-                try { obj.name = p.name !== undefined ? p.name : null; } catch(e) { obj.name = null; }
-                try { obj.avatar = p.avatar !== undefined ? p.avatar : null; } catch(e) { obj.avatar = null; }
-                try { obj.ammo = p.ammo !== undefined ? p.ammo : null; } catch(e) { obj.ammo = null; }
-                try { obj.score = p.score !== undefined ? p.score : null; } catch(e) { obj.score = null; }
-                players.push(obj);
-              }
-            }
-            return { players: players, frame_count: (game && game.frame_count) ? game.frame_count : 0 };
-          } catch(e) { return { players: [], frame_count: 0 }; }
-        };
-      } catch(e) {}
-    }
-  } catch(e) {}
-
-  Great$45$Love$45$League$Stick_Man_Battle$server$$/* __MMB_BOOTSTRAP_SNIPPET start */
-try{ window.__mmb_game = game; }catch(e){}
-try{ window.__mmb_get_state = function(){ try{ var players=[]; if(game && game.particle_list && game.particle_list.length){ for(my =0;<0; ++){} } }catch(e){return {players:[], frame_count:0};} }; }catch(e){}
-/* __MMB_BOOTSTRAP_SNIPPET end */
-
-/* __MMB_BOOTSTRAP_SNIPPET start */
-try{ window.__mmb_game = game; }catch(e){}
-try{ window.__mmb_get_state = function(){ try{ var players = []; if (game && game.particle_list && game.particle_list.length){ for (var i=0;i<game.particle_list.length;i++){ var p = game.particle_list[i]; var ctrl = (p && p.control) ? p.control : { health: 0 }; players.push({ index: (p && p.index)!==undefined ? p.index : i, health: (ctrl.health===undefined?0:ctrl.health), name: p && p.name ? p.name : null, ammo: p && p.ammo ? p.ammo : null, score: p && p.score ? p.score : null }); } } return { players: players, frame_count: (game && game.frame_count)? game.frame_count : 0 }; }catch(e){ return { players: [], frame_count: 0 }; } }; }catch(e){}
-/* __MMB_BOOTSTRAP_SNIPPET end */
-
-.Game$start_run(game);
+  Great$45$Love$45$League$Stick_Man_Battle$server$$Game$start_run(game);
 })();
