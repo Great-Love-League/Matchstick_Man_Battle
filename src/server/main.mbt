@@ -592,6 +592,9 @@ fn main {
     // 激活全局开始界面标记
     start_screen_active.val = true
     let start_initialized: Ref[Bool] = { val: false }
+    
+    // 播放菜单 BGM
+    game.audio.play_bgm(AudioEventType::BgmMenu)
 
     // 注册开始界面时的自定义函数（在 GameRunning 阶段设置每个玩家的模拟按键并绘制覆盖层）
     game.register_custom_function(
@@ -705,6 +708,9 @@ fn main {
               particle.control.walk_cooldown = 0
               particle.control.jump_cooldown = -1
             }
+            // 停止菜单 BGM 并播放关卡 BGM
+            game.audio.stop_bgm()
+            game.play_level_bgm(5)
             // 仅关闭开始界面，保留当前关卡和世界状态（不跳转）
             start_screen_active.val = false
           }
