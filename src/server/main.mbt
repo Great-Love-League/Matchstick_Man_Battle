@@ -2,6 +2,11 @@ pub const PPM = 20.0
 const Width: Double = 1000.0
 const Height: Double = 1000.0
 
+// 全局开始界面随机数生成器，用于驱动模拟按键的随机行为
+let start_rng: Ref[@random.Rand] = { val: @random.Rand::new() }
+
+// 使用已生成的 p5 绑定检测 Enter 键，不需要自定义 extern
+
 fn box2d_init(game:Game) ->Unit{
   // game.create_platform(
   //   (0.0,0.0),
@@ -581,7 +586,121 @@ fn main {
 	{
 		let game = create_game(background = BackgroundImage::new(Some("./src/assets/background1.png")))
 		load_map(game,5)|> ignore
-		box2d_init(game)
+    box2d_init(game)
+
+    // ==== Start Screen: 初始化并注册开始界面逻辑 ====
+    // 激活全局开始界面标记
+    start_screen_active.val = true
+    let start_initialized: Ref[Bool] = { val: false }
+
+    // 注册开始界面时的自定义函数（在 GameRunning 阶段设置每个玩家的模拟按键并绘制覆盖层）
+    game.register_custom_function(
+      GameCustomFunction::new(
+        GameRunning,
+        fn(game: Game, p5: &@p5js.P5JS) {
+          // 仅在 start_screen_active 为 true 时拦截并绘制开始界面
+          if not(start_screen_active.val) {
+            return
+          }
+
+          // 第一次进入：初始化血量与自动瞄准（开启），并初始化模拟按键数组
+          if not(start_initialized.val) {
+            // 将玩家血量设为 10000
+            for p in game.particle_list {
+              p.control.health = 10000
+            }
+            // 开启自动瞄准
+            for i = 0; i < game.particle_list.length(); i = i + 1 {
+              match game.get_auto_aim_config(i) {
+                Some(cfg) => cfg.enabled = true
+                None => game.register_auto_aim_config(i, AutoAimConfig::new(enabled=true))
+              }
+            }
+            // 初始化每个玩家的模拟按键与倒计时
+            start_simulated_keys.val = Array::new()
+            start_sim_timers.val = Array::new()
+            for i = 0; i < game.particle_list.length(); i = i + 1 {
+              start_simulated_keys.val.push(Array::new())
+              start_sim_timers.val.push(0)
+            }
+            // 为了避免所有玩家同时选择相同行为（例如都向右走），
+            // 在初始化时为每个玩家分配一个错开的初始动作并设置计时器
+            for i = 0; i < game.particle_list.length(); i = i + 1 {
+              // 使用索引生成的伪偏移量来选择初始动作
+              let left_k = if i < game.particle_control_configs.length() { game.particle_control_configs[i].left_key } else { @p5js.KeyA }
+              let right_k = if i < game.particle_control_configs.length() { game.particle_control_configs[i].right_key } else { @p5js.KeyD }
+              let jump_k = if i < game.particle_control_configs.length() { game.particle_control_configs[i].jump_key } else { @p5js.KeyW }
+              let shoot_k = if i < game.particle_control_configs.length() { game.particle_control_configs[i].shoot_key } else { @p5js.KeyZ }
+
+              // 使用全局 RNG 随机选择初始动作（避免所有玩家同步）
+              let rng = start_rng.val
+              let choice = rng.int() % 100
+              if choice < 35 {
+                start_simulated_keys.val[i] = [ right_k ]
+              } else if choice < 70 {
+                start_simulated_keys.val[i] = [ left_k ]
+              } else if choice < 85 {
+                start_simulated_keys.val[i] = [ jump_k ]
+              } else {
+                start_simulated_keys.val[i] = [ shoot_k ]
+              }
+              // 初始动作持续 1-4 秒（60-240 帧），增加多样性
+              start_sim_timers.val[i] = 60 + (rng.int() % 181)
+            }
+            start_initialized.val = true
+          }
+
+          // 每帧处理：如果某玩家的模拟按键计时器到期，则选择一个新的动作并持续3秒（180帧）
+            for i = 0; i < game.particle_list.length(); i = i + 1 {
+            if start_sim_timers.val[i] <= 0 {
+              // 使用全局 RNG 来选择下一动作与持续时间
+              let rng = start_rng.val
+              // 取该玩家的控制绑定（回退到默认键位以防没有注册）
+              let left_k = if i < game.particle_control_configs.length() { game.particle_control_configs[i].left_key } else { @p5js.KeyA }
+              let right_k = if i < game.particle_control_configs.length() { game.particle_control_configs[i].right_key } else { @p5js.KeyD }
+              let jump_k = if i < game.particle_control_configs.length() { game.particle_control_configs[i].jump_key } else { @p5js.KeyW }
+              let shoot_k = if i < game.particle_control_configs.length() { game.particle_control_configs[i].shoot_key } else { @p5js.KeyZ }
+
+              let choice = rng.int() % 100
+              if choice < 35 {
+                // 向右行走
+                start_simulated_keys.val[i] = [ right_k ]
+              } else if choice < 70 {
+                // 向左行走
+                start_simulated_keys.val[i] = [ left_k ]
+              } else if choice < 85 {
+                // 跳跃
+                start_simulated_keys.val[i] = [ jump_k ]
+              } else {
+                // 射击
+                start_simulated_keys.val[i] = [ shoot_k ]
+              }
+              // 随机持续 1-4 秒（60-240 帧）
+              start_sim_timers.val[i] = 60 + (rng.int() % 181)
+            } else {
+              start_sim_timers.val[i] = start_sim_timers.val[i] - 1
+            }
+          }
+
+          // 绘制开始界面提示（p5）
+          p5.push()
+          p5.fillColorPara(0.0, Some(0.0), Some(0.0), Some(150.0))
+          p5.noStroke()
+          p5.rect(0.0, 0.0, Width, Height)
+          p5.textSizeSet(48.0)
+          p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
+          p5.textAlign("center", Some("center"))
+          p5.text("按 Enter 开始游戏", Width / 2.0, Height / 2.0, None, None)
+          p5.pop()
+
+          // 仅响应 Enter 键：按下后关闭开始界面并跳转到 level1
+          if (p5.keyIsDown(Enter)) {
+            start_screen_active.val = false
+            navigateTo("game-level1.html")
+          }
+        }
+      )
+    )
 		load_custom_functions(game)
     
 		register_control(game)
