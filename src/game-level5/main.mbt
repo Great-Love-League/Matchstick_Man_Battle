@@ -1,8 +1,8 @@
 fn main {
   let game = @server.create_game()
   @server.load_map(game, 5) |> ignore
-	@server.Gun::create(game,0, Some("src/assets/gun4.png"))
-	@server.Gun::create(game,1, Some("src/assets/gun4.png"))
+	@server.Gun::create(game,0, Some("src/assets/gun1.png"))
+	@server.Gun::create(game,1, Some("src/assets/gun1.png"))
 
   @server.register_both_weapon_change(game)
 

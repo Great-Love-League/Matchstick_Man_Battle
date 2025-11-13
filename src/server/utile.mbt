@@ -1,12 +1,12 @@
-pub fn[T: Eq + Compare] min(a : T, b : T) -> T{
+pub fn[T: Compare] min(a : T, b : T) -> T{
   if a < b{
     return a
   }
   return b
 }
 
-pub fn[T: Eq + Compare] max(a : T, b : T) -> T{
-  if a > b{
+pub fn[T: Compare] max(a : T, b : T) -> T{
+  if a >= b{
     return a
   }
   return b
@@ -71,9 +71,13 @@ pub fn get_entity_aabb(body_list: Array[@box2d.B2Body]) -> @box2d.B2AABB{
 ///| Draw the Axis-Aligned Bounding Box (AABB) on the canvas.
 /// 会转化为 canvass 坐标系进行绘制
 pub fn draw_aabb(p5: &@p5js.P5JS, aabb: @box2d.B2AABB, color_set: (&@p5js.P5JS)->Unit) -> Unit{
+  p5.push()
+
   let (min_x, min_y) = world_to_screen(aabb.getminVertex().getX(), aabb.getminVertex().getY())
   let (max_x, max_y) = world_to_screen(aabb.getmaxVertex().getX(), aabb.getmaxVertex().getY())
 
   color_set(p5)
   p5.rect(min_x, min_y, max_x - min_x, max_y - min_y)
+
+  p5.pop()
 }
