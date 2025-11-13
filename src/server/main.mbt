@@ -257,10 +257,10 @@ pub fn register_control(game:Game) -> Unit{
 
 pub fn register_auto_aim(game:Game) -> Unit {
   // 为玩家0注册自动瞄准配置
-  // 默认禁用，可通过T键切换
+  // 默认启用，可通过T键切换
   // 默认瞄准其他玩家和敌人，最大范围50米
   let config_player0 = AutoAimConfig::new(
-    enabled=false,
+    enabled=true,
     target_types=[EntityType::Player, EntityType::Enemy],
     max_range=50.0
   )
@@ -268,7 +268,7 @@ pub fn register_auto_aim(game:Game) -> Unit {
   
   // 为玩家1注册自动瞄准配置
   let config_player1 = AutoAimConfig::new(
-    enabled=false,
+    enabled=true,
     target_types=[EntityType::Player, EntityType::Enemy],
     max_range=50.0
   )
