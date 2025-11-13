@@ -32,15 +32,15 @@ pub fn load_map(game:Game, level : Int) -> Bool {
 			return true
 		}
 		3 => {
-			create_platform(game, (0, 0.5), (10, 1), angle = 0.0)|> ignore;
-			create_rotatable_platform(game, (-20, 8), (8, 0.8), 2, initial_angle=0.3) |> ignore;
-			create_rotatable_platform(game, (15, 10), (8, 0.8), 2, initial_angle=1.2) |> ignore;
-			create_rotatable_platform(game, (-5, 16), (8, 0.8), 2, initial_angle=2.8) |> ignore;
-			create_rotatable_platform(game, (22, 19), (8, 0.8), -2, initial_angle=-0.9) |> ignore;
-			create_rotatable_platform(game, (-18, 28), (8, 0.8), -2, initial_angle=0.7) |> ignore;
-			create_rotatable_platform(game, (8, 33), (8, 0.8), 2, initial_angle=-1.5) |> ignore;
-			create_rotatable_platform(game, (-10, 41), (8, 0.8), 2, initial_angle=2.4) |> ignore;
-			create_rotatable_platform(game, (19, 45), (8, 0.8), 2, initial_angle=-2.1) |> ignore;
+			create_platform(game, (0, 0.5), (10, 1), angle = 0.0, path = Some("./src/game-level3/images/plane2.png"))|> ignore;
+			create_rotatable_platform(game, (-20, 8), (8, 0.8), 2, initial_angle=0.3, path = Some("./src/game-level3/images/plane2.png")) |> ignore;
+			create_rotatable_platform(game, (15, 10), (8, 0.8), 2, initial_angle=1.2, path = Some("./src/game-level3/images/plane2.png")) |> ignore;
+			create_rotatable_platform(game, (-5, 16), (8, 0.8), 2, initial_angle=2.8, path = Some("./src/game-level3/images/plane2.png")) |> ignore;
+			create_rotatable_platform(game, (22, 19), (8, 0.8), -2, initial_angle=-0.9, path = Some("./src/game-level3/images/plane2.png")) |> ignore;
+			create_rotatable_platform(game, (-18, 28), (8, 0.8), -2, initial_angle=0.7, path = Some("./src/game-level3/images/plane2.png")) |> ignore;
+			create_rotatable_platform(game, (8, 33), (8, 0.8), 2, initial_angle=-1.5, path = Some("./src/game-level3/images/plane2.png")) |> ignore;
+			create_rotatable_platform(game, (-10, 41), (8, 0.8), 2, initial_angle=2.4, path = Some("./src/game-level3/images/plane2.png")) |> ignore;
+			create_rotatable_platform(game, (19, 45), (8, 0.8), 2, initial_angle=-2.1, path = Some("./src/game-level3/images/plane2.png")) |> ignore;
 			return true
 		}
 		4 => {
