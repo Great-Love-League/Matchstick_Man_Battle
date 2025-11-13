@@ -584,7 +584,7 @@ pub fn register_both_weapon_change(game : Game)->Unit{
 fn main {
 
 	{
-		let game = create_game(background = BackgroundImage::new(Some("./src/assets/background1.png")))
+		let game = create_game(background = BackgroundImage::new(Some("./src/game-level5/images/background.png")))
 		load_map(game,5)|> ignore
     box2d_init(game)
 
