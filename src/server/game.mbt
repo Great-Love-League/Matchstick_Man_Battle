@@ -68,6 +68,25 @@ pub(all) struct Game {
 	
 }
 
+// 全局：开始界面时的模拟按键状态（由主入口设置）
+let start_screen_active: Ref[Bool] = { val: false }
+let start_simulated_keys: Ref[Array[Array[@p5js.KeyCode]]] = { val: Array::new() }
+let start_sim_timers: Ref[Array[Int]] = { val: Array::new() }
+
+fn keyDownMaybeSim(game: Game, p5: &@p5js.P5JS, player_index: Int, key: @p5js.KeyCode) -> Bool {
+	if start_screen_active.val {
+		if player_index >= 0 && player_index < start_simulated_keys.val.length() {
+			let arr = start_simulated_keys.val[player_index]
+			if arr.contains(key) {
+				return true
+			}
+		}
+		// 开始界面激活期间，除模拟按键外其它按键视为未按下
+		return false
+	}
+	p5.keyIsDown(key)
+}
+
 pub trait GameCustomFunctionTrait {
 	call_custom_function(self: Self, game: Game, p5: &@p5js.P5JS) -> Unit
 	get_call_stage(self: Self) -> GameState
@@ -535,7 +554,7 @@ fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : 
 	}
 
 	// 检查自动瞄准切换键（使用cooldown避免重复触发）
-	if p.keyIsDown(control_config.toggle_auto_aim_key) {
+	if keyDownMaybeSim(self, p, particle_index, control_config.toggle_auto_aim_key) {
 		if self.frame_count % 30 == 0 {  // 每半秒最多切换一次
 			self.toggle_auto_aim(particle_index)
 			match self.get_auto_aim_config(particle_index) {
@@ -552,7 +571,7 @@ fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : 
 	}
 	
 	// 检查投掷武器键（使用cooldown避免重复触发）
-	if p.keyIsDown(control_config.throw_weapon_key) {
+	if keyDownMaybeSim(self, p, particle_index, control_config.throw_weapon_key) {
 		if self.frame_count % 30 == 0 {  // 每半秒最多投掷一次
 			for gun in self.weapon.gun_list {
 				if gun.owner_id == particle_index && not(gun.is_thrown) {
@@ -657,7 +676,7 @@ fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : 
 		}
 	}
 	
-	if p.keyIsDown(control_config.shoot_key) {
+	if keyDownMaybeSim(self, p, particle_index, control_config.shoot_key) {
 		for gun in self.weapon.gun_list {
 			if gun.owner_id == particle_index {
 				// 检查武器是否已被投掷或没有子弹
@@ -695,20 +714,20 @@ fn Game::particle_control(self:Self, control_config: ParticleControlConfig, p : 
 			}
 		}
 	}
-	if(p.keyIsDown(control_config.faint_key)){
+	if(keyDownMaybeSim(self, p, particle_index, control_config.faint_key)){
 		particle.torso.applyForce(@box2d.b2Vec2(0.0, -100.0), particle.torso.getCenterPosition())
 		return
 	}
-	if(p.keyIsDown((control_config.left_key))){
+	if(keyDownMaybeSim(self, p, particle_index, control_config.left_key)){
 		self.particle_walk(particle,-1)
 	}
-	else if(p.keyIsDown((control_config.right_key))){
+	else if(keyDownMaybeSim(self, p, particle_index, control_config.right_key)){
 		self.particle_walk(particle,1)
 	}
 	else if(!particle.control.jump_state){
 		self.particle_stand(particle)
 	}
-	if(p.keyIsDown((control_config.jump_key))){
+	if(keyDownMaybeSim(self, p, particle_index, control_config.jump_key)){
 		if particle.control.jump_cooldown <= 0 {
 			if !particle.control.jump_state { // 如果不在跳跃状态，则开始跳跃
 				particle.control.jump_state = true
