@@ -1118,6 +1118,11 @@ pub fn Game::start_run(self:Self) -> Unit {
     	register_end_router(self)
 			register_stop_router(self)
 		// 预加载图片资源
+		// 注册音频控制
+		register_audio_controls(self)
+		// 播放背景音乐
+		self.audio.play_bgm(AudioEventType::BgmMenu)
+
 	}
 
 	getP5Instance(draw, preload) |> ignore

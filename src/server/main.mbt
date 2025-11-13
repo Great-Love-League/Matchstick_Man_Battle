@@ -574,10 +574,10 @@ fn main {
 		register_animation(game)
 		register_blood_spray_animation(game,500.0,500.0, 1.0, 1.0)
 		register_smoke_animation(game,500.0,500.0)
-		// 注册音频控制
-		register_audio_controls(game)
-		// 播放背景音乐
-		game.audio.play_bgm(AudioEventType::BgmMenu)
+		// // 注册音频控制
+		// register_audio_controls(game)
+		// // 播放背景音乐
+		// game.audio.play_bgm(AudioEventType::BgmMenu)
 		game.start_run()
 	}
 
