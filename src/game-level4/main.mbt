@@ -4,8 +4,8 @@ fn main {
     background = @server.BackgroundImage::new(Some("./src/game-level4/images/background.png"))
   )
   @server.load_map(game, 4) |> ignore
-	@server.Gun::create(game,0, Some("src/assets/gun3.png"))
-	@server.Gun::create(game,1, Some("src/assets/gun3.png"))
+	@server.Gun::create(game,0, Some("src/assets/gun1.png"))
+	@server.Gun::create(game,1, Some("src/assets/gun1.png"))
 
   @server.register_both_weapon_change(game)
 

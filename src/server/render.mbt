@@ -68,7 +68,8 @@ pub fn drawBody(
   image_width: Double,
   image_height: Double,
   offset_x: Double,
-  offset_y: Double
+  offset_y: Double,
+  is_bullet~: Bool = false
 ) -> Unit {
   let pos = body.getCenterPosition()
   let (sx, sy) = world_to_screen(pos.getX(), pos.getY())
@@ -78,9 +79,9 @@ pub fn drawBody(
       // 对于静态物体（速度接近0），使用 body 的旋转角度
       // 对于动态物体（有速度），使用速度方向作为角度
       let vel = body.getLinearVelocity()
-      let speed_squared = vel.getX() * vel.getX() + vel.getY() * vel.getY()
+      // let speed_squared = vel.getX() * vel.getX() + vel.getY() * vel.getY()
       
-      let angle = if speed_squared > 0.01 {
+      let angle = if is_bullet {
         // 有速度：使用速度方向（适用于子弹）
         @cmath.atan2(vel.getY(), vel.getX())
       } else {
@@ -114,7 +115,8 @@ pub fn drawStaticBody(
   image_width: Double,
   image_height: Double,
   offset_x: Double,
-  offset_y: Double
+  offset_y: Double,
+  is_bullet~: Bool = false
 ) -> Unit {
   let pos = body.getCenterPosition()
   let (sx, sy) = world_to_screen(pos.getX(), pos.getY())
@@ -124,10 +126,11 @@ pub fn drawStaticBody(
       // 对于静态物体（速度接近0），使用 body 的旋转角度
       // 对于动态物体（有速度），使用速度方向作为角度
       let vel = body.getLinearVelocity()
-      let speed_squared = vel.getX() * vel.getX() + vel.getY() * vel.getY()
+      // let speed_squared = vel.getX() * vel.getX() + vel.getY() * vel.getY()
       
-      let angle = if speed_squared > 1 {
+      let angle = if is_bullet {
         // 有速度：使用速度方向（适用于子弹）
+        
         @cmath.atan2(vel.getY(), vel.getX())
       } else {
         // 静止：使用 body 的旋转角度（适用于平台）
