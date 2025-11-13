@@ -289,10 +289,9 @@
             .side-panel { display: none; }
         }
     </style>
-    <script src=".mooncakes\Demonmasterlqx\MoonP5\p5.js"></script>
     <script src="./assets/navigation.js"></script>
-    <script src="./target/js/release/build/game-level2/game-level2.js"></script>
-    <!-- 不在 head 中加载 p5/box2d，改在 body 底部按依赖顺序加载 -->
+    <!-- 注意：不要在 head 中提前加载 p5 / box2d / game 脚本，
+        它们会在 body 底部按正确顺序加载（p5 -> box2d -> game）以避免符号未定义或重复声明的问题。 -->
 </head>
 
 <body>
