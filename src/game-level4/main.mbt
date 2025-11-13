@@ -162,8 +162,8 @@ fn load_custom_functions(game:@server.Game) -> Unit {
 fn main {
   let game = @server.create_game()
   @server.load_map(game, 4) |> ignore
-	// @server.Gun::create(game,0, Some("src/assets/gun1.png"))
-	// @server.Gun::create(game,1, Some("sword"))
+	@server.Gun::create(game,0, Some("src/assets/gun1.png"))
+	@server.Gun::create(game,1, Some("src/assets/gun1.png"))
 
   load_custom_functions(game)
   
