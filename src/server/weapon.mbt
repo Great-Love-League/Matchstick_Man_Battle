@@ -620,7 +620,7 @@ pub impl WeaponControl for Gun with attack_at_angle(self, game, angle){
 				self.owner_id, 
 				angle,
 				speed=100.0,
-				damage=15,
+				damage=3,
 				max_distance=150.0,
 				penetration=5,  // 穿透5个目标
 				gravity_compensation=1.0,    // 100%补偿，完全无下坠 ✨

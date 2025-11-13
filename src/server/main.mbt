@@ -30,6 +30,65 @@ fn box2d_init(game:Game) ->Unit{
 	// Sword::create(game,1,Some("sword"))
 }
 
+pub fn register_weapon_exchange(game:Game, target_particle: Int, exchange_condition : FixedArray[(Game, &@p5js.P5JS)->Bool]) -> Unit{
+
+  /// 武器切换功能
+  game.register_custom_function(
+    GameCustomFunction::new(
+      GameRunning,
+      fn(game: Game, p: &@p5js.P5JS) {
+
+        let mut has_weapon = false
+        let mut index = 0
+        for gun in game.weapon.gun_list {
+          if gun.owner_id == target_particle {
+            has_weapon = true
+            break
+          }
+          index += 1
+        }
+
+        let clear_old = fn(){
+          if has_weapon {
+            game.weapon.gun_list[index].destroy(game)
+            game.weapon.gun_list.remove(index) |> ignore
+          }
+        }
+
+        if(exchange_condition[0](game, p)){
+          // 销毁旧武器
+          clear_old()
+          // 创建手枪
+          Gun::create(game, target_particle, Some("src/assets/gun1.png"))
+          println("装备手枪!")
+        }
+        if(exchange_condition[1](game, p)){
+          // 销毁旧武器
+          clear_old()
+
+          // 创建霰弹枪
+          game.create_shotgun(target_particle, Some("src/assets/gun2.png"))
+          println("装备霰弹枪!")
+        }
+        if(exchange_condition[2](game, p)){
+          // 销毁旧武器
+          clear_old()
+          // 创建狙击枪
+          game.create_sniper(target_particle, Some("src/assets/gun3.png"))
+          println("装备狙击枪!")
+        }
+        if(exchange_condition[3](game, p)){
+          // 销毁旧武器
+          clear_old()
+          // 创建激光枪
+          game.create_laser_rifle(target_particle, Some("src/assets/gun4.png"))
+          println("装备激光枪!")
+        }
+      }
+    )
+  )
+}
+
 fn load_custom_functions(game:Game) -> Unit {
 
   /// 昏迷功能
@@ -55,62 +114,6 @@ fn load_custom_functions(game:Game) -> Unit {
     )
   )
 
-  /// 武器切换功能
-  game.register_custom_function(
-    GameCustomFunction::new(
-      GameRunning,
-      fn(game: Game, p: &@p5js.P5JS) {
-
-        let mut has_weapon = false
-        let mut index = 0
-        for gun in game.weapon.gun_list {
-          if gun.owner_id == 0 {
-            has_weapon = true
-            break
-          }
-          index += 1
-        }
-
-        let clear_old = fn(){
-          if has_weapon {
-            game.weapon.gun_list[index].destroy(game)
-            game.weapon.gun_list.remove(index) |> ignore
-          }
-        }
-
-        if(p.keyIsDown(Digit1)){
-          // 销毁旧武器
-          clear_old()
-          // 创建手枪
-          game.create_pistol(0)
-          println("装备手枪!")
-        }
-        if(p.keyIsDown(Digit2)){
-          // 销毁旧武器
-          clear_old()
-
-          // 创建霰弹枪
-          game.create_shotgun(0, Some("src/assets/gun2.png"))
-          println("装备霰弹枪!")
-        }
-        if(p.keyIsDown(Digit3)){
-          // 销毁旧武器
-          clear_old()
-          // 创建狙击枪
-          game.create_sniper(0, Some("src/assets/gun3.png"))
-          println("装备狙击枪!")
-        }
-        if(p.keyIsDown(Digit4)){
-          // 销毁旧武器
-          clear_old()
-          // 创建激光枪
-          game.create_laser_rifle(0, Some("src/assets/gun4.png"))
-          println("装备激光枪!")
-        }
-      }
-    )
-  )
-
   /// 测试生成物品 - K键在角色前方生成生命包
   game.register_custom_function(
     GameCustomFunction::new(
@@ -124,6 +127,42 @@ fn load_custom_functions(game:Game) -> Unit {
     )
   )
 
+  /// 添加血量输出
+  game.register_custom_function(
+    GameCustomFunction::new(
+      GameRunning,
+      fn(game: Game, p5: &@p5js.P5JS) {
+        p5 |> ignore
+        // 每100帧输出一次血量
+        if game.frame_count % 100 == 0 {
+          for particle in game.particle_list {
+            println("玩家 \{particle.index} 血量: \{particle.control.health}")
+          }
+        }
+      }
+    )
+  )
+
+  /// 添加body aabb绘制
+  game.register_custom_function(
+    GameCustomFunction::new(
+      GameRunning,
+      fn(game: Game, p5: &@p5js.P5JS) {
+        for i in game.particle_list {
+          draw_aabb(p5, 
+          get_entity_aabb(i.get_all_bodies()), 
+          fn (p5){
+            p5.noFill()
+            p5.fillColorPara(255.0, Some(0.0), Some(0.0), Some(150.0))
+          })
+        }
+      }
+    )
+  )
+
+}
+
+pub fn register_mouse_shoot(game:Game, player_id : Int) -> Unit {
   /// 鼠标射击功能 - 左键点击朝鼠标方向射击（支持自动瞄准）
   game.register_custom_function(
     GameCustomFunction::new(
@@ -131,7 +170,6 @@ fn load_custom_functions(game:Game) -> Unit {
       fn(game: Game, p5: &@p5js.P5JS) {
         // 检查是否按下鼠标左键
         if p5.mouseIsPressed() {
-          let player_id = 0
           
           // 先检查是否启用自动瞄准
           let angle = match game.get_auto_aim_config(player_id) {
@@ -167,39 +205,6 @@ fn load_custom_functions(game:Game) -> Unit {
               break
             }
           }
-        }
-      }
-    )
-  )
-
-  /// 添加血量输出
-  game.register_custom_function(
-    GameCustomFunction::new(
-      GameRunning,
-      fn(game: Game, p5: &@p5js.P5JS) {
-        p5 |> ignore
-        // 每100帧输出一次血量
-        if game.frame_count % 100 == 0 {
-          for particle in game.particle_list {
-            println("玩家 \{particle.index} 血量: \{particle.control.health}")
-          }
-        }
-      }
-    )
-  )
-
-  /// 添加body aabb绘制
-  game.register_custom_function(
-    GameCustomFunction::new(
-      GameRunning,
-      fn(game: Game, p5: &@p5js.P5JS) {
-        for i in game.particle_list {
-          draw_aabb(p5, 
-          get_entity_aabb(i.get_all_bodies()), 
-          fn (p5){
-            p5.noFill()
-            p5.fillColorPara(255.0, Some(0.0), Some(0.0), Some(150.0))
-          })
         }
       }
     )
@@ -559,6 +564,18 @@ fn register_stop_router(game: Game) -> Unit {
   )
 }
 
+pub fn register_both_weapon_change(game : Game)->Unit{
+  let key_pressed = fn(key: @p5js.KeyCode)  {
+    fn(game: Game, p: &@p5js.P5JS) -> Bool {
+      game |> ignore
+      p.keyIsDown(key)
+    }
+  }
+
+  register_weapon_exchange(game, 0, [key_pressed(@p5js.Digit1), key_pressed(@p5js.Digit2), key_pressed(@p5js.Digit3), key_pressed(@p5js.Digit4)])
+  register_weapon_exchange(game, 1, [key_pressed(@p5js.Digit7), key_pressed(@p5js.Digit8), key_pressed(@p5js.Digit9), key_pressed(@p5js.Digit0)])
+}
+
 fn main {
 
 	{
@@ -566,18 +583,20 @@ fn main {
 		load_map(game,5)|> ignore
 		box2d_init(game)
 		load_custom_functions(game)
+    
 		register_control(game)
 		register_auto_aim(game)
 		register_hp_show(game)
-		register_show_mouse_screen_coords(game)
-		register_animation(game)
-		register_animation(game)
-		register_blood_spray_animation(game,500.0,500.0, 1.0, 1.0)
-		register_smoke_animation(game,500.0,500.0)
-		// // 注册音频控制
-		// register_audio_controls(game)
-		// // 播放背景音乐
-		// game.audio.play_bgm(AudioEventType::BgmMenu)
+    register_both_weapon_change(game)
+
+    register_mouse_shoot(game, 0)
+
+		// register_show_mouse_screen_coords(game)
+		// register_animation(game)
+		// register_animation(game)
+		// register_blood_spray_animation(game,500.0,500.0, 1.0, 1.0)
+		// register_smoke_animation(game,500.0,500.0)
+
 		game.start_run()
 	}
 
