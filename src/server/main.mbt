@@ -522,6 +522,43 @@ fn register_end_router(game: Game) -> Unit {
   )
 }
 
+fn register_stop_router(game: Game) -> Unit {
+  game.register_custom_function(
+    GameCustomFunction::new(
+      GamePaused,
+      fn(game: Game, p: &@p5js.P5JS) {
+        if !game.navigation_requested {
+          if (p.keyIsDown(@p5js.KeyR)) {
+            game.navigation_requested = true
+            game.navigation_target = None
+            reloadPage()
+          } else if (p.keyIsDown(@p5js.Digit1)) {
+            game.navigation_requested = true
+            game.navigation_target = Some("game-level1.html")
+            navigateTo("game-level1.html")
+          } else if (p.keyIsDown(@p5js.Digit2)) {
+            game.navigation_requested = true
+            game.navigation_target = Some("game-level2.html")
+            navigateTo("game-level2.html")
+          } else if (p.keyIsDown(@p5js.Digit3)) {
+            game.navigation_requested = true
+            game.navigation_target = Some("game-level3.html")
+            navigateTo("game-level3.html")
+          } else if (p.keyIsDown(@p5js.Digit4)) {
+            game.navigation_requested = true
+            game.navigation_target = Some("game-level4.html")
+            navigateTo("game-level4.html")
+          } else if (p.keyIsDown(@p5js.Digit5)) {
+            game.navigation_requested = true
+            game.navigation_target = Some("game-level5.html")
+            navigateTo("game-level5.html")
+          }
+        }
+      }
+    )
+  )
+}
+
 fn main {
 
 	{

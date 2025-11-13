@@ -62,6 +62,9 @@ pub(all) struct Game {
 	// navigation guard: 防止在 GameOver 时每帧重复触发导航/刷新，导致递归或多次调用
 	mut navigation_requested : Bool
 	mut navigation_target : String?
+
+	mut pre_key_p : Bool
+	mut key_p_changed_count : Int
 	
 }
 
@@ -270,7 +273,38 @@ fn Game::prepare(self:Self, p5: &@p5js.P5JS) -> Unit {
 
 fn Game::pause(self:Self, p5: &@p5js.P5JS) -> Unit {
 	self.run_custom_functions(GamePaused, p5)
-	self.state = GameRunning
+
+	p5.push()
+	
+	// 显示半透明背景
+	p5.fillColorPara(0.0, Some(0.0), Some(0.0), Some(150.0))
+	p5.noStroke()
+	p5.rect(0.0, 0.0, Width, Height)
+	
+	// 显示暂停文字
+	p5.textSizeSet(80.0)
+	p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
+	p5.textAlign("center", Some("center"))
+	p5.text("暂停中", Width / 2.0, Height / 2.0 - 100.0, None, None)
+	
+	// 显示提示文字
+	p5.textSizeSet(30.0)
+	p5.fillColorPara(200.0, Some(200.0), Some(200.0), Some(255.0))
+	p5.text("按 P 键继续游戏", Width / 2.0, Height / 2.0, None, None)
+	
+	// 显示router提示
+	p5.textSizeSet(24.0)
+	p5.fillColorPara(150.0, Some(150.0), Some(150.0), Some(255.0))
+	p5.text("按 1-5 载入对应关卡，R 刷新", Width / 2.0, Height / 2.0 + 80.0, None, None)
+	
+	p5.pop()
+
+	if (self.key_p_changed_count % 4 == 0) {
+		self.state = GameRunning
+	}
+	else{
+		self.state = GamePaused
+	}
 }
 
 fn Game::running(self:Self, p5: &@p5js.P5JS) -> Unit {
@@ -414,7 +448,12 @@ fn Game::running(self:Self, p5: &@p5js.P5JS) -> Unit {
 		}
 	}
 
-	self.state = GameRunning
+	if (self.key_p_changed_count % 4 != 0) {
+		self.state = GamePaused
+	}
+	else{
+		self.state = GameRunning
+	}
 }
 
 pub fn Game::check_particle_out_of_bounds(self:Self, particle: Particle) -> Bool {
@@ -768,7 +807,9 @@ pub fn create_game(
 		audio,
 		background : background,
 		navigation_requested: false,
-		navigation_target: None
+		navigation_target: None,
+		pre_key_p: false,
+		key_p_changed_count: 0,
 	}
 	
 	game
@@ -1064,11 +1105,18 @@ pub fn Game::add_animation(self:Self, animation: &Animation) -> Unit {
 pub fn Game::start_run(self:Self) -> Unit {
 	self.state = GamePreparing
 	let draw = (p5: @p5js.P5Instance) => {
+		if p5.keyIsDown(@p5js.KeyP) != self.pre_key_p {
+			self.key_p_changed_count += 1
+		}
+
 		self.state_machine_update(p5)
+
+		self.pre_key_p = p5.keyIsDown(@p5js.KeyP)
 	}
 	let preload = (p5: @p5js.P5Instance) => {
 		p5 |> ignore
     	register_end_router(self)
+			register_stop_router(self)
 		// 预加载图片资源
 	}
 
