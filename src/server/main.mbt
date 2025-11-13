@@ -38,10 +38,17 @@ fn box2d_init(game:Game) ->Unit{
 pub fn register_weapon_exchange(game:Game, target_particle: Int, exchange_condition : FixedArray[(Game, &@p5js.P5JS)->Bool]) -> Unit{
 
   /// 武器切换功能
+
+  let mut pre_change_frame = 0
+
   game.register_custom_function(
     GameCustomFunction::new(
       GameRunning,
       fn(game: Game, p: &@p5js.P5JS) {
+
+        if game.frame_count - pre_change_frame < 30 {
+          return
+        }
 
         let mut has_weapon = false
         let mut index = 0
@@ -66,28 +73,32 @@ pub fn register_weapon_exchange(game:Game, target_particle: Int, exchange_condit
           // 创建手枪
           Gun::create(game, target_particle, Some("src/assets/gun1.png"))
           println("装备手枪!")
+          pre_change_frame = game.frame_count
         }
-        if(exchange_condition[1](game, p)){
+        else if(exchange_condition[1](game, p)){
           // 销毁旧武器
           clear_old()
 
           // 创建霰弹枪
           game.create_shotgun(target_particle, Some("src/assets/gun2.png"))
           println("装备霰弹枪!")
+          pre_change_frame = game.frame_count
         }
-        if(exchange_condition[2](game, p)){
+        else if(exchange_condition[2](game, p)){
           // 销毁旧武器
           clear_old()
           // 创建狙击枪
           game.create_sniper(target_particle, Some("src/assets/gun3.png"))
           println("装备狙击枪!")
+          pre_change_frame = game.frame_count
         }
-        if(exchange_condition[3](game, p)){
+        else if(exchange_condition[3](game, p)){
           // 销毁旧武器
           clear_old()
           // 创建激光枪
           game.create_laser_rifle(target_particle, Some("src/assets/gun4.png"))
           println("装备激光枪!")
+          pre_change_frame = game.frame_count
         }
       }
     )

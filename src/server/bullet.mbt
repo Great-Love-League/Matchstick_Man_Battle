@@ -754,8 +754,8 @@ pub fn Game::shoot_shotgun(
       position,
       velocity,
       player_index,
-      damage=6,  // 散弹单发伤害较低
-      max_distance=60.0,  // 射程增加
+      damage=40,  // 散弹单发伤害较低
+      max_distance=30.0,  // 射程增加
       target_types=[Player],
       penetration=0,
       gravity_compensation=gravity_compensation

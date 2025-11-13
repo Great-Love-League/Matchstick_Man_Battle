@@ -1,9 +1,9 @@
 
 pub fn load_map(game:Game, level : Int) -> Bool {
-  game.create_particle((-10.0, 12.0)) |> ignore
-  game.create_particle((-5.0, 12.0)) |> ignore
 	match level {
 		1 => {
+			game.create_particle((10-25,15)) |> ignore
+			game.create_particle((0,30)) |> ignore
 			create_platform(game, (-24.5, 25), (1, 25), angle = 0.0, path = Some("./src/game-level1/images/plane1.png"))|> ignore;
 			create_platform(game, (24.5, 25), (1, 25), angle = 0.0, path = Some("./src/game-level1/images/plane1.png"))|> ignore;
 			create_platform(game, (0, 49.5), (23.6, 1), angle = 0.0, path = Some("./src/game-level1/images/plane1.png"))|> ignore;
@@ -17,6 +17,8 @@ pub fn load_map(game:Game, level : Int) -> Bool {
 			return true
 		}
 		2 => {
+			game.create_particle((10-25,15)) |> ignore
+			game.create_particle((10,45)) |> ignore
 			create_platform(game, (-24.5, 25), (1, 25), angle = 0.0, path = Some("./src/game-level2/images/plane3.png"))|> ignore;
 			create_platform(game, (24.5, 25), (1, 25), angle = 0.0, path = Some("./src/game-level2/images/plane3.png"))|> ignore;
 			create_platform(game, (0, 49.5), (23.6, 1), angle = 0.0, path = Some("./src/game-level2/images/plane2.png"))|> ignore;
@@ -32,6 +34,8 @@ pub fn load_map(game:Game, level : Int) -> Bool {
 			return true
 		}
 		3 => {
+			game.create_particle((10-25,15)) |> ignore
+			game.create_particle((10,45)) |> ignore
 			create_platform(game, (0, 0.5), (10, 1), angle = 0.0, path = Some("./src/game-level3/images/plane2.png"))|> ignore;
 			create_rotatable_platform(game, (-20, 8), (8, 0.8), 2, initial_angle=0.3, path = Some("./src/game-level3/images/plane2.png")) |> ignore;
 			create_rotatable_platform(game, (15, 10), (8, 0.8), 2, initial_angle=1.2, path = Some("./src/game-level3/images/plane2.png")) |> ignore;
@@ -44,7 +48,8 @@ pub fn load_map(game:Game, level : Int) -> Bool {
 			return true
 		}
 		4 => {
-
+			game.create_particle((10-25,15)) |> ignore
+			game.create_particle((10,45)) |> ignore
 			create_platform(game, (-24.5, 25), (1, 25), angle = 0.0, path = Some("./src/game-level4/images/plane1.png"))|> ignore;
 			create_platform(game, (24.5, 25), (1, 25), angle = 0.0, path = Some("./src/game-level4/images/plane1.png"))|> ignore;
 			create_platform(game, (0, 49.5), (23.6, 1), angle = 0.0, path = Some("./src/game-level4/images/plane2.png"))|> ignore;
@@ -56,6 +61,8 @@ pub fn load_map(game:Game, level : Int) -> Bool {
 		}
 		5 => {
 			
+			game.create_particle((10-25,15)) |> ignore
+			game.create_particle((15,44)) |> ignore
 			create_platform(game, (-24.5, 25), (1, 25), angle = 0.0, path = Some("./src/game-level5/images/plane2.png"))|> ignore;
 			create_platform(game, (24.5, 25), (1, 25), angle = 0.0, path = Some("./src/game-level5/images/plane2.png"))|> ignore;
 			create_platform(game, (0, 49.5), (23.6, 1), angle = 0.0, path = Some("./src/game-level5/images/plane2.png"))|> ignore;
