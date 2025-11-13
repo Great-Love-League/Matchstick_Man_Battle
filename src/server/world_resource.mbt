@@ -56,15 +56,15 @@ pub fn load_map(game:Game, level : Int) -> Bool {
 		}
 		5 => {
 			
-			create_platform(game, (-24.5, 25), (1, 25), angle = 0.0)|> ignore;
-			create_platform(game, (24.5, 25), (1, 25), angle = 0.0)|> ignore;
-			create_platform(game, (0, 49.5), (23.6, 1), angle = 0.0)|> ignore;
-			create_platform(game, (0, 0.5), (23.6, 1), angle = 0.0)|> ignore; 
-			create_rotatable_platform(game, (0, 25), (10, 0.8), 10, initial_angle=0) |> ignore;
-			create_movable_platform(game, (5,1), (-18,5), (-18,10), 48, (-18,5))|> ignore;  
-			create_movable_platform(game, (5,1), (18,5), (18,10), 48, (18,5))|> ignore;    
-			create_movable_platform(game, (5,1), (-18,40), (-18,45), 48, (-18,40))|> ignore; 
-			create_movable_platform(game, (5,1), (18,40), (18,45), 48, (18,40))|> ignore;    
+			create_platform(game, (-24.5, 25), (1, 25), angle = 0.0, path = Some("./src/game-level5/images/plane2.png"))|> ignore;
+			create_platform(game, (24.5, 25), (1, 25), angle = 0.0, path = Some("./src/game-level5/images/plane2.png"))|> ignore;
+			create_platform(game, (0, 49.5), (23.6, 1), angle = 0.0, path = Some("./src/game-level5/images/plane2.png"))|> ignore;
+			create_platform(game, (0, 0.5), (23.6, 1), angle = 0.0, path = Some("./src/game-level5/images/plane2.png"))|> ignore; 
+			create_rotatable_platform(game, (0, 25), (10, 0.8), 10, initial_angle=0, path = Some("./src/game-level5/images/plane2.png")) |> ignore;
+			create_movable_platform(game, (5,1), (-18,5), (-18,10), 48, (-18,5), path = Some("./src/game-level5/images/plane1.png"))|> ignore;  
+			create_movable_platform(game, (5,1), (18,5), (18,10), 48, (18,5), path = Some("./src/game-level5/images/plane1.png"))|> ignore;    
+			create_movable_platform(game, (5,1), (-18,40), (-18,45), 48, (-18,40), path = Some("./src/game-level5/images/plane1.png"))|> ignore; 
+			create_movable_platform(game, (5,1), (18,40), (18,45), 48, (18,40), path = Some("./src/game-level5/images/plane1.png"))|> ignore;    
 			return true
 		}
 		_ => {
