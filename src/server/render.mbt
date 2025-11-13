@@ -131,7 +131,7 @@ pub fn drawStaticBody(
         @cmath.atan2(vel.getY(), vel.getX())
       } else {
         // 静止：使用 body 的旋转角度（适用于平台）
-        body.getRotation()
+        -body.getRotation()
       }
       
 			println("Drawing body at (\{sx}, \{sy}) with angle \{angle} radians")
