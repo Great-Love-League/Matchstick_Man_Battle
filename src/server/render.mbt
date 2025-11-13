@@ -219,17 +219,17 @@ pub fn drawDynamicBody(
         p.image(img, -offset_x, offset_y, Some(image_width), Some(image_height))
 
         // 调试：画出期望的世界偏移方向（红色）
-        p.noFill()
-        p.strokeComponents(255.0, 0.0, 0.0, Some(255.0))
-        p.line(0.0, 0.0, world_off_x, world_off_y)
+        // p.noFill()
+        // p.strokeComponents(255.0, 0.0, 0.0, Some(255.0))
+        // p.line(0.0, 0.0, world_off_x, world_off_y)
       } else {
         p.rotate(draw_angle, None)
         p.image(img, offset_x, offset_y, Some(image_width), Some(image_height))
 
         // 调试：画出期望的世界偏移方向（蓝色）
-        p.noFill()
-        p.strokeComponents(0.0, 0.0, 255.0, Some(255.0))
-        p.line(0.0, 0.0, world_off_x, world_off_y)
+        // p.noFill()
+        // p.strokeComponents(0.0, 0.0, 255.0, Some(255.0))
+        // p.line(0.0, 0.0, world_off_x, world_off_y)
       }
       p.pop()
     }
