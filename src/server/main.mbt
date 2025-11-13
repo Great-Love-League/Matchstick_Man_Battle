@@ -511,6 +511,10 @@ fn register_end_router(game: Game) -> Unit {
             game.navigation_requested = true
             game.navigation_target = Some("game-level4.html")
             navigateTo("game-level4.html")
+          } else if (p.keyIsDown(@p5js.Digit5)) {
+            game.navigation_requested = true
+            game.navigation_target = Some("game-level5.html")
+            navigateTo("game-level5.html")
           }
         }
       }
