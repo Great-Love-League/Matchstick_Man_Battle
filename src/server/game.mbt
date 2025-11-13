@@ -74,6 +74,9 @@ let start_simulated_keys: Ref[Array[Array[@p5js.KeyCode]]] = { val: Array::new()
 let start_sim_timers: Ref[Array[Int]] = { val: Array::new() }
 
 fn keyDownMaybeSim(game: Game, p5: &@p5js.P5JS, player_index: Int, key: @p5js.KeyCode) -> Bool {
+
+	game |> ignore
+
 	if start_screen_active.val {
 		if player_index >= 0 && player_index < start_simulated_keys.val.length() {
 			let arr = start_simulated_keys.val[player_index]

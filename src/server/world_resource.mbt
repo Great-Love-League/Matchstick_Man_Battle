@@ -4,16 +4,16 @@ pub fn load_map(game:Game, level : Int) -> Bool {
   game.create_particle((-5.0, 12.0)) |> ignore
 	match level {
 		1 => {
-			create_platform(game, (-24.5, 25), (1, 25), angle = 0.0)|> ignore;
-			create_platform(game, (24.5, 25), (1, 25), angle = 0.0)|> ignore;
-			create_platform(game, (0, 49.5), (23.6, 1), angle = 0.0)|> ignore;
-			create_platform(game, (0, 0.5), (23.6, 1), angle = 0.0)|> ignore;
-			create_movable_platform(game, (5,1), (10-25,10), (40-25,40), 16 ,(10-25,10))|> ignore;
-			create_movable_platform(game, (5,1), (15,10), (-15,40), 16, (0,25))|> ignore;
-			create_platform(game, (0, 10), (5, 1) , angle = 1.57)|> ignore;
-			create_platform(game, (0, 40), (5, 1) , angle = 1.57)|> ignore;
-			create_rotatable_platform(game, (-17, 25), (6, 1) , 10)|> ignore;
-			create_rotatable_platform(game, (17, 25), (6, 1) ,20)|> ignore;
+			create_platform(game, (-24.5, 25), (1, 25), angle = 0.0, path = Some("./src/game-level1/images/plane1.png"))|> ignore;
+			create_platform(game, (24.5, 25), (1, 25), angle = 0.0, path = Some("./src/game-level1/images/plane1.png"))|> ignore;
+			create_platform(game, (0, 49.5), (23.6, 1), angle = 0.0, path = Some("./src/game-level1/images/plane1.png"))|> ignore;
+			create_platform(game, (0, 0.5), (23.6, 1), angle = 0.0, path = Some("./src/game-level1/images/plane1.png"))|> ignore;
+			create_movable_platform(game, (5,1), (10-25,10), (40-25,40), 16 ,(10-25,10), path = Some("./src/game-level1/images/plane1.png"))|> ignore;
+			create_movable_platform(game, (5,1), (15,10), (-15,40), 16, (0,25), path = Some("./src/game-level1/images/plane1.png"))|> ignore;
+			create_platform(game, (0, 10), (5, 1) , angle = 1.57, path = Some("./src/game-level1/images/plane1.png"))|> ignore;
+			create_platform(game, (0, 40), (5, 1) , angle = 1.57,path = Some("./src/game-level1/images/plane1.png"))|> ignore;
+			create_rotatable_platform(game, (-17, 25), (6, 1) , 10,path = Some("./src/game-level1/images/plane1.png"))|> ignore;
+			create_rotatable_platform(game, (17, 25), (6, 1) ,20,path = Some("./src/game-level1/images/plane1.png"))|> ignore;
 			return true
 		}
 		2 => {
