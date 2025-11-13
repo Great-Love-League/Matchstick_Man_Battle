@@ -434,6 +434,8 @@
 
     <!-- 游戏构建脚本（可能包含 p5 代码），确保在 p5 之后加载 -->
     <script src="./target/js/release/build/game-level2/game-level2.js"></script>
+    <!-- 自动 hook 脚本：运行时为构建产物注入 getter/health-change 探测 -->
+    <script src="./auto_hooks/level2_runtime_hook.js"></script>
 
     <!-- 脚本：返回菜单按钮行为 + 把现有或新创建的 canvas 归位到 #game-container -->
     <script>
