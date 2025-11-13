@@ -1,6 +1,8 @@
 
 fn main {
-  let game = @server.create_game()
+  let game = @server.create_game(
+    background = @server.BackgroundImage::new(Some("./src/game-level2/images/background.png"))
+  )
   @server.load_map(game, 2) |> ignore
 	@server.Gun::create(game,0,Some("src/assets/gun1.png"))
 	@server.Gun::create(game,1,Some("src/assets/gun1.png"))
