@@ -693,10 +693,20 @@ fn main {
           p5.text("按 Enter 开始游戏", Width / 2.0, Height / 2.0, None, None)
           p5.pop()
 
-          // 仅响应 Enter 键：按下后关闭开始界面并跳转到 level1
+          // 仅响应 Enter 键：按下后把玩家恢复为 100 血并回到起始位置，然后关闭开始界面并跳转到 level1
           if (p5.keyIsDown(Enter)) {
+            // 恢复每个玩家到正常血量（100）并清除濒死状态；保留当前位置
+            for i = 0; i < game.particle_list.length(); i = i + 1 {
+              let particle = game.particle_list[i]
+              particle.control.health = 100
+              particle.control.faint_state = false
+              particle.control.faint_resistance = 0
+              // 清除走路/跳跃冷却，确保玩家能马上响应输入
+              particle.control.walk_cooldown = 0
+              particle.control.jump_cooldown = -1
+            }
+            // 仅关闭开始界面，保留当前关卡和世界状态（不跳转）
             start_screen_active.val = false
-            navigateTo("game-level1.html")
           }
         }
       )
