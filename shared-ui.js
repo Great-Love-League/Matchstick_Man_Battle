@@ -120,7 +120,16 @@
 
                 if (!state || !state.players) return;
 
-                var p0 = state.players[0] || { health:0, name:'P0', ammo:null, score:null, avatar:null };
+                // Build mapping by player.index to avoid relying on array positions
+                var playersByIndex = {};
+                for (var pi = 0; pi < state.players.length; pi++) {
+                    var pl = state.players[pi];
+                    if (!pl) continue;
+                    if (typeof pl.index === 'number') playersByIndex[pl.index] = pl;
+                }
+
+                // Fallback helpers: prefer mapping by index, else fall back to array positions
+                var p0 = playersByIndex[0] || state.players[0] || { health:0, name:'P0', ammo:null, score:null, avatar:null };
                 var hp0 = Math.max(0, Math.min(100, (p0.health===undefined||p0.health===null)?0:p0.health));
                 safeFill('p0-hp-fill', hp0, 'p0-hp-text');
                 safeText('p0-name', p0.name || ('P'+(p0.index===undefined?0:p0.index)));
@@ -128,7 +137,7 @@
                 safeText('p0-score', (p0.score===null||p0.score===undefined)?'—':p0.score);
                 safeIcon('p0-avatar', '👤');
 
-                var p1 = state.players[1] || { health:0, name:'P1', ammo:null, score:null, avatar:null };
+                var p1 = playersByIndex[1] || state.players[1] || { health:0, name:'P1', ammo:null, score:null, avatar:null };
                 var hp1 = Math.max(0, Math.min(100, (p1.health===undefined||p1.health===null)?0:p1.health));
                 safeFill('p1-hp-fill', hp1, 'p1-hp-text');
                 safeText('p1-name', p1.name || ('P'+(p1.index===undefined?1:p1.index)));

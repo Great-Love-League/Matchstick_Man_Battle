@@ -16,7 +16,7 @@
     <script src="lib/jquery.svg.min.js"></script>
 
     <link rel="stylesheet" href="./shared-ui.css">
-    <script src="./assets/navigation.js"></script>
+    <style>
         .side-panel h3 {
             margin: 0 0 16px 0;
             font-size: 16px;
@@ -282,7 +282,7 @@
     <!-- 游戏构建脚本（可能包含 p5 代码），确保在 p5 之后加载 -->
     <script src="./target/js/release/build/game-level4/game-level4.js"></script>
     <!-- 自动 hook 脚本：运行时为构建产物注入 getter/health-change 探测 -->
-    <script src="./auto_hooks/level2_runtime_hook.js"></script>
+    <script src="./auto_hooks/runtime_hook_global.js"></script>
     <script src="./shared-ui.js"></script>
 
     <!-- 脚本：返回菜单按钮行为 + 把现有或新创建的 canvas 归位到 #game-container -->
