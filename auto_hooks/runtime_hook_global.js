@@ -1,26 +1,21 @@
-// Runtime auto-hook for level2
-// - Wraps Game$start_run to expose window.__mmb_game and window.__mmb_get_state
-// - Wraps Game$check_bullet_collision to detect health deltas and emit __mmb_trigger_hit
-// - Wraps Game$state_machine_update to ensure game instance is captured early
-// - Adds a non-invasive canvas-parenting fallback
+// Global runtime auto-hook
+// - Hooks Game$start_run / Game$state_machine_update to expose window.__mmb_game and window.__mmb_get_state
+// - Hooks Game$check_bullet_collision to detect health deltas and emit __mmb_trigger_hit
+// - Non-invasive canvas parenting for p5
 (function(){
   function safeGet(name){ try { return window[name]; } catch(e){ return undefined; } }
   var startName = 'Great$45$Love$45$League$Stick_Man_Battle$server$$Game$start_run';
   var checkName = 'Great$45$Love$45$League$Stick_Man_Battle$server$$Game$check_bullet_collision';
   var updateName = 'Great$45$Love$45$League$Stick_Man_Battle$server$$Game$state_machine_update';
 
-  // More robust getter: explicitly check numeric index and health values
   function attachGetter(game){
     try{
       if(!game) return;
-      // If already attached to this specific game instance, skip
       if(window.__mmb_game === game && typeof window.__mmb_get_state === 'function') return;
-      
       try{ window.__mmb_game = game; }catch(e){}
       try{
         window.__mmb_get_state = function(){
           try{
-            // Build sparse array keyed by particle.index, then convert to dense ordered array
             var byIndex = {};
             var maxIndex = -1;
             if(game && game.particle_list && game.particle_list.length){
@@ -52,7 +47,6 @@
     }catch(e){}
   }
 
-  // Generic poller for hooking functions
   function hookFunction(name, wrapperFactory) {
     var orig = safeGet(name);
     if(orig && typeof orig === 'function'){
@@ -64,11 +58,10 @@
           clearInterval(t);
           try{ window[name] = wrapperFactory(f); }catch(e){}
         }
-      }, 50); // Poll faster (50ms)
+      }, 50);
     }
   }
 
-  // Hook start_run
   hookFunction(startName, function(orig){
     return function(game){
       try{ attachGetter(game); }catch(e){}
@@ -76,7 +69,6 @@
     };
   });
 
-  // Hook state_machine_update (runs every frame, ensures we catch the game instance if start_run was missed)
   hookFunction(updateName, function(orig){
     return function(self, p5_helpers){
       try{ attachGetter(self); }catch(e){}
@@ -84,10 +76,9 @@
     };
   });
 
-  // Hook check_bullet_collision
   hookFunction(checkName, function(orig){
     return function(self, bullet){
-      try{ attachGetter(self); }catch(e){} // Ensure game is captured
+      try{ attachGetter(self); }catch(e){}
       try{
         var before = {};
         try{
@@ -122,76 +113,32 @@
     };
   });
 
-  // Canvas parenting helper
+  // Canvas parenting helper (same non-invasive approach)
   function ensureCanvasParenting(){
     try{
       var getContainer = function(){ return (typeof document !== 'undefined') ? document.getElementById('game-container') : null; };
-
       function moveCanvasToContainer(c){
         try{
           var cont = getContainer();
           if(!cont || !c) return;
-          if(c && typeof c.parent === 'function'){
-            try{ c.parent('game-container'); return; }catch(e){}
-          }
+          if(c && typeof c.parent === 'function'){ try{ c.parent('game-container'); return; }catch(e){} }
           var node = c && (c.elt || c.canvas) ? (c.elt || c.canvas) : c;
-          if(node && node.parentNode !== cont){
-            try{ cont.appendChild(node); }catch(e){}
-          }
+          if(node && node.parentNode !== cont){ try{ cont.appendChild(node); }catch(e){} }
         }catch(e){}
       }
-
       function patchP5(){
-        try{
-          if(window.p5 && window.p5.prototype && !window.__mmb_p5_patched){
-            var orig = window.p5.prototype.createCanvas;
-            if(typeof orig === 'function'){
-              window.p5.prototype.createCanvas = function(){
-                var res = orig.apply(this, arguments);
-                try{ setTimeout(function(){ moveCanvasToContainer(res); }, 0); }catch(e){}
-                return res;
-              };
-              window.__mmb_p5_patched = true;
-              return true;
-            }
-          }
-        }catch(e){}
-        return false;
+        try{ if(window.p5 && window.p5.prototype && !window.__mmb_p5_patched){ var orig = window.p5.prototype.createCanvas; if(typeof orig === 'function'){ window.p5.prototype.createCanvas = function(){ var res = orig.apply(this, arguments); try{ setTimeout(function(){ moveCanvasToContainer(res); }, 0); }catch(e){} return res; }; window.__mmb_p5_patched = true; return true; } } }catch(e){}
       }
-
-      if(!patchP5()){
-        var ppoll = setInterval(function(){ if(patchP5()){ clearInterval(ppoll); } }, 120);
-      }
-
+      if(!patchP5()){ var ppoll = setInterval(function(){ if(patchP5()){ clearInterval(ppoll); } }, 120); }
       try{
         var observer = new MutationObserver(function(muts){
-          muts.forEach(function(m){
-            if(m.addedNodes && m.addedNodes.length){
-              for(var i=0;i<m.addedNodes.length;i++){
-                var n = m.addedNodes[i];
-                if(!n) continue;
-                if(n.nodeName === 'CANVAS') moveCanvasToContainer(n);
-                else if(n.querySelectorAll){
-                  try{ var list = n.querySelectorAll('canvas'); for(var j=0;j<list.length;j++) moveCanvasToContainer(list[j]); }catch(e){}
-                }
-              }
-            }
-          });
+          muts.forEach(function(m){ if(m.addedNodes && m.addedNodes.length){ for(var i=0;i<m.addedNodes.length;i++){ var n = m.addedNodes[i]; if(!n) continue; if(n.nodeName === 'CANVAS') moveCanvasToContainer(n); else if(n.querySelectorAll){ try{ var list = n.querySelectorAll('canvas'); for(var j=0;j<list.length;j++) moveCanvasToContainer(list[j]); }catch(e){} } } } });
         });
         if(typeof document !== 'undefined' && (document.body || document.documentElement)){
           observer.observe(document.body || document.documentElement, { childList: true, subtree: true });
         }
       }catch(e){}
-
-      try{ setTimeout(function(){
-        try{
-          if(typeof document !== 'undefined'){
-            var existing = Array.prototype.slice.call(document.querySelectorAll('canvas'));
-            for(var k=0;k<existing.length;k++) moveCanvasToContainer(existing[k]);
-          }
-        }catch(e){}
-      }, 140); }catch(e){}
-
+      try{ setTimeout(function(){ try{ if(typeof document !== 'undefined'){ var existing = Array.prototype.slice.call(document.querySelectorAll('canvas')); for(var k=0;k<existing.length;k++) moveCanvasToContainer(existing[k]); } }catch(e){} }, 140); }catch(e){}
     }catch(e){}
   }
 
