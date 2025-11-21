@@ -11,6 +11,12 @@ extern "js" fn reloadPage() -> Unit =
 	#|   window.location.reload();
 	#| }
 
+extern "js" fn get_query_param(key: String) -> String? =
+#| (key) => {
+#|   const params = new URLSearchParams(window.location.search);
+#|   return params.get(key);
+#| }
+
 ///| 全局变量：存储子弹贴图
 pub(all) struct Game {
 	world : @box2d.B2World
@@ -313,6 +319,9 @@ fn Game::prepare(self:Self, p5: &@p5js.P5JS) -> Unit {
 
 	// 倒计时逻辑
 	if self.start_countdown_timer > 0 {
+		if self.start_countdown_timer == 180 {
+			self.audio.play_sound(LevelStart)
+		}
 		self.start_countdown_timer -= 1
 		
 		// 绘制倒计时
@@ -322,43 +331,13 @@ fn Game::prepare(self:Self, p5: &@p5js.P5JS) -> Unit {
 		p5.noStroke()
 		p5.rect(0.0, 0.0, Width, Height)
 		
-		let remaining_seconds = (self.start_countdown_timer / 60) + 1
-		let progress = (self.start_countdown_timer % 60).to_double() / 60.0
-		
-		p5.textAlign("center", Some("center"))
-		
-		// 动态效果：缩放和透明度
-		let scale = 1.0 + (1.0 - progress) * 0.5
-		p5.textSizeSet(150.0 * scale)
-		
-		// 颜色渐变：从白色到透明
-		let alpha = progress * 255.0
-		
-		// 不同的秒数显示不同的颜色
-		match remaining_seconds {
-			3 => p5.fillColorPara(255.0, Some(100.0), Some(100.0), Some(alpha)) // 红
-			2 => p5.fillColorPara(255.0, Some(255.0), Some(100.0), Some(alpha)) // 黄
-			1 => p5.fillColorPara(100.0, Some(255.0), Some(100.0), Some(alpha)) // 绿
-			_ => p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(alpha))
-		}
-		
-		p5.text(remaining_seconds.to_string(), Width / 2.0, Height / 2.0, None, None)
-		
-		// 绘制装饰性圆圈
-		p5.noFill()
-		p5.strokeWeight(10.0)
-		p5.strokeComponents(255.0, 255.0, 255.0, Some(alpha * 0.5))
-		let arc_angle = progress * 2.0 * 3.14159
-		p5.arc(Width / 2.0, Height / 2.0, 300.0 * scale, 300.0 * scale, -1.57, -1.57 + arc_angle, None, None)
+		draw_countdown(p5, self.start_countdown_timer)
 		
 		p5.pop()
 	} else {
 		// 倒计时结束，显示 GO! 一瞬间，然后开始游戏
 		// 这里为了简单，直接开始游戏，GO! 可以作为 GameRunning 的第一帧或者特效
 		self.state = GameRunning
-		
-		// 可以在这里播放一个 "GO" 的音效
-		self.audio.play_sound(LevelStart)
 	}
 }
 
@@ -584,7 +563,7 @@ fn Game::game_over(self:Self, p5: &@p5js.P5JS) -> Unit {
 		
 		// 计算下一关
 		let next_level = if self.current_level >= 5 { 1 } else { self.current_level + 1 }
-		let next_url = "game-level\{next_level}.html"
+		let next_url = "game-level\{next_level}.html?auto_start=true"
 		
 		println("游戏结束，3秒已到，自动跳转到下一关: \{next_url}")
 		self.navigation_target = Some(next_url)
@@ -647,9 +626,10 @@ fn Game::game_over(self:Self, p5: &@p5js.P5JS) -> Unit {
 	}
 	
 	// 显示提示文字
-	p5.textSizeSet(30.0)
-	p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
-	p5.text("3秒后开始下一场对局", Width / 2.0, Height / 2.0 + 80.0, None, None)
+	let remaining = 180 - self.game_over_timer
+	if remaining > 0 {
+		draw_countdown(p5, remaining)
+	}
 	p5.pop()
 
 	self.state = GameOver
@@ -952,6 +932,13 @@ pub fn create_game(
 		start_countdown_timer: 180, // 3 seconds * 60 fps
 		start_countdown_duration: 180,
 		rng: @random.Rand::new(),
+	}
+	
+	match get_query_param("auto_start") {
+		Some("true") => {
+			game.start_countdown_timer = 0
+		}
+		_ => ()
 	}
 	
 	game
@@ -1262,6 +1249,24 @@ pub fn Game::play_level_bgm(self:Self, level: Int) -> Unit {
 pub fn Game::start_run(self:Self) -> Unit {
 	self.state = GamePreparing
 	let draw = (p5: @p5js.P5Instance) => {
+		if p5.keyIsDown(@p5js.Digit8) {
+			self.shake_timer = self.shake_duration
+		}
+
+		if p5.keyIsDown(@p5js.Digit9) {
+			if self.frame_count % 10 == 0 {
+				self.slow_mode = true
+				println("切换到 1/4 时间模式")
+			}
+		}
+
+		if p5.keyIsDown(@p5js.Digit0) {
+			if self.frame_count % 10 == 0 {
+				self.slow_mode = false
+				println("切换到正常时间模式")
+			}
+		}
+
 		if p5.keyIsDown(@p5js.KeyP) != self.pre_key_p {
 			self.key_p_changed_count += 1
 		}
@@ -1281,4 +1286,38 @@ pub fn Game::start_run(self:Self) -> Unit {
 	}
 
 	getP5Instance(draw, preload) |> ignore
+}
+
+fn draw_countdown(p5: &@p5js.P5JS, remaining_frames: Int) -> Unit {
+	let remaining_seconds = (remaining_frames / 60) + 1
+	let progress = (remaining_frames % 60).to_double() / 60.0
+	
+	p5.push()
+	p5.textAlign("center", Some("center"))
+	
+	// 动态效果：缩放和透明度
+	let scale = 1.0 + (1.0 - progress) * 0.5
+	p5.textSizeSet(150.0 * scale)
+	
+	// 颜色渐变：从白色到透明
+	let alpha = progress * 255.0
+	
+	// 不同的秒数显示不同的颜色
+	match remaining_seconds {
+		3 => p5.fillColorPara(255.0, Some(100.0), Some(100.0), Some(alpha)) // 红
+		2 => p5.fillColorPara(255.0, Some(255.0), Some(100.0), Some(alpha)) // 黄
+		1 => p5.fillColorPara(100.0, Some(255.0), Some(100.0), Some(alpha)) // 绿
+		_ => p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(alpha))
+	}
+	
+	p5.text(remaining_seconds.to_string(), Width / 2.0, Height / 2.0, None, None)
+	
+	// 绘制装饰性圆圈
+	p5.noFill()
+	p5.strokeWeight(10.0)
+	p5.strokeComponents(255.0, 255.0, 255.0, Some(alpha * 0.5))
+	let arc_angle = progress * 2.0 * 3.14159
+	p5.arc(Width / 2.0, Height / 2.0, 300.0 * scale, 300.0 * scale, -1.57, -1.57 + arc_angle, None, None)
+	
+	p5.pop()
 }
