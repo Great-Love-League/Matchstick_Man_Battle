@@ -1293,31 +1293,64 @@ fn draw_countdown(p5: &@p5js.P5JS, remaining_frames: Int) -> Unit {
 	let progress = (remaining_frames % 60).to_double() / 60.0
 	
 	p5.push()
+	p5.translate(Width / 2.0, Height / 2.0, None)
 	p5.textAlign("center", Some("center"))
 	
-	// 动态效果：缩放和透明度
-	let scale = 1.0 + (1.0 - progress) * 0.5
-	p5.textSizeSet(150.0 * scale)
+	// 动态效果：弹性缩放
+	let scale = 1.0 + progress * 2.0
+	p5.textSizeSet(120.0 * scale)
 	
-	// 颜色渐变：从白色到透明
-	let alpha = progress * 255.0
-	
-	// 不同的秒数显示不同的颜色
-	match remaining_seconds {
-		3 => p5.fillColorPara(255.0, Some(100.0), Some(100.0), Some(alpha)) // 红
-		2 => p5.fillColorPara(255.0, Some(255.0), Some(100.0), Some(alpha)) // 黄
-		1 => p5.fillColorPara(100.0, Some(255.0), Some(100.0), Some(alpha)) // 绿
-		_ => p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(alpha))
+	// 颜色渐变
+	let alpha = if progress > 0.8 {
+		(1.0 - progress) * 5.0 * 255.0 
+	} else {
+		255.0
+	}
+	// Fade out at the very end of the second
+	let final_alpha = if progress < 0.2 {
+		progress * 5.0 * 255.0
+	} else {
+		alpha
 	}
 	
-	p5.text(remaining_seconds.to_string(), Width / 2.0, Height / 2.0, None, None)
+	// 不同的秒数显示不同的颜色
+	let (r, g, b) = match remaining_seconds {
+		3 => (255.0, 50.0, 50.0) // Red
+		2 => (255.0, 200.0, 0.0) // Yellow
+		1 => (50.0, 255.0, 50.0) // Green
+		_ => (255.0, 255.0, 255.0)
+	}
+	
+	// 文字
+	p5.strokeWeight(4.0)
+	p5.strokeComponents(0.0, 0.0, 0.0, Some(final_alpha))
+	p5.fillColorPara(r, Some(g), Some(b), Some(final_alpha))
+	// 垂直位置微调 +25.0 以视觉居中
+	p5.text(remaining_seconds.to_string(), 0.0, 75.0, None, None)
 	
 	// 绘制装饰性圆圈
 	p5.noFill()
+	
+	// 外圈 - 顺时针旋转
+	p5.push()
+	p5.rotate((1.0 - progress) * 3.14, None)
 	p5.strokeWeight(10.0)
-	p5.strokeComponents(255.0, 255.0, 255.0, Some(alpha * 0.5))
-	let arc_angle = progress * 2.0 * 3.14159
-	p5.arc(Width / 2.0, Height / 2.0, 300.0 * scale, 300.0 * scale, -1.57, -1.57 + arc_angle, None, None)
+	p5.strokeComponents(r, g, b, Some(final_alpha * 0.6))
+	// 绘制三段圆弧
+	p5.arc(0.0, 0.0, 300.0, 300.0, 0.0, 1.5, None, None)
+	p5.arc(0.0, 0.0, 300.0, 300.0, 2.1, 3.6, None, None)
+	p5.arc(0.0, 0.0, 300.0, 300.0, 4.2, 5.7, None, None)
+	p5.pop()
+
+	// 内圈 - 逆时针旋转，随时间缩小
+	p5.push()
+	p5.rotate(-(1.0 - progress) * 6.28, None)
+	let inner_scale = 0.8 + progress * 0.5
+	p5.scale(inner_scale, Some(inner_scale), None)
+	p5.strokeWeight(5.0)
+	p5.strokeComponents(255.0, 255.0, 255.0, Some(final_alpha * 0.8))
+	p5.ellipse(0.0, 0.0, 250.0, 250.0)
+	p5.pop()
 	
 	p5.pop()
 }
