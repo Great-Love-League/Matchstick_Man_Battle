@@ -65,7 +65,11 @@ pub(all) struct Game {
 
 	mut pre_key_p : Bool
 	mut key_p_changed_count : Int
-	
+
+	// 自动重启相关
+	mut game_over_timer : Int
+	mut is_game_over_sound_played : Bool
+	mut current_level : Int
 }
 
 // 全局：开始界面时的模拟按键状态（由主入口设置）
@@ -499,6 +503,30 @@ pub fn Game::check_particle_out_of_bounds(self:Self, particle: Particle) -> Bool
 fn Game::game_over(self:Self, p5: &@p5js.P5JS) -> Unit {
 	self.run_custom_functions(GameOver, p5)
 
+	// 播放游戏结束音效（只播放一次）
+	if not(self.is_game_over_sound_played) {
+		// 播放玩家死亡音效作为结束音效
+		self.audio.play_sound(PlayerDeath)
+		self.is_game_over_sound_played = true
+	}
+
+	// 增加计时器
+	self.game_over_timer += 1
+
+	// 3秒后自动跳转下一关（假设60fps，3秒=180帧）
+	if self.game_over_timer > 180 && not(self.navigation_requested) {
+		self.navigation_requested = true
+		
+		// 计算下一关
+		let next_level = if self.current_level >= 5 { 1 } else { self.current_level + 1 }
+		let next_url = "game-level\{next_level}.html"
+		
+		println("游戏结束，3秒已到，自动跳转到下一关: \{next_url}")
+		self.navigation_target = Some(next_url)
+		navigateTo(next_url)
+		return
+	}
+
 	// 画一个简单的游戏结束画面
 	// 找出获胜者（血量大于0的玩家）
 	let mut winner_index = -1
@@ -520,7 +548,7 @@ fn Game::game_over(self:Self, p5: &@p5js.P5JS) -> Unit {
 	p5.textSizeSet(80.0)
 	p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
 	p5.textAlign("center", Some("center"))
-	p5.text("游戏结束", Width / 2.0, Height / 2.0 - 80.0, None, None)
+	p5.text("帅气的击杀！", Width / 2.0, Height / 2.0 - 80.0, None, None)
 	
 	// 显示获胜者
 	if winner_index >= 0 {
@@ -536,7 +564,7 @@ fn Game::game_over(self:Self, p5: &@p5js.P5JS) -> Unit {
 	// 显示提示文字
 	p5.textSizeSet(30.0)
 	p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
-	p5.text("按 1-5 载入对应关卡，R 刷新", Width / 2.0, Height / 2.0 + 80.0, None, None)
+	p5.text("3秒后开始下一场对局", Width / 2.0, Height / 2.0 + 80.0, None, None)
 	p5.pop()
 
 	self.state = GameOver
@@ -832,6 +860,9 @@ pub fn create_game(
 		navigation_target: None,
 		pre_key_p: false,
 		key_p_changed_count: 0,
+		game_over_timer: 0,
+		is_game_over_sound_played: false,
+		current_level: 1,
 	}
 	
 	game
