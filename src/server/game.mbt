@@ -70,6 +70,16 @@ pub(all) struct Game {
 	mut game_over_timer : Int
 	mut is_game_over_sound_played : Bool
 	mut current_level : Int
+
+	// 游戏结束祝贺语索引
+	mut game_over_message_index : Int
+	
+	// 开始倒计时相关
+	mut start_countdown_timer : Int
+	mut start_countdown_duration : Int
+	
+	// 随机数生成器
+	rng : @random.Rand
 }
 
 // 全局：开始界面时的模拟按键状态（由主入口设置）
@@ -294,7 +304,62 @@ fn Game::state_machine_update(self:Self, p5: &@p5js.P5JS) -> Unit {
 
 fn Game::prepare(self:Self, p5: &@p5js.P5JS) -> Unit {
 	self.run_custom_functions(GamePreparing, p5)
-	self.state = GameRunning
+	
+	// 如果处于开始界面模式，直接跳过倒计时进入运行状态（由运行状态中的自定义函数处理开始界面）
+	if start_screen_active.val {
+		self.state = GameRunning
+		return
+	}
+
+	// 倒计时逻辑
+	if self.start_countdown_timer > 0 {
+		self.start_countdown_timer -= 1
+		
+		// 绘制倒计时
+		p5.push()
+		// 半透明背景
+		p5.fillColorPara(0.0, Some(0.0), Some(0.0), Some(100.0))
+		p5.noStroke()
+		p5.rect(0.0, 0.0, Width, Height)
+		
+		let remaining_seconds = (self.start_countdown_timer / 60) + 1
+		let progress = (self.start_countdown_timer % 60).to_double() / 60.0
+		
+		p5.textAlign("center", Some("center"))
+		
+		// 动态效果：缩放和透明度
+		let scale = 1.0 + (1.0 - progress) * 0.5
+		p5.textSizeSet(150.0 * scale)
+		
+		// 颜色渐变：从白色到透明
+		let alpha = progress * 255.0
+		
+		// 不同的秒数显示不同的颜色
+		match remaining_seconds {
+			3 => p5.fillColorPara(255.0, Some(100.0), Some(100.0), Some(alpha)) // 红
+			2 => p5.fillColorPara(255.0, Some(255.0), Some(100.0), Some(alpha)) // 黄
+			1 => p5.fillColorPara(100.0, Some(255.0), Some(100.0), Some(alpha)) // 绿
+			_ => p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(alpha))
+		}
+		
+		p5.text(remaining_seconds.to_string(), Width / 2.0, Height / 2.0, None, None)
+		
+		// 绘制装饰性圆圈
+		p5.noFill()
+		p5.strokeWeight(10.0)
+		p5.strokeComponents(255.0, 255.0, 255.0, Some(alpha * 0.5))
+		let arc_angle = progress * 2.0 * 3.14159
+		p5.arc(Width / 2.0, Height / 2.0, 300.0 * scale, 300.0 * scale, -1.57, -1.57 + arc_angle, None, None)
+		
+		p5.pop()
+	} else {
+		// 倒计时结束，显示 GO! 一瞬间，然后开始游戏
+		// 这里为了简单，直接开始游戏，GO! 可以作为 GameRunning 的第一帧或者特效
+		self.state = GameRunning
+		
+		// 可以在这里播放一个 "GO" 的音效
+		self.audio.play_sound(LevelStart)
+	}
 }
 
 fn Game::pause(self:Self, p5: &@p5js.P5JS) -> Unit {
@@ -537,6 +602,26 @@ fn Game::game_over(self:Self, p5: &@p5js.P5JS) -> Unit {
 		}
 	}
 
+	// 随机选择祝贺语
+	if self.game_over_message_index == -1 {
+		self.game_over_message_index = self.rng.int() % 5
+	}
+	
+	let messages = [
+		"帅气的击杀！",
+		"无可匹敌！",
+		"主宰比赛！",
+		"神一般的操作！",
+		"这就是实力！"
+	]
+	// 防止索引越界
+	let safe_index = if self.game_over_message_index >= 0 && self.game_over_message_index < messages.length() {
+		self.game_over_message_index
+	} else {
+		0
+	}
+	let message = messages[safe_index]
+
 	p5.push()
 	
 	// 显示半透明背景
@@ -548,7 +633,7 @@ fn Game::game_over(self:Self, p5: &@p5js.P5JS) -> Unit {
 	p5.textSizeSet(80.0)
 	p5.fillColorPara(255.0, Some(255.0), Some(255.0), Some(255.0))
 	p5.textAlign("center", Some("center"))
-	p5.text("帅气的击杀！", Width / 2.0, Height / 2.0 - 80.0, None, None)
+	p5.text(message, Width / 2.0, Height / 2.0 - 80.0, None, None)
 	
 	// 显示获胜者
 	if winner_index >= 0 {
@@ -863,6 +948,10 @@ pub fn create_game(
 		game_over_timer: 0,
 		is_game_over_sound_played: false,
 		current_level: 1,
+		game_over_message_index: -1,
+		start_countdown_timer: 180, // 3 seconds * 60 fps
+		start_countdown_duration: 180,
+		rng: @random.Rand::new(),
 	}
 	
 	game

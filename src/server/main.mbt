@@ -724,6 +724,10 @@ fn main {
             game.play_level_bgm(5)
             // 仅关闭开始界面，保留当前关卡和世界状态（不跳转）
             start_screen_active.val = false
+            
+            // 触发倒计时：切换回 GamePreparing 状态，并重置计时器
+            game.start_countdown_timer = 180
+            game.state = GamePreparing
           }
         }
       )
